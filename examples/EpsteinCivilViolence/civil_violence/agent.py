@@ -86,7 +86,7 @@ class Citizen(Agent):
         Look around and see who my neighbors are
         """
         self.neighborhood = self.model.grid.get_neighborhood(self.pos,
-                                                        moore=False, radius=1)
+                                                        moore=self.model.moore, radius=self.vision)
         self.neighbors = self.model.grid.get_cell_list_contents(self.neighborhood)
         self.empty_neighbors = [c for c in self.neighborhood if
                                 self.model.grid.is_cell_empty(c)]
@@ -161,7 +161,7 @@ class Cop(Agent):
         Look around and see who my neighbors are.
         """
         self.neighborhood = self.model.grid.get_neighborhood(self.pos,
-                                                        moore=False, radius=1)
+                                                        moore=self.model.moore, radius=self.vision)
         self.neighbors = self.model.grid.get_cell_list_contents(self.neighborhood)
         self.empty_neighbors = [c for c in self.neighborhood if
                                 self.model.grid.is_cell_empty(c)]

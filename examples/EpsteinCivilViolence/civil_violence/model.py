@@ -18,13 +18,13 @@ class CivilViolenceModel(Model):
         width: grid width
         citizen_density: approximate % of cells occupied by citizens.
         cop_density: approximate % of calles occupied by cops.
-        citizen_vision: number of cells in each direction (N, S, E and W) that
-            citizen can inspect
-        cop_vision: number of cells in each direction (N, S, E and W) that cop
-            can inspect
+        citizen_vision: number of cells in each direction citizen can inspect, 
+            either von Neumann or Moore neighborhood.
+        cop_vision: number of cells in each direction that cop can inspect,
+            either von Neumann or Moore neighborhood.
         legitimacy:  (L) citizens' perception of regime legitimacy, equal
             across all citizens
-        max_jail_term: (J_max)
+        max_jail_term: (J_max), actual jail terms are intergers uniformly distributed from 0 to J_max
         active_threshold: if (grievance - (risk_aversion * arrest_probability))
             > threshold, citizen rebels
         arrest_prob_constant: set to ensure agents make plausible arrest
@@ -32,13 +32,12 @@ class CivilViolenceModel(Model):
         movement: binary, whether agents try to move at step end
         max_iters: model may not have a natural stopping point, so we set a
             max.
-
     """
 
     def __init__(self, height, width, citizen_density, cop_density,
                  citizen_vision, cop_vision, legitimacy,
-                 max_jail_term, active_threshold=.1, arrest_prob_constant=2.3,
-                 movement=True, max_iters=1000):
+                 max_jail_term, active_threshold = .1, arrest_prob_constant = 2.3,
+                 movement = True, max_iters = 1000, moore = "Neumann"):
         super().__init__()
         self.height = height
         self.width = width
@@ -56,6 +55,11 @@ class CivilViolenceModel(Model):
         self.iteration = 0
         self.schedule = RandomActivation(self)
         self.grid = Grid(height, width, torus=True)
+        if moore == "Moore":
+            self.moore = 1
+        else:
+            self.moore = 0
+
         model_reporters = {
             "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
             "Active": lambda m: self.count_type_citizens(m, "Active"),
