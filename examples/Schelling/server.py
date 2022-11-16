@@ -1,67 +1,46 @@
-from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.modules import CanvasGrid, ChartModule, TextElement
-from mesa.visualization.TextVisualization import (
-    TextData, TextGrid, TextVisualization
-)
+import mesa
 
-from model import SchellingModel
+from model import Schelling
 
 
-class SchellingTextVisualization(TextVisualization):
-    '''
-    ASCII visualization for schelling model
-    '''
-
-    def __init__(self, model):
-        '''
-        Create new Schelling ASCII visualization.
-        '''
-        self.model = model
-
-        grid_viz = TextGrid(self.model.grid, self.ascii_agent)
-        happy_viz = TextData(self.model, 'happy')
-        self.elements = [grid_viz, happy_viz]
-
-    @staticmethod
-    def ascii_agent(a):
-        '''
-        Minority agents are X, Majority are O.
-        '''
-        if a.type == 0:
-            return 'O'
-        if a.type == 1:
-            return 'X'
-
-
-class HappyElement(TextElement):
-    '''
+def get_happy_agents(model):
+    """
     Display a text count of how many happy agents there are.
-    '''
-    def __init__(self):
-        pass
-
-    def render(self, model):
-        return "Happy agents: " + str(model.happy)
+    """
+    return f"Happy agents: {model.happy}"
 
 
 def schelling_draw(agent):
-    '''
+    """
     Portrayal Method for canvas
-    '''
+    """
     if agent is None:
         return
     portrayal = {"Shape": "circle", "r": 0.5, "Filled": "true", "Layer": 0}
 
     if agent.type == 0:
-        portrayal["Color"] = "Red"
+        portrayal["Color"] = ["#FF0000", "#FF9999"]
+        portrayal["stroke_color"] = "#00FF00"
     else:
-        portrayal["Color"] = "Blue"
+        portrayal["Color"] = ["#0000FF", "#9999FF"]
+        portrayal["stroke_color"] = "#000000"
     return portrayal
 
-happy_element = HappyElement()
-canvas_element = CanvasGrid(schelling_draw, 20, 20, 500, 500)
-happy_chart = ChartModule([{"Label": "happy", "Color": "Black"}])
-server = ModularServer(SchellingModel,
-                       [canvas_element, happy_element, happy_chart],
-                       "Schelling", 20, 20, 0.8, 0.2, 4)
-server.launch()
+
+canvas_element = mesa.visualization.CanvasGrid(schelling_draw, 20, 20, 500, 500)
+happy_chart = mesa.visualization.ChartModule([{"Label": "happy", "Color": "Black"}])
+
+model_params = {
+    "height": 20,
+    "width": 20,
+    "density": mesa.visualization.Slider("Agent density", 0.8, 0.1, 1.0, 0.1),
+    "minority_pc": mesa.visualization.Slider("Fraction minority", 0.2, 0.00, 1.0, 0.05),
+    "homophily": mesa.visualization.Slider("Homophily", 3, 0, 8, 1),
+}
+
+server = mesa.visualization.ModularServer(
+    Schelling,
+    [canvas_element, get_happy_agents, happy_chart],
+    "Schelling",
+    model_params,
+)
