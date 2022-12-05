@@ -1,2 +1,2 @@
 jupyter
-mesa
+mesa~=1.1
