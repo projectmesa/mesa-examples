@@ -1,11 +1,11 @@
 from model import Schelling
-from mesa_replay import CachableModel, CacheState
+from mesa_replay import CacheableModel, CacheState
 
 
-class CachableSchelling(CachableModel):
-    """A wrapper around the original Schelling model to make the simulation cachable and replay-able.
-    Uses CachableModel from the Mesa-Replay library, which is a decorator that can be put around any regular mesa model
-    to make it "cachable". From outside, a CachableSchelling instance can be treated like any regular Mesa model.
+class CacheableSchelling(CacheableModel):
+    """A wrapper around the original Schelling model to make the simulation cacheable and replay-able.
+    Uses CacheableModel from the Mesa-Replay library, which is a decorator that can be put around any regular mesa model
+    to make it "cacheable". From outside, a CacheableSchelling instance can be treated like any regular Mesa model.
     The only difference is that the model will write the state of every simulation step to a cache file or when in
     replay mode use a given cache file to replay that cached simulation run."""
 
