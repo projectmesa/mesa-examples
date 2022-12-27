@@ -8,6 +8,11 @@ It enables a simulation run to be "cached" or in other words recorded. The recor
 It uses the [Mesa-Replay](https://github.com/Logende/mesa-replay) library and puts the Schelling model inside a so-called `CacheableModel` wrapper that we name `CacheableSchelling`.
 From the user's perspective, the new model behaves the same way as the original Schelling model, but additionally supports caching.
 
+Note that the main purpose of this example is to demonstrate that caching and replaying simulation runs is possible.
+The example is designed to be accessible. 
+In practice, someone who wants to replay their simulation might not necessarily embed a replay button into the web view, but instead have a dedicated script to run a simulation that is being cached, separate from a script to replay a simulation run from a given cache file.
+More examples of caching and replay can be found in the [Mesa-Replay Repository](https://github.com/Logende/mesa-replay/tree/main/examples).
+
 ## Installation
 
 To install the dependencies use pip and the requirements.txt in this directory. e.g.
