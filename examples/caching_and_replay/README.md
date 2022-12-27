@@ -31,8 +31,10 @@ To run the model interactively, run ``mesa runserver`` in this directory. e.g.
 
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
 
-After running a regular simulation, you can **replay** your latest cached simulation run by first enabling the Replay switch and then pressing Reset.
-Note that this **requires the previous simulation run to have finished** (e.g. all agents are happy, no more new steps are simulated).
+First, run the **simulation** with the 'Replay' switch disabled. 
+When the simulation run is finished (e.g. all agents are happy, no more new steps are simulated), the run will automatically be stored in a cache file.
+
+Next, **replay** your latest cached simulation run by enabling the Replay switch and then pressing Reset.
 
 ## Files
 
