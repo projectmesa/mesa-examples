@@ -20,8 +20,8 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 
 ```
     # First, we clone the Mesa repo
-    $ git clone https://github.com/projectmesa/mesa.git
-    $ cd mesa
+    $ git clone https://github.com/projectmesa/mesa-examples.git
+    $ cd mesa-examples
     # Then we cd to the example directory
     $ cd examples/wolf_sheep
     $ pip install -r requirements.txt
