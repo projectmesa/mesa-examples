@@ -1,0 +1,17 @@
+# To use this docker-compose.yml, run `docker compose up`. If you want to make
+# it run in the background, you instead run `docker compose up -d`. If you want
+# to run a different example, change the `MODEL_DIR` below to e.g.
+# "examples/sugarscape_cg". You can also specify the path to your custom model
+# (relative to this Git repository).
+# Note: the model directory MUST contain a run.py file.
+version: '3'
+services:
+  install:
+    build: .
+    image: mesa:dev
+    volumes:
+      - .:/opt/mesa
+    environment:
+      MODEL_DIR: examples/forest_fire
+    ports:
+      - "127.0.0.1:8521:8521"
