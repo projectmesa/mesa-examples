@@ -1,0 +1,20 @@
+# local package
+-e .
+
+# external requirements
+mesa-geo~=0.5.0
+geopandas
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+jupyter
+notebook
+jupyter_contrib_nbextensions
+jupyter_nbextensions_configurator
+autopep8
+tqdm
+momepy
+networkx
+black[jupyter]
