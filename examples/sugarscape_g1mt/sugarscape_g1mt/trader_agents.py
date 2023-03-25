@@ -340,6 +340,7 @@ class Trader(mesa.Agent):
         else:
             self.spice -= self.metabolism_spice
 
+
     def maybe_die(self):
         """
         Function to remove Traders who have consumed all their sugar or spice
