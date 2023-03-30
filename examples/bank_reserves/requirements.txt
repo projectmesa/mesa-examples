@@ -1,4 +1,4 @@
 itertools
-mesa
+mesa~=1.1.0
 numpy
 pandas
