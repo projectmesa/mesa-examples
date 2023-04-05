@@ -1,2 +1,2 @@
 networkx>=2.0
-mesa
+mesa~=1.1
