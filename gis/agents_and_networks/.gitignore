@@ -8,6 +8,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+venv/
 build/
 develop-eggs/
 dist/
@@ -41,7 +42,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
 
 # Translations
 *.mo
@@ -56,26 +57,36 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter and iPython notebook checkpoints
-*.ipynb_checkpoints
+# DotEnv configuration
+.env
 
-# Spyder app workspace config file
-.spyderworkspace
+# Database
+*.db
+*.rdb
 
-# PyCharm environment files
-.idea/
+# Pycharm
+.idea
 
-# VSCode environment files
+# VS Code
 .vscode/
-*.code-workspace
 
-# Apple OSX
-*.DS_Store
+# Spyder
+.spyproject/
 
-# mypy
+# Jupyter NB Checkpoints
+.ipynb_checkpoints/
+
+# exclude data from source control by default
+# /data/
+
+# Mac OS-specific storage files
+.DS_Store
+
+# vim
+*.swp
+*.swo
+
+# Mypy cache
 .mypy_cache/
-.dmypy.json
-dmypy.json
 
-# Virtual environment
-venv/
+**/*.pkl
