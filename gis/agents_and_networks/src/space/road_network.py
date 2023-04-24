@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pickle
-from typing import Dict, List, Tuple, Optional
 
 import geopandas as gpd
 import momepy
