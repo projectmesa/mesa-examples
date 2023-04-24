@@ -5,7 +5,8 @@ from hex_snowflake.cell import Cell
 
 class HexSnowflake(mesa.Model):
     """
-    Represents the hex grid of cells. The grid is represented by a 2-dimensional array of cells with adjacency rules specific to hexagons.
+    Represents the hex grid of cells. The grid is represented by a 2-dimensional array
+    of cells with adjacency rules specific to hexagons.
     """
 
     def __init__(self, width=50, height=50):
@@ -25,7 +26,7 @@ class HexSnowflake(mesa.Model):
         self.grid = mesa.space.HexGrid(width, height, torus=True)
 
         # Place a dead cell at each location.
-        for (contents, x, y) in self.grid.coord_iter():
+        for contents, x, y in self.grid.coord_iter():
             cell = Cell((x, y), self)
             self.grid.place_agent(cell, (x, y))
             self.schedule.add(cell)

@@ -23,7 +23,8 @@ class PersonAgent(mg.GeoAgent):
         :param unique_id:   Unique identifier for the agent
         :param model:       Model in which the agent runs
         :param geometry:    Shape object for the agent
-        :param agent_type:  Indicator if agent is infected ("infected", "susceptible", "recovered" or "dead")
+        :param agent_type:  Indicator if agent is infected
+                            ("infected", "susceptible", "recovered" or "dead")
         :param mobility_range:  Range of distance to move in one step
         """
         super().__init__(unique_id, model, geometry, crs)
@@ -92,8 +93,10 @@ class NeighbourhoodAgent(mg.GeoAgent):
         :param unique_id:   Unique identifier for the agent
         :param model:       Model in which the agent runs
         :param geometry:    Shape object for the agent
-        :param agent_type:  Indicator if agent is infected ("infected", "susceptible", "recovered" or "dead")
-        :param hotspot_threshold:   Number of infected agents in region to be considered a hot-spot
+        :param agent_type:  Indicator if agent is infected
+                            ("infected", "susceptible", "recovered" or "dead")
+        :param hotspot_threshold:   Number of infected agents in region
+                                    to be considered a hot-spot
         """
         super().__init__(unique_id, model, geometry, crs)
         self.atype = agent_type
@@ -108,7 +111,8 @@ class NeighbourhoodAgent(mg.GeoAgent):
         self.model.counts[self.atype] += 1  # Count agent type
 
     def color_hotspot(self):
-        # Decide if this region agent is a hot-spot (if more than threshold person agents are infected)
+        # Decide if this region agent is a hot-spot
+        # (if more than threshold person agents are infected)
         neighbors = self.model.space.get_intersecting_agents(self)
         infected_neighbors = [
             neighbor for neighbor in neighbors if neighbor.atype == "infected"
