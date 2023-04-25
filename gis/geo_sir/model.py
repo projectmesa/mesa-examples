@@ -104,8 +104,8 @@ class GeoSir(mesa.Model):
         self.steps += 1
         self.reset_counts()
         self.schedule.step()
-        self.space._recreate_rtree()  # Recalculate spatial tree,
-        # because agents are moving
+        # Recalculate spatial tree, because agents are moving
+        self.space._recreate_rtree()
 
         self.datacollector.collect(self)
 
