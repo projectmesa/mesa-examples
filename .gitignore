@@ -79,3 +79,5 @@ dmypy.json
 
 # Virtual environment
 venv/
+
+examples/caching_and_replay/my_cache_file_path.cache

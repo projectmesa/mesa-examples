@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-from typing import List
 
 import pyproj
 import numpy as np
@@ -20,7 +19,7 @@ class Commuter(mg.GeoAgent):
     crs: pyproj.CRS
     origin: Building  # where he begins his trip
     destination: Building  # the destination he wants to arrive at
-    my_path: List[
+    my_path: list[
         mesa.space.FloatCoordinate
     ]  # a set containing nodes to visit in the shortest path
     step_in_path: int  # the number of step taking in the walk
@@ -30,7 +29,7 @@ class Commuter(mg.GeoAgent):
     start_time_m: int
     end_time_h: int  # time to leave work, hour and minute
     end_time_m: int
-    work_friends_id: List[int]  # set of friends at work
+    work_friends_id: list[int]  # set of friends at work
     status: str  # work, home, or transport
     testing: bool  # a temp variable used in identifying friends
     happiness_home: float
@@ -58,8 +57,9 @@ class Commuter(mg.GeoAgent):
 
     def __repr__(self) -> str:
         return (
-            f"Commuter(unique_id={self.unique_id}, geometry={self.geometry}, status={self.status}, "
-            f"num_home_friends={self.num_home_friends}, num_work_friends={len(self.work_friends_id)})"
+            f"Commuter(unique_id={self.unique_id}, geometry={self.geometry}, "
+            f"status={self.status}, num_home_friends={self.num_home_friends}, "
+            f"num_work_friends={len(self.work_friends_id)})"
         )
 
     @property
@@ -194,7 +194,8 @@ class Commuter(mg.GeoAgent):
         self._redistribute_path_vertices()
 
     def _redistribute_path_vertices(self) -> None:
-        # if origin and destination share the same entrance, then self.my_path will contain only this entrance node,
+        # if origin and destination share the same entrance, then self.my_path
+        # will contain only this entrance node,
         # and len(self.path) == 1. There is no need to redistribute path vertices.
         if len(self.my_path) > 1:
             unit_transformer = UnitTransformer(degree_crs=self.model.walkway.crs)
