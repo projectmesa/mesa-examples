@@ -80,7 +80,7 @@ class ColorPatches(mesa.Model):
         #  -->but only col & row
         # for (contents, col, row) in self._grid.coord_iter():
         # replaced content with _ to appease linter
-        for (_, row, col) in self._grid.coord_iter():
+        for _, row, col in self._grid.coord_iter():
             cell = ColorCell(
                 (row, col), self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
             )
@@ -115,7 +115,7 @@ class ColorPatches(mesa.Model):
              80                 cell_objects = model.grid.get_cell_list_contents([(x, y)])
 
         AttributeError: 'ColorPatches' object has no attribute 'grid'
-        """
+        """  # noqa: E501
         return self._grid
 
     @property

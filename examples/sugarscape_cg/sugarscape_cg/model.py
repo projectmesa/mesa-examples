@@ -75,7 +75,6 @@ class SugarscapeCg(mesa.Model):
             print([self.schedule.time, self.schedule.get_type_count(SsAgent)])
 
     def run_model(self, step_count=200):
-
         if self.verbose:
             print(
                 "Initial number Sugarscape Agent: ",

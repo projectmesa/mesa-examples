@@ -1,6 +1,6 @@
 # mesa-examples
 
-This repository contains examples that work with Mesa and illustrate different features of Mesa. 
+This repository contains examples that work with Mesa and illustrate different features of Mesa.
 
 To contribute to this repository, see `CONTRIBUTING.rst`_
 
