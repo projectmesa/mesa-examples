@@ -18,7 +18,7 @@ class ForestFire(mesa.Model):
         """
         # Set up model objects
         self.schedule = mesa.time.RandomActivation(self)
-        self.grid = mesa.space.Grid(width, height, torus=False)
+        self.grid = mesa.space.SingleGrid(width, height, torus=False)
 
         self.datacollector = mesa.DataCollector(
             {
