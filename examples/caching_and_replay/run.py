@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import mesa
 
@@ -18,9 +18,10 @@ def get_cache_file_status(_):
     """
     Display an informational text about caching and the status of the cache file (existing versus not existing)
     """
+    cache_file = Path("./my_cache_file_path.cache")
     return (
         f"Only activate the 'Replay cached run?' switch when a cache file already exists, otherwise it will fail. "
-        f"Cache file existing: '{os.path.exists('my_cache_file_path.cache')}'."
+        f"Cache file existing: '{cache_file.exists()}'."
     )
 
 
