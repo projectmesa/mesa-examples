@@ -19,8 +19,10 @@ class GeoSir(mesa.Model):
         Create a new InfectedModel
         :param pop_size:        Size of population
         :param init_infected:   Probability of a person agent to start as infected
-        :param exposure_distance:   Proximity distance between agents to be exposed to each other
-        :param infection_risk:      Probability of agent to become infected, if it has been exposed to another infected
+        :param exposure_distance:   Proximity distance between agents
+                                    to be exposed to each other
+        :param infection_risk:      Probability of agent to become infected,
+                                    if it has been exposed to another infected
         """
         self.schedule = mesa.time.BaseScheduler(self)
         self.space = mg.GeoSpace(warn_crs_conversion=False)
@@ -44,7 +46,8 @@ class GeoSir(mesa.Model):
             }
         )
 
-        # Set up the Neighbourhood patches for every region in file (add to schedule later)
+        # Set up the Neighbourhood patches for every region in file
+        # (add to schedule later)
         ac = mg.AgentCreator(NeighbourhoodAgent, model=self)
         neighbourhood_agents = ac.from_file(
             self.geojson_regions, unique_id=self.unique_id
@@ -101,7 +104,8 @@ class GeoSir(mesa.Model):
         self.steps += 1
         self.reset_counts()
         self.schedule.step()
-        self.space._recreate_rtree()  # Recalculate spatial tree, because agents are moving
+        # Recalculate spatial tree, because agents are moving
+        self.space._recreate_rtree()
 
         self.datacollector.collect(self)
 
