@@ -72,7 +72,7 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
 
-        self._grid = mesa.space.Grid(width, height, torus=False)
+        self._grid = mesa.space.SingleGrid(width, height, torus=False)
         self._schedule = mesa.time.SimultaneousActivation(self)
 
         # self._grid.coord_iter()
