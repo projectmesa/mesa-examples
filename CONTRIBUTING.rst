@@ -1,9 +1,9 @@
 Contributing
 =========================
 
-As an open source project, Mesa welcomes contributions of many forms, and from beginners to experts. 
+As an open source project, Mesa welcomes contributions of many forms, and from beginners to experts.
 
-Contributions can a full model or it could one of the following to an existing model: 
+Contributions can a full model or it could one of the following to an existing model:
 
 - Code patches
 - Bug reports and patch reviews

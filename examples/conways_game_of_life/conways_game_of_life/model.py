@@ -23,11 +23,11 @@ class ConwaysGameOfLife(mesa.Model):
         self.schedule = mesa.time.SimultaneousActivation(self)
 
         # Use a simple grid, where edges wrap around.
-        self.grid = mesa.space.Grid(width, height, torus=True)
+        self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
         # Place a cell at each location, with some initialized to
         # ALIVE and some to DEAD.
-        for (contents, x, y) in self.grid.coord_iter():
+        for contents, x, y in self.grid.coord_iter():
             cell = Cell((x, y), self)
             if self.random.random() < 0.1:
                 cell.state = cell.ALIVE

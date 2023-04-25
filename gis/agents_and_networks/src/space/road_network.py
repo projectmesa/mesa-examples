@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pickle
-from typing import Dict, List, Tuple, Optional
 
 import geopandas as gpd
 import momepy
@@ -50,18 +49,19 @@ class RoadNetwork:
 
     def get_shortest_path(
         self, source: mesa.space.FloatCoordinate, target: mesa.space.FloatCoordinate
-    ) -> List[mesa.space.FloatCoordinate]:
+    ) -> list[mesa.space.FloatCoordinate]:
         from_node_pos = self.get_nearest_node(source)
         to_node_pos = self.get_nearest_node(target)
-        # return nx.shortest_path(self.nx_graph, from_node_pos, to_node_pos, method="dijkstra", weight="length")
+        # return nx.shortest_path(self.nx_graph, from_node_pos,
+        #                         to_node_pos, method="dijkstra", weight="length")
         return nx.astar_path(self.nx_graph, from_node_pos, to_node_pos, weight="length")
 
 
 class CampusWalkway(RoadNetwork):
     campus: str
-    _path_select_cache: Dict[
-        Tuple[mesa.space.FloatCoordinate, mesa.space.FloatCoordinate],
-        List[mesa.space.FloatCoordinate],
+    _path_select_cache: dict[
+        tuple[mesa.space.FloatCoordinate, mesa.space.FloatCoordinate],
+        list[mesa.space.FloatCoordinate],
     ]
 
     def __init__(self, campus, lines) -> None:
@@ -78,9 +78,10 @@ class CampusWalkway(RoadNetwork):
         self,
         source: mesa.space.FloatCoordinate,
         target: mesa.space.FloatCoordinate,
-        path: List[mesa.space.FloatCoordinate],
+        path: list[mesa.space.FloatCoordinate],
     ) -> None:
-        # print(f"caching path... current number of cached paths: {len(self._path_select_cache)}")
+        # print(f"caching path... current number of cached paths:
+        # {len(self._path_select_cache)}")
         self._path_select_cache[(source, target)] = path
         self._path_select_cache[(target, source)] = list(reversed(path))
         with open(self._path_cache_result, "wb") as cached_result:
@@ -88,5 +89,5 @@ class CampusWalkway(RoadNetwork):
 
     def get_cached_path(
         self, source: mesa.space.FloatCoordinate, target: mesa.space.FloatCoordinate
-    ) -> Optional[List[mesa.space.FloatCoordinate]]:
+    ) -> list[mesa.space.FloatCoordinate] | None:
         return self._path_select_cache.get((source, target), None)

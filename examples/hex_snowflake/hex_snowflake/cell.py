@@ -36,7 +36,9 @@ class Cell(mesa.Agent):
         changed here, but is just computed and stored in self._nextState,
         because our current state may still be necessary for our neighbors
         to calculate their next state.
-        When a cell is made alive, its neighbors are able to be considered in the next step. Only cells that are considered check their neighbors for performance reasons.
+        When a cell is made alive, its neighbors are able to be considered
+        in the next step. Only cells that are considered check their neighbors
+        for performance reasons.
         """
         # assume no state change
         self._nextState = self.state

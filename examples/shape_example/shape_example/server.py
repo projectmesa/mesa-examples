@@ -17,7 +17,6 @@ def agent_draw(agent):
             "Layer": 2,
             "Color": ["#00FF00", "#99FF99"],
             "stroke_color": "#666666",
-            "Filled": "true",
             "heading_x": agent.heading[0],
             "heading_y": agent.heading[1],
             "text": agent.unique_id,
