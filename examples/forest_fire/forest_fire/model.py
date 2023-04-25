@@ -18,7 +18,7 @@ class ForestFire(mesa.Model):
         """
         # Set up model objects
         self.schedule = mesa.time.RandomActivation(self)
-        self.grid = mesa.space.Grid(width, height, torus=False)
+        self.grid = mesa.space.SingleGrid(width, height, torus=False)
 
         self.datacollector = mesa.DataCollector(
             {
@@ -29,7 +29,7 @@ class ForestFire(mesa.Model):
         )
 
         # Place a tree in each cell with Prob = density
-        for (contents, x, y) in self.grid.coord_iter():
+        for contents, x, y in self.grid.coord_iter():
             if self.random.random() < density:
                 # Create a tree
                 new_tree = TreeCell((x, y), self)

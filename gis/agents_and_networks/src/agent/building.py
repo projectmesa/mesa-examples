@@ -27,8 +27,8 @@ class Building(mg.GeoAgent):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__name__}(unique_id={self.unique_id}, name={self.name}, function={self.function}, "
-            f"centroid={self.centroid})"
+            f"{self.__class__.__name__}(unique_id={self.unique_id}, name={self.name}, "
+            f"function={self.function}, centroid={self.centroid})"
         )
 
     def __eq__(self, other):

@@ -1,4 +1,4 @@
-Agents and Networks Model 
+Agents and Networks Model
 =========================
 
 [![](https://img.youtube.com/vi/zIRMNPTBESc/0.jpg)](https://www.youtube.com/watch?v=zIRMNPTBESc)
