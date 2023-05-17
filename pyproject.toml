@@ -1,0 +1,21 @@
+[project]
+name = "mesa-models"
+version = "0.1.0"
+description = "Importable Mesa models."
+authors = [
+    {name = "Project Mesa Team", email = "projectmesa@googlegroups.com"}
+]
+license = {file = "LICENSE"}
+readme = "README.rst"
+requires-python = ">=3.8"
+dependencies = [
+    "mesa>=1.2"
+]
+
+
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
