@@ -1,5 +1,3 @@
-import mesa
-
 import streamlit as st
 
 import time
@@ -8,20 +6,15 @@ import pandas as pd
 
 import altair as alt
 
-import plotly.express as px
-
 import numpy as np
+
 from conways_game_of_life.model import ConwaysGameOfLife
 
 import pandas as pd
 
 
-import random
-
 model = st.title("Boltzman Wealth Model")
-num_ticks = st.slider(
-    "Select number of Simulation Runs", min_value=1, max_value=100, value=50
-)
+num_ticks = st.slider("Select number of Steps", min_value=1, max_value=100, value=50)
 height = st.slider("Select Grid Height", min_value=10, max_value=100, step=10, value=15)
 width = st.slider("Select Grid Width", min_value=10, max_value=100, step=10, value=20)
 model = ConwaysGameOfLife(height, width)
