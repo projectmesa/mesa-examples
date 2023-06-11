@@ -1,4 +1,3 @@
-
 import mesa
 import streamlit as st
 
