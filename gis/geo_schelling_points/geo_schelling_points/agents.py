@@ -1,8 +1,7 @@
 import random
 
-from shapely.geometry import Point
-
 import mesa_geo as mg
+from shapely.geometry import Point
 
 
 class PersonAgent(mg.GeoAgent):

@@ -1,7 +1,7 @@
 import mesa
 import mesa_geo as mg
-from shapely.geometry import Point
 import pyproj
+from shapely.geometry import Point
 
 
 class Driveway(mg.GeoAgent):

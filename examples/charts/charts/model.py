@@ -12,7 +12,6 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
-
 from charts.agents import Bank, Person
 
 """

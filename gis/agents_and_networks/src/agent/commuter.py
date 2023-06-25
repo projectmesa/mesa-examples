@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import random
 
-import pyproj
-import numpy as np
 import mesa
 import mesa_geo as mg
-from shapely.geometry import Point, LineString
-
+import numpy as np
+import pyproj
+from shapely.geometry import LineString, Point
 from src.agent.building import Building
-from src.space.utils import redistribute_vertices, UnitTransformer
+from src.space.utils import UnitTransformer, redistribute_vertices
 
 
 class Commuter(mg.GeoAgent):

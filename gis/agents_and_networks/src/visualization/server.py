@@ -1,5 +1,4 @@
 import mesa
-
 from src.agent.building import Building
 from src.agent.commuter import Commuter
 from src.agent.geo_agents import Driveway, LakeAndRiver, Walkway

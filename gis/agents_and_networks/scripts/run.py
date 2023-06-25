@@ -2,13 +2,12 @@ import argparse
 
 import mesa
 import mesa_geo as mg
-
 from src.model.model import AgentsAndNetworks
 from src.visualization.server import (
     agent_draw,
     clock_element,
-    status_chart,
     friendship_chart,
+    status_chart,
 )
 
 

@@ -3,9 +3,8 @@ from __future__ import annotations
 import gzip
 
 import mesa
-import numpy as np
-
 import mesa_geo as mg
+import numpy as np
 
 
 class LakeCell(mg.Cell):

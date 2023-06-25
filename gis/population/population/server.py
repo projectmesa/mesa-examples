@@ -1,7 +1,6 @@
 import mesa
-from shapely.geometry import Point, Polygon
-
 import mesa_geo as mg
+from shapely.geometry import Point, Polygon
 
 from .model import Population
 from .space import UgandaCell

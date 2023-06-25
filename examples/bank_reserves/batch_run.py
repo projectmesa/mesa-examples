@@ -29,7 +29,6 @@ import itertools
 import mesa
 import numpy as np
 import pandas as pd
-
 from bank_reserves.agents import Bank, Person
 
 # Start of datacollector functions

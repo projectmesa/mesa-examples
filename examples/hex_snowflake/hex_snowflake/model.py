@@ -1,5 +1,4 @@
 import mesa
-
 from hex_snowflake.cell import Cell
 
 

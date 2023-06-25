@@ -11,7 +11,6 @@ Author of NetLogo code:
 """
 
 import mesa
-
 from bank_reserves.random_walk import RandomWalker
 
 
