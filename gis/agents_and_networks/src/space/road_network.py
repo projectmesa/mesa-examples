@@ -8,6 +8,7 @@ import momepy
 import networkx as nx
 import pyproj
 from sklearn.neighbors import KDTree
+
 from src.space.utils import segmented
 
 
@@ -71,7 +72,7 @@ class CampusWalkway(RoadNetwork):
             with open(self._path_cache_result, "rb") as cached_result:
                 self._path_select_cache = pickle.load(cached_result)
         except FileNotFoundError:
-            self._path_select_cache = dict()
+            self._path_select_cache = {}
 
     def cache_path(
         self,

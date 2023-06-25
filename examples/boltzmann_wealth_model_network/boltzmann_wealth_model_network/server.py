@@ -6,7 +6,7 @@ from .model import BoltzmannWealthModelNetwork
 def network_portrayal(G):
     # The model ensures there is 0 or 1 agent per node
 
-    portrayal = dict()
+    portrayal = {}
     portrayal["nodes"] = [
         {
             "id": node_id,

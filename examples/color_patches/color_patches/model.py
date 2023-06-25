@@ -115,7 +115,7 @@ class ColorPatches(mesa.Model):
              80                 cell_objects = model.grid.get_cell_list_contents([(x, y)])
 
         AttributeError: 'ColorPatches' object has no attribute 'grid'
-        """  # noqa: E501
+        """
         return self._grid
 
     @property
