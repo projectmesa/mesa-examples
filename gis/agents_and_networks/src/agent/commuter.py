@@ -7,6 +7,7 @@ import mesa_geo as mg
 import numpy as np
 import pyproj
 from shapely.geometry import LineString, Point
+
 from src.agent.building import Building
 from src.space.utils import UnitTransformer, redistribute_vertices
 

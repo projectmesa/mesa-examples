@@ -14,10 +14,7 @@ def SsAgent_portrayal(agent):
         return {"Shape": "sugarscape_cg/resources/ant.png", "scale": 0.9, "Layer": 1}
 
     elif type(agent) is Sugar:
-        if agent.amount != 0:
-            color = color_dic[agent.amount]
-        else:
-            color = "#D6F5D6"
+        color = color_dic[agent.amount] if agent.amount != 0 else "#D6F5D6"
         return {
             "Color": color,
             "Shape": "rect",

@@ -5,6 +5,7 @@ from typing import DefaultDict, Dict, Optional, Set, Tuple
 import mesa
 import mesa_geo as mg
 from shapely.geometry import Point
+
 from src.agent.building import Building
 from src.agent.commuter import Commuter
 
@@ -20,13 +21,13 @@ class Campus(mg.GeoSpace):
 
     def __init__(self, crs: str) -> None:
         super().__init__(crs=crs)
-        self.homes = tuple()
-        self.works = tuple()
-        self.other_buildings = tuple()
+        self.homes = ()
+        self.works = ()
+        self.other_buildings = ()
         self.home_counter = defaultdict(int)
-        self._buildings = dict()
+        self._buildings = {}
         self._commuters_pos_map = defaultdict(set)
-        self._commuter_id_map = dict()
+        self._commuter_id_map = {}
 
     def get_random_home(self) -> Building:
         return random.choice(self.homes)
