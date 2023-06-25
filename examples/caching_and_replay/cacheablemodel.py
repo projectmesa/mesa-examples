@@ -1,5 +1,5 @@
-from model import Schelling
 from mesa_replay import CacheableModel, CacheState
+from model import Schelling
 
 
 class CacheableSchelling(CacheableModel):

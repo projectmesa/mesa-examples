@@ -1,9 +1,9 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
 import geopandas as gpd
+import mesa
 import numpy as np
 import pyproj
-import mesa
 from shapely.geometry import LineString, MultiLineString
 from shapely.ops import transform
 

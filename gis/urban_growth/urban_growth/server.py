@@ -1,7 +1,6 @@
 from typing import Tuple
 
 import mesa
-
 import mesa_geo as mg
 
 from .model import UrbanGrowth

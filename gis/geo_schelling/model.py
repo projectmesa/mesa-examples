@@ -1,7 +1,6 @@
 import random
 
 import mesa
-
 import mesa_geo as mg
 
 

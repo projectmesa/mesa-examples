@@ -1,7 +1,6 @@
 import mesa
-
-from hex_snowflake.portrayal import portrayCell
 from hex_snowflake.model import HexSnowflake
+from hex_snowflake.portrayal import portrayCell
 
 width, height = 50, 50
 

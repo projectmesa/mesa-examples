@@ -1,5 +1,4 @@
 import mesa
-
 from charts.agents import Person
 from charts.model import Charts
 

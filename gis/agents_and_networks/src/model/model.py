@@ -1,15 +1,14 @@
 import uuid
 from functools import partial
 
-import pandas as pd
 import geopandas as gpd
 import mesa
 import mesa_geo as mg
+import pandas as pd
 from shapely.geometry import Point
-
+from src.agent.building import Building
 from src.agent.commuter import Commuter
 from src.agent.geo_agents import Driveway, LakeAndRiver, Walkway
-from src.agent.building import Building
 from src.space.campus import Campus
 from src.space.road_network import CampusWalkway
 

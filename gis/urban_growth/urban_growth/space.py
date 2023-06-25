@@ -4,10 +4,9 @@ import gzip
 import random
 
 import mesa
+import mesa_geo as mg
 import numpy as np
 import rasterio as rio
-
-import mesa_geo as mg
 
 
 class UrbanCell(mg.Cell):

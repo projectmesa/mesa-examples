@@ -1,6 +1,6 @@
 import mesa
 
-from .model import Walker, ShapeExample
+from .model import ShapeExample, Walker
 
 
 def agent_draw(agent):

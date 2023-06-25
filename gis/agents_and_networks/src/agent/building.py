@@ -3,9 +3,9 @@ from __future__ import annotations
 import uuid
 from random import randrange
 
-import pyproj
 import mesa
 import mesa_geo as mg
+import pyproj
 from shapely.geometry import Polygon
 
 

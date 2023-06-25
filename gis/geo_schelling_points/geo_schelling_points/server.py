@@ -1,5 +1,4 @@
 import mesa
-
 import mesa_geo as mg
 
 from .agents import PersonAgent, RegionAgent

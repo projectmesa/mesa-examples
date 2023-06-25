@@ -3,12 +3,11 @@ from __future__ import annotations
 import pickle
 
 import geopandas as gpd
-import momepy
-import pyproj
-import networkx as nx
 import mesa
+import momepy
+import networkx as nx
+import pyproj
 from sklearn.neighbors import KDTree
-
 from src.space.utils import segmented
 
 

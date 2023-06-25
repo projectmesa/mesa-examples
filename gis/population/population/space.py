@@ -5,7 +5,6 @@ import uuid
 
 import geopandas as gpd
 import mesa
-
 from mesa_geo.geoagent import GeoAgent
 from mesa_geo.geospace import GeoSpace
 from mesa_geo.raster_layers import Cell, RasterLayer

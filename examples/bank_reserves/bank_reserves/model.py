@@ -12,7 +12,6 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
-
 from bank_reserves.agents import Bank, Person
 
 """

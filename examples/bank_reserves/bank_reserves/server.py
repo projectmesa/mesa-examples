@@ -1,5 +1,4 @@
 import mesa
-
 from bank_reserves.agents import Person
 from bank_reserves.model import BankReserves
 
