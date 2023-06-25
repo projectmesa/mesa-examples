@@ -64,6 +64,12 @@ extend-ignore = [
     "N802", # Function name should be lowercase
     "N999",  # Invalid module name. We should revisit this in the future, TODO
     "B007",  # Loop control variable `i` not used within loop body
+    "N806",  # Variable `N` in function should be lowercase
+    "N803",  # Argument name `N` should be lowercase
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar` TODO
+    "S311",  # Standard pseudo-random generators are not suitable for cryptographic purposes TODO
+    "B008",  # Do not perform function call `pyproj.CRS` in argument defaults TODO
+    "S301",  # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue TODO
 ]
 # Hardcode to Python 3.8.
 target-version = "py38"
