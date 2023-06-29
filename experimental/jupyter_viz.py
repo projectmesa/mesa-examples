@@ -59,14 +59,23 @@ class JupyterContainer:
         x = []
         y = []
         s = []
+        c = []
         for i in range(g.width):
             for j in range(g.height):
                 for agent in g._grid[i][j]:
-                    _s = self.agent_portrayal(agent)
+                    data = self.agent_portrayal(agent)
                     x.append(i)
                     y.append(j)
-                    s.append(_s)
-        return {"x": x, "y": y, "s": s}
+                    if "size" in data:
+                        s.append(data["size"])
+                    if "color" in data:
+                        c.append(data["color"])
+        out = {"x": x, "y": y}
+        if len(s) > 0:
+            out["s"] = s
+        if len(c) > 0:
+            out["c"] = c
+        return out
 
 
 @solara.component
