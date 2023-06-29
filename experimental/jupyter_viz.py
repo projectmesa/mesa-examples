@@ -65,11 +65,17 @@ class JupyterContainer:
     def portray(self, g):
         x = []
         y = []
-        s = []
-        c = []
+        s = []  # size
+        c = []  # color
         for i in range(g.width):
             for j in range(g.height):
-                for agent in g._grid[i][j]:
+                content = g._grid[i][j]
+                if not content:
+                    continue
+                if not hasattr(content, "__iter__"):
+                    # Is a single grid
+                    content = [content]
+                for agent in content:
                     data = self.agent_portrayal(agent)
                     x.append(i)
                     y.append(j)
@@ -85,6 +91,43 @@ class JupyterContainer:
         return out
 
 
+def make_space(viz):
+    space_fig = Figure()
+    space_ax = space_fig.subplots()
+    space_ax.scatter(**viz.portray(viz.model.grid))
+    space_ax.set_axis_off()
+    solara.FigureMatplotlib(space_fig, dependencies=[viz.model, viz.df])
+
+
+def make_plot(viz, measure):
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot(viz.df.loc[:, measure])
+    ax.set_ylabel(measure)
+    # Set integer x axis
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
+
+
+def make_user_input(user_input, k, v):
+    if v["type"] == "SliderInt":
+        solara.SliderInt(
+            v.get("label", "label"),
+            value=user_input,
+            min=v.get("min"),
+            max=v.get("max"),
+            step=v.get("step"),
+        )
+    elif v["type"] == "SliderFloat":
+        solara.SliderFloat(
+            v.get("label", "label"),
+            value=user_input,
+            min=v.get("min"),
+            max=v.get("max"),
+            step=v.get("step"),
+        )
+
+
 @solara.component
 def MesaComponent(viz):
     solara.Markdown(viz.name)
@@ -92,16 +135,9 @@ def MesaComponent(viz):
     # 1. User inputs
     user_inputs = {}
     for k, v in viz.model_params_input.items():
-        if v["type"] == "SliderInt":
-            user_input = solara.use_reactive(v["value"])
-            user_inputs[k] = user_input.value
-            solara.SliderInt(
-                v.get("label", "label"),
-                value=user_input,
-                min=v.get("min", 0),
-                max=v.get("max", 10),
-                step=v.get("step", 1),
-            )
+        user_input = solara.use_reactive(v["value"])
+        user_inputs[k] = user_input.value
+        make_user_input(user_input, k, v)
 
     # 2. Model
     def make_model():
@@ -119,22 +155,15 @@ def MesaComponent(viz):
         solara.Button(label="⏸︎", color="primary", on_click=viz.do_pause)
         # solara.Button(label="Reset", color="primary", on_click=do_reset)
 
-    # 3. Space
-    space_fig = Figure()
-    space_ax = space_fig.subplots()
-    space_ax.scatter(**viz.portray(viz.model.grid))
-    space_ax.set_axis_off()
-    solara.FigureMatplotlib(space_fig, dependencies=[viz.model, viz.df])
-
-    # 4. Plots
-    for i, measure in enumerate(viz.measures):
-        fig = Figure()
-        ax = fig.subplots()
-        ax.plot(viz.df.loc[:, measure])
-        ax.set_ylabel(measure)
-        # Set integer x axis
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
+    with solara.GridFixed(columns=2):
+        # 3. Space
+        make_space(viz)
+        # 4. Plots
+        for i, measure in enumerate(viz.measures):
+            if callable(measure):
+                solara.Markdown(measure(viz.model))
+            else:
+                make_plot(viz, measure)
 
 
 def JupyterViz(
