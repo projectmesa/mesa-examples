@@ -61,19 +61,10 @@ class EpsteinCivilViolence(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
-        # agent counts
-        self.citizen_count = 0
-        self.cop_count = 0
-        self.jail_count = 0
-        self.active_count = 0
-        self.quiescent_count = 0
-        self.average_jail_term = 0
-
         model_reporters = {
             "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
             "Active": lambda m: self.count_type_citizens(m, "Active"),
             "Jailed": self.count_jailed,
-            "Citizens": self.count_citizens,
             "Cops": self.count_cops,
         }
         agent_reporters = {
@@ -123,10 +114,6 @@ class EpsteinCivilViolence(mesa.Model):
         self.schedule.step()
         # collect data
         self.datacollector.collect(self)
-        # update agent counts
-        self.active_count = self.count_type_citizens(self, "Active")
-        self.quiescent_count = self.count_type_citizens(self, "Quiescent")
-        self.jail_count = self.count_jailed(self)
         # update iteration
         self.iteration += 1
         if self.iteration > self.max_iters:
@@ -155,17 +142,6 @@ class EpsteinCivilViolence(mesa.Model):
         count = 0
         for agent in model.schedule.agents:
             if agent.breed == "citizen" and agent.jail_sentence > 0:
-                count += 1
-        return count
-
-    @staticmethod
-    def count_citizens(model):
-        """
-        Helper method to count citizens.
-        """
-        count = 0
-        for agent in model.schedule.agents:
-            if agent.breed == "citizen":
                 count += 1
         return count
 
