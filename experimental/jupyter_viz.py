@@ -11,7 +11,14 @@ plt.switch_backend("agg")
 
 
 class JupyterContainer:
-    def __init__(self, model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None):
+    def __init__(
+        self,
+        model_class,
+        model_params,
+        measures=None,
+        name="Mesa Model",
+        agent_portrayal=None,
+    ):
         self.model_class = model_class
         self.split_model_params(model_params)
         self.measures = measures
@@ -130,5 +137,9 @@ def MesaComponent(viz):
         solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
 
 
-def JupyterViz(model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None):
-    return MesaComponent(JupyterContainer(model_class, model_params, measures, name, agent_portrayal))
+def JupyterViz(
+    model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None
+):
+    return MesaComponent(
+        JupyterContainer(model_class, model_params, measures, name, agent_portrayal)
+    )
