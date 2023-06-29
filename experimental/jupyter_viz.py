@@ -1,10 +1,9 @@
 import threading
 
-import solara
 import matplotlib.pyplot as plt
+import solara
 from matplotlib.figure import Figure
 from matplotlib.ticker import MaxNLocator
-
 
 # Avoid interactive backend
 plt.switch_backend("agg")
