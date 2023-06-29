@@ -104,8 +104,6 @@ class EpsteinCivilViolence(mesa.Model):
 
         self.running = True
         self.datacollector.collect(self)
-        self.citizen_count = sum(value for value in self.count_agents(self).values())
-        self.cop_count = self.count_cops(self)
 
     def step(self):
         """
@@ -142,17 +140,6 @@ class EpsteinCivilViolence(mesa.Model):
         count = 0
         for agent in model.schedule.agents:
             if agent.breed == "citizen" and agent.jail_sentence > 0:
-                count += 1
-        return count
-
-    @staticmethod
-    def count_cops(model):
-        """
-        Helper method to count cops.
-        """
-        count = 0
-        for agent in model.schedule.agents:
-            if agent.breed == "cop":
                 count += 1
         return count
 
