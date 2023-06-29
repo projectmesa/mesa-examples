@@ -10,18 +10,13 @@ from matplotlib.ticker import MaxNLocator
 plt.switch_backend("agg")
 
 
-def agent_portrayal(agent):
-    if agent.wealth > 0:
-        return 50
-    return 10
-
-
 class JupyterContainer:
-    def __init__(self, model_class, model_params, measures=None, name="Mesa Model"):
+    def __init__(self, model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None):
         self.model_class = model_class
         self.split_model_params(model_params)
         self.measures = measures
         self.name = name
+        self.agent_portrayal = agent_portrayal
         self.thread = None
 
     def split_model_params(self, model_params):
@@ -60,15 +55,14 @@ class JupyterContainer:
         self.model.running = False
         self.thread.join()
 
-    @staticmethod
-    def portray(g):
+    def portray(self, g):
         x = []
         y = []
         s = []
         for i in range(g.width):
             for j in range(g.height):
                 for agent in g._grid[i][j]:
-                    _s = agent_portrayal(agent)
+                    _s = self.agent_portrayal(agent)
                     x.append(i)
                     y.append(j)
                     s.append(_s)
@@ -127,5 +121,5 @@ def MesaComponent(viz):
         solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
 
 
-def JupyterViz(model_class, model_params, measures=None, name="Mesa Model"):
-    return MesaComponent(JupyterContainer(model_class, model_params, measures, name))
+def JupyterViz(model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None):
+    return MesaComponent(JupyterContainer(model_class, model_params, measures, name, agent_portrayal))
