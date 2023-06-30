@@ -113,9 +113,7 @@ class Citizen(mesa.Agent):
             ):
                 actives_in_vision += 1
         self.arrest_probability = 1 - math.exp(
-            -1
-            * self.model.arrest_prob_constant
-            * (cops_in_vision / actives_in_vision)
+            -1 * self.model.arrest_prob_constant * (cops_in_vision / actives_in_vision)
         )
 
 
