@@ -1,6 +1,4 @@
 import mesa
-from mesa.visualization.modules import ChartModule
-from mesa.visualization.UserParam import Slider
 
 from .agent import Citizen, Cop
 from .model import EpsteinCivilViolence
@@ -10,15 +8,6 @@ AGENT_QUIET_COLOR = "#648FFF"
 AGENT_REBEL_COLOR = "#FE6100"
 JAIL_COLOR = "#808080"
 JAIL_SHAPE = "rect"
-
-chart = ChartModule(
-    [
-        {"Label": "Quiescent", "Color": "#648FFF"},
-        {"Label": "Active", "Color": "#FE6100"},
-        {"Label": "Jailed", "Color": "#808080"},
-    ],
-    data_collector_name="datacollector",
-)
 
 
 def citizen_cop_portrayal(agent):
@@ -59,14 +48,28 @@ def citizen_cop_portrayal(agent):
 model_params = {
     "height": 40,
     "width": 40,
-    "citizen_density": Slider("Initial Agent Density", 0.7, 0.0, 0.9, 0.1),
-    "cop_density": Slider("Initial Cop Density", 0.04, 0.0, 0.1, 0.01),
-    "citizen_vision": Slider("Citizen Vision", 7, 1, 10, 1),
-    "cop_vision": Slider("Cop Vision", 7, 1, 10, 1),
-    "legitimacy": Slider("Government Legitimacy", 0.82, 0.0, 1, 0.01),
-    "max_jail_term": Slider("Max Jail Term", 30, 0, 50, 1),
+    "citizen_density": mesa.visualization.Slider(
+        "Initial Agent Density", 0.7, 0.0, 0.9, 0.1
+    ),
+    "cop_density": mesa.visualization.Slider(
+        "Initial Cop Density", 0.04, 0.0, 0.1, 0.01
+    ),
+    "citizen_vision": mesa.visualization.Slider("Citizen Vision", 7, 1, 10, 1),
+    "cop_vision": mesa.visualization.Slider("Cop Vision", 7, 1, 10, 1),
+    "legitimacy": mesa.visualization.Slider(
+        "Government Legitimacy", 0.82, 0.0, 1, 0.01
+    ),
+    "max_jail_term": mesa.visualization.Slider("Max Jail Term", 30, 0, 50, 1),
 }
 canvas_element = mesa.visualization.CanvasGrid(citizen_cop_portrayal, 40, 40, 480, 480)
+chart = mesa.visualization.ChartModule(
+    [
+        {"Label": "Quiescent", "Color": "#648FFF"},
+        {"Label": "Active", "Color": "#FE6100"},
+        {"Label": "Jailed", "Color": "#808080"},
+    ],
+    data_collector_name="datacollector",
+)
 server = mesa.visualization.ModularServer(
     EpsteinCivilViolence,
     [
