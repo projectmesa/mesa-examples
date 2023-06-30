@@ -112,7 +112,6 @@ class EpsteinCivilViolence(mesa.Model):
         self.schedule.step()
         # collect data
         self.datacollector.collect(self)
-        # update iteration
         self.iteration += 1
         if self.iteration > self.max_iters:
             self.running = False
