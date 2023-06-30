@@ -141,15 +141,3 @@ class EpsteinCivilViolence(mesa.Model):
             if agent.breed == "citizen" and agent.jail_sentence > 0:
                 count += 1
         return count
-
-    # combine all agent counts into one method
-    @staticmethod
-    def count_agents(model):
-        """
-        combines the various count methods into one
-        """
-        return {
-            "Quiescent": model.count_type_citizens(model, "Quiescent"),
-            "Active": model.count_type_citizens(model, "Active"),
-            "Jailed": model.count_jailed(model),
-        }
