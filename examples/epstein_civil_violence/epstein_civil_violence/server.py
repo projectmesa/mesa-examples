@@ -1,6 +1,6 @@
 import mesa
-from mesa.visualization.UserParam import Slider
 from mesa.visualization.modules import ChartModule
+from mesa.visualization.UserParam import Slider
 
 from .agent import Citizen, Cop
 from .model import EpsteinCivilViolence
@@ -56,16 +56,16 @@ def citizen_cop_portrayal(agent):
     return portrayal
 
 
-model_params = dict(
-    height=40,
-    width=40,
-    citizen_density=Slider("Initial Agent Density", 0.7, 0.0, 0.9, 0.1),
-    cop_density=Slider("Initial Cop Density", 0.04, 0.0, 0.1, 0.01),
-    citizen_vision=Slider("Citizen Vision", 7, 1, 10, 1),
-    cop_vision=Slider("Cop Vision", 7, 1, 10, 1),
-    legitimacy=Slider("Government Legitimacy", 0.82, 0.0, 1, 0.01),
-    max_jail_term=Slider("Max Jail Term", 30, 0, 50, 1),
-)
+model_params = {
+    "height": 40,
+    "width": 40,
+    "citizen_density": Slider("Initial Agent Density", 0.7, 0.0, 0.9, 0.1),
+    "cop_density": Slider("Initial Cop Density", 0.04, 0.0, 0.1, 0.01),
+    "citizen_vision": Slider("Citizen Vision", 7, 1, 10, 1),
+    "cop_vision": Slider("Cop Vision", 7, 1, 10, 1),
+    "legitimacy": Slider("Government Legitimacy", 0.82, 0.0, 1, 0.01),
+    "max_jail_term": Slider("Max Jail Term", 30, 0, 50, 1),
+}
 canvas_element = mesa.visualization.CanvasGrid(citizen_cop_portrayal, 40, 40, 480, 480)
 server = mesa.visualization.ModularServer(
     EpsteinCivilViolence,
