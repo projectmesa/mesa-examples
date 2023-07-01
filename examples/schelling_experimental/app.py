@@ -1,4 +1,4 @@
-from mesa_models.experimental import JupyterViz
+from mesa_models.experimental import JupyterViz, make_text
 from model import Schelling
 
 
@@ -46,7 +46,7 @@ model_params = {
 page = JupyterViz(
     Schelling,
     model_params,
-    measures=["happy", get_happy_agents],
+    measures=["happy", make_text(get_happy_agents)],
     name="Schelling",
     agent_portrayal=agent_portrayal,
 )

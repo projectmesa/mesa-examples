@@ -108,6 +108,13 @@ def make_plot(viz, measure):
     solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
 
 
+def make_text(renderer):
+    def function(viz):
+        solara.Markdown(renderer(viz.model))
+
+    return function
+
+
 def make_user_input(user_input, k, v):
     if v["type"] == "SliderInt":
         solara.SliderInt(
@@ -160,7 +167,8 @@ def MesaComponent(viz):
         # 4. Plots
         for i, measure in enumerate(viz.measures):
             if callable(measure):
-                solara.Markdown(measure(viz.model))
+                # Is a custom object
+                measure(viz)
             else:
                 make_plot(viz, measure)
 
