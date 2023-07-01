@@ -45,7 +45,7 @@ class SugarscapeCg(mesa.Model):
 
         sugar_distribution = np.genfromtxt("sugarscape_cg/sugar-map.txt")
         agent_id = 0
-        for _, x, y in self.grid.coord_iter():
+        for _, (x, y) in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
             sugar = Sugar(agent_id, (x, y), self, max_sugar)
             agent_id += 1

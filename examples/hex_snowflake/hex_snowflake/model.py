@@ -25,9 +25,9 @@ class HexSnowflake(mesa.Model):
         self.grid = mesa.space.HexGrid(width, height, torus=True)
 
         # Place a dead cell at each location.
-        for contents, x, y in self.grid.coord_iter():
-            cell = Cell((x, y), self)
-            self.grid.place_agent(cell, (x, y))
+        for contents, pos in self.grid.coord_iter():
+            cell = Cell(pos, self)
+            self.grid.place_agent(cell, pos)
             self.schedule.add(cell)
 
         # activate the center(ish) cell.
