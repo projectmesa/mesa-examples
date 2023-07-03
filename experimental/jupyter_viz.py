@@ -167,6 +167,8 @@ def MesaComponent(viz):
 
     with solara.Row():
         solara.Button(label="Step", color="primary", on_click=viz.do_step)
+        # This style is necessary so that the play widget has almost the same
+        # height as typical Solara buttons.
         solara.Style(
             """
         .widget-play {
