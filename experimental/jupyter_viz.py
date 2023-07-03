@@ -195,9 +195,9 @@ def MesaComponent(viz):
         # solara.Button(label="Reset", color="primary", on_click=do_reset)
 
     with solara.GridFixed(columns=2):
-        # 3. Space
+        # 4. Space
         make_space(viz)
-        # 4. Plots
+        # 5. Plots
         for i, measure in enumerate(viz.measures):
             if callable(measure):
                 # Is a custom object
