@@ -7,7 +7,7 @@ To contribute to this repository, see [CONTRIBUTING.rst](https://github.com/proj
 This repo also contains a package that readily lets you import and run some of the examples:
 ```console
 $ # This will install the "mesa_models" package
-$ pip install git+https://github.com/projectmesa/mesa-examples
+$ pip install -U -e git+https://github.com/projectmesa/mesa-examples#egg=mesa-models
 ```
 ```python
 from mesa_models.boltzmann_wealth_model.model import BoltzmannWealthModel
