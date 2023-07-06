@@ -136,7 +136,7 @@ def make_user_input(user_input, k, v):
 
 
 @solara.component
-def MesaComponent(viz):
+def MesaComponent(viz, space_drawer=None, play_interval=400):
     solara.Markdown(viz.name)
 
     # 1. User inputs
@@ -178,7 +178,7 @@ def MesaComponent(viz):
         )
         widgets.Play(
             value=0,
-            interval=400,
+            interval=play_interval,
             repeat=True,
             show_repeat=False,
             on_value=on_value_play,
@@ -196,7 +196,10 @@ def MesaComponent(viz):
 
     with solara.GridFixed(columns=2):
         # 4. Space
-        make_space(viz)
+        if space_drawer is None:
+            make_space(viz)
+        else:
+            space_drawer(viz)
         # 5. Plots
         for i, measure in enumerate(viz.measures):
             if callable(measure):
@@ -207,8 +210,16 @@ def MesaComponent(viz):
 
 
 def JupyterViz(
-    model_class, model_params, measures=None, name="Mesa Model", agent_portrayal=None
+    model_class,
+    model_params,
+    measures=None,
+    name="Mesa Model",
+    agent_portrayal=None,
+    space_drawer=None,
+    play_interval=400,
 ):
     return MesaComponent(
-        JupyterContainer(model_class, model_params, measures, name, agent_portrayal)
+        JupyterContainer(model_class, model_params, measures, name, agent_portrayal),
+        space_drawer=space_drawer,
+        play_interval=play_interval,
     )
