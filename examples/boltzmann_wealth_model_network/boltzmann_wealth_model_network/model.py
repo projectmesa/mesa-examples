@@ -56,7 +56,7 @@ class MoneyAgent(mesa.Agent):
     def move(self):
         possible_steps = [
             node
-            for node in self.model.grid.get_neighbors(self.pos, include_center=False)
+            for node in self.model.grid.get_neighborhood(self.pos, include_center=False)
             if self.model.grid.is_cell_empty(node)
         ]
         if len(possible_steps) > 0:
@@ -64,8 +64,7 @@ class MoneyAgent(mesa.Agent):
             self.model.grid.move_agent(self, new_position)
 
     def give_money(self):
-        neighbors_nodes = self.model.grid.get_neighbors(self.pos, include_center=False)
-        neighbors = self.model.grid.get_cell_list_contents(neighbors_nodes)
+        neighbors = self.model.grid.get_neighbors(self.pos, include_center=False)
         if len(neighbors) > 0:
             other = self.random.choice(neighbors)
             other.wealth += 1

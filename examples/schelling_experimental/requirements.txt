@@ -1,4 +1,5 @@
 jupyter
 matplotlib
-mesa~=1.1
--e git+https://github.com/projectmesa/mesa-examples
+mesa~=2.0
+solara
+git+https://github.com/projectmesa/mesa-examples
