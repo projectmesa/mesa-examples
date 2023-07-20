@@ -8,10 +8,6 @@ authors = [
 license = {file = "LICENSE"}
 readme = "README.rst"
 requires-python = ">=3.8"
-dependencies = [
-    "solara",
-]
-
 
 [build-system]
 requires = [

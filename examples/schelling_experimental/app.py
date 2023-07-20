@@ -1,4 +1,4 @@
-from mesa_models.experimental import JupyterViz, make_text
+from mesa.experimental import JupyterViz, make_text
 from model import Schelling
 
 

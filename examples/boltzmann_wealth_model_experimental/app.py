@@ -1,4 +1,4 @@
-from mesa_models.experimental import JupyterViz
+from mesa.experimental import JupyterViz
 from model import BoltzmannWealthModel
 
 
