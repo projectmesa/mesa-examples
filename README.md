@@ -13,6 +13,3 @@ $ pip install -U -e git+https://github.com/projectmesa/mesa-examples#egg=mesa-mo
 from mesa_models.boltzmann_wealth_model.model import BoltzmannWealthModel
 ```
 You can see the available models at [setup.cfg](https://github.com/projectmesa/mesa-examples/blob/main/setup.cfg).
-
-The package also contains experimental code, which will be in the main Mesa package once they have stabilized.
-You can see an example of the `JupyterViz` function in the experimental boltzmann wealth model's [app.py](https://github.com/projectmesa/mesa-examples/blob/main/examples/boltzmann_wealth_model_experimental/app.py).
