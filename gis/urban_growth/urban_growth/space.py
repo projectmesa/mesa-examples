@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import gzip
 import random
 
 import mesa
@@ -96,7 +95,7 @@ class City(mg.GeoSpace):
             "land_use": land_use_data,
         }
         for attribute_name, data_file in data.items():
-            with gzip.open(data_file, "rb") as f, rio.open(f, "r") as dataset:
+            with rio.open(f"/vsigzip/{data_file}", "r") as dataset:
                 values = dataset.read()
             self.raster_layer.apply_raster(values, attr_name=attribute_name)
 
