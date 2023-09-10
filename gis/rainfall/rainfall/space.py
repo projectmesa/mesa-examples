@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import gzip
-
 import mesa
 import mesa_geo as mg
 import numpy as np
@@ -33,11 +31,10 @@ class CraterLake(mg.GeoSpace):
         self.outflow = 0
 
     def set_elevation_layer(self, elevation_gzip_file, crs):
-        with gzip.open(elevation_gzip_file, "rb") as elevation_file:
-            raster_layer = mg.RasterLayer.from_file(
-                elevation_file, cell_cls=LakeCell, attr_name="elevation"
-            )
-            raster_layer.crs = crs
+        raster_layer = mg.RasterLayer.from_file(
+            f"/vsigzip/{elevation_gzip_file}", cell_cls=LakeCell, attr_name="elevation"
+        )
+        raster_layer.crs = crs
         raster_layer.apply_raster(
             data=np.zeros(shape=(1, raster_layer.height, raster_layer.width)),
             attr_name="water_level",
