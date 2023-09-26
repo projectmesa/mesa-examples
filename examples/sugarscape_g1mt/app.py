@@ -1,13 +1,12 @@
 import numpy as np
-import solara
-from matplotlib.figure import Figure
-from mesa.experimental import JupyterViz
+from mesa.experimental import JupyterViz, prepare_matplotlib_space
 from sugarscape_g1mt.model import SugarscapeG1mt
 from sugarscape_g1mt.resource_agents import Sugar
 from sugarscape_g1mt.trader_agents import Trader
 
 
-def space_drawer(viz):
+@prepare_matplotlib_space
+def space_drawer(viz, fig, ax):
     def portray(g):
         layers = {
             "sugar": [[np.nan for j in range(g.height)] for i in range(g.width)],
@@ -29,8 +28,6 @@ def space_drawer(viz):
                         layers["spice"][i][j] = value
         return layers
 
-    fig = Figure()
-    ax = fig.subplots()
     out = portray(viz.model.grid)
     # Sugar
     # Important note: imshow by default draws from upper left. You have to
@@ -41,8 +38,6 @@ def space_drawer(viz):
     ax.imshow(out["spice"], cmap="winter", origin="lower")
     # Trader
     ax.scatter(**out["trader"])
-    ax.set_axis_off()
-    solara.FigureMatplotlib(fig, dependencies=[viz.model, viz.df])
 
 
 model_params = {
