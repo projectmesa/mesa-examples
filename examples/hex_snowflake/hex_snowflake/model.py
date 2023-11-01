@@ -1,5 +1,5 @@
 import mesa
-from hex_snowflake.cell import Cell
+from .cell import Cell
 
 
 class HexSnowflake(mesa.Model):
@@ -22,7 +22,7 @@ class HexSnowflake(mesa.Model):
         self.schedule = mesa.time.SimultaneousActivation(self)
 
         # Use a hexagonal grid, where edges wrap around.
-        self.grid = mesa.space.HexGrid(width, height, torus=True)
+        self.grid = mesa.space.HexSingleGrid(width, height, torus=True)
 
         # Place a dead cell at each location.
         for contents, pos in self.grid.coord_iter():

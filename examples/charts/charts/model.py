@@ -12,7 +12,7 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
-from charts.agents import Bank, Person
+from .agents import Bank, Person
 
 """
 If you want to perform a parameter sweep, call batch_run.py instead of run.py.

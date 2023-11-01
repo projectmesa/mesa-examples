@@ -10,6 +10,7 @@ Northwestern University, Evanston, IL.
 """
 
 import mesa
+from pathlib import Path
 
 from .agents import SsAgent, Sugar
 
@@ -43,7 +44,7 @@ class SugarscapeCg(mesa.Model):
         # Create sugar
         import numpy as np
 
-        sugar_distribution = np.genfromtxt("sugarscape_cg/sugar-map.txt")
+        sugar_distribution = np.genfromtxt(Path(__file__).parent / "sugar-map.txt")
         agent_id = 0
         for _, (x, y) in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
