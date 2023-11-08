@@ -99,7 +99,7 @@ class Boid(mesa.Agent):
             self.cohere(neighbors) * self.cohere_factor
             + self.separate(neighbors) * self.separate_factor
             + self.match_heading(neighbors) * self.match_factor
-        ) / 2
+        )
         self.direction_vector /= np.linalg.norm(self.direction_vector)
         new_pos = self.pos + self.direction_vector * self.speed
         self.model.space.move_agent(self, new_pos)
