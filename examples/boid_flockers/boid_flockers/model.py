@@ -58,13 +58,13 @@ class BoidFlockers(mesa.Model):
             x = self.random.random() * self.space.x_max
             y = self.random.random() * self.space.y_max
             pos = np.array((x, y))
-            velocity = np.random.random(2) * 2 - 1
+            direction_vector = np.random.random(2) * 2 - 1
             boid = Boid(
                 i,
                 self,
                 pos,
                 self.speed,
-                velocity,
+                direction_vector,
                 self.vision,
                 self.separation,
                 **self.factors,
