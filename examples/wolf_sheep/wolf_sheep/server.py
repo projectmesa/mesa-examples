@@ -52,7 +52,7 @@ model_params = {
     "title": mesa.visualization.StaticText("Parameters:"),
     "grass": mesa.visualization.Checkbox("Grass Enabled", True),
     "grass_regrowth_time": mesa.visualization.Slider("Grass Regrowth Time", 20, 1, 50),
-    "initial_sheep": mesa.visualization.Slider(
+    "initial_elk": mesa.visualization.Slider(
         "Initial Elk Population", 100, 10, 300
     ),
     "elk_reproduce": mesa.visualization.Slider(
