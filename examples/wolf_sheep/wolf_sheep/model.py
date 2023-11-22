@@ -45,7 +45,7 @@ class WolfElk(mesa.Model):
         self,
         width=20,
         height=20,
-        initial_sheep=100,
+        initial_elk=100,
         initial_wolves=50,
         elk_reproduce=0.04,
         wolf_reproduce=0.05,
