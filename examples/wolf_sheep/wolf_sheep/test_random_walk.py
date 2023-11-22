@@ -80,3 +80,7 @@ if __name__ == "__main__":
     for i in range(10):
         print("Step:", str(i))
         viz.step()
+
+# Kaitlyn: this could be helpful for testing our changes to randomwalker before adding it to entire project
+
+
