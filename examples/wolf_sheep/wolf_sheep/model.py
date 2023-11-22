@@ -11,22 +11,22 @@ Replication of the model found in NetLogo:
 
 import mesa
 
-from .agents import GrassPatch, Sheep, Wolf
+from .agents import GrassPatch, Elk, Wolf
 from .scheduler import RandomActivationByTypeFiltered
 
 
-class WolfSheep(mesa.Model):
+class WolfElk(mesa.Model):
     """
-    Wolf-Sheep Predation Model
+    Wolf-Elk Predation Model
     """
 
     height = 20
     width = 20
 
-    initial_sheep = 100
+    initial_elk = 100
     initial_wolves = 50
 
-    sheep_reproduce = 0.04
+    elk_reproduce = 0.04
     wolf_reproduce = 0.05
 
     wolf_gain_from_food = 20
@@ -47,12 +47,12 @@ class WolfSheep(mesa.Model):
         height=20,
         initial_sheep=100,
         initial_wolves=50,
-        sheep_reproduce=0.04,
+        elk_reproduce=0.04,
         wolf_reproduce=0.05,
         wolf_gain_from_food=20,
         grass=False,
         grass_regrowth_time=30,
-        sheep_gain_from_food=4,
+        elk_gain_from_food=4,
     ):
         """
         Create a new Wolf-Sheep model with the given parameters.
@@ -72,21 +72,21 @@ class WolfSheep(mesa.Model):
         # Set parameters
         self.width = width
         self.height = height
-        self.initial_sheep = initial_sheep
+        self.initial_elk = initial_elk
         self.initial_wolves = initial_wolves
-        self.sheep_reproduce = sheep_reproduce
+        self.elk_reproduce = elk_reproduce
         self.wolf_reproduce = wolf_reproduce
         self.wolf_gain_from_food = wolf_gain_from_food
         self.grass = grass
         self.grass_regrowth_time = grass_regrowth_time
-        self.sheep_gain_from_food = sheep_gain_from_food
+        self.elk_gain_from_food = elk_gain_from_food
 
         self.schedule = RandomActivationByTypeFiltered(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         self.datacollector = mesa.DataCollector(
             {
                 "Wolves": lambda m: m.schedule.get_type_count(Wolf),
-                "Sheep": lambda m: m.schedule.get_type_count(Sheep),
+                "Elk": lambda m: m.schedule.get_type_count(Elk),
                 "Grass": lambda m: m.schedule.get_type_count(
                     GrassPatch, lambda x: x.fully_grown
                 ),
@@ -94,13 +94,13 @@ class WolfSheep(mesa.Model):
         )
 
         # Create sheep:
-        for i in range(self.initial_sheep):
+        for i in range(self.initial_elk):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(self.next_id(), (x, y), self, True, energy)
-            self.grid.place_agent(sheep, (x, y))
-            self.schedule.add(sheep)
+            energy = self.random.randrange(2 * self.elk_gain_from_food)
+            elk = Elk(self.next_id(), (x, y), self, True, energy)
+            self.grid.place_agent(elk, (x, y))
+            self.schedule.add(elk)
 
         # Create wolves
         for i in range(self.initial_wolves):
@@ -137,7 +137,7 @@ class WolfSheep(mesa.Model):
                 [
                     self.schedule.time,
                     self.schedule.get_type_count(Wolf),
-                    self.schedule.get_type_count(Sheep),
+                    self.schedule.get_type_count(Elk),
                     self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
                 ]
             )
@@ -145,7 +145,7 @@ class WolfSheep(mesa.Model):
     def run_model(self, step_count=200):
         if self.verbose:
             print("Initial number wolves: ", self.schedule.get_type_count(Wolf))
-            print("Initial number sheep: ", self.schedule.get_type_count(Sheep))
+            print("Initial number elk: ", self.schedule.get_type_count(Elk))
             print(
                 "Initial number grass: ",
                 self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
@@ -157,7 +157,7 @@ class WolfSheep(mesa.Model):
         if self.verbose:
             print("")
             print("Final number wolves: ", self.schedule.get_type_count(Wolf))
-            print("Final number sheep: ", self.schedule.get_type_count(Sheep))
+            print("Final number elk: ", self.schedule.get_type_count(Elk))
             print(
                 "Final number grass: ",
                 self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),

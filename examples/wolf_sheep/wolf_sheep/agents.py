@@ -3,9 +3,9 @@ import mesa
 from .random_walk import RandomWalker
 
 
-class Sheep(RandomWalker):
+class Elk(RandomWalker):
     """
-    A sheep that walks around, reproduces (asexually) and gets eaten.
+    A elk that walks around, reproduces (asexually) and gets eaten.
 
     The init is the same as the RandomWalker.
     """
@@ -40,20 +40,20 @@ class Sheep(RandomWalker):
                 self.model.schedule.remove(self)
                 living = False
 
-        if living and self.random.random() < self.model.sheep_reproduce:
+        if living and self.random.random() < self.model.elk_reproduce:
             # Create a new sheep:
             if self.model.grass:
                 self.energy /= 2
-            lamb = Sheep(
+            calf = Elk(
                 self.model.next_id(), self.pos, self.model, self.moore, self.energy
             )
-            self.model.grid.place_agent(lamb, self.pos)
-            self.model.schedule.add(lamb)
+            self.model.grid.place_agent(calf, self.pos)
+            self.model.schedule.add(calf)
 
 
 class Wolf(RandomWalker):
     """
-    A wolf that walks around, reproduces (asexually) and eats sheep.
+    A wolf that walks around, reproduces (asexually) and eats elk.
     """
 
     energy = None
@@ -66,17 +66,17 @@ class Wolf(RandomWalker):
         self.random_move()
         self.energy -= 1
 
-        # If there are sheep present, eat one
+        # If there are elk present, eat one
         x, y = self.pos
         this_cell = self.model.grid.get_cell_list_contents([self.pos])
-        sheep = [obj for obj in this_cell if isinstance(obj, Sheep)]
-        if len(sheep) > 0:
-            sheep_to_eat = self.random.choice(sheep)
+        elk = [obj for obj in this_cell if isinstance(obj, Elk)]
+        if len(elk) > 0:
+            elk_to_eat = self.random.choice(elk)
             self.energy += self.model.wolf_gain_from_food
 
             # Kill the sheep
-            self.model.grid.remove_agent(sheep_to_eat)
-            self.model.schedule.remove(sheep_to_eat)
+            self.model.grid.remove_agent(elk_to_eat)
+            self.model.schedule.remove(elk_to_eat)
 
         # Death or reproduction
         if self.energy < 0:
