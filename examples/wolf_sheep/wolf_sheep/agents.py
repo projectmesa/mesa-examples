@@ -57,6 +57,7 @@ class Wolf(RandomWalker):
     """
 
     energy = None
+    threshold = 0.5
 
     def __init__(self, unique_id, pos, model, moore, energy=None):
         super().__init__(unique_id, pos, model, moore=moore)
@@ -66,17 +67,48 @@ class Wolf(RandomWalker):
         self.random_move()
         self.energy -= 1
 
-        # If there are sheep present, eat one
         x, y = self.pos
         this_cell = self.model.grid.get_cell_list_contents([self.pos])
         sheep = [obj for obj in this_cell if isinstance(obj, Sheep)]
+        
         if len(sheep) > 0:
             sheep_to_eat = self.random.choice(sheep)
-            self.energy += self.model.wolf_gain_from_food
+            
+            # Check probability of eating the sheep
+            wolf_eats_prob = self.random.random()
+            if wolf_eats_prob < self.threshold:
+                # Wolf eats the sheep
+                self.energy += self.model.wolf_gain_from_food
 
-            # Kill the sheep
-            self.model.grid.remove_agent(sheep_to_eat)
-            self.model.schedule.remove(sheep_to_eat)
+                # Kill the sheep
+                self.model.grid.remove_agent(sheep_to_eat)
+                self.model.schedule.remove(sheep_to_eat)
+            else:
+                # Wolf moves away a random number of spaces
+                self.random_move()
+                
+#         x, y = self.pos
+#         this_cell = self.model.grid.get_cell_list_contents([self.pos])
+#         elk = [obj for obj in this_cell if isinstance(obj, Elk)]
+        
+#         if len(elk) > 0:
+#             elk_to_eat = self.random.choice(elk)
+            
+#             # Check probability of eating the elk
+#             wolf_eats_prob = self.random.random()
+#             if wolf_eats_prob < self.threshold:
+#                 # Wolf eats the elk
+#                 self.energy += self.model.wolf_gain_from_food
+
+#                 # Kill the elk
+#                 self.model.grid.remove_agent(elk_to_eat)
+#                 self.model.schedule.remove(elk_to_eat)
+#             else:
+#                 # Wolf moves away a random number of spaces
+#                 self.random_move()
+
+            
+         
 
         # Death or reproduction
         if self.energy < 0:
@@ -91,6 +123,7 @@ class Wolf(RandomWalker):
                 )
                 self.model.grid.place_agent(cub, cub.pos)
                 self.model.schedule.add(cub)
+
 
 
 class GrassPatch(mesa.Agent):
