@@ -38,7 +38,7 @@ def wolf_elk_portrayal(agent):
     return portrayal
 
 
-canvas_element = mesa.visualization.CanvasGrid(wolf_elk_portrayal, 20, 20, 500, 500)
+canvas_element = mesa.visualization.CanvasGrid(wolf_elk_portrayal, 50, 50, 1000, 1000)
 chart_element = mesa.visualization.ChartModule(
     [
         {"Label": "Wolves", "Color": "#AA0000"},
@@ -53,12 +53,12 @@ model_params = {
     "grass": mesa.visualization.Checkbox("Grass Enabled", True),
     "grass_regrowth_time": mesa.visualization.Slider("Grass Regrowth Time", 20, 1, 50),
     "initial_elk": mesa.visualization.Slider(
-        "Initial Elk Population", 100, 10, 300
+        "Initial Elk Population", 1700, 10, 2000
     ),
     "elk_reproduce": mesa.visualization.Slider(
         "Elk Reproduction Rate", 0.04, 0.01, 1.0, 0.01
     ),
-    "initial_wolves": mesa.visualization.Slider("Initial Wolf Population", 50, 10, 300),
+    "initial_wolves": mesa.visualization.Slider("Initial Wolf Population", 14, 5, 300),
     "wolf_reproduce": mesa.visualization.Slider(
         "Wolf Reproduction Rate",
         0.05,
