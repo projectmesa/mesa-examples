@@ -11,7 +11,7 @@ Replication of the model found in NetLogo:
 
 import mesa
 
-from .agents import GrassPatch, Elk, Wolf
+from .agents import GrassPatch, Elk, Wolf, WateringHole
 from .scheduler import RandomActivationByTypeFiltered
 
 
@@ -33,7 +33,8 @@ class WolfElk(mesa.Model):
 
     grass = False
     grass_regrowth_time = 30
-    sheep_gain_from_food = 4
+    elk_gain_from_food = 4
+    water = True
 
     verbose = False  # Print-monitoring
 
@@ -44,7 +45,7 @@ class WolfElk(mesa.Model):
     def __init__(
         self,
         width=50,
-        height=50,
+        height=30,
         initial_elk=1700,
         initial_wolves=14,
         elk_reproduce=0.04,
@@ -53,12 +54,13 @@ class WolfElk(mesa.Model):
         grass=False,
         grass_regrowth_time=30,
         elk_gain_from_food=4,
+        water=True
     ):
         """
-        Create a new Wolf-Sheep model with the given parameters.
+        Create a new Wolf-Elk model with the given parameters.
 
         Args:
-            initial_sheep: Number of sheep to start with
+            initial_elk: Number of sheep to start with
             initial_wolves: Number of wolves to start with
             sheep_reproduce: Probability of each sheep reproducing each step
             wolf_reproduce: Probability of each wolf reproducing each step
@@ -66,7 +68,7 @@ class WolfElk(mesa.Model):
             grass: Whether to have the sheep eat grass for energy
             grass_regrowth_time: How long it takes for a grass patch to regrow
                                  once it is eaten
-            sheep_gain_from_food: Energy sheep gain from grass, if enabled.
+            elk_gain_from_food: Energy sheep gain from grass, if enabled.
         """
         super().__init__()
         # Set parameters
@@ -80,6 +82,7 @@ class WolfElk(mesa.Model):
         self.grass = grass
         self.grass_regrowth_time = grass_regrowth_time
         self.elk_gain_from_food = elk_gain_from_food
+        self.water = water
 
         self.schedule = RandomActivationByTypeFiltered(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
@@ -93,7 +96,7 @@ class WolfElk(mesa.Model):
             }
         )
 
-        # Create sheep:
+        # Create elk:
         for i in range(self.initial_elk):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
@@ -124,6 +127,17 @@ class WolfElk(mesa.Model):
                 patch = GrassPatch(self.next_id(), (x, y), self, fully_grown, countdown)
                 self.grid.place_agent(patch, (x, y))
                 self.schedule.add(patch)
+                
+        # Create watering holes
+        if self.water:
+            for x in range(0,5):
+                for y in range(0,5):
+          
+                    waterhole = WateringHole(self.next_id(), (x,y), self)
+                    self.grid.place_agent(waterhole, (x,y))
+                    self.schedule.add(waterhole)
+            
+            
 
         self.running = True
         self.datacollector.collect(self)
@@ -139,6 +153,7 @@ class WolfElk(mesa.Model):
                     self.schedule.get_type_count(Wolf),
                     self.schedule.get_type_count(Elk),
                     self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
+                    self.schedule.get_type_count(WateringHole)
                 ]
             )
 

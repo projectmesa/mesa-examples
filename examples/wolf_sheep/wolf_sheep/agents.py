@@ -31,7 +31,7 @@ class Elk(RandomWalker):
             this_cell = self.model.grid.get_cell_list_contents([self.pos])
             grass_patch = [obj for obj in this_cell if isinstance(obj, GrassPatch)][0]
             if grass_patch.fully_grown:
-                self.energy += self.model.sheep_gain_from_food
+                self.energy += self.model.elk_gain_from_food
                 grass_patch.fully_grown = False
 
             # Death
@@ -74,7 +74,7 @@ class Wolf(RandomWalker):
             elk_to_eat = self.random.choice(elk)
             self.energy += self.model.wolf_gain_from_food
 
-            # Kill the sheep
+            # Kill the elk
             self.model.grid.remove_agent(elk_to_eat)
             self.model.schedule.remove(elk_to_eat)
 
@@ -95,7 +95,7 @@ class Wolf(RandomWalker):
 
 class GrassPatch(mesa.Agent):
     """
-    A patch of grass that grows at a fixed rate and it is eaten by sheep
+    A patch of grass that grows at a fixed rate and it is eaten by elk
     """
 
     def __init__(self, unique_id, pos, model, fully_grown, countdown):
@@ -119,3 +119,14 @@ class GrassPatch(mesa.Agent):
                 self.countdown = self.model.grass_regrowth_time
             else:
                 self.countdown -= 1
+class WateringHole(mesa.Agent):
+    def __init__(self, unique_id, pos, model):
+        
+        super().__init__(unique_id, model)
+        self.pos=pos
+    
+    def step(self):
+        pass
+        
+                 
+    
