@@ -36,7 +36,7 @@ def wolf_elk_portrayal(agent):
         portrayal["h"] = 1
         
     elif type(agent) is WateringHole:
-        portrayal["Color"] = ["#728cff"]
+        portrayal["Color"] = ["#728cff", "#0000FF"]
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
         portrayal["Layer"] = 1

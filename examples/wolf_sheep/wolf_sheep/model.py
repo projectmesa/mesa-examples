@@ -1,5 +1,5 @@
 """
-Wolf-Sheep Predation Model
+Wolf-Elk Predation Model
 ================================
 
 Replication of the model found in NetLogo:
@@ -39,7 +39,7 @@ class WolfElk(mesa.Model):
     verbose = False  # Print-monitoring
 
     description = (
-        "A model for simulating wolf and sheep (predator-prey) ecosystem modelling."
+        "A model for simulating wolf and elk (predator-prey) ecosystem modelling."
     )
 
     def __init__(
@@ -62,13 +62,13 @@ class WolfElk(mesa.Model):
         Args:
             initial_elk: Number of sheep to start with
             initial_wolves: Number of wolves to start with
-            sheep_reproduce: Probability of each sheep reproducing each step
+            elk_reproduce: Probability of each elk reproducing each step
             wolf_reproduce: Probability of each wolf reproducing each step
             wolf_gain_from_food: Energy a wolf gains from eating a sheep
-            grass: Whether to have the sheep eat grass for energy
+            grass: Whether to have the elk eat grass for energy
             grass_regrowth_time: How long it takes for a grass patch to regrow
                                  once it is eaten
-            elk_gain_from_food: Energy sheep gain from grass, if enabled.
+            elk_gain_from_food: Energy elk gain from grass, if enabled.
         """
         super().__init__()
         # Set parameters
@@ -131,7 +131,14 @@ class WolfElk(mesa.Model):
         # Create watering holes
         if self.water:
             for x in range(0,5):
-                for y in range(0,5):
+                for y in range(0,7):
+          
+                    waterhole = WateringHole(self.next_id(), (x,y), self)
+                    self.grid.place_agent(waterhole, (x,y))
+                    self.schedule.add(waterhole)
+                    
+            for x in range(45,50):
+                for y in range(22,30):
           
                     waterhole = WateringHole(self.next_id(), (x,y), self)
                     self.grid.place_agent(waterhole, (x,y))

@@ -49,6 +49,15 @@ class Elk(RandomWalker):
             )
             self.model.grid.place_agent(calf, self.pos)
             self.model.schedule.add(calf)
+            
+            
+        # if there is water present, drink it
+        
+#         x, y = self.pos
+#         this_cell = self.model.grid.get_cell_list_contents([self.pos])
+        water = [obj for obj in this_cell if isinstance(obj, WateringHole)]
+        if len(water) > 0:
+            self.energy += 1
 
 
 class Wolf(RandomWalker):
@@ -77,6 +86,14 @@ class Wolf(RandomWalker):
             # Kill the elk
             self.model.grid.remove_agent(elk_to_eat)
             self.model.schedule.remove(elk_to_eat)
+            
+        # if there is water present, drink it
+        
+#         x, y = self.pos
+ #        this_cell = self.model.grid.get_cell_list_contents([self.pos])
+        water = [obj for obj in this_cell if isinstance(obj, WateringHole)]
+        if len(water) > 0:
+            self.energy += 1
 
         # Death or reproduction
         if self.energy < 0:
