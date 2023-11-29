@@ -86,6 +86,7 @@ class Wolf(RandomWalker):
             else:
                 # Wolf moves away a random number of spaces
                 self.random_move()
+                self.energy -= 1
                 
 #         x, y = self.pos
 #         this_cell = self.model.grid.get_cell_list_contents([self.pos])
@@ -106,6 +107,7 @@ class Wolf(RandomWalker):
 #             else:
 #                 # Wolf moves away a random number of spaces
 #                 self.random_move()
+#                 self.energy -= 1
 
             
          
