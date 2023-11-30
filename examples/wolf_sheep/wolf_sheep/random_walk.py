@@ -1,5 +1,5 @@
 """
-Generalized behavior for random walking, one grid cell at a time.
+Determines where wolves and elk will move. Called random_walk because originally in mesa, movement was totally random
 """
 
 import mesa
@@ -20,51 +20,73 @@ class RandomWalker(mesa.Agent):
     x = None
     y = None
     moore = True
+    water = True
+    energy = None
 
-    def __init__(self, unique_id, pos, model, moore=True, target_location=(0,0)):
+    def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(49,29), 
+                 water_desire=True, energy=None):
         """
         grid: The MultiGrid object in which the agent lives.
         x: The agent's current x coordinate
         y: The agent's current y coordinate
         moore: If True, may move in all 8 directions.
                 Otherwise, only up, down, left, right.
-        target_location: watering hole location
+        target_location: watering hole locations
         """
         super().__init__(unique_id, model)
         self.pos = pos
         self.moore = moore
-        target_location = target_location
+        self.target_location_1 = target_location_1
+        self.target_location_2 = target_location_2
+        self.energy = energy
         
-    def calculate_distance(point1, point2):
+        
+    def calculate_distance(self, point1, point2):
         x1, y1 = point1
         x2, y2 = point2
         return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
     
-    def find_closest_neighbor(agent_position, neighborhood):
+    def find_closest_neighbor(self, agent_position, neighborhood):
         closest_neighbor = None
         min_distance = float('inf')  # Initialize with a large value
 
         for neighbor_cell in neighborhood:
-            distance_to_target = calculate_distance(neighbor_cell, target_location)
+            distance_to_target = calculate_distance(neighbor_cell, self.target_location_1)
+            if distance_to_target < min_distance:
+                min_distance = distance_to_target
+                closest_neighbor = neighbor_cell
+            distance_to_target = calculate_distance(neighbor_cell, self.target_location_2)
             if distance_to_target < min_distance:
                 min_distance = distance_to_target
                 closest_neighbor = neighbor_cell
 
         return closest_neighbor
-
+    
+    def movement_determination(self, energy):
+        if self.energy < 10:
+            self.water_desire = True
+        else:
+            self.water_desire = False
+        
     def random_move(self):
         """
         Step one cell in any allowable direction.
         """
         # Pick the next cell from the adjacent cells.
         next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
-        closest_neighbor_to_target = find_closest_neighbor(agent_position, neighborhood)
+        closest_neighbor_to_target = self.find_closest_neighbor(agent_position, neighborhood)
         
         #probability that it moves towards watering hole
-        prob = self.random.uniform(0, 1)
+        prob_to_water = self.random.uniform(0, 1)
         
-        if prob > 0.5:
-            next_move = closest_neighbor_to_target
+        
+        if water_desire = True:
+            
+            if prob_to_water > 0.5:
+                next_move = closest_neighbor_to_target
+            else:
+                next_move = self.random.choice(next_moves)
+                
         else:
             next_move = self.random.choice(next_moves)
         # Now move:
