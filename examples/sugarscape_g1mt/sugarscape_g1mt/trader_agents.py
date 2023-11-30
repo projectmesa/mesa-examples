@@ -20,6 +20,13 @@ def get_distance(pos_1, pos_2):
     return math.sqrt(dx**2 + dy**2)
 
 
+def flatten(list_of_lists):
+    """
+    helper function to collapse a list of lists into one list. See np.ravel in NumPy.
+    """
+    return [item for sublist in list_of_lists for item in sublist]
+
+
 class Trader(mesa.Agent):
     """
     Trader:
@@ -92,16 +99,13 @@ class Trader(mesa.Agent):
             return spice_patch.amount
         return 0
 
-    def get_trader(self, pos):
+    def get_traders(self, pos):
         """
         helper function used in self.trade_with_neighbors()
         """
 
         this_cell = self.model.grid.get_cell_list_contents(pos)
-
-        for agent in this_cell:
-            if isinstance(agent, Trader):
-                return agent
+        return [agent for agent in this_cell if isinstance(agent, Trader)]
 
     def is_occupied_by_other(self, pos):
         """
@@ -357,13 +361,15 @@ class Trader(mesa.Agent):
         3- collect data
         """
 
-        neighbor_agents = [
-            self.get_trader(pos)
-            for pos in self.model.grid.get_neighborhood(
-                self.pos, self.moore, False, self.vision
-            )
-            if self.is_occupied_by_other(pos)
-        ]
+        neighbor_agents = flatten(
+            [
+                self.get_traders(pos)
+                for pos in self.model.grid.get_neighborhood(
+                    self.pos, self.moore, False, self.vision
+                )
+                if self.is_occupied_by_other(pos)
+            ]
+        )
 
         if len(neighbor_agents) == 0:
             return
