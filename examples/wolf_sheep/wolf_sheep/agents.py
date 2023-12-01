@@ -15,12 +15,12 @@ class Sheep(RandomWalker):
     def __init__(self, unique_id, pos, model, moore, energy):
         super().__init__(unique_id, pos, model, moore=moore, energy=None)
 
-    def step(self, energy):
+    def step(self):
         """
         A model step. Move, then eat grass and reproduce.
         """
         #self.movement_determination()
-        self.random_move(self.energy)
+        self.random_move(energy)
         living = True
 
         if self.model.grass:
@@ -62,9 +62,9 @@ class Wolf(RandomWalker):
         super().__init__(unique_id, pos, model, moore=moore, energy=None)
         self.energy = energy
 
-    def step(self, energy):
+    def step(self):
         #self.movement_determination()
-        self.random_move(self.energy)
+        self.random_move(energy)
         self.energy -= 1
 
         # If there are sheep present, eat one
