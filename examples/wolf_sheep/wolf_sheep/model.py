@@ -101,8 +101,8 @@ class WolfSheep(mesa.Model):
         for i in range(self.initial_sheep):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            self.energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(self.next_id(), (x, y), self, True, self.energy)
+            energy = self.random.randrange(2 * self.sheep_gain_from_food)
+            sheep = Sheep(self.next_id(), (x, y), self, True, energy)
             self.grid.place_agent(sheep, (x, y))
             self.schedule.add(sheep)
 
@@ -110,8 +110,8 @@ class WolfSheep(mesa.Model):
         for i in range(self.initial_wolves):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            self.energy = self.random.randrange(2 * self.wolf_gain_from_food)
-            wolf = Wolf(self.next_id(), (x, y), self, True, self.energy)
+            energy = self.random.randrange(2 * self.wolf_gain_from_food)
+            wolf = Wolf(self.next_id(), (x, y), self, True, energy)
             self.grid.place_agent(wolf, (x, y))
             self.schedule.add(wolf)
 
