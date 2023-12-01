@@ -19,7 +19,7 @@ class Sheep(RandomWalker):
         """
         A model step. Move, then eat grass and reproduce.
         """
-        self.movement_determination()
+        #self.movement_determination()
         self.random_move()
         living = True
 
@@ -63,7 +63,7 @@ class Wolf(RandomWalker):
         self.energy = energy
 
     def step(self):
-        self.movement_determination()
+        #self.movement_determination()
         self.random_move()
         self.energy -= 1
 
