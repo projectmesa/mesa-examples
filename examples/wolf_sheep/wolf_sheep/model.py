@@ -142,7 +142,7 @@ class WolfSheep(mesa.Model):
                 ]
             )
 
-    def run_model(self, energy, step_count=200):
+    def run_model(self, step_count=200, energy):
         if self.verbose:
             print("Initial number wolves: ", self.schedule.get_type_count(Wolf))
             print("Initial number sheep: ", self.schedule.get_type_count(Sheep))
