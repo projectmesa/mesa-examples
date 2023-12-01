@@ -128,8 +128,8 @@ class WolfSheep(mesa.Model):
         self.running = True
         self.datacollector.collect(self)
 
-    def step(self):
-        self.schedule.step()
+    def step(self, energy):
+        self.schedule.step(self.energy)
         # collect data
         self.datacollector.collect(self)
         if self.verbose:
