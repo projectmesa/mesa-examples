@@ -66,13 +66,13 @@ class RandomWalker(mesa.Agent):
         """
         # Pick the next cell from the adjacent cells.
         next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
-        closest_neighbor_to_target = self.find_closest_neighbor(self.pos, next_moves)
+        closest_neighbor_to_target, min_distance = self.find_closest_neighbor(self.pos, next_moves)
         
         #probability that it moves towards watering hole if it's far away from a watering hole
         prob_to_water = self.random.uniform(0, 1)
         
         
-        if self.min_distance > 25:
+        if min_distance > 25:
             
             if prob_to_water > 0.5:
                 next_move = closest_neighbor_to_target
