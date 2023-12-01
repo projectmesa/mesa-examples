@@ -71,7 +71,7 @@ class WolfSheep(mesa.Model):
                                  once it is eaten
             sheep_gain_from_food: Energy sheep gain from grass, if enabled.
         """
-        super().__init__()
+        super().__init__(energy=None)
         # Set parameters
         self.width = width
         self.height = height
