@@ -48,16 +48,14 @@ class RandomWalker(mesa.Agent):
         min_distance = float('inf')  # Initialize with a large value
 
         for neighbor_cell in neighborhood:
-            distance_to_target = calculate_distance(neighbor_cell, self.target_location_1)
+            distance_to_target = self.calculate_distance(neighbor_cell, self.target_location_1)
             if distance_to_target < min_distance:
                 min_distance = distance_to_target
                 closest_neighbor = neighbor_cell
-                closest_target_location = self.target_location_1
-            distance_to_target = calculate_distance(neighbor_cell, self.target_location_2)
+            distance_to_target = self.calculate_distance(neighbor_cell, self.target_location_2)
             if distance_to_target < min_distance:
                 min_distance = distance_to_target
                 closest_neighbor = neighbor_cell
-                closest_target_location = self.target_location_2
 
         return closest_neighbor, min_distance
         
