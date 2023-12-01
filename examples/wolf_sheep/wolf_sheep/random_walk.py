@@ -21,10 +21,9 @@ class RandomWalker(mesa.Agent):
     y = None
     moore = True
     water = True
-    energy = None
 
     def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(49,29), 
-                 water_desire=True, energy=None):
+                 water_desire=True):
         """
         grid: The MultiGrid object in which the agent lives.
         x: The agent's current x coordinate
@@ -55,18 +54,15 @@ class RandomWalker(mesa.Agent):
             if distance_to_target < min_distance:
                 min_distance = distance_to_target
                 closest_neighbor = neighbor_cell
+                closest_target_location = self.target_location_1
             distance_to_target = calculate_distance(neighbor_cell, self.target_location_2)
             if distance_to_target < min_distance:
                 min_distance = distance_to_target
                 closest_neighbor = neighbor_cell
+                closest_target_location = self.target_location_2
 
-        return closest_neighbor
-    
-    def movement_determination(self, energy):
-        if self.energy < 10:
-            self.water_desire = True
-        else:
-            self.water_desire = False
+        return closest_neighbor, min_distance
+        
         
     def random_move(self):
         """
@@ -76,11 +72,11 @@ class RandomWalker(mesa.Agent):
         next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
         closest_neighbor_to_target = self.find_closest_neighbor(agent_position, neighborhood)
         
-        #probability that it moves towards watering hole
+        #probability that it moves towards watering hole if it's far away from a watering hole
         prob_to_water = self.random.uniform(0, 1)
         
         
-        if water_desire == True:
+        if min_distance > 25:
             
             if prob_to_water > 0.5:
                 next_move = closest_neighbor_to_target
