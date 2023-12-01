@@ -35,7 +35,7 @@ class WolfSheep(mesa.Model):
     grass_regrowth_time = 30
     sheep_gain_from_food = 4
 
-    verbose = True  # Print-monitoring
+    verbose = False  # Print-monitoring
 
     description = (
         "A model for simulating wolf and sheep (predator-prey) ecosystem modelling."
