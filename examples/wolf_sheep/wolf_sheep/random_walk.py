@@ -72,9 +72,9 @@ class RandomWalker(mesa.Agent):
         prob_to_water = self.random.uniform(0, 1)
         
         
-        if min_distance > 25:
+        if min_distance > 20:
             
-            if prob_to_water > 0.5:
+            if prob_to_water > 0.8:
                 next_move = closest_neighbor_to_target
             else:
                 next_move = self.random.choice(next_moves)
