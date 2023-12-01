@@ -22,8 +22,7 @@ class RandomWalker(mesa.Agent):
     moore = True
     water = True
 
-    def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(49,29), 
-                 water_desire=True):
+    def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(49,29)):
         """
         grid: The MultiGrid object in which the agent lives.
         x: The agent's current x coordinate
@@ -37,7 +36,6 @@ class RandomWalker(mesa.Agent):
         self.moore = moore
         self.target_location_1 = target_location_1
         self.target_location_2 = target_location_2
-        self.energy = energy
         
         
     def calculate_distance(self, point1, point2):
