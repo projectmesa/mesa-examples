@@ -36,6 +36,8 @@ class WolfSheep(mesa.Model):
     sheep_gain_from_food = 4
 
     verbose = True  # Print-monitoring
+    
+    energy = None
 
     description = (
         "A model for simulating wolf and sheep (predator-prey) ecosystem modelling."
