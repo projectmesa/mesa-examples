@@ -62,21 +62,16 @@ class RandomWalker(mesa.Agent):
 
         return closest_neighbor
     
-#     def movement_determination(self, energy):
-#         if self.energy < 10:
-#             self.water_desire = True
-#         else:
-#             self.water_desire = False
-        
-    def random_move(self, energy):
-        """
-        Step one cell in any allowable direction.
-        """
+    def movement_determination(self, energy):
         if self.energy < 10:
             self.water_desire = True
         else:
             self.water_desire = False
         
+    def random_move(self):
+        """
+        Step one cell in any allowable direction.
+        """
         # Pick the next cell from the adjacent cells.
         next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
         closest_neighbor_to_target = self.find_closest_neighbor(agent_position, neighborhood)
