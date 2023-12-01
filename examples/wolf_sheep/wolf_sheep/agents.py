@@ -20,7 +20,7 @@ class Sheep(RandomWalker):
         A model step. Move, then eat grass and reproduce.
         """
         #self.movement_determination()
-        self.random_move()
+        self.random_move(energy)
         living = True
 
         if self.model.grass:
@@ -64,7 +64,7 @@ class Wolf(RandomWalker):
 
     def step(self):
         #self.movement_determination()
-        self.random_move()
+        self.random_move(energy)
         self.energy -= 1
 
         # If there are sheep present, eat one
