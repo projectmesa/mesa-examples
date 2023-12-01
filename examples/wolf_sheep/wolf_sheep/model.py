@@ -45,7 +45,7 @@ class WolfSheep(mesa.Model):
 
     def __init__(
         self,
-        energy=None,
+        energy,
         width=20,
         height=20,
         initial_sheep=100,
