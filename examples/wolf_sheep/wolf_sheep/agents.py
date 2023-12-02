@@ -41,7 +41,7 @@ class Elk(RandomWalker):
                 living = False
 
         if living and self.random.random() < self.model.elk_reproduce:
-            # Create a new sheep:
+            # Create a new elk:
             if self.model.grass:
                 self.energy /= 2
             calf = Elk(
@@ -52,7 +52,7 @@ class Elk(RandomWalker):
             
             
         # if there is water present, drink it
-        
+
 #         x, y = self.pos
 #         this_cell = self.model.grid.get_cell_list_contents([self.pos])
         water = [obj for obj in this_cell if isinstance(obj, WateringHole)]
@@ -66,6 +66,7 @@ class Wolf(RandomWalker):
     """
 
     energy = None
+    threshold = 0.5
 
     def __init__(self, unique_id, pos, model, moore, energy=None):
         super().__init__(unique_id, pos, model, moore=moore)
@@ -74,27 +75,29 @@ class Wolf(RandomWalker):
     def step(self):
         self.random_move()
         self.energy -= 1
-
-        # If there are elk present, eat one
+        
+    # probability wolf eats elk upon encounter        
         x, y = self.pos
         this_cell = self.model.grid.get_cell_list_contents([self.pos])
         elk = [obj for obj in this_cell if isinstance(obj, Elk)]
+
         if len(elk) > 0:
             elk_to_eat = self.random.choice(elk)
-            self.energy += self.model.wolf_gain_from_food
 
-            # Kill the elk
-            self.model.grid.remove_agent(elk_to_eat)
-            self.model.schedule.remove(elk_to_eat)
-            
-        # if there is water present, drink it
-        
-#         x, y = self.pos
- #        this_cell = self.model.grid.get_cell_list_contents([self.pos])
-        water = [obj for obj in this_cell if isinstance(obj, WateringHole)]
-        if len(water) > 0:
-            self.energy += 1
+            # Check probability of eating the elk
+            wolf_eats_prob = self.random.random()
+            if wolf_eats_prob < self.threshold:
+                # Wolf eats the elk
+                self.energy += self.model.wolf_gain_from_food
 
+                # Kill the elk
+                self.model.grid.remove_agent(elk_to_eat)
+                self.model.schedule.remove(elk_to_eat)
+            else:
+                # Wolf moves away a random number of spaces
+                self.random_move()
+                self.energy -= 1
+                
         # Death or reproduction
         if self.energy < 0:
             self.model.grid.remove_agent(self)
@@ -144,6 +147,6 @@ class WateringHole(mesa.Agent):
     
     def step(self):
         pass
-        
+
                  
-    
+
