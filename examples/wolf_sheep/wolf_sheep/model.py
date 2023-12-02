@@ -1,5 +1,5 @@
 """
-Wolf-Sheep Predation Model
+Wolf-Elk Predation Model
 ================================
 
 Replication of the model found in NetLogo:
@@ -11,96 +11,99 @@ Replication of the model found in NetLogo:
 
 import mesa
 
-from .agents import GrassPatch, Sheep, Wolf
+from .agents import GrassPatch, Elk, Wolf, WateringHole
 from .scheduler import RandomActivationByTypeFiltered
 
 
-class WolfSheep(mesa.Model):
+class WolfElk(mesa.Model):
     """
-    Wolf-Sheep Predation Model
+    Wolf-Elk Predation Model
     """
 
-    height = 20
-    width = 20
+    height = 50
+    width = 50
 
-    initial_sheep = 100
-    initial_wolves = 50
+    initial_elk = 1700
+    initial_wolves = 14
 
-    sheep_reproduce = 0.04
+    elk_reproduce = 0.04
     wolf_reproduce = 0.05
 
     wolf_gain_from_food = 20
 
     grass = False
     grass_regrowth_time = 30
-    sheep_gain_from_food = 4
+    elk_gain_from_food = 4
+    water = True
 
     verbose = False  # Print-monitoring
 
     description = (
-        "A model for simulating wolf and sheep (predator-prey) ecosystem modelling."
+        "A model for simulating wolf and elk (predator-prey) ecosystem modelling."
     )
 
     def __init__(
         self,
-        width=20,
-        height=20,
-        initial_sheep=100,
-        initial_wolves=50,
-        sheep_reproduce=0.04,
+        width=50,
+        height=30,
+        initial_elk=1700,
+        initial_wolves=14,
+        elk_reproduce=0.04,
         wolf_reproduce=0.05,
         wolf_gain_from_food=20,
         grass=False,
         grass_regrowth_time=30,
-        sheep_gain_from_food=4,
+        elk_gain_from_food=4,
+        water=True
     ):
         """
-        Create a new Wolf-Sheep model with the given parameters.
+        Create a new Wolf-Elk model with the given parameters.
 
         Args:
-            initial_sheep: Number of sheep to start with
+            initial_elk: Number of sheep to start with
             initial_wolves: Number of wolves to start with
-            sheep_reproduce: Probability of each sheep reproducing each step
+            elk_reproduce: Probability of each elk reproducing each step
             wolf_reproduce: Probability of each wolf reproducing each step
             wolf_gain_from_food: Energy a wolf gains from eating a sheep
-            grass: Whether to have the sheep eat grass for energy
+            grass: Whether to have the elk eat grass for energy
             grass_regrowth_time: How long it takes for a grass patch to regrow
                                  once it is eaten
-            sheep_gain_from_food: Energy sheep gain from grass, if enabled.
+            elk_gain_from_food: Energy elk gain from grass, if enabled.
         """
         super().__init__()
         # Set parameters
         self.width = width
         self.height = height
-        self.initial_sheep = initial_sheep
+        self.initial_elk = initial_elk
         self.initial_wolves = initial_wolves
-        self.sheep_reproduce = sheep_reproduce
+        self.elk_reproduce = elk_reproduce
         self.wolf_reproduce = wolf_reproduce
         self.wolf_gain_from_food = wolf_gain_from_food
         self.grass = grass
         self.grass_regrowth_time = grass_regrowth_time
-        self.sheep_gain_from_food = sheep_gain_from_food
+        self.elk_gain_from_food = elk_gain_from_food
+        self.water = water
 
         self.schedule = RandomActivationByTypeFiltered(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         self.datacollector = mesa.DataCollector(
             {
                 "Wolves": lambda m: m.schedule.get_type_count(Wolf),
-                "Sheep": lambda m: m.schedule.get_type_count(Sheep),
+                "Elk": lambda m: m.schedule.get_type_count(Elk),
                 "Grass": lambda m: m.schedule.get_type_count(
                     GrassPatch, lambda x: x.fully_grown
                 ),
             }
         )
 
-        # Create sheep:
-        for i in range(self.initial_sheep):
+        # Create elk:
+        for i in range(self.initial_elk):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(self.next_id(), (x, y), self, True, energy)
-            self.grid.place_agent(sheep, (x, y))
-            self.schedule.add(sheep)
+            energy = self.random.randrange(2 * self.elk_gain_from_food)
+            elk = Elk(self.next_id(), (x, y), self, True, energy)
+            self.grid.place_agent(elk, (x, y))
+            self.schedule.add(elk)
 
         # Create wolves
         for i in range(self.initial_wolves):
@@ -124,6 +127,24 @@ class WolfSheep(mesa.Model):
                 patch = GrassPatch(self.next_id(), (x, y), self, fully_grown, countdown)
                 self.grid.place_agent(patch, (x, y))
                 self.schedule.add(patch)
+                
+        # Create watering holes
+        if self.water:
+            for x in range(0,5):
+                for y in range(0,7):
+          
+                    waterhole = WateringHole(self.next_id(), (x,y), self)
+                    self.grid.place_agent(waterhole, (x,y))
+                    self.schedule.add(waterhole)
+                    
+            for x in range(45,50):
+                for y in range(22,30):
+          
+                    waterhole = WateringHole(self.next_id(), (x,y), self)
+                    self.grid.place_agent(waterhole, (x,y))
+                    self.schedule.add(waterhole)
+            
+            
 
         self.running = True
         self.datacollector.collect(self)
@@ -137,15 +158,16 @@ class WolfSheep(mesa.Model):
                 [
                     self.schedule.time,
                     self.schedule.get_type_count(Wolf),
-                    self.schedule.get_type_count(Sheep),
+                    self.schedule.get_type_count(Elk),
                     self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
+                    self.schedule.get_type_count(WateringHole)
                 ]
             )
 
     def run_model(self, step_count=200):
         if self.verbose:
             print("Initial number wolves: ", self.schedule.get_type_count(Wolf))
-            print("Initial number sheep: ", self.schedule.get_type_count(Sheep))
+            print("Initial number elk: ", self.schedule.get_type_count(Elk))
             print(
                 "Initial number grass: ",
                 self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
@@ -157,7 +179,7 @@ class WolfSheep(mesa.Model):
         if self.verbose:
             print("")
             print("Final number wolves: ", self.schedule.get_type_count(Wolf))
-            print("Final number sheep: ", self.schedule.get_type_count(Sheep))
+            print("Final number elk: ", self.schedule.get_type_count(Elk))
             print(
                 "Final number grass: ",
                 self.schedule.get_type_count(GrassPatch, lambda x: x.fully_grown),
