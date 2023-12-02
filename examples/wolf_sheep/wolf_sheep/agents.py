@@ -3,9 +3,9 @@ import mesa
 from .random_walk import RandomWalker
 
 
-class Sheep(RandomWalker):
+class Elk(RandomWalker):
     """
-    A sheep that walks around, reproduces (asexually) and gets eaten.
+    A elk that walks around, reproduces (asexually) and gets eaten.
 
     The init is the same as the RandomWalker.
     """
@@ -31,7 +31,7 @@ class Sheep(RandomWalker):
             this_cell = self.model.grid.get_cell_list_contents([self.pos])
             grass_patch = [obj for obj in this_cell if isinstance(obj, GrassPatch)][0]
             if grass_patch.fully_grown:
-                self.energy += self.model.sheep_gain_from_food
+                self.energy += self.model.elk_gain_from_food
                 grass_patch.fully_grown = False
 
             # Death
@@ -40,11 +40,11 @@ class Sheep(RandomWalker):
                 self.model.schedule.remove(self)
                 living = False
 
-        if living and self.random.random() < self.model.sheep_reproduce:
-            # Create a new sheep:
+        if living and self.random.random() < self.model.elk_reproduce:
+            # Create a new elk:
             if self.model.grass:
                 self.energy /= 2
-            lamb = Sheep(
+            lamb = Elk(
                 self.model.next_id(), self.pos, self.model, self.moore, self.energy
             )
             self.model.grid.place_agent(lamb, self.pos)
@@ -53,7 +53,7 @@ class Sheep(RandomWalker):
 
 class Wolf(RandomWalker):
     """
-    A wolf that walks around, reproduces (asexually) and eats sheep.
+    A wolf that walks around, reproduces (asexually) and eats elk.
     """
 
     energy = None
@@ -66,50 +66,29 @@ class Wolf(RandomWalker):
     def step(self):
         self.random_move()
         self.energy -= 1
-
+                
         x, y = self.pos
         this_cell = self.model.grid.get_cell_list_contents([self.pos])
-        sheep = [obj for obj in this_cell if isinstance(obj, Sheep)]
-        
-        if len(sheep) > 0:
-            sheep_to_eat = self.random.choice(sheep)
-            
-            # Check probability of eating the sheep
+        elk = [obj for obj in this_cell if isinstance(obj, Elk)]
+
+        if len(elk) > 0:
+            elk_to_eat = self.random.choice(elk)
+
+            # Check probability of eating the elk
             wolf_eats_prob = self.random.random()
             if wolf_eats_prob < self.threshold:
-                # Wolf eats the sheep
+                # Wolf eats the elk
                 self.energy += self.model.wolf_gain_from_food
 
-                # Kill the sheep
-                self.model.grid.remove_agent(sheep_to_eat)
-                self.model.schedule.remove(sheep_to_eat)
+                # Kill the elk
+                self.model.grid.remove_agent(elk_to_eat)
+                self.model.schedule.remove(elk_to_eat)
             else:
                 # Wolf moves away a random number of spaces
                 self.random_move()
                 self.energy -= 1
-                
-#         x, y = self.pos
-#         this_cell = self.model.grid.get_cell_list_contents([self.pos])
-#         elk = [obj for obj in this_cell if isinstance(obj, Elk)]
-        
-#         if len(elk) > 0:
-#             elk_to_eat = self.random.choice(elk)
-            
-#             # Check probability of eating the elk
-#             wolf_eats_prob = self.random.random()
-#             if wolf_eats_prob < self.threshold:
-#                 # Wolf eats the elk
-#                 self.energy += self.model.wolf_gain_from_food
 
-#                 # Kill the elk
-#                 self.model.grid.remove_agent(elk_to_eat)
-#                 self.model.schedule.remove(elk_to_eat)
-#             else:
-#                 # Wolf moves away a random number of spaces
-#                 self.random_move()
-#                 self.energy -= 1
 
-            
          
 
         # Death or reproduction
