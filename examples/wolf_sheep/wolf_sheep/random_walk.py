@@ -22,7 +22,7 @@ class RandomWalker(mesa.Agent):
     moore = True
     water = True
 
-    def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(19,19)):
+    def __init__(self, unique_id, pos, model, moore=True, target_location_1=(0,0), target_location_2=(49,29)):
         """
         grid: The MultiGrid object in which the agent lives.
         x: The agent's current x coordinate
