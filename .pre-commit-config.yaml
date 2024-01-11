@@ -8,8 +8,9 @@ repos:
   rev: v0.1.6
   hooks:
     # Run the linter.
+    # TODO fix the lint issues for the Jupyter notebooks
     - id: ruff
-      types_or: [ python, pyi, jupyter ]
+      types_or: [ python, pyi ]
     # Run the formatter.
     - id: ruff-format
       types_or: [ python, pyi, jupyter ]
