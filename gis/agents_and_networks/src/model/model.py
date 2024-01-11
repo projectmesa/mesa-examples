@@ -156,9 +156,9 @@ class AgentsAndNetworks(mesa.Model):
         buildings_df = buildings_df.set_crs(self.data_crs, allow_override=True).to_crs(
             crs
         )
-        buildings_df["centroid"] = [
-            (x, y) for x, y in zip(buildings_df.centroid.x, buildings_df.centroid.y)
-        ]
+        buildings_df["centroid"] = list(
+            zip(buildings_df.centroid.x, buildings_df.centroid.y)
+        )
         building_creator = mg.AgentCreator(Building, model=self)
         buildings = building_creator.from_GeoDataFrame(buildings_df)
         self.space.add_buildings(buildings)
