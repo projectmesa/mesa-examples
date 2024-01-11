@@ -71,7 +71,7 @@ class ColorPatches(mesa.Model):
         Create a 2D lattice with strict borders where agents live
         The agents next state is first determined before updating the grid
         """
-
+        super().__init__()
         self._grid = mesa.space.SingleGrid(width, height, torus=False)
         self._schedule = mesa.time.SimultaneousActivation(self)
 

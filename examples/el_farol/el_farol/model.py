@@ -14,6 +14,7 @@ class ElFarolBar(mesa.Model):
         height=100,
         N=100,
     ):
+        super().__init__()
         self.running = True
         self.num_agents = N
         self.schedule = mesa.time.RandomActivation(self)

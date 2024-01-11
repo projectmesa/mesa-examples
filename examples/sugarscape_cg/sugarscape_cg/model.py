@@ -30,6 +30,7 @@ class SugarscapeCg(mesa.Model):
         Args:
             initial_population: Number of population to start with
         """
+        super().__init__()
 
         # Set parameters
         self.width = width

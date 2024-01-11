@@ -97,6 +97,7 @@ class Charts(mesa.Model):
         rich_threshold=10,
         reserve_percent=50,
     ):
+        super().__init__()
         self.height = height
         self.width = width
         self.init_people = init_people
