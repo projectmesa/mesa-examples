@@ -73,7 +73,7 @@ class ColorPatches(mesa.Model):
         """
         super().__init__()
         self._grid = mesa.space.SingleGrid(width, height, torus=False)
-        self._schedule = mesa.time.SimultaneousActivation(self)
+        self.schedule = mesa.time.SimultaneousActivation(self)
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row
@@ -85,7 +85,7 @@ class ColorPatches(mesa.Model):
                 (row, col), self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
             )
             self._grid.place_agent(cell, (row, col))
-            self._schedule.add(cell)
+            self.schedule.add(cell)
 
         self.running = True
 
@@ -93,7 +93,7 @@ class ColorPatches(mesa.Model):
         """
         Advance the model one step.
         """
-        self._schedule.step()
+        self.schedule.step()
 
     # the following is a temporary fix for the framework classes accessing
     # model attributes directly
@@ -117,13 +117,3 @@ class ColorPatches(mesa.Model):
         AttributeError: 'ColorPatches' object has no attribute 'grid'
         """
         return self._grid
-
-    @property
-    def schedule(self):
-        """
-        mesa_ABM/examples_ABM/color_patches/mesa/visualization/ModularVisualization.py",
-        line 278, in run_model
-            while self.model.schedule.steps < self.max_steps and self.model.running:
-        AttributeError: 'NoneType' object has no attribute 'steps'
-        """
-        return self._schedule
