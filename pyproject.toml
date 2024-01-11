@@ -66,6 +66,7 @@ extend-ignore = [
     "S311",  # Standard pseudo-random generators are not suitable for cryptographic purposes TODO
     "B008",  # Do not perform function call `pyproj.CRS` in argument defaults TODO
     "S301",  # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue TODO
+    "ISC001",  # conflict with ruff format
 ]
 # Hardcode to Python 3.8.
 target-version = "py38"
