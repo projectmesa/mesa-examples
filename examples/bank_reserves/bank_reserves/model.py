@@ -12,6 +12,7 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
+
 from .agents import Bank, Person
 
 """

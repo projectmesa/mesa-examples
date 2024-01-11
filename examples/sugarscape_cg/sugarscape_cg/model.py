@@ -9,8 +9,9 @@ Center for Connected Learning and Computer-Based Modeling,
 Northwestern University, Evanston, IL.
 """
 
-import mesa
 from pathlib import Path
+
+import mesa
 
 from .agents import SsAgent, Sugar
 

@@ -8,7 +8,6 @@ from src.agent.geo_agents import Driveway, LakeAndRiver, Walkway
 class ClockElement(mesa.visualization.TextElement):
     def __init__(self):
         super().__init__()
-        pass
 
     def render(self, model):
         return f"Day {model.day}, {model.hour:02d}:{model.minute:02d}"

@@ -1,7 +1,8 @@
-import pytest
-import os
-from mesa import Model
 import importlib
+import os
+
+import pytest
+from mesa import Model
 
 
 def get_models(directory):
