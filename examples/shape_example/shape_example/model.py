@@ -11,6 +11,7 @@ class Walker(mesa.Agent):
 
 class ShapeExample(mesa.Model):
     def __init__(self, N=2, width=20, height=10):
+        super().__init__()
         self.N = N  # num of agents
         self.headings = ((1, 0), (0, 1), (-1, 0), (0, -1))  # tuples are fast
         self.grid = mesa.space.SingleGrid(width, height, torus=False)

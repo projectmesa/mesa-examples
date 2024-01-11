@@ -13,7 +13,7 @@ class HexSnowflake(mesa.Model):
         """
         Create a new playing area of (width, height) cells.
         """
-
+        super().__init__()
         # Set up the grid and schedule.
 
         # Use SimultaneousActivation which simulates all the cells
