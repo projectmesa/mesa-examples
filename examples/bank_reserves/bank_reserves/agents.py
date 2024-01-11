@@ -11,6 +11,7 @@ Author of NetLogo code:
 """
 
 import mesa
+
 from .random_walk import RandomWalker
 
 
