@@ -2,7 +2,7 @@
 -e .
 
 # external requirements
-mesa-geo~=0.6.0
+mesa-geo~=0.7
 geopandas
 numpy
 pandas
