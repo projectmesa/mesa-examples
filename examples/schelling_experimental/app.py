@@ -25,7 +25,6 @@ page = JupyterViz(
     Schelling,
     model_params,
     measures=["happy", make_text(get_happy_agents)],
-    name="Schelling",
     agent_portrayal=agent_portrayal,
 )
 page  # noqa
