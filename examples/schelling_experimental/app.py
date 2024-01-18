@@ -10,8 +10,7 @@ def get_happy_agents(model):
 
 
 def agent_portrayal(agent):
-    color = "tab:orange" if agent.type == 0 else "tab:blue"
-    return {"color": color}
+    return {"color": "tab:orange" if agent.type == 0 else "tab:blue"}
 
 
 model_params = {
