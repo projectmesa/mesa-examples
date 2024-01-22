@@ -12,6 +12,9 @@ on:
     paths-ignore:
       - '**.md'
       - '**.rst'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'  # Monday at 6:00 UTC
 
 # This will cancel previous run if a newer job that obsoletes the said previous
 # run, is started.
@@ -21,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-stable:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -31,5 +34,20 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: pip install mesa pytest
+    - name: Test with pytest
+      run: pytest test_examples.py
+
+  build-main:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        pip install pytest
+        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
     - name: Test with pytest
       run: pytest test_examples.py
