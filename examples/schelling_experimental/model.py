@@ -68,6 +68,8 @@ class Schelling(mesa.Model):
         """
         self.happy = 0  # Reset counter of happy agents
         self.agents.shuffle().do("step")
+        # Must be before data collection.
+        self._advance_time()  # Temporary API; will be finalized by Mesa 3.0 release
         # collect data
         self.datacollector.collect(self)
 
