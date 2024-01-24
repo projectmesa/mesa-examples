@@ -117,7 +117,7 @@ class Charts(mesa.Model):
                 "Money": get_total_money,
                 "Loans": get_total_loans,
             },
-            agent_reporters={"Wealth": lambda x: x.wealth},
+            agent_reporters={"Wealth": lambda x: getattr(x, "wealth", None)},
         )
 
         # create a single bank for the model
