@@ -176,10 +176,6 @@ class SugarscapeG1mt(mesa.Model):
         for agent in trader_shuffle:
             agent.trade_with_neighbors()
 
-        self.schedule.steps += (
-            1  # important for data collector to track number of steps
-        )
-
         # collect model level data
         self.datacollector.collect(self)
         """
