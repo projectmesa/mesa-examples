@@ -1,4 +1,4 @@
-from mesa.experimental import JupyterViz, make_text
+from mesa.experimental import JupyterViz, Slider, make_text
 from model import Schelling
 
 
@@ -10,35 +10,13 @@ def get_happy_agents(model):
 
 
 def agent_portrayal(agent):
-    color = "tab:orange" if agent.type == 0 else "tab:blue"
-    return {"color": color}
+    return {"color": "tab:orange" if agent.type == 0 else "tab:blue"}
 
 
 model_params = {
-    "density": {
-        "type": "SliderFloat",
-        "value": 0.8,
-        "label": "Agent density",
-        "min": 0.1,
-        "max": 1.0,
-        "step": 0.1,
-    },
-    "minority_pc": {
-        "type": "SliderFloat",
-        "value": 0.2,
-        "label": "Fraction minority",
-        "min": 0.0,
-        "max": 1.0,
-        "step": 0.05,
-    },
-    "homophily": {
-        "type": "SliderInt",
-        "value": 3,
-        "label": "Homophily",
-        "min": 0,
-        "max": 8,
-        "step": 1,
-    },
+    "density": Slider("Agent density", 0.8, 0.1, 1.0, 0.1),
+    "minority_pc": Slider("Fraction minority", 0.2, 0.0, 1.0, 0.05),
+    "homophily": Slider("Homophily", 3, 0, 8, 1),
     "width": 20,
     "height": 20,
 }
@@ -47,7 +25,6 @@ page = JupyterViz(
     Schelling,
     model_params,
     measures=["happy", make_text(get_happy_agents)],
-    name="Schelling",
     agent_portrayal=agent_portrayal,
 )
 page  # noqa
