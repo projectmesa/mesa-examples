@@ -136,18 +136,6 @@ class SugarscapeG1mt(mesa.Model):
             self.schedule.add(trader)
             agent_id += 1
 
-    def randomize_traders(self):
-        """
-        helper function for self.step()
-
-        puts traders in randomized list for step function
-        """
-
-        traders_shuffle = list(self.schedule.agents_by_type[Trader].values())
-        self.random.shuffle(traders_shuffle)
-
-        return traders_shuffle
-
     def step(self):
         """
         Unique step function that does staged activation of sugar and spice
@@ -160,7 +148,7 @@ class SugarscapeG1mt(mesa.Model):
         # step trader agents
         # to account for agent death and removal we need a seperate data strcuture to
         # iterate
-        trader_shuffle = self.randomize_traders()
+        trader_shuffle = self.get_agents_of_type(Trader).shuffle(inplace=True)
 
         for agent in trader_shuffle:
             agent.prices = []
@@ -175,10 +163,7 @@ class SugarscapeG1mt(mesa.Model):
             self.datacollector.collect(self)
             return
 
-        trader_shuffle = self.randomize_traders()
-
-        for agent in trader_shuffle:
-            agent.trade_with_neighbors()
+        self.get_agents_of_type(Trader).shuffle(inplace=True).do("trade_with_neighbors")
 
         self._steps += 1
         # collect model level data
