@@ -124,6 +124,7 @@ class BankReservesModel(mesa.Model):
         rich_threshold=10,
         reserve_percent=50,
     ):
+        super().__init__()
         self.uid = next(self.id_gen)
         self.height = height
         self.width = width
