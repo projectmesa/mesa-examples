@@ -77,13 +77,10 @@ class SugarscapeG1mt(mesa.Model):
             model_reporters={
                 "Trader": lambda m: m.schedule.get_type_count(Trader),
                 "Trade Volume": lambda m: sum(
-                    len(a.trade_partners)
-                    for a in m.schedule.agents_by_type[Trader].values()
+                    len(a.trade_partners) for a in m.get_agents_of_type(Trader)
                 ),
                 "Price": lambda m: geometric_mean(
-                    flatten(
-                        [a.prices for a in m.schedule.agents_by_type[Trader].values()]
-                    )
+                    flatten([a.prices for a in m.get_agents_of_type(Trader)])
                 ),
             },
             agent_reporters={"Trade Network": lambda a: get_trade(a)},
@@ -142,7 +139,7 @@ class SugarscapeG1mt(mesa.Model):
         and then randomly activates traders
         """
         # step Resource agents
-        for resource in self.schedule.agents_by_type[Resource].values():
+        for resource in self.get_agents_of_type(Resource):
             resource.step()
 
         # step trader agents
