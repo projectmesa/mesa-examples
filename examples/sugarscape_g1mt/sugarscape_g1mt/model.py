@@ -68,14 +68,12 @@ class SugarscapeG1mt(mesa.Model):
         self.enable_trade = enable_trade
         self.running = True
 
-        # initiate activation schedule
-        self.schedule = mesa.time.RandomActivationByType(self)
         # initiate mesa grid class
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         # initiate datacollector
         self.datacollector = mesa.DataCollector(
             model_reporters={
-                "Trader": lambda m: m.schedule.get_type_count(Trader),
+                "Trader": lambda m: len(m.get_agents_of_type(Trader)),
                 "Trade Volume": lambda m: sum(
                     len(a.trade_partners) for a in m.get_agents_of_type(Trader)
                 ),
@@ -95,7 +93,6 @@ class SugarscapeG1mt(mesa.Model):
             max_sugar = sugar_distribution[x, y]
             max_spice = spice_distribution[x, y]
             resource = Resource(agent_id, self, (x, y), max_sugar, max_spice)
-            self.schedule.add(resource)
             self.grid.place_agent(resource, (x, y))
             agent_id += 1
 
@@ -130,7 +127,6 @@ class SugarscapeG1mt(mesa.Model):
             )
             # place agent
             self.grid.place_agent(trader, (x, y))
-            self.schedule.add(trader)
             agent_id += 1
 
     def step(self):
