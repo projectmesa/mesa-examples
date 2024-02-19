@@ -106,9 +106,10 @@ class VirusOnNetwork(mesa.Model):
 
 
 class VirusAgent(mesa.Agent):
-    '''
+    """
     Individual Agent definition and its properties/interaction methods
-    '''
+    """
+
     def __init__(
         self,
         unique_id,

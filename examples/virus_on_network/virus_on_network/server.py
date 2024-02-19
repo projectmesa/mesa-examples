@@ -50,10 +50,10 @@ def network_portrayal(G):
 
 
 network = mesa.visualization.NetworkModule(
-    portrayal_method=network_portrayal, 
-    canvas_height=500, 
+    portrayal_method=network_portrayal,
+    canvas_height=500,
     canvas_width=500,
-    )
+)
 chart = mesa.visualization.ChartModule(
     [
         {"Label": "Infected", "Color": "#FF0000"},
@@ -83,12 +83,12 @@ model_params = {
         description="Choose how many agents to include in the model",
     ),
     "avg_node_degree": mesa.visualization.Slider(
-        name="Avg Node Degree", 
-        value=3, 
-        min_value=3, 
-        max_value=8, 
-        step=1, 
-        description="Avg Node Degree"
+        name="Avg Node Degree",
+        value=3,
+        min_value=3,
+        max_value=8,
+        step=1,
+        description="Avg Node Degree",
     ),
     "initial_outbreak_size": mesa.visualization.Slider(
         name="Initial Outbreak Size",
