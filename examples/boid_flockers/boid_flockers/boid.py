@@ -12,7 +12,7 @@ class Boid(mesa.Agent):
         - Alignment: try to fly in the same direction as the neighbors.
 
     Boids have a vision that defines the radius in which they look for their
-    neighbors to flock with. Their speed (a scalar) and velocity (a vector)
+    neighbors to flock with. Their speed (a scalar) and direction (a vector)
     define their movement. Separation is their desired minimum distance from
     any other Boid.
     """
@@ -23,7 +23,7 @@ class Boid(mesa.Agent):
         model,
         pos,
         speed,
-        velocity,
+        direction_vector,
         vision,
         separation,
         cohere=0.025,
@@ -37,6 +37,7 @@ class Boid(mesa.Agent):
             unique_id: Unique agent identifyer.
             pos: Starting position
             speed: Distance to move per step.
+            direction_vector: numpy vector for the Boid's direction of movement. It is a unit vector (a vector with length 1) that determines the direction of the Boid's movement.
             heading: numpy vector for the Boid's direction of movement.
             vision: Radius to look around for nearby Boids.
             separation: Minimum distance to maintain from other Boids.
@@ -47,7 +48,7 @@ class Boid(mesa.Agent):
         super().__init__(unique_id, model)
         self.pos = np.array(pos)
         self.speed = speed
-        self.velocity = velocity
+        self.direction_vector = direction_vector
         self.vision = vision
         self.separation = separation
         self.cohere_factor = cohere
@@ -84,7 +85,7 @@ class Boid(mesa.Agent):
         match_vector = np.zeros(2)
         if neighbors:
             for neighbor in neighbors:
-                match_vector += neighbor.velocity
+                match_vector += neighbor.direction_vector
             match_vector /= len(neighbors)
         return match_vector
 
@@ -94,11 +95,11 @@ class Boid(mesa.Agent):
         """
 
         neighbors = self.model.space.get_neighbors(self.pos, self.vision, False)
-        self.velocity += (
+        self.direction_vector += (
             self.cohere(neighbors) * self.cohere_factor
             + self.separate(neighbors) * self.separate_factor
             + self.match_heading(neighbors) * self.match_factor
-        ) / 2
-        self.velocity /= np.linalg.norm(self.velocity)
-        new_pos = self.pos + self.velocity * self.speed
+        )
+        self.direction_vector /= np.linalg.norm(self.direction_vector)
+        new_pos = self.pos + self.direction_vector * self.speed
         self.model.space.move_agent(self, new_pos)
