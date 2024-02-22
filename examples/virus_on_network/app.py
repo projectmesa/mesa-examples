@@ -1,4 +1,5 @@
 import math
+
 import solara
 from matplotlib.figure import Figure
 from matplotlib.ticker import MaxNLocator
