@@ -2,7 +2,7 @@
 
 ## Summary
 
-This example applies caching on the Mesa [Schelling example](https://github.com/projectmesa/mesa-examples/tree/main/examples/Schelling).
+This example applies caching on the Mesa [Schelling example](https://github.com/projectmesa/mesa-examples/tree/main/examples/schelling).
 It enables a simulation run to be "cached" or in other words recorded. The recorded simulation run is persisted on the local file system and can be replayed at any later point.
 
 It uses the [Mesa-Replay](https://github.com/Logende/mesa-replay) library and puts the Schelling model inside a so-called `CacheableModel` wrapper that we name `CacheableSchelling`.
@@ -27,6 +27,14 @@ To run the model interactively, run ``mesa runserver`` in this directory. e.g.
 
 ```
     $ mesa runserver
+```
+
+or 
+
+Directly run the file ``run.py`` in the terminal. e.g.
+
+```
+    $ python run.py
 ```
 
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.

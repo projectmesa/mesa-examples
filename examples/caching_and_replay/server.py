@@ -28,7 +28,13 @@ def schelling_draw(agent):
     return portrayal
 
 
-canvas_element = mesa.visualization.CanvasGrid(schelling_draw, 20, 20, 500, 500)
+canvas_element = mesa.visualization.CanvasGrid(
+    portrayal_method=schelling_draw,
+    grid_width=20,
+    grid_height=20, 
+    canvas_width=500,
+    canvas_height=500,
+    )
 happy_chart = mesa.visualization.ChartModule([{"Label": "happy", "Color": "Black"}])
 
 model_params = {
@@ -40,8 +46,8 @@ model_params = {
 }
 
 server = mesa.visualization.ModularServer(
-    Schelling,
-    [canvas_element, get_happy_agents, happy_chart],
-    "Schelling",
-    model_params,
+    model_cls=Schelling,
+    visualization_elements=[canvas_element, get_happy_agents, happy_chart],
+    name="Schelling Segregation Model",
+    model_params=model_params,
 )
