@@ -24,10 +24,10 @@ $ mesa runserver
 
 or 
 
-Directly run the file ``app.py`` in the terminal. e.g.
+Directly run the file ``run.py`` in the terminal. e.g.
 
 ```
-    $ python app.py
+    $ python run.py
 ```
 
 * Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
