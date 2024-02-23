@@ -19,6 +19,7 @@ We assign agents a trait, **Fertility**, according to which they can perform Age
 
 ### Combat (WIP)
 
+This model demonstrates visualisation of agent attributes.
 ## How to Run
 
 To run the model interactively, run ``mesa runserver`` in this directory. e.g.

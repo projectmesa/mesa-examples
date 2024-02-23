@@ -39,9 +39,11 @@ class SugarscapeScc(mesa.Model):
         self.schedule = mesa.time.RandomActivationByType(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         self.datacollector = mesa.DataCollector(
-            {"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)}
+            model_reporters={"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)},
+            agent_reporters={
+                "Age": lambda a: a.age if (isinstance(a, SsAgent)) else None
+            },
         )
-
         # Create sugar
         import numpy as np
 

@@ -30,9 +30,11 @@ def SsAgent_portrayal(agent):
 
 canvas_element = mesa.visualization.CanvasGrid(SsAgent_portrayal, 50, 50, 500, 500)
 chart_element = mesa.visualization.ChartModule(
-    [{"Label": "SsAgent", "Color": "#AA0000"}]
+    [{"Label": "SsAgent", "Color": "#AA0000"}], data_collector_name="datacollector"
 )
-
+bar_graph = mesa.visualization.BarChartModule(
+    [{"Label": "age", "Color": "#AAAAAA"}], data_collector_name="datacollector"
+)
 server = mesa.visualization.ModularServer(
-    SugarscapeScc, [canvas_element, chart_element], "Sugarscape 3 SCC"
+    SugarscapeScc, [canvas_element, chart_element, bar_graph], "Sugarscape 3 SCC"
 )
