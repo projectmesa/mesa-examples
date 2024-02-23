@@ -6,16 +6,15 @@ from .SimpleContinuousModule import SimpleCanvas
 
 def boid_draw(agent):
     neighbors = agent.model.space.get_neighbors(agent.pos, agent.vision, False)
-    if len(neighbors)<=1:
+    if len(neighbors) <= 1:
         return {"Shape": "circle", "r": 2, "Filled": "true", "Color": "Red"}
-    elif len(neighbors)>=2:
+    elif len(neighbors) >= 2:
         return {"Shape": "circle", "r": 2, "Filled": "true", "Color": "Green"}
 
+
 boid_canvas = SimpleCanvas(
-    portrayal_method=boid_draw,
-    canvas_height=500,
-    canvas_width=500
-    )
+    portrayal_method=boid_draw, canvas_height=500, canvas_width=500
+)
 model_params = {
     "population": mesa.visualization.Slider(
         name="Number of boids",
@@ -54,8 +53,8 @@ model_params = {
 }
 
 server = mesa.visualization.ModularServer(
-    model_cls=BoidFlockers, 
-    visualization_elements=[boid_canvas], 
-    name="Boid Flocking Model", 
-    model_params=model_params
+    model_cls=BoidFlockers,
+    visualization_elements=[boid_canvas],
+    name="Boid Flocking Model",
+    model_params=model_params,
 )

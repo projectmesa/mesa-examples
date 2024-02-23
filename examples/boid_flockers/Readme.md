@@ -22,7 +22,7 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 $ mesa runserver
 ```
 
-or 
+or
 
 Directly run the file ``run.py`` in the terminal. e.g.
 
