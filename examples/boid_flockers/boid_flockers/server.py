@@ -5,10 +5,14 @@ from .SimpleContinuousModule import SimpleCanvas
 
 
 def boid_draw(agent):
-    neighbors = agent.model.space.get_neighbors(agent.pos, agent.vision, False)
-    if len(neighbors) <= 1:
+    if not agent.neighbors: # Only for the first Frame
+        neighbors = len(agent.model.space.get_neighbors(agent.pos, agent.vision, False))
+    else:
+        neighbors = len(agent.neighbors)
+    
+    if neighbors <= 1:
         return {"Shape": "circle", "r": 2, "Filled": "true", "Color": "Red"}
-    elif len(neighbors) >= 2:
+    elif neighbors >= 2:
         return {"Shape": "circle", "r": 2, "Filled": "true", "Color": "Green"}
 
 
