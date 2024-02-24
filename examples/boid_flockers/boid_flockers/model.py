@@ -8,6 +8,7 @@ Uses numpy arrays to represent vectors.
 import mesa
 import numpy as np
 
+
 class Boid(mesa.Agent):
     """
     A Boid-style flocker agent.
@@ -109,6 +110,7 @@ class Boid(mesa.Agent):
         self.direction /= np.linalg.norm(self.direction)
         new_pos = self.pos + self.direction * self.speed
         self.model.space.move_agent(self, new_pos)
+
 
 class BoidFlockers(mesa.Model):
     """
