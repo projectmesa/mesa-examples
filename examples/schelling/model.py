@@ -15,8 +15,7 @@ class SchellingAgent(mesa.Agent):
            x, y: Agent initial location.
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
-        super().__init__(pos, model)
-        self.unique_id = unique_id
+        super().__init__(unique_id, model)
         self.pos = pos
         self.type = agent_type
 
