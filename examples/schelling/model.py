@@ -6,7 +6,7 @@ class SchellingAgent(mesa.Agent):
     Schelling segregation agent
     """
 
-    def __init__(self, pos, model, agent_type):
+    def __init__(self, pos, model, agent_type, unique_id):
         """
         Create a new Schelling agent.
 
@@ -16,6 +16,7 @@ class SchellingAgent(mesa.Agent):
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
         super().__init__(pos, model)
+        self.unique_id = unique_id
         self.pos = pos
         self.type = agent_type
 
@@ -38,6 +39,15 @@ class Schelling(mesa.Model):
     """
 
     def __init__(self, width=20, height=20, density=0.8, minority_pc=0.2, homophily=3):
+        """
+        Create a new Schelling model.
+
+        Args:
+            width, height: Size of the space.
+            density: Initial Chance for a cell to populated
+            minority_pc: Chances for an agent to be in minority class
+            homophily: Minimum number of agents of same class needed to be happy
+        """
         super().__init__()
         self.width = width
         self.height = height
@@ -55,6 +65,7 @@ class Schelling(mesa.Model):
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]},
         )
 
+        agent_id = 0 # Unique ID for each agent
         # Set up agents
         # We use a grid iterator that returns
         # the coordinates of a cell as well as
@@ -64,9 +75,10 @@ class Schelling(mesa.Model):
             if self.random.random() < self.density:
                 agent_type = 1 if self.random.random() < self.minority_pc else 0
 
-                agent = SchellingAgent((x, y), self, agent_type)
+                agent = SchellingAgent(pos=(x, y), model=self, agent_type=agent_type, unique_id=agent_id)
                 self.grid.place_agent(agent, (x, y))
                 self.schedule.add(agent)
+                agent_id += 1
 
         self.running = True
         self.datacollector.collect(self)
@@ -77,8 +89,7 @@ class Schelling(mesa.Model):
         """
         self.happy = 0  # Reset counter of happy agents
         self.schedule.step()
-        # collect data
-        self.datacollector.collect(self)
+        self.datacollector.collect(self) # collect data
 
         if self.happy == self.schedule.get_agent_count():
             self.running = False
