@@ -29,7 +29,7 @@ def schelling_draw(agent):
 canvas_element = mesa.visualization.CanvasGrid(
     portrayal_method=schelling_draw,
     grid_width=20,
-    grid_height=20,
+    grid_height=20, 
     canvas_width=500,
     canvas_height=500,
     )
@@ -42,7 +42,7 @@ model_params = {
         name="Agent density",
         value=0.8,
         min_value=0.1,
-        max_value=1.0,
+        max_value=1.0, 
         step=0.1),
     "minority_pc": mesa.visualization.Slider(
         name="Fraction minority",
@@ -55,6 +55,12 @@ model_params = {
         value=3,
         min_value=0,
         max_value=8,
+        step=1),
+    "radius": mesa.visualization.Slider(
+        name="Search Radius",
+        value=1,
+        min_value=1,
+        max_value=5,
         step=1),
 }
 
