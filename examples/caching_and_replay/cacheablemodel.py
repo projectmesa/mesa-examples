@@ -22,12 +22,18 @@ class CacheableSchelling(CacheableModel):
         density=0.8,
         minority_pc=0.2,
         homophily=3,
+        radius=1,
         cache_file_path="my_cache_file_path.cache",
         # Note that this is an additional parameter we add to our model,
         # which decides whether to simulate or replay
         replay=False,
     ):
-        actual_model = Schelling(width, height, density, minority_pc, homophily)
+        actual_model = Schelling(width=width,
+                                 height=height,
+                                 density=density,
+                                 minority_pc=minority_pc,
+                                 homophily=homophily,
+                                 radius=radius)
         cache_state = CacheState.REPLAY if replay else CacheState.RECORD
         super().__init__(
             model=actual_model,
