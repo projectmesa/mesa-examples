@@ -29,7 +29,7 @@ To run the model interactively, run ``mesa runserver`` in this directory. e.g.
     $ mesa runserver
 ```
 
-or 
+or
 
 Directly run the file ``run.py`` in the terminal. e.g.
 

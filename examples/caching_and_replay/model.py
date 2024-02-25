@@ -40,7 +40,16 @@ class Schelling(mesa.Model):
     Model class for the Schelling segregation model.
     """
 
-    def __init__(self, height=20, width=20, homophily=3, radius=1, density=0.8, minority_pc=0.3, seed=None):
+    def __init__(
+        self,
+        height=20,
+        width=20,
+        homophily=3,
+        radius=1,
+        density=0.8,
+        minority_pc=0.3,
+        seed=None,
+    ):
         """
         Create a new Schelling model.
 
@@ -52,7 +61,7 @@ class Schelling(mesa.Model):
             radius: Search radius for checking similarity
             seed: Seed for Reproducibility
         """
-        
+
         super().__init__(seed=seed)
         self.height = height
         self.width = width
@@ -90,6 +99,6 @@ class Schelling(mesa.Model):
         self.schedule.step()
 
         self.datacollector.collect(self)
-        
+
         if self.happy == self.schedule.get_agent_count():
             self.running = False

@@ -28,12 +28,14 @@ class CacheableSchelling(CacheableModel):
         # which decides whether to simulate or replay
         replay=False,
     ):
-        actual_model = Schelling(width=width,
-                                 height=height,
-                                 density=density,
-                                 minority_pc=minority_pc,
-                                 homophily=homophily,
-                                 radius=radius)
+        actual_model = Schelling(
+            width=width,
+            height=height,
+            density=density,
+            minority_pc=minority_pc,
+            homophily=homophily,
+            radius=radius,
+        )
         cache_state = CacheState.REPLAY if replay else CacheState.RECORD
         super().__init__(
             model=actual_model,
