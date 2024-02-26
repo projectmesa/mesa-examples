@@ -23,7 +23,7 @@ class CacheableSchelling(CacheableModel):
         minority_pc=0.2,
         homophily=3,
         radius=1,
-        cache_file_path="my_cache_file_path.cache",
+        cache_file_path="./my_cache_file_path.cache",
         # Note that this is an additional parameter we add to our model,
         # which decides whether to simulate or replay
         replay=False,
