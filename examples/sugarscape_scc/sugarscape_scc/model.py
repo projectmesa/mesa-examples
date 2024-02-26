@@ -16,9 +16,9 @@ import mesa
 from .agents import SsAgent, Sugar
 
 
-class SugarscapeCg(mesa.Model):
+class SugarscapeScc(mesa.Model):
     """
-    Sugarscape 2 Constant Growback
+    Sugarscape 3 SCC
     """
 
     verbose = True  # Print-monitoring
@@ -36,13 +36,14 @@ class SugarscapeCg(mesa.Model):
         self.width = width
         self.height = height
         self.initial_population = initial_population
-
         self.schedule = mesa.time.RandomActivationByType(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         self.datacollector = mesa.DataCollector(
-            {"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)}
+            model_reporters={"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)},
+            agent_reporters={
+                "Age": lambda a: a.age if (isinstance(a, SsAgent)) else None
+            },
         )
-
         # Create sugar
         import numpy as np
 
@@ -54,10 +55,10 @@ class SugarscapeCg(mesa.Model):
             self.schedule.add(sugar)
 
         # Create agent:
-        for i in range(self.initial_population):
+        for _ in range(self.initial_population):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            sugar = self.random.randrange(6, 25)
+            sugar = self.random.randrange(50, 100)
             metabolism = self.random.randrange(2, 4)
             vision = self.random.randrange(1, 6)
             ssa = SsAgent(
