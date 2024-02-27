@@ -41,7 +41,7 @@ class SugarscapeScc(mesa.Model):
         self.datacollector = mesa.DataCollector(
             model_reporters={"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)},
             agent_reporters={
-                "Age": lambda a: a.age if (isinstance(a, SsAgent)) else None
+                "age": lambda a: a.age if (isinstance(a, SsAgent)) else None
             },
         )
         # Create sugar
