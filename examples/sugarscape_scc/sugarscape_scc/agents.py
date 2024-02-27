@@ -18,7 +18,15 @@ def get_distance(pos_1, pos_2):
 
 class SsAgent(mesa.Agent):
     def __init__(
-        self, unique_id, pos, model, moore=False, sugar=0, metabolism=0, vision=0
+        self,
+        unique_id,
+        pos,
+        model,
+        moore=False,
+        sugar=0,
+        metabolism=0,
+        vision=0,
+        fertile=40,
     ):
         # first generation agents are randomly assigned metabolism and vision,
         # children get a contribution from their parents
@@ -30,16 +38,26 @@ class SsAgent(mesa.Agent):
         self.metabolism = metabolism
         self.vision = vision
         self.age = 0
+        self.fertile = fertile
         self.age_of_death = self.random.randrange(60, 100)
-        self.fertility = self.random.randrange(10, 40)
         self.gender = self.random.randint(0, 1)  # 0 is FEMALE, 1 is MALE
+        self.children = []  # maybe stores the IDs of the kids of the agent?
 
     def is_occupied(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
         return any(isinstance(agent, SsAgent) for agent in this_cell)
 
-    def childbearing_years(self) -> bool:
-        return True
+    def is_fertile(self) -> bool:
+        # reduced some of the randomness in determining when agents can no longer reproduce
+        if self.age < 15:
+            return False
+
+        if (self.gender == 1) and (self.age > 60):
+            return False
+
+        if (self.gender == 0) and (self.age > 50):
+            return False
+        return self.sugar < self.fertile
 
     def get_sugar(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -76,15 +94,15 @@ class SsAgent(mesa.Agent):
         sugar_patch.amount = 0
 
     def sex(self):
+        """ """
         potential_mates = [
             i
             for i in self.model.grid.get_neighbors(
                 self.pos, self.moore, include_center=False, radius=self.vision
             )
-            if
-            (  # also check for childbearing age
+            if (
                 (type(i) is SsAgent)
-                and (i.sugar >= i.fertility)
+                and (i.is_fertile() is True)
                 and (i.gender != self.gender)
             )
         ]
@@ -99,7 +117,7 @@ class SsAgent(mesa.Agent):
         ]
         self.random.shuffle(empty_cells)
         for neighbor in potential_mates:
-            if self.sugar < self.fertility:
+            if self.sugar < self.fertile:
                 break
 
             if len(empty_cells) == 0:
@@ -123,15 +141,19 @@ class SsAgent(mesa.Agent):
 
         # iterate through list
 
+    def inheritance():
+        pass
+
     def step(self):
         self.move()
         self.eat()
-        if self.sugar >= self.fertility:  # also check for childbearing age
-            self.sex()  # sex condition(s)
+        if self.is_fertile() is True:
+            self.sex()  # reproduction condition
 
         if (self.sugar <= 0) or (self.age == self.age_of_death):
             self.model.grid.remove_agent(self)
             self.model.schedule.remove(self)  # death conditions
+            self.inheritance()
         self.age += 1
 
 
