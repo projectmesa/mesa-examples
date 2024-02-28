@@ -96,7 +96,6 @@ class SsAgent(mesa.Agent):
         sugar_patch.amount = 0
 
     def sex(self):
-
         potential_mates = [
             i
             for i in self.model.grid.get_neighbors(
