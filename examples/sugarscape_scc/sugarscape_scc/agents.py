@@ -42,6 +42,8 @@ class SsAgent(mesa.Agent):
         self.age_of_death = self.random.randrange(60, 100)
         self.gender = self.random.randint(0, 1)  # 0 is FEMALE, 1 is MALE
         self.children = []  # maybe stores the IDs of the kids of the agent?
+        self.age_of_death = self.random.randrange(60, 100)
+        self.gender = self.random.randint(0, 1)  # 0 is FEMALE, 1 is MALE
 
     def is_occupied(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -94,7 +96,7 @@ class SsAgent(mesa.Agent):
         sugar_patch.amount = 0
 
     def sex(self):
-        """ """
+
         potential_mates = [
             i
             for i in self.model.grid.get_neighbors(
