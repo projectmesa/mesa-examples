@@ -64,42 +64,43 @@ def assess_results(results, single_agent):
 
 args = sys.argv[1:]
 
+try:
+    if args[0] == "-s":
+        print("Running Single Model")
+        # instantiate the model
+        model = SugarscapeG1mt()
+        # run the model
+        model.run_model()
+        # Get results
+        model_results = model.datacollector.get_model_vars_dataframe()
+        # Convert to make similar to batch_run_results
+        model_results["Step"] = model_results.index
+        agent_results = model.datacollector.get_agent_vars_dataframe()
+        agent_results = agent_results.reset_index()
+        # assess the results
+        assess_results(model_results, agent_results)
 
-if args[0] == "runserver":
+    elif args[0] == "-b":
+        print("Conducting a Batch Run")
+        # Batch Run
+        params = {
+            "width": 50,
+            "height": 50,
+            "vision_min": range(1, 4),
+            "metabolism_max": [2, 3, 4, 5],
+        }
+
+        results_batch = mesa.batch_run(
+            SugarscapeG1mt,
+            parameters=params,
+            iterations=1,
+            number_processes=1,
+            data_collection_period=1,
+            display_progress=True,
+        )
+
+        assess_results(results_batch, None)
+    else:
+        raise Exception("Option not found")
+except IndexError:
     server.launch()
-
-elif "s" in args[0] or "Single" in args[0]:
-    print("Running Single Model")
-    # instantiate the model
-    model = SugarscapeG1mt()
-    # run the model
-    model.run_model()
-    # Get results
-    model_results = model.datacollector.get_model_vars_dataframe()
-    # Convert to make similar to batch_run_results
-    model_results["Step"] = model_results.index
-    agent_results = model.datacollector.get_agent_vars_dataframe()
-    agent_results = agent_results.reset_index()
-    # assess the results
-    assess_results(model_results, agent_results)
-
-else:
-    print("Conducting a Batch Run")
-    # Batch Run
-    params = {
-        "width": 50,
-        "height": 50,
-        "vision_min": range(1, 4),
-        "metabolism_max": [2, 3, 4, 5],
-    }
-
-    results_batch = mesa.batch_run(
-        SugarscapeG1mt,
-        parameters=params,
-        iterations=1,
-        number_processes=1,
-        data_collection_period=1,
-        display_progress=True,
-    )
-
-    assess_results(results_batch, None)
