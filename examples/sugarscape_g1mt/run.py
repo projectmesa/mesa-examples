@@ -64,7 +64,7 @@ def assess_results(results, single_agent):
 
 args = sys.argv[1:]
 
-if (len(args) == 0):
+if len(args) == 0:
     server.launch()
 
 elif args[0] == "-s":
