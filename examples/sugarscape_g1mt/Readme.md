@@ -72,14 +72,14 @@ Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and p
 
 ## Files
 
-* ``sugarscape_g1mt/trader_agents.py``: Defines the Trader agent class.
-* ``sugarscape_g1mt/resource_agents.py``: Defines the Resource agent class which contains an amount of sugar and spice.
-* ``sugarscape_g1mt/model.py``: Manages the Sugarscape Constant Growback with Traders model.
-* ``sugarscape_g1mt/sugar_map.txt``: Provides sugar and spice landscape in raster type format.
-* ``server.py``: Sets up an interactive visualization server.
-* ``run.py``: Runs Server, Single Run or Batch Run  with data collection and basic analysis.
-* ``app.py``: Runs a visualization server via Solara (`solara run app.py`).
-* ``tests.py``: Has tests to ensure that the model reproduces the results in shown in Growing Artificial Societies.
+* `sugarscape_g1mt/trader_agents.py`: Defines the Trader agent class.
+* `sugarscape_g1mt/resource_agents.py`: Defines the Resource agent class which contains an amount of sugar and spice.
+* `sugarscape_g1mt/model.py`: Manages the Sugarscape Constant Growback with Traders model.
+* `sugarscape_g1mt/sugar_map.txt`: Provides sugar and spice landscape in raster type format.
+* `server.py`: Sets up an interactive visualization server.
+* `run.py`: Runs Server, Single Run or Batch Run  with data collection and basic analysis.
+* `app.py`: Runs a visualization server via Solara (`solara run app.py`).
+* `tests.py`: Has tests to ensure that the model reproduces the results in shown in Growing Artificial Societies.
 
 ## Additional Resources
 
