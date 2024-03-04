@@ -2,7 +2,7 @@ import mesa
 
 
 def compute_gini(model):
-    agent_wealths = [agent.wealth for agent in model.schedule.agents]
+    agent_wealths = model.agents.get("wealth")
     x = sorted(agent_wealths)
     N = model.num_agents
     B = sum(xi * (N - i) for i, xi in enumerate(x)) / (N * sum(x))
@@ -19,27 +19,26 @@ class BoltzmannWealthModel(mesa.Model):
 
     def __init__(self, N=100, width=10, height=10):
         super().__init__()
+        self.running = True  # TODO remove this line when at Mesa 3.0
         self.num_agents = N
         self.grid = mesa.space.MultiGrid(width, height, True)
-        self.schedule = mesa.time.RandomActivation(self)
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
         )
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(i, self)
-            self.schedule.add(a)
             # Add the agent to a random grid cell
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(a, (x, y))
 
-        self.running = True
         self.datacollector.collect(self)
 
     def step(self):
-        self.schedule.step()
-        # collect data
+        self.agents.shuffle().do("step")
+        # Must be before data collection.
+        self._advance_time()  # Temporary API; will be finalized by Mesa 3.0 release
         self.datacollector.collect(self)
 
     def run_model(self, n):
@@ -55,17 +54,18 @@ class MoneyAgent(mesa.Agent):
         self.wealth = 1
 
     def move(self):
-        possible_steps = self.model.grid.get_neighborhood(
+        possible_positions = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False
         )
-        new_position = self.random.choice(possible_steps)
-        self.model.grid.move_agent(self, new_position)
+        self.model.grid.move_agent_to_one_of(self, possible_positions)
 
     def give_money(self):
-        cellmates = self.model.grid.get_cell_list_contents([self.pos])
-        cellmates.pop(
-            cellmates.index(self)
-        )  # Ensure agent is not giving money to itself
+        cellmates = [
+            c
+            for c in self.model.grid.get_cell_list_contents([self.pos])
+            # Ensure agent is not giving money to itself
+            if c is not self
+        ]
         if len(cellmates) > 0:
             other = self.random.choice(cellmates)
             other.wealth += 1
