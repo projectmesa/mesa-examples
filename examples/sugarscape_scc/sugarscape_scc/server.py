@@ -35,7 +35,6 @@ chart_element = mesa.visualization.ChartModule(
     [{"Label": "SsAgent", "Color": "#AA0000"}], data_collector_name="datacollector"
 )
 bar_graph = mesa.visualization.BarChartModule(
-
     [{"Label": "age", "Color": "#AAAAAA"}], data_collector_name="datacollector"
 )
 server = mesa.visualization.ModularServer(

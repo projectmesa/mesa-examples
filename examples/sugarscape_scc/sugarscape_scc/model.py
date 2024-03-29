@@ -32,4 +32,3 @@ class SugarscapeScc(SugarscapeCg):
             model_reporters={"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)},
             agent_reporters={"age": "age"},
         )
-
