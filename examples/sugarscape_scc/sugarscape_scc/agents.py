@@ -1,22 +1,7 @@
-import math
-
-import mesa
+from mesa_models.sugarscape_cg.agents import SsAgent
 
 
-def get_distance(pos_1, pos_2):
-    """Get the distance between two point
-
-    Args:
-        pos_1, pos_2: Coordinate tuples for both points.
-    """
-    x1, y1 = pos_1
-    x2, y2 = pos_2
-    dx = x1 - x2
-    dy = y1 - y2
-    return math.sqrt(dx**2 + dy**2)
-
-
-class SsAgent(mesa.Agent):
+class SsAgent3(SsAgent):
     def __init__(
         self,
         unique_id,
@@ -31,12 +16,7 @@ class SsAgent(mesa.Agent):
         # first generation agents are randomly assigned metabolism and vision,
         # children get a contribution from their parents
 
-        super().__init__(unique_id, model)
-        self.pos = pos
-        self.moore = moore
-        self.sugar = sugar
-        self.metabolism = metabolism
-        self.vision = vision
+        super().__init__(unique_id, pos, model, moore, sugar, metabolism, vision)
         self.age = 0
         self.fertile = fertile
         self.age_of_death = self.random.randrange(60, 100)
@@ -44,10 +24,6 @@ class SsAgent(mesa.Agent):
         self.children = []  # maybe stores the IDs of the kids of the agent?
         self.age_of_death = self.random.randrange(60, 100)
         self.gender = self.random.randint(0, 1)  # 0 is FEMALE, 1 is MALE
-
-    def is_occupied(self, pos):
-        this_cell = self.model.grid.get_cell_list_contents([pos])
-        return any(isinstance(agent, SsAgent) for agent in this_cell)
 
     def is_fertile(self) -> bool:
         # reduced some of the randomness in determining when agents can no longer reproduce
@@ -61,41 +37,7 @@ class SsAgent(mesa.Agent):
             return False
         return self.sugar < self.fertile
 
-    def get_sugar(self, pos):
-        this_cell = self.model.grid.get_cell_list_contents([pos])
-        for agent in this_cell:
-            if type(agent) is Sugar:
-                return agent
-
-    def move(self):
-        # Get neighborhood within vision
-        neighbors = [
-            i
-            for i in self.model.grid.get_neighborhood(
-                self.pos, self.moore, False, radius=self.vision
-            )
-            if not self.is_occupied(i)
-        ]
-        neighbors.append(self.pos)
-        # Look for location with the most sugar
-        max_sugar = max(self.get_sugar(pos).amount for pos in neighbors)
-        candidates = [
-            pos for pos in neighbors if self.get_sugar(pos).amount == max_sugar
-        ]
-        # Narrow down to the nearest ones
-        min_dist = min(get_distance(self.pos, pos) for pos in candidates)
-        final_candidates = [
-            pos for pos in candidates if get_distance(self.pos, pos) == min_dist
-        ]
-        self.random.shuffle(final_candidates)
-        self.model.grid.move_agent(self, final_candidates[0])
-
-    def eat(self):
-        sugar_patch = self.get_sugar(self.pos)
-        self.sugar = self.sugar - self.metabolism + sugar_patch.amount
-        sugar_patch.amount = 0
-
-    def sex(self):
+      def sex(self):
         potential_mates = [
             i
             for i in self.model.grid.get_neighbors(
@@ -142,8 +84,10 @@ class SsAgent(mesa.Agent):
 
         # iterate through list
 
-    def inheritance():
-        pass
+    def inheritance(self):
+        for i in self.children:
+            i.sugar += self.sugar / len(self.children)
+
 
     def step(self):
         self.move()
@@ -152,18 +96,9 @@ class SsAgent(mesa.Agent):
             self.sex()  # reproduction condition
 
         if (self.sugar <= 0) or (self.age == self.age_of_death):
+            self.inheritance()
             self.model.grid.remove_agent(self)
             self.model.schedule.remove(self)  # death conditions
-            self.inheritance()
         self.age += 1
 
 
-class Sugar(mesa.Agent):
-    def __init__(self, unique_id, pos, model, max_sugar, growback_rule=1):
-        super().__init__(unique_id, model)
-        self.amount = max_sugar
-        self.max_sugar = max_sugar
-        self.growback = growback_rule
-
-    def step(self):
-        self.amount = min([self.max_sugar, self.amount + self.growback])
