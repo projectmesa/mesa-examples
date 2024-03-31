@@ -10,8 +10,6 @@ class ElFarolBar(mesa.Model):
         crowd_threshold=60,
         num_strategies=10,
         memory_size=10,
-        width=100,
-        height=100,
         N=100,
     ):
         super().__init__()
