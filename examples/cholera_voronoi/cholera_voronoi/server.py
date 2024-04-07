@@ -1,5 +1,5 @@
 import mesa
-from cholera.model import Cholera
+from cholera_voronoi.model import Cholera
 
 
 def get_removed_people(model: Cholera):

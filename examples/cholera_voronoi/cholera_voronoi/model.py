@@ -54,7 +54,6 @@ class Cholera(mesa.Model):
             random=self.random,
         )
 
-        print(self.grid.all_cells)
         for population, cell, contaminated in zip(
             cell_population, list(self.grid.all_cells), is_pump_contaminated
         ):
