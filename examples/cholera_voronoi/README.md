@@ -5,7 +5,7 @@ This folder contains a implementation of Cholera spread analyzed by John Snow at
 The model has two agents: people and pumps. Pumps can infect people and neighbor pumps. People start as susceptible, can be infected by pumps and recover or die, according to a simple SIR model. Each cell has only one pump and is connected to neighbor cells according to Voronoi's diagram. The model aims to investigate how fast actions oriented by Voronoi diagrams can prevent disease spread.
 
 ## How to Run
- 
+
 To run the model interactively, run ``mesa runserver`` in this directory. e.g.
 
 ```
