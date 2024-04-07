@@ -1,5 +1,6 @@
 import mesa
 import mesa_geo as mg
+import mesa_geo.geoexperimental as mge
 import xyzservices.providers as xyz
 from model import GeoSchelling
 
@@ -15,13 +16,13 @@ class HappyElement(mesa.visualization.TextElement):
     def render(self, model):
         return "Happy agents: " + str(model.happy)
 
-
+'''
 model_params = {
     "density": mesa.visualization.Slider("Agent density", 0.6, 0.1, 1.0, 0.1),
     "minority_pc": mesa.visualization.Slider("Fraction minority", 0.2, 0.00, 1.0, 0.05),
     "export_data": mesa.visualization.Checkbox("Export data after simulation", False),
 }
-
+'''
 
 def schelling_draw(agent):
     """
@@ -36,12 +37,36 @@ def schelling_draw(agent):
         portrayal["color"] = "Blue"
     return portrayal
 
+model_params = {
+    "density":{ 
+     "type": "SliderFloat",
+     "value": 0.6,
+     "label": "Population Density",
+     "min": 0.0,
+     "max": 1.0,
+     "step": 0.1,},
+    "minority_pc":{
+     "type": "SliderFloat",
+     "value": 0.2,
+     "label": "Fraction Minority",
+     "min": 0.0,
+     "max": 1.0,
+     "step": 0.05},
+     "export_data": { 
+     "type": "Checkbox",
+     "value": False,
+     "description" :'Export Data',
+     "disabled": False}
+}
 
-happy_element = HappyElement()
-map_element = mg.visualization.MapModule(
-    schelling_draw, [52, 12], 4, tiles=xyz.CartoDB.Positron
+page = mge.JupyterViz(
+    GeoSchelling, 
+    model_params,
+    measures = ["happy"],
+    name="Geo-Schelling Model",
+    agent_portrayal=schelling_draw,
+    zoom=3,
+    center_point= [52,12]
 )
-happy_chart = mesa.visualization.ChartModule([{"Label": "happy", "Color": "Black"}])
-server = mesa.visualization.ModularServer(
-    GeoSchelling, [map_element, happy_element, happy_chart], "Schelling", model_params
-)
+
+page
