@@ -1,7 +1,5 @@
 import mesa
-import mesa_geo as mg
 import mesa_geo.geoexperimental as mge
-import xyzservices.providers as xyz
 from model import GeoSchelling
 
 
@@ -69,4 +67,4 @@ page = mge.JupyterViz(
     center_point= [52,12]
 )
 
-page
+page # noqa: B018
