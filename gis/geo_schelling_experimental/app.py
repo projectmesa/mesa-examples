@@ -14,16 +14,6 @@ class HappyElement(mesa.visualization.TextElement):
     def render(self, model):
         return "Happy agents: " + str(model.happy)
 
-
-"""
-model_params = {
-    "density": mesa.visualization.Slider("Agent density", 0.6, 0.1, 1.0, 0.1),
-    "minority_pc": mesa.visualization.Slider("Fraction minority", 0.2, 0.00, 1.0, 0.05),
-    "export_data": mesa.visualization.Checkbox("Export data after simulation", False),
-}
-"""
-
-
 def schelling_draw(agent):
     """
     Portrayal Method for canvas
@@ -63,7 +53,7 @@ model_params = {
     },
 }
 
-page = mge.JupyterViz(
+page = mge.GeoJupyterViz(
     GeoSchelling,
     model_params,
     measures=["happy"],
