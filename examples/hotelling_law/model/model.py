@@ -2,7 +2,7 @@ from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid, SingleGrid
 from mesa.datacollection import DataCollector
-from agents.agents import (
+from hotelling_law.agents.agents import (
     StoreAgent,
 )  # Adjust the import statement based on your project structure
 import numpy as np

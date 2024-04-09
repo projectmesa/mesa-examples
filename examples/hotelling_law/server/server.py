@@ -6,7 +6,7 @@ from mesa.visualization.modules import CanvasGrid
 # Import the model and visualization elements defined
 # in other files of the project.
 from model.model import HotellingModel
-from visualization.visualization import (
+from hotelling_law.visualization.visualization import (
     agent_portrayal,
     average_price_chart,
     total_revenue_chart,
