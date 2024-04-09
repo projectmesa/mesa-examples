@@ -1,5 +1,5 @@
 # Import necessary components from the Mesa visualization modules.
-from hotelling_law.visualization.visualization import (
+from ..visualization.visualization import (
     agent_portrayal,
     average_price_chart,
     total_revenue_chart,

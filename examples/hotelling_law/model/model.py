@@ -1,6 +1,6 @@
 # Adjust the import statement based on your project structure
 import numpy as np
-from hotelling_law.agents.agents import (
+from ..agents.agents import (
     StoreAgent,
 )
 from mesa import Model
