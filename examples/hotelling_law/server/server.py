@@ -1,16 +1,16 @@
 # Import necessary components from the Mesa visualization modules.
-from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.UserParam import Slider, Choice
-from mesa.visualization.modules import CanvasGrid
-
-# Import the model and visualization elements defined
-# in other files of the project.
-from model.model import HotellingModel
 from hotelling_law.visualization.visualization import (
     agent_portrayal,
     average_price_chart,
     total_revenue_chart,
 )
+from mesa.visualization.ModularVisualization import ModularServer
+from mesa.visualization.modules import CanvasGrid
+from mesa.visualization.UserParam import Choice, Slider
+
+# Import the model and visualization elements defined
+# in other files of the project.
+from model.model import HotellingModel
 
 # Define the size of the grid that will be used for visualizing
 # the simulation in the web interface.

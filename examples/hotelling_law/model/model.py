@@ -1,11 +1,12 @@
-from mesa import Model
-from mesa.time import RandomActivation
-from mesa.space import MultiGrid, SingleGrid
-from mesa.datacollection import DataCollector
+# Adjust the import statement based on your project structure
+import numpy as np
 from hotelling_law.agents.agents import (
     StoreAgent,
-)  # Adjust the import statement based on your project structure
-import numpy as np
+)
+from mesa import Model
+from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid, SingleGrid
+from mesa.time import RandomActivation
 
 
 # Function to compute the average price of all store agents in the model.
