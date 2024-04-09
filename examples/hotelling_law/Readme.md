@@ -20,7 +20,7 @@ To run this simulation, you will need Python 3.x and the following Python librar
 You can install all required libraries by running:
 
 ```bash
-pip install -r requirements.txt 
+pip install -r requirements.txt
 ```
 
 ## Project Structure

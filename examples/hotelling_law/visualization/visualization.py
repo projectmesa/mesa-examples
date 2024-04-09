@@ -26,14 +26,10 @@ def agent_portrayal(agent):
             ] = "#FF0000"  # Agents with a price above 12 are colored red,
             # indicating higher prices.
         elif agent.price > 8:
-            portrayal[
-                "Color"
-            ] = "#FFFF00"  # Agents with a price above 8 and
+            portrayal["Color"] = "#FFFF00"  # Agents with a price above 8 and
             # up to 12 are colored yellow,indicating moderate prices.
         else:
-            portrayal[
-                "Color"
-            ] = "#00FF00"  # Agents with a price of 8 or below
+            portrayal["Color"] = "#00FF00"  # Agents with a price of 8 or below
             # are colored green,indicating lower prices.
 
     return portrayal  # Return the portrayal dictionary to be used by
@@ -43,9 +39,7 @@ def agent_portrayal(agent):
 # Define a chart to visualize the average price of agents
 # over time in the simulation.
 average_price_chart = ChartModule(
-    [
-        {"Label": "Average Price", "Color": "Black"}
-    ],  # The data series label and color.
+    [{"Label": "Average Price", "Color": "Black"}],  # The data series label and color.
     data_collector_name="datacollector",  # The name of the DataCollector
     # object from which to retrieve the data.
 )

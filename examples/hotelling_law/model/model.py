@@ -91,9 +91,7 @@ class HotellingModel(Model):
         # and mobility rate.
         super().__init__()
         self.num_agents = N  # Total number of store agents in the model.
-        self.mobility_rate = (
-            mobility_rate  # Percentage of agents that can move.
-        )
+        self.mobility_rate = mobility_rate  # Percentage of agents that can move.
         self.mode = mode  # Operational mode of the simulation
         # (affects agents' behavior).
         self.environment_type = (
@@ -142,9 +140,7 @@ class HotellingModel(Model):
 
             for unique_id in range(self.num_agents):
                 if not available_positions:
-                    raise ValueError(
-                        "No more available positions to place agents."
-                    )
+                    raise ValueError("No more available positions to place agents.")
 
                 can_move = mobile_agents_assigned < num_mobile_agents
                 if can_move:

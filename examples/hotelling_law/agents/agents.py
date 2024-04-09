@@ -34,9 +34,7 @@ class StoreAgent(Agent):
                     (middle_x, (current_y + 1) % self.model.grid.height),
                 ]
                 possible_empty_steps = [
-                    pos
-                    for pos in possible_steps
-                    if self.model.grid.is_cell_empty(pos)
+                    pos for pos in possible_steps if self.model.grid.is_cell_empty(pos)
                 ]
                 if possible_empty_steps:
                     new_position = self.random.choice(possible_empty_steps)
