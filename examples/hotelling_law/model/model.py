@@ -1,12 +1,13 @@
 # Adjust the import statement based on your project structure
 import numpy as np
-from ..agents.agents import (
-    StoreAgent,
-)
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid, SingleGrid
 from mesa.time import RandomActivation
+
+from ..agents.agents import (
+    StoreAgent,
+)
 
 
 # Function to compute the average price of all store agents in the model.
