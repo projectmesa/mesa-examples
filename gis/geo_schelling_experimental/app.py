@@ -14,6 +14,7 @@ class HappyElement(mesa.visualization.TextElement):
     def render(self, model):
         return "Happy agents: " + str(model.happy)
 
+
 def schelling_draw(agent):
     """
     Portrayal Method for canvas
