@@ -49,4 +49,23 @@ To start the simulation, navigate to the project directory and execute the follo
 python run.py
 ```
 
+# Project Details
+
+### Professor: [Vipin P. Veetil](https://www.vipinveetil.com/)
+### Indian Institute of Management, Kozhikode
+
+### Project by
+
+| Group 8 |                           |               |
+|-|---------------------------|---------------|
+| Name | Email Id                  | Roll No       |
+| Amrita Tripathy | amrita15d@iimk.edu.in     | EPGP-15D-010  |
+| Anirban Mondal | anirban15e@iimk.edu.in    | EPGP-15E-006  |
+| Namita Das | namita15d@iimk.edu.in     | EPGP-15D-046  |
+| Sandeep Shenoy | sandeep15c@iimk.edu.in    | EPGP-15C-076  |
+| Sanjeeb Kumar Dhinda | sanjeeb15d@iimk.edu.in | EPGP-15D-074  |
+| Umashankar Ankuri | umashankar15d@iimk.edu.in | EPGP-15D-096  |
+| Vinayak Nair | vinayak15d@iimk.edu.in    | EPGP-15D-102  |
+| Wayne Joseph Unger | wayne15d@iimk.edu.in    | EPGP-15D-104  |
+
 
