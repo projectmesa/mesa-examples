@@ -56,7 +56,7 @@ class StoreAgent(Agent):
             # adjust prices if allowed.
             self.move()
             self.adjust_price()
-        elif self.model.mode == "moving_only" and self.can_move:
+        elif self.model.mode == "moving_only":
             # In moving_only mode, the agent only moves if it can.
             self.move()
         elif self.model.mode == "pricing_only":
