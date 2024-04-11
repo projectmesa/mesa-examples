@@ -21,7 +21,7 @@ def compute_average_price(model):
 def compute_total_revenue(model):
     """Compute the total revenue of all stores,
     simplified as price * market share."""
-    return sum(agent.price for agent in model.agents)
+    return sum(model.agents.get("price"))
 
 
 # The main model class that sets up and runs the simulation.
