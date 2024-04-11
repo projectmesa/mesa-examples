@@ -5,7 +5,7 @@ from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid, SingleGrid
 from mesa.time import RandomActivation
 
-from ..agents.agents import (
+from examples.hotelling_law.agents import (
     StoreAgent,
 )
 
@@ -13,9 +13,7 @@ from ..agents.agents import (
 # Function to compute the average price of all store agents in the model.
 def compute_average_price(model):
     """Compute the average price of all stores."""
-    store_prices = [agent.price for agent in model.schedule.agents]
-    average_price = np.mean(store_prices)
-    return average_price
+    return np.mean([agent.price for agent in model.agents])
 
 
 # Function to compute the total revenue for all store agents,
@@ -23,10 +21,7 @@ def compute_average_price(model):
 def compute_total_revenue(model):
     """Compute the total revenue of all stores,
     simplified as price * market share."""
-    total_revenue = sum(
-        agent.price for agent in model.schedule.agents
-    )  # Simplified revenue calculation
-    return total_revenue
+    return sum(agent.price for agent in model.agents)
 
 
 # The main model class that sets up and runs the simulation.
@@ -81,9 +76,9 @@ class HotellingModel(Model):
 
     def __init__(
         self,
-        N,
-        width,
-        height,
+        N=10,
+        width=20,
+        height=20,
         mode="default",
         environment_type="grid",
         mobility_rate=80,
@@ -120,6 +115,7 @@ class HotellingModel(Model):
             model_reporters={
                 "Average Price": compute_average_price,
                 "Total Revenue": compute_total_revenue,
+                "Price Variance": lambda m: np.var([agent.price for agent in m.agents])
             }
         )
 

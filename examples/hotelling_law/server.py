@@ -5,8 +5,8 @@ from mesa.visualization.UserParam import Choice, Slider
 
 # Import the model and visualization elements defined
 # in other files of the project.
-from ..model.model import HotellingModel
-from ..visualization.visualization import (
+from examples.hotelling_law.model import HotellingModel
+from examples.hotelling_law.visualization import (
     agent_portrayal,
     average_price_chart,
     total_revenue_chart,

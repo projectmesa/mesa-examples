@@ -54,8 +54,7 @@ class StoreAgent(Agent):
         if self.model.mode == "default":
             # In default mode, the agent can move and
             # adjust prices if allowed.
-            if self.can_move:
-                self.move()
+            self.move()
             self.adjust_price()
         elif self.model.mode == "moving_only" and self.can_move:
             # In moving_only mode, the agent only moves if it can.
