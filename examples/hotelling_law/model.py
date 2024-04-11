@@ -115,7 +115,7 @@ class HotellingModel(Model):
             model_reporters={
                 "Average Price": compute_average_price,
                 "Total Revenue": compute_total_revenue,
-                "Price Variance": lambda m: np.var([agent.price for agent in m.agents])
+                "Price Variance": lambda m: np.var([agent.price for agent in m.agents]),
             }
         )
 
