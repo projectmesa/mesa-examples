@@ -13,7 +13,7 @@ from examples.hotelling_law.agents import (
 # Function to compute the average price of all store agents in the model.
 def compute_average_price(model):
     """Compute the average price of all stores."""
-    return np.mean([agent.price for agent in model.agents])
+    return np.mean(model.agents.get("price"))
 
 
 # Function to compute the total revenue for all store agents,
