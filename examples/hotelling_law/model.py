@@ -79,13 +79,13 @@ class HotellingModel(Model):
     """
 
     def __init__(
-            self,
-            N=10,
-            width=10,
-            height=10,
-            mode="default",
-            environment_type="grid",
-            mobility_rate=80,
+        self,
+        N=10,
+        width=10,
+        height=10,
+        mode="default",
+        environment_type="grid",
+        mobility_rate=80,
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,

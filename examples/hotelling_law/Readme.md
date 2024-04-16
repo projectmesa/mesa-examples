@@ -40,7 +40,7 @@ hotelling-law-mesa/
 To start the simulation, navigate to the project directory and execute the following command:
 
 ```bash
-python run.py 
+python run.py
 
 solara run app.py (mesa 3.0)
 ```

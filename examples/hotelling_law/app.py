@@ -33,7 +33,7 @@ def agent_portrayal(agent):
 
 def space_drawer(model, agent_portrayal):
     # Ensure previously opened figures are closed to manage memory
-    plt.close('all')
+    plt.close("all")
     # Smaller figure size
     fig, ax = plt.subplots(figsize=(8, 5), dpi=100)  # Adjust figure size here
 
@@ -41,13 +41,13 @@ def space_drawer(model, agent_portrayal):
     ticks = np.arange(0, model.grid.width + 1, 1)
     ax.set_xticks(ticks, minor=False)
     ax.set_yticks(ticks, minor=False)
-    ax.grid(which="both", color="gray", linestyle='-', linewidth=0.5)
+    ax.grid(which="both", color="gray", linestyle="-", linewidth=0.5)
     ax.tick_params(which="both", size=0)  # Hide grid ticks
 
     # Set axis limits and aspect
     ax.set_xlim(0, model.grid.width)
     ax.set_ylim(0, model.grid.height)
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
 
     # Hide major tick labels
     ax.set_xticklabels([])
@@ -67,8 +67,9 @@ def space_drawer(model, agent_portrayal):
         # Adjusted size for smaller figure
         sizes.append(portrayal.get("size", 100))
 
-    ax.scatter(x_vals, y_vals, c=colors, s=sizes, linewidths=0.5,
-               edgecolors="black", alpha=0.6)
+    ax.scatter(
+        x_vals, y_vals, c=colors, s=sizes, linewidths=0.5, edgecolors="black", alpha=0.6
+    )
 
     # Invert y-axis to match grid origin (bottom-left)
     ax.invert_yaxis()
@@ -93,13 +94,13 @@ model_params = {
         "type": "Select",
         "value": "default",
         "label": "Mode:",
-        "values": ["default", "pricing_only", "moving_only"]
+        "values": ["default", "pricing_only", "moving_only"],
     },
     "environment_type": {
         "type": "Select",
         "value": "grid",
         "label": "Environment Type:",
-        "values": ["grid", "line"]
+        "values": ["grid", "line"],
     },
     "mobility_rate": {
         "type": "SliderInt",
