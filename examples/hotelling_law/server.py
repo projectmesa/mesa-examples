@@ -6,8 +6,7 @@ from mesa.visualization.UserParam import Choice, Slider
 # Import the model and visualization elements defined
 # in other files of the project.
 from .model import HotellingModel
-from .visualization import (
-    agent_portrayal, average_price_chart, total_revenue_chart)
+from .visualization import agent_portrayal, average_price_chart, total_revenue_chart
 
 # Define the size of the grid that will be used for visualizing
 # the simulation in the web interface.

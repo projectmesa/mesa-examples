@@ -68,8 +68,7 @@ def space_drawer(model, agent_portrayal):
         sizes.append(portrayal.get("size", 100))
 
     ax.scatter(
-        x_vals, y_vals, c=colors, s=sizes,
-        linewidths=0.5, edgecolors="black", alpha=0.6
+        x_vals, y_vals, c=colors, s=sizes, linewidths=0.5, edgecolors="black", alpha=0.6
     )
 
     # Invert y-axis to match grid origin (bottom-left)
