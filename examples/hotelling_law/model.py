@@ -23,7 +23,7 @@ def compute_total_revenue(model):
 
 def compute_price_variance(model):
     """Compute the variance in price among all stores."""
-    return np.var([agent.price for agent in model.agents])
+    return np.var([model.agents.get("price")])
 
 
 # The main model class that sets up and runs the simulation.

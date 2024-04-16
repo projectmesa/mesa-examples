@@ -1,12 +1,13 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import solara
+from matplotlib.figure import Figure
 from mesa.experimental import JupyterViz
 
 from .model import HotellingModel
 
 
-# This function defines how agents are visually represented in the simulation.
+# This function defines how agents are visually
+# represented in the simulation.
 def agent_portrayal(agent):
     size = 50  # Default size
     color = "grey"  # Default color for agents
@@ -32,10 +33,9 @@ def agent_portrayal(agent):
 
 
 def space_drawer(model, agent_portrayal):
-    # Ensure previously opened figures are closed to manage memory
-    plt.close("all")
-    # Smaller figure size
-    fig, ax = plt.subplots(figsize=(8, 5), dpi=100)  # Adjust figure size here
+    # Create a new figure
+    fig = Figure(figsize=(8, 5), dpi=100)
+    ax = fig.subplots()
 
     # Define grid lines
     ticks = np.arange(0, model.grid.width + 1, 1)
@@ -53,30 +53,20 @@ def space_drawer(model, agent_portrayal):
     ax.set_xticklabels([])
     ax.set_yticklabels([])
 
-    # Plotting agents
-    x_vals = []
-    y_vals = []
-    colors = []
-    sizes = []
+    # Plotting agents using portrayal
     for agent in model.schedule.agents:
         portrayal = agent_portrayal(agent)
         x, y = agent.pos
-        x_vals.append(x + 0.5)  # Centering the dot in the grid cell
-        y_vals.append(y + 0.5)
-        colors.append(portrayal.get("color", "black"))
-        # Adjusted size for smaller figure
-        sizes.append(portrayal.get("size", 100))
-
-    ax.scatter(
-        x_vals, y_vals, c=colors, s=sizes, linewidths=0.5, edgecolors="black", alpha=0.6
-    )
+        # Adjust plot call for object-oriented API
+        ax.scatter(x + 0.5, y + 0.5, c=portrayal.get("color", "black"),
+                   s=portrayal.get("size", 100), linewidths=0.5,
+                   edgecolors="black", alpha=0.6)
 
     # Invert y-axis to match grid origin (bottom-left)
     ax.invert_yaxis()
 
-    # Adjust layout
-    # This can help with making better use of the available space
-    plt.tight_layout()
+    # Adjust layout properly for embedded plots
+    fig.tight_layout()
 
     return solara.FigureMatplotlib(fig)
 
