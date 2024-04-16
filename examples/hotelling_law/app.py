@@ -58,9 +58,15 @@ def space_drawer(model, agent_portrayal):
         portrayal = agent_portrayal(agent)
         x, y = agent.pos
         # Adjust plot call for object-oriented API
-        ax.scatter(x + 0.5, y + 0.5, c=portrayal.get("color", "black"),
-                   s=portrayal.get("size", 100), linewidths=0.5,
-                   edgecolors="black", alpha=0.6)
+        ax.scatter(
+            x + 0.5,
+            y + 0.5,
+            c=portrayal.get("color", "black"),
+            s=portrayal.get("size", 100),
+            linewidths=0.5,
+            edgecolors="black",
+            alpha=0.6,
+        )
 
     # Invert y-axis to match grid origin (bottom-left)
     ax.invert_yaxis()
