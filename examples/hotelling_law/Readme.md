@@ -27,18 +27,12 @@ pip install -r requirements.txt
 
 ```plaintext
 hotelling-law-mesa/
-├── analysis/
-│   └── analyze_simulation.py
-├── agents/
-│   └── agents.py
-├── models/
-│   └── model.py
-├── server/
-│   └── server.py
-├── visualization/
-│   └── visualization.py
+├── __init__.py
+├── agents.py
+├── model.py
+├── app.py
 ├── requirements.txt
-└── run.py
+└── tests.py
 ```
 
 ## Running the Simulation
@@ -46,7 +40,9 @@ hotelling-law-mesa/
 To start the simulation, navigate to the project directory and execute the following command:
 
 ```bash
-python run.py
+python run.py 
+
+solara run app.py (mesa 3.0)
 ```
 
 # Project Details

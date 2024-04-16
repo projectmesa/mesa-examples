@@ -1,11 +1,10 @@
-# Adjust the import statement based on your project structure
 import numpy as np
 from mesa import Model
 from mesa.datacollection import DataCollector
-from mesa.space import MultiGrid, SingleGrid
+from mesa.space import MultiGrid
 from mesa.time import RandomActivation
 
-from examples.hotelling_law.agents import (
+from .agents import (
     StoreAgent,
 )
 
@@ -22,6 +21,11 @@ def compute_total_revenue(model):
     """Compute the total revenue of all stores,
     simplified as price * market share."""
     return sum(model.agents.get("price"))
+
+
+def compute_price_variance(model):
+    """Compute the variance in price among all stores."""
+    return np.var([agent.price for agent in model.agents])
 
 
 # The main model class that sets up and runs the simulation.
@@ -75,20 +79,20 @@ class HotellingModel(Model):
     """
 
     def __init__(
-        self,
-        N=10,
-        width=20,
-        height=20,
-        mode="default",
-        environment_type="grid",
-        mobility_rate=80,
+            self,
+            N=10,
+            width=10,
+            height=10,
+            mode="default",
+            environment_type="grid",
+            mobility_rate=80,
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,
         # and mobility rate.
         super().__init__()
         self.num_agents = N  # Total number of store agents in the model.
-        self.mobility_rate = mobility_rate  # Percentage of agents that can move.
+        self.mobility_rate = mobility_rate  # % of agents that can move.
         self.mode = mode  # Operational mode of the simulation
         # (affects agents' behavior).
         self.environment_type = (
@@ -104,8 +108,8 @@ class HotellingModel(Model):
                 width, height, True
             )  # A grid where multiple agents can occupy the same cell.
         elif environment_type == "line":
-            self.grid = SingleGrid(
-                width, height, True
+            self.grid = MultiGrid(
+                1, height, True
             )  # A grid representing a line (single occupancy per cell).
 
         self._initialize_agents()
@@ -115,7 +119,7 @@ class HotellingModel(Model):
             model_reporters={
                 "Average Price": compute_average_price,
                 "Total Revenue": compute_total_revenue,
-                "Price Variance": lambda m: np.var([agent.price for agent in m.agents]),
+                "Price Variance": compute_price_variance,
             }
         )
 
@@ -126,44 +130,18 @@ class HotellingModel(Model):
         )  # Calculate number of mobile agents.
         mobile_agents_assigned = 0
 
-        # Different logic for placing agents based on the environment type.
-        if self.environment_type == "line":
-            middle_x = (
-                self.grid.width // 2
-            )  # For a line environment, agents are placed along
-            # the middle axis.
-            available_positions = set(
-                range(self.grid.height)
-            )  # Track available positions for placement.
+        for unique_id in range(self.num_agents):
+            can_move = mobile_agents_assigned < num_mobile_agents
+            if can_move:
+                mobile_agents_assigned += 1
 
-            for unique_id in range(self.num_agents):
-                if not available_positions:
-                    raise ValueError("No more available positions to place agents.")
+            agent = StoreAgent(unique_id, self, can_move=can_move)
+            self.schedule.add(agent)
 
-                can_move = mobile_agents_assigned < num_mobile_agents
-                if can_move:
-                    mobile_agents_assigned += 1
-
-                agent = StoreAgent(unique_id, self, can_move=can_move)
-                self.schedule.add(agent)
-
-                y_position = self.random.choice(list(available_positions))
-                available_positions.remove(y_position)
-                initial_position = (middle_x, y_position)
-                self.grid.place_agent(agent, initial_position)
-        else:
-            for unique_id in range(self.num_agents):
-                can_move = mobile_agents_assigned < num_mobile_agents
-                if can_move:
-                    mobile_agents_assigned += 1
-
-                agent = StoreAgent(unique_id, self, can_move=can_move)
-                self.schedule.add(agent)
-
-                # Randomly place agents on the grid for a grid environment.
-                x = self.random.randrange(self.grid.width)
-                y = self.random.randrange(self.grid.height)
-                self.grid.place_agent(agent, (x, y))
+            # Randomly place agents on the grid for a grid environment.
+            x = self.random.randrange(self.grid.width)
+            y = self.random.randrange(self.grid.height)
+            self.grid.place_agent(agent, (x, y))
 
     # Method to advance the simulation by one step.
     def step(self):

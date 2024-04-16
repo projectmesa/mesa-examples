@@ -1,5 +1,3 @@
-# Import the ChartModule from Mesa to enable chart visualizations
-# in the simulation interface.
 from mesa.visualization.modules import ChartModule
 
 
@@ -38,8 +36,8 @@ def agent_portrayal(agent):
 
 # Define a chart to visualize the average price of agents
 # over time in the simulation.
-average_price_chart = ChartModule(
-    [{"Label": "Average Price", "Color": "Black"}],  # The data series label and color.
+average_price_chart = ChartModule(   # The data series label and color.
+    [{"Label": "Average Price", "Color": "Black"}],
     data_collector_name="datacollector",  # The name of the DataCollector
     # object from which to retrieve the data.
 )

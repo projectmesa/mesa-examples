@@ -1,7 +1,7 @@
 # Import the server object from the server module within the server package.
 # This object is configured in server.py, where you set up the
 # simulation model, visualization, and user controls.
-from examples.hotelling_law.server import server
+from .server import server
 
 # This conditional checks if the script is being run directly
 # (as opposed to being imported as a module).

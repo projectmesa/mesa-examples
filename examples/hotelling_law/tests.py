@@ -1,6 +1,6 @@
 from scipy.stats import linregress
 
-from examples.hotelling_law.model import HotellingModel
+from .model import HotellingModel
 
 
 def check_slope(data, increasing=True):

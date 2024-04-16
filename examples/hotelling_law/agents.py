@@ -16,29 +16,13 @@ class StoreAgent(Agent):
     def move(self):
         # Defines how the store agent moves in the environment.
         if self.can_move:
-            if self.model.environment_type == "grid":
-                # For a grid environment, find neighboring positions and
-                # randomly move to one.
-                possible_steps = self.model.grid.get_neighborhood(
-                    self.pos, moore=True, include_center=False
-                )
-                new_position = self.random.choice(possible_steps)
-                self.model.grid.move_agent(self, new_position)
-            elif self.model.environment_type == "line":
-                # For a line environment, calculate possible moves within the
-                # line and move if possible.
-                current_y = self.pos[1]
-                middle_x = self.model.grid.width // 2
-                possible_steps = [
-                    (middle_x, (current_y - 1) % self.model.grid.height),
-                    (middle_x, (current_y + 1) % self.model.grid.height),
-                ]
-                possible_empty_steps = [
-                    pos for pos in possible_steps if self.model.grid.is_cell_empty(pos)
-                ]
-                if possible_empty_steps:
-                    new_position = self.random.choice(possible_empty_steps)
-                    self.model.grid.move_agent(self, new_position)
+            # For a grid / line  environment, find neighboring positions and
+            # randomly move to one.
+            possible_steps = self.model.grid.get_neighborhood(
+                self.pos, moore=True, include_center=False
+            )
+            new_position = self.random.choice(possible_steps)
+            self.model.grid.move_agent(self, new_position)
 
     def adjust_price(self):
         # Randomly adjusts the price of the store

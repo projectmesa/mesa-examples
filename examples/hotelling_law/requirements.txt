@@ -1,5 +1,7 @@
 mesa
+solara
 pandas
 matplotlib
 numpy
 scipy
+jupyter

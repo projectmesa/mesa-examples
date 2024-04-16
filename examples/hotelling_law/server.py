@@ -1,7 +1,7 @@
 # Import necessary components from the Mesa visualization modules.
 from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.UserParam import Choice, Slider
+from mesa.visualization.modules import CanvasGrid
 
 # Import the model and visualization elements defined
 # in other files of the project.
