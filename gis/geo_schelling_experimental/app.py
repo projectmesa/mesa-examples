@@ -23,7 +23,7 @@ def schelling_draw(agent):
     if agent.atype is None:
         portrayal["color"] = "Grey"
     elif agent.atype == 0:
-        portrayal["color"] = "Red"
+        portrayal["color"] = "Orange"
     else:
         portrayal["color"] = "Blue"
     return portrayal
@@ -35,7 +35,7 @@ model_params = {
         "value": 0.6,
         "label": "Population Density",
         "min": 0.0,
-        "max": 1.0,
+        "max": 0.9,  # Prevents error if there is no place to move
         "step": 0.1,
     },
     "minority_pc": {
