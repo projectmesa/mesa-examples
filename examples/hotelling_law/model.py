@@ -4,9 +4,7 @@ from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
 from mesa.time import RandomActivation
 
-from .agents import (
-    StoreAgent,
-)
+from .agents import StoreAgent
 
 
 # Function to compute the average price of all store agents in the model.
