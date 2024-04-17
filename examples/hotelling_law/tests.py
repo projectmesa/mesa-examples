@@ -31,10 +31,10 @@ def test_price_variance_behavior(expected_to_increase=True):
 
     # Checking if the slope of the price variance is as expected
     if expected_to_increase:
-        assert check_slope(df_model["Price Variance"],
-                           increasing=True), \
-            "The price variance should increase over time, but it did not."
+        assert check_slope(
+            df_model["Price Variance"], increasing=True
+        ), "The price variance should increase over time, but it did not."
     else:
-        assert check_slope(df_model["Price Variance"],
-                           increasing=False), \
-            "The price variance should decrease over time, but it did not."
+        assert check_slope(
+            df_model["Price Variance"], increasing=False
+        ), "The price variance should decrease over time, but it did not."

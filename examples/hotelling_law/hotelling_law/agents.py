@@ -37,13 +37,13 @@ class StoreAgent(Agent):
 
     # adjust price dynamics based on neighbouring store
     def adjust_price_by_neighbour_store(self):
-        neighbors = (self.model.grid.get_neighbors
-                     (self.pos, moore=True, include_center=False))
+        neighbors = self.model.grid.get_neighbors(
+            self.pos, moore=True, include_center=False
+        )
         if not neighbors:
             return  # No adjustment if there are no neighbors
 
-        avg_neighbor_price = np.mean([neighbor.price for
-                                      neighbor in neighbors])
+        avg_neighbor_price = np.mean([neighbor.price for neighbor in neighbors])
         price_difference = self.price - avg_neighbor_price
 
         # Strategy: Narrow the price gap if it's significantly
