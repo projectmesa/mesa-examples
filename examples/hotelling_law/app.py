@@ -1,9 +1,8 @@
 import numpy as np
 import solara
+from hotelling_law.model import HotellingModel
 from matplotlib.figure import Figure
 from mesa.experimental import JupyterViz
-
-from .model import HotellingModel
 
 
 # This function defines how agents are visually

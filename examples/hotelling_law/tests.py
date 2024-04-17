@@ -1,6 +1,5 @@
+from hotelling_law.model import HotellingModel
 from scipy.stats import linregress
-
-from .model import HotellingModel
 
 
 def check_slope(data, increasing=True):
@@ -10,9 +9,14 @@ def check_slope(data, increasing=True):
     return (slope > 0) if increasing else (slope < 0)
 
 
-def test_decreasing_price_variance():
-    """Test to ensure the price variance decreases over time,
-    in line with Hotelling's law."""
+def test_price_variance_behavior(expected_to_increase=True):
+    """Test to ensure the price variance behaves as expected over time.
+
+    Parameters:
+    - expected_to_increase (bool):
+    True if the price variance is expected to increase over time,
+    False if it is expected to decrease.
+    """
     model = HotellingModel(
         N=10,
         width=20,
@@ -25,6 +29,12 @@ def test_decreasing_price_variance():
 
     df_model = model.datacollector.get_model_vars_dataframe()
 
-    assert check_slope(
-        df_model["Price Variance"], increasing=False
-    ), "The price variance should decrease over time."
+    # Checking if the slope of the price variance is as expected
+    if expected_to_increase:
+        assert check_slope(df_model["Price Variance"],
+                           increasing=True), \
+            "The price variance should increase over time, but it did not."
+    else:
+        assert check_slope(df_model["Price Variance"],
+                           increasing=False), \
+            "The price variance should decrease over time, but it did not."
