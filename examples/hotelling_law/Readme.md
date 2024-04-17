@@ -42,7 +42,7 @@ To start the simulation, navigate to the project directory and execute the follo
 ```bash
 python run.py
 
-solara run app.py (mesa 3.0)
+solara run app.py
 ```
 
 # Project Details
