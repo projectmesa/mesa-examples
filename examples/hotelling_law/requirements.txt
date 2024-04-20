@@ -1,7 +1,3 @@
 mesa
-solara
-pandas
-matplotlib
-numpy
 scipy
-jupyter
+git+https://github.com/projectmesa/mesa-examples

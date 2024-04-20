@@ -13,12 +13,7 @@ Hotelling's Law is an economic theory that predicts competitors in a market will
 To run this simulation, you will need Python 3.x and the following Python libraries:
 
 - mesa
-- solara
-- pandas
-- matplotlib
-- numpy
 - scipy
-- jupyter
 
 You can install all required libraries by running:
 
