@@ -1,3 +1,2 @@
 mesa
 scipy
-git+https://github.com/projectmesa/mesa-examples
