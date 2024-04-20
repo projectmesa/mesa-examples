@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is an agent-based model implemented using the Mesa framework in Python. It simulates market dynamics based on Hotelling's Law, exploring the behavior of stores in a competitive market environment. Stores adjust their prices and locations to maximize revenue, providing insights into the effects of competition and customer behavior on market outcomes.
+This project is an agent-based model implemented using the Mesa framework in Python. It simulates market dynamics based on Hotelling's Law, exploring the behavior of stores in a competitive market environment. Stores adjust their prices and locations if it's increases market share to maximize revenue, providing insights into the effects of competition and customer behavior on market outcomes.
 
 ## Hotelling's Law
 
@@ -12,10 +12,13 @@ Hotelling's Law is an economic theory that predicts competitors in a market will
 
 To run this simulation, you will need Python 3.x and the following Python libraries:
 
-- Mesa
-- Pandas
-- Matplotlib
-- Numpy
+- mesa
+- solara
+- pandas
+- matplotlib
+- numpy
+- scipy
+- jupyter
 
 You can install all required libraries by running:
 
@@ -26,13 +29,19 @@ pip install -r requirements.txt
 ## Project Structure
 
 ```plaintext
-hotelling-law-mesa/
-├── __init__.py
-├── agents.py
-├── model.py
-├── app.py
-├── requirements.txt
-└── tests.py
+mesa-examples/
+└── examples/
+    └── hotelling_law/
+        ├── hotelling_law/
+        │   ├── __init__.py
+        │   ├── model.py
+        │   └── agents.py
+        ├── __init__.py
+        ├── app.py
+        ├── cprofile_test.py
+        ├── Readme.md
+        ├── requirements.txt
+        └── tests.py
 ```
 
 ## Running the Simulation
@@ -40,8 +49,6 @@ hotelling-law-mesa/
 To start the simulation, navigate to the project directory and execute the following command:
 
 ```bash
-python run.py
-
 solara run app.py
 ```
 
@@ -65,3 +72,5 @@ solara run app.py
 | Wayne Joseph Unger | wayne15d@iimk.edu.in    | EPGP-15D-104  |
 
 
+### Hotelling Law Simulation - Visualization
+![plot](hotelling_law_sim.png)
