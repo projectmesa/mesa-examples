@@ -33,7 +33,6 @@ mesa-examples/
         │   └── agents.py
         ├── __init__.py
         ├── app.py
-        ├── cprofile_test.py
         ├── Readme.md
         ├── requirements.txt
         └── tests.py
