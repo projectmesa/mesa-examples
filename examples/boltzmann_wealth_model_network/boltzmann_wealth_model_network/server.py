@@ -12,9 +12,11 @@ def network_portrayal(G):
             "id": node_id,
             "size": 3 if agents else 1,
             "color": "#CC0000" if not agents or agents[0].wealth == 0 else "#007959",
-            "label": None
-            if not agents
-            else f"Agent:{agents[0].unique_id} Wealth:{agents[0].wealth}",
+            "label": (
+                None
+                if not agents
+                else f"Agent:{agents[0].unique_id} Wealth:{agents[0].wealth}"
+            ),
         }
         for (node_id, agents) in G.nodes.data("agent")
     ]
