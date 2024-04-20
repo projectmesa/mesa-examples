@@ -28,13 +28,13 @@ model_params = {
         "type": "Select",
         "value": "default",
         "label": "Mode:",
-        "values": ["default", "pricing_only", "moving_only"]
+        "values": ["default", "pricing_only", "moving_only"],
     },
     "environment_type": {
         "type": "Select",
         "value": "grid",
         "label": "Environment Type:",
-        "values": ["grid", "line"]
+        "values": ["grid", "line"],
     },
     "mobility_rate": {
         "type": "SliderInt",
@@ -48,7 +48,7 @@ model_params = {
         "type": "Select",
         "value": "default",
         "label": "Consumer Preferences:",
-        "values": ["default", "proximity", "price"]
+        "values": ["default", "proximity", "price"],
     },
     "width": {
         "type": "SliderInt",
@@ -91,9 +91,11 @@ def agent_portrayal(agent):
         if agent.preferred_store is None:
             color = "white"
         else:
-            store_id = agent.preferred_store.unique_id \
-                if isinstance(agent.preferred_store, StoreAgent) \
+            store_id = (
+                agent.preferred_store.unique_id
+                if isinstance(agent.preferred_store, StoreAgent)
                 else agent.preferred_store
+            )
             color = store_colors(store_id)
 
     # Construct and return the portrayal dictionary
@@ -137,25 +139,31 @@ def space_drawer(model, agent_portrayal):
             # each store's portion of the cell
             rect_x = pos[0] + (i * width)
             rect_y = pos[1]
-            rect = patches.Rectangle((rect_x, rect_y),
-                                     width, 1, linewidth=0.5,
-                                     edgecolor="k", facecolor=store["color"])
+            rect = patches.Rectangle(
+                (rect_x, rect_y),
+                width,
+                1,
+                linewidth=0.5,
+                edgecolor="k",
+                facecolor=store["color"],
+            )
             ax.add_patch(rect)
 
     # Jittered scatter plot for all agents
     for agent in model.schedule.agents:
         portrayal = agent_portrayal(agent)
-        jitter_x = (np.random.uniform(-jitter_amount, jitter_amount)
-                    + agent.pos[0] + 0.5)
-        jitter_y = (np.random.uniform(-jitter_amount, jitter_amount)
-                    + agent.pos[1] + 0.5)
+        jitter_x = np.random.uniform(-jitter_amount, jitter_amount) + agent.pos[0] + 0.5
+        jitter_y = np.random.uniform(-jitter_amount, jitter_amount) + agent.pos[1] + 0.5
 
         ax.scatter(
-            jitter_x, jitter_y,
+            jitter_x,
+            jitter_y,
             color=portrayal.get("color", "black"),
             s=portrayal.get("size", 100),
             marker=portrayal.get("marker", "o"),
-            linewidths=0.5, edgecolors="black", alpha=0.6
+            linewidths=0.5,
+            edgecolors="black",
+            alpha=0.6,
         )
 
     fig.tight_layout()
@@ -169,18 +177,16 @@ def make_market_share_and_price_chart(model):
 
     # Get store agents and sort them by their unique_id
     # to ensure consistent order
-    store_agents = [agent for agent in model.schedule.agents
-                    if isinstance(agent, StoreAgent)]
-    store_agents_sorted = sorted(store_agents,
-                                 key=lambda agent: agent.unique_id)
+    store_agents = [
+        agent for agent in model.schedule.agents if isinstance(agent, StoreAgent)
+    ]
+    store_agents_sorted = sorted(store_agents, key=lambda agent: agent.unique_id)
 
     # Now gather market shares, prices, and labels using the sorted list
     market_shares = [agent.market_share for agent in store_agents_sorted]
     prices = [agent.price for agent in store_agents_sorted]
-    store_labels = [f"Store {agent.unique_id}"
-                    for agent in store_agents_sorted]
-    colors = [agent_portrayal(agent)["color"]
-              for agent in store_agents_sorted]
+    store_labels = [f"Store {agent.unique_id}" for agent in store_agents_sorted]
+    colors = [agent_portrayal(agent)["color"] for agent in store_agents_sorted]
 
     # Calculate the number of groups and bar width
     n_groups = len(market_shares)
@@ -194,14 +200,22 @@ def make_market_share_and_price_chart(model):
     price_color = "#ff7f0e"  # Orange
 
     # Plot bars
-    ax.bar(indices - bar_width / 2,
-           market_shares, bar_width,
-           label="Market Share",
-           color=market_share_color, alpha=0.7)
-    ax.bar(indices + bar_width / 2,
-           prices, bar_width,
-           label="Price",
-           color=price_color, alpha=0.7)
+    ax.bar(
+        indices - bar_width / 2,
+        market_shares,
+        bar_width,
+        label="Market Share",
+        color=market_share_color,
+        alpha=0.7,
+    )
+    ax.bar(
+        indices + bar_width / 2,
+        prices,
+        bar_width,
+        label="Price",
+        color=price_color,
+        alpha=0.7,
+    )
 
     # Add labels, title, and legend
     ax.set_xticks(indices)
@@ -225,10 +239,11 @@ def make_price_changes_line_chart(model):
     model_data = model.datacollector.get_model_vars_dataframe()
 
     # Retrieve agent colors based on their portrayal
-    agent_colors = {f"Store_{agent.unique_id}_Price":
-                        agent_portrayal(agent)["color"]
-                    for agent in model.schedule.agents
-                    if isinstance(agent, StoreAgent)}
+    agent_colors = {
+        f"Store_{agent.unique_id}_Price": agent_portrayal(agent)["color"]
+        for agent in model.schedule.agents
+        if isinstance(agent, StoreAgent)
+    }
 
     for column in model_data.columns:
         if column.startswith("Store_") and column.endswith("_Price"):
@@ -236,8 +251,12 @@ def make_price_changes_line_chart(model):
             store_id = column.split("_")[1]
             line_color = agent_colors.get(column, "black")
 
-            ax.plot(model_data.index, model_data[column],
-                    label=f"Store {store_id}", color=line_color)
+            ax.plot(
+                model_data.index,
+                model_data[column],
+                label=f"Store {store_id}",
+                color=line_color,
+            )
 
     ax.set_title("Price Changes of Each Store Over Time")
     ax.set_xlabel("Simulation Step")
@@ -256,10 +275,11 @@ def make_market_share_line_chart(model):
     model_data = model.datacollector.get_model_vars_dataframe()
 
     # Retrieve agent colors based on their portrayal
-    agent_colors = {f"Store_{agent.unique_id}_Market Share":
-                        agent_portrayal(agent)["color"]
-                    for agent in model.schedule.agents
-                    if isinstance(agent, StoreAgent)}
+    agent_colors = {
+        f"Store_{agent.unique_id}_Market Share": agent_portrayal(agent)["color"]
+        for agent in model.schedule.agents
+        if isinstance(agent, StoreAgent)
+    }
 
     for column in model_data.columns:
         if column.startswith("Store_") and column.endswith("_Market Share"):
@@ -267,8 +287,12 @@ def make_market_share_line_chart(model):
             store_id = column.split("_")[1]
             line_color = agent_colors.get(column, "black")
 
-            ax.plot(model_data.index, model_data[column],
-                    label=f"Store {store_id}", color=line_color)
+            ax.plot(
+                model_data.index,
+                model_data[column],
+                label=f"Store {store_id}",
+                color=line_color,
+            )
 
     ax.set_title("Market share of Each Store Over Time")
     ax.set_xlabel("Simulation Step")
@@ -287,10 +311,11 @@ def make_revenue_line_chart(model):
     model_data = model.datacollector.get_model_vars_dataframe()
 
     # Retrieve agent colors based on their portrayal
-    agent_colors = {f"Store_{agent.unique_id}_Revenue":
-                        agent_portrayal(agent)["color"]
-                    for agent in model.schedule.agents
-                    if isinstance(agent, StoreAgent)}
+    agent_colors = {
+        f"Store_{agent.unique_id}_Revenue": agent_portrayal(agent)["color"]
+        for agent in model.schedule.agents
+        if isinstance(agent, StoreAgent)
+    }
 
     for column in model_data.columns:
         if column.startswith("Store_") and column.endswith("_Revenue"):
@@ -298,8 +323,12 @@ def make_revenue_line_chart(model):
             store_id = column.split("_")[1]
             line_color = agent_colors.get(column, "black")
 
-            ax.plot(model_data.index, model_data[column],
-                    label=f"Store {store_id}", color=line_color)
+            ax.plot(
+                model_data.index,
+                model_data[column],
+                label=f"Store {store_id}",
+                color=line_color,
+            )
 
     ax.set_title("Revenue of Each Store Over Time")
     ax.set_xlabel("Simulation Step")
@@ -315,10 +344,13 @@ def make_revenue_line_chart(model):
 page = JupyterViz(
     model_class=HotellingModel,
     model_params=model_params,
-    measures=[make_price_changes_line_chart,
-              make_market_share_and_price_chart,
-              make_market_share_line_chart,
-              "Price Variance", make_revenue_line_chart],
+    measures=[
+        make_price_changes_line_chart,
+        make_market_share_and_price_chart,
+        make_market_share_line_chart,
+        "Price Variance",
+        make_revenue_line_chart,
+    ],
     name="Hotelling's Law Model",
     agent_portrayal=agent_portrayal,
     space_drawer=space_drawer,

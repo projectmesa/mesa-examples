@@ -9,8 +9,7 @@ class StoreAgent(Agent):
     """An agent representing a store with a price and ability to move
     and adjust prices."""
 
-    def __init__(self, unique_id, model, price=10,
-                 can_move=True, strategy="Budget"):
+    def __init__(self, unique_id, model, price=10, can_move=True, strategy="Budget"):
         # Initializes the store agent with a unique ID,
         # the model it belongs to,its initial price,
         # and whether it can move.
@@ -25,15 +24,13 @@ class StoreAgent(Agent):
     def estimate_market_share(self, new_position=None):
         position = new_position if new_position else self.pos
         nearby_consumers = self.model.grid.get_neighborhood(
-            position,
-            moore=True,
-            include_center=False,
-            radius=8
+            position, moore=True, include_center=False, radius=8
         )
 
         # Filter nearby agents to include only ConsumerAgents.
-        nearby_consumers = [agent for agent in nearby_consumers
-                            if isinstance(agent, ConsumerAgent)]
+        nearby_consumers = [
+            agent for agent in nearby_consumers if isinstance(agent, ConsumerAgent)
+        ]
         market_share = len(nearby_consumers)
         return market_share
 
@@ -52,9 +49,9 @@ class StoreAgent(Agent):
         best_market_share = self.estimate_market_share()
 
         for neighbor in self.model.grid.get_neighborhood(
-                self.pos, moore=True, include_center=False):
-            potential_market_share = (
-                self.estimate_market_share(new_position=neighbor))
+            self.pos, moore=True, include_center=False
+        ):
+            potential_market_share = self.estimate_market_share(new_position=neighbor)
             if potential_market_share >= best_market_share:
                 best_market_share = potential_market_share
                 best_position = neighbor
@@ -62,29 +59,35 @@ class StoreAgent(Agent):
 
     def adjust_price(self):
         # Calculate competitor prices and the average competitor price
-        competitor_prices = [store.price for store in
-                             self.model.get_store_agents() if
-                             store.unique_id != self.unique_id]
-        average_competitor_price = np.mean(competitor_prices) \
-            if competitor_prices else self.price
+        competitor_prices = [
+            store.price
+            for store in self.model.get_store_agents()
+            if store.unique_id != self.unique_id
+        ]
+        average_competitor_price = (
+            np.mean(competitor_prices) if competitor_prices else self.price
+        )
 
         # Calculate the current and average market share
         current_market_share = self.market_share
-        all_market_shares = [store.market_share
-                             for store in self.model.get_store_agents()]
-        average_market_share = np.mean(all_market_shares) \
-            if all_market_shares else 0
+        all_market_shares = [
+            store.market_share for store in self.model.get_store_agents()
+        ]
+        average_market_share = np.mean(all_market_shares) if all_market_shares else 0
 
         # Calculate the market share change
         market_share_change = (
-            (current_market_share - self.previous_market_share) / self.previous_market_share
-            if self.previous_market_share > 0 else 0
+            (current_market_share - self.previous_market_share)
+            / self.previous_market_share
+            if self.previous_market_share > 0
+            else 0
         )
 
         # Determine if the store's market share
         # significantly exceeds the average
         is_significantly_above_average = (
-                current_market_share > average_market_share * 1.3)
+            current_market_share > average_market_share * 1.3
+        )
 
         target_price = average_competitor_price
         # Base adjustment based on strategy
@@ -117,8 +120,7 @@ class StoreAgent(Agent):
     def identify_competitors(self):
         competitors = []
         for agent in self.model.schedule.agents:
-            if (isinstance(agent, StoreAgent)
-                    and agent.unique_id != self.unique_id):
+            if isinstance(agent, StoreAgent) and agent.unique_id != self.unique_id:
                 # Estimate market overlap as a measure of competition
                 overlap = self.estimate_market_overlap(agent)
                 if overlap > 0:  # If there's any market overlap,
@@ -128,7 +130,7 @@ class StoreAgent(Agent):
 
     def estimate_market_overlap(self, other_store):
         """Estimate market overlap between this store and another store.
-           This could be based on shared consumer base or other factors."""
+        This could be based on shared consumer base or other factors."""
         overlap = 0
 
         for consumer in self.model.get_consumer_agents():
@@ -179,8 +181,7 @@ class ConsumerAgent(Agent):
             elif consumer_preference == "price":
                 score = store.price
             else:  # Default case includes both proximity and price
-                score = (store.price +
-                         self.euclidean_distance(self.pos, store.pos))
+                score = store.price + self.euclidean_distance(self.pos, store.pos)
 
             # Update the list of best stores if a new minimum score is found
             if score < min_score:

@@ -4,7 +4,7 @@ from scipy.stats import linregress
 
 def check_slope(data, increasing=True):
     """Checks the slope of a dataset to determine
-            if it's increasing or decreasing."""
+    if it's increasing or decreasing."""
     slope = get_slope(data)
     return (slope > 0) if increasing else (slope < 0)
 
@@ -52,6 +52,6 @@ def test_constant_price_variance():
 
     df_model = model.datacollector.get_model_vars_dataframe()
 
-    assert get_slope(
-        df_model["Price Variance"]
-    ) == 0, "The price variance constant over time."
+    assert (
+        get_slope(df_model["Price Variance"]) == 0
+    ), "The price variance constant over time."

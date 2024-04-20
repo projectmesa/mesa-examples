@@ -68,15 +68,15 @@ class HotellingModel(Model):
     """
 
     def __init__(
-            self,
-            N_stores=20,
-            N_consumers=100,
-            width=50,
-            height=50,
-            mode="default",
-            consumer_preferences="default",
-            environment_type="grid",
-            mobility_rate=80,
+        self,
+        N_stores=20,
+        N_consumers=100,
+        width=50,
+        height=50,
+        mode="default",
+        consumer_preferences="default",
+        environment_type="grid",
+        mobility_rate=80,
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,
@@ -113,33 +113,31 @@ class HotellingModel(Model):
         self._initialize_agents()
 
         # Define model-level reporters
-        model_reporters = {
-            "Price Variance": self.compute_price_variance
-        }
+        model_reporters = {"Price Variance": self.compute_price_variance}
 
         # Dynamically generate store-specific price collectors
         store_price_collectors = {
-            f"Store_{i}_Price":
-                self.get_store_price_lambda(i) for i in range(N_stores)
+            f"Store_{i}_Price": self.get_store_price_lambda(i) for i in range(N_stores)
         }
 
         # Dynamically generate store-specific market_share collectors
         store_market_share_collectors = {
-            f"Store_{i}_Market Share":
-                self.get_market_share_lambda(i) for i in range(N_stores)
+            f"Store_{i}_Market Share": self.get_market_share_lambda(i)
+            for i in range(N_stores)
         }
 
         # Dynamically generate store-specific revenue collectors
         store_revenue_collectors = {
-            f"Store_{i}_Revenue":
-                self.get_revenue_lambda(i) for i in range(N_stores)
+            f"Store_{i}_Revenue": self.get_revenue_lambda(i) for i in range(N_stores)
         }
 
         # Combine the dictionaries and pass them to DataCollector
-        all_reporters = {**model_reporters,
-                         **store_price_collectors,
-                         **store_market_share_collectors,
-                         **store_revenue_collectors}
+        all_reporters = {
+            **model_reporters,
+            **store_price_collectors,
+            **store_market_share_collectors,
+            **store_revenue_collectors,
+        }
         self.datacollector = DataCollector(model_reporters=all_reporters)
 
     @staticmethod
@@ -147,24 +145,34 @@ class HotellingModel(Model):
         """Return a lambda function that gets the
         price of a store by its unique ID."""
         return lambda m: next(
-            (agent.price for agent in m.store_agents
-             if agent.unique_id == unique_id), 0)
+            (agent.price for agent in m.store_agents if agent.unique_id == unique_id), 0
+        )
 
     @staticmethod
     def get_market_share_lambda(unique_id):
         """Return a lambda function that gets the
         market_share of a store by its unique ID."""
         return lambda m: next(
-            (agent.market_share for agent in m.store_agents
-             if agent.unique_id == unique_id), 0)
+            (
+                agent.market_share
+                for agent in m.store_agents
+                if agent.unique_id == unique_id
+            ),
+            0,
+        )
 
     @staticmethod
     def get_revenue_lambda(unique_id):
         """Return a lambda function that calculates the
         revenue of a store by its unique ID."""
         return lambda m: next(
-            (agent.market_share * agent.price for agent in m.store_agents
-             if agent.unique_id == unique_id), 0)
+            (
+                agent.market_share * agent.price
+                for agent in m.store_agents
+                if agent.unique_id == unique_id
+            ),
+            0,
+        )
 
     # initialize and place agents on the grid.
     def _initialize_agents(self):
@@ -179,8 +187,7 @@ class HotellingModel(Model):
             if can_move:
                 mobile_agents_assigned += 1
 
-            agent = StoreAgent(unique_id, self,
-                               can_move=can_move, strategy=strategy)
+            agent = StoreAgent(unique_id, self, can_move=can_move, strategy=strategy)
             self.schedule.add(agent)
             self.store_agents.add(agent)
 
@@ -252,8 +259,7 @@ class HotellingModel(Model):
         if not self.store_agents:
             return 0
 
-        total_consumers = (
-            sum(agent.market_share for agent in self.store_agents))
+        total_consumers = sum(agent.market_share for agent in self.store_agents)
         average_market_share = total_consumers / len(self.store_agents)
         return average_market_share
 
