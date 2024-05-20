@@ -1,4 +1,4 @@
-from mesa.experimental import JupyterViz, Slider, make_text
+from jupyter_viz import JupyterViz, Slider, make_text
 from model import Schelling
 
 
