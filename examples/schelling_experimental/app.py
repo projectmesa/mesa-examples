@@ -1,4 +1,4 @@
-from vizualization.jupyter_viz import JupyterViz, Slider, make_text
+from visualization.jupyter_viz import JupyterViz, Slider, make_text
 from model import Schelling
 
 
