@@ -14,15 +14,14 @@ class TreeCell(mesa.Agent):
     practice to give one to each agent anyway.
     """
 
-    def __init__(self, pos, model):
+    def __init__(self, unique_id, model):
         """
         Create a new tree.
         Args:
-            pos: The tree's coordinates on the grid.
+            unique_id: Unique identifier for the agent.
             model: standard model reference for agent.
         """
-        super().__init__(pos, model)
-        self.pos = pos
+        super().__init__(unique_id, model)
         self.condition = "Fine"
 
     def step(self):
