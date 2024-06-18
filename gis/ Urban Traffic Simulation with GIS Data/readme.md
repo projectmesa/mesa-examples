@@ -1,147 +1,86 @@
-Adding a "Purpose" section to the README will help clarify the motivation and goals behind the project. Here's the updated README:
+### README.md
 
----
+# GIS-Based Traffic Simulation with Mesa-Geo
 
-# GIS-Based Traffic Simulation using Mesa-Geo
+## Overview
 
-This project simulates traffic flow on a road network using the Mesa-Geo library. The simulation involves creating vehicle agents that move randomly within a defined geographical space.
+This project is a GIS-based traffic simulation platform developed using the Mesa-Geo extension for Mesa. The application models and visualizes vehicle movements on a road network, providing insights into traffic patterns and enabling the analysis of traffic management strategies. This simulation tool is valuable for urban planners, researchers, and policymakers in understanding and optimizing traffic flow in cities.
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Purpose](#purpose)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Visualization](#visualization)
-- [Contributing](#contributing)
-- [License](#license)
+gis/ Urban Traffic Simulation with GIS Data/Road_traffic_congestion.gif
 
-## Introduction
-This project uses Mesa-Geo, a GIS extension for the Mesa Agent-Based Modeling framework, to simulate vehicle movements on a road network. It provides a visual representation of vehicle positions over time and allows for easy modification of parameters such as the number of vehicles and their speeds.
 
-## Purpose
-The primary purpose of this project is to model and visualize traffic flow on a road network to better understand vehicle movements and traffic dynamics. This can be used for:
-- Studying traffic patterns and identifying potential bottlenecks.
-- Simulating the impact of different traffic management strategies.
-- Enhancing urban planning and road network design.
-- Providing a foundation for more advanced traffic simulations that incorporate additional factors such as traffic lights, pedestrian crossings, and real-time traffic data.
+## Why GIS-Based Traffic Simulation?
+
+Traffic congestion is a significant issue in urban areas, leading to increased travel times, higher fuel consumption, and elevated pollution levels. By simulating traffic congestion, urban planners, researchers, and policymakers can:
+
+- **Identify Congestion Points:** Pinpoint critical areas prone to traffic jams.
+- **Analyze Traffic Patterns:** Understand how vehicles move through the city.
+- **Evaluate Traffic Management Strategies:** Test the effectiveness of different traffic management strategies.
+- **Optimize Traffic Flow:** Improve the overall efficiency of the road network.
 
 ## Features
-- Simulation of vehicle movements on a road network.
-- Random movement behavior for vehicle agents.
-- Visualization of vehicle positions using Matplotlib.
-- Easy to modify and extend for different road networks and behaviors.
+
+- **Realistic Road Networks:** Uses OSMnx to import real road networks.
+- **Dynamic Traffic Simulation:** Simulates vehicle movements and congestion points dynamically.
+- **Interactive Visualization:** Provides an interactive map for visualizing the simulation in real-time.
+- **Customizable Parameters:** Allows users to input specific parameters, such as the number of vehicles and their routes.
 
 ## Installation
-1. Clone the repository:
+
+### Prerequisites
+
+- Python 3.x
+- Mesa
+- Mesa-Geo
+- OSMnx
+- NetworkX
+- Folium
+- PyQt5
+
+### Installation Steps
+
+1. **Clone the Repository:**
    ```bash
    git clone https://github.com/yourusername/gis-traffic-simulation.git
    cd gis-traffic-simulation
    ```
 
-2. Install the required libraries:
+2. **Install Required Packages:**
    ```bash
-   pip install mesa mesa-geo geopandas shapely matplotlib
+   pip install mesa mesa-geo osmnx networkx folium pyqt5
    ```
 
-3. Download the road network data file (e.g., a shapefile) and place it in the project directory.
+3. **Run the Application:**
+   ```bash
+   python main.py
+   ```
 
 ## Usage
-1. Import the necessary libraries and define the model, agents, and GeoSpace:
-   ```python
-   import mesa
-   import mesa_geo as mg
-   import geopandas as gpd
-   from shapely.geometry import Point
-   import random
 
-   class TrafficGeoSpace(mg.GeoSpace):
-       def __init__(self):
-           super().__init__()
+1. **Enter Simulation Parameters:** Specify the number of vehicles, start coordinates, and end coordinates.
+2. **Run Simulation:** Start the simulation to see how traffic flows and where congestion occurs.
+3. **View Results:** Analyze the simulation results using the interactive map and graphical outputs.
 
-   class VehicleAgent(mg.GeoAgent):
-       def __init__(self, unique_id, model, geometry, crs):
-           super().__init__(unique_id, model, geometry, crs)
-           self.speed = random.uniform(10, 20)
+## How It Works
 
-       def step(self):
-           new_position = self.random_move()
-           self.geometry = new_position
+1. **Import Road Network:** Uses OSMnx to import a road network from OpenStreetMap based on bounding box coordinates.
+2. **Initialize Simulation:** Sets up the simulation environment using Mesa and Mesa-Geo.
+3. **Simulate Traffic Flow:** Vehicles move through the network following the shortest paths calculated by NetworkX.
+4. **Visualize Results:** Uses Folium to visualize the road network and vehicle movements on an interactive map.
 
-       def random_move(self):
-           x, y = self.geometry.xy
-           x_new = x[0] + random.uniform(-0.001, 0.001)
-           y_new = y[0] + random.uniform(-0.001, 0.001)
-           return Point(x_new, y_new)
 
-   class TrafficModel(mesa.Model):
-       def __init__(self, road_network_file):
-           self.schedule = mesa.time.RandomActivation(self)
-           self.space = TrafficGeoSpace()
-           self.load_roads(road_network_file)
-           self.create_vehicles(50)
 
-       def load_roads(self, road_network_file):
-           roads = gpd.read_file(road_network_file)
-           for idx, road in roads.iterrows():
-               road_agent = mg.GeoAgent(idx, self, road.geometry, roads.crs)
-               self.space.add_agents(road_agent)
+## Future Enhancements
 
-       def create_vehicles(self, num_vehicles):
-           for i in range(num_vehicles):
-               x, y = random.uniform(-10, 10), random.uniform(-10, 10)
-               vehicle = VehicleAgent(i, self, Point(x, y), "EPSG:4326")
-               self.space.add_agents(vehicle)
-               self.schedule.add(vehicle)
-
-       def step(self):
-           self.schedule.step()
-   ```
-
-2. Run the model and collect vehicle positions:
-   ```python
-   road_network_file = "path/to/your/road_network.shp"
-   model = TrafficModel(road_network_file)
-   vehicle_positions = []
-
-   for i in range(100):
-       model.step()
-       step_positions = [(v.unique_id, v.geometry.x, v.geometry.y) for v in model.schedule.agents if isinstance(v, VehicleAgent)]
-       vehicle_positions.append(step_positions)
-   ```
-
-3. Visualize the vehicle positions:
-   ```python
-   import matplotlib.pyplot as plt
-   import matplotlib.animation as animation
-
-   fig, ax = plt.subplots()
-   scat = ax.scatter([], [])
-
-   def init():
-       scat.set_offsets([])
-       return scat,
-
-   def update(frame):
-       positions = vehicle_positions[frame]
-       data = [(x, y) for _, x, y in positions]
-       scat.set_offsets(data)
-       return scat,
-
-   ani = animation.FuncAnimation(fig, update, frames=len(vehicle_positions), init_func=init, blit=True)
-   plt.show()
-   ```
-
-## Visualization
-The simulation can be visualized using Matplotlib. The positions of the vehicles are updated in real-time, providing an animated view of the traffic flow.
+- **Dynamic Traffic Data:** Incorporate real-time traffic data for more accurate simulations.
+- **Advanced Visualization:** Enhance the visualization with heatmaps and traffic density graphs.
+- **Interactive Controls:** Add more interactive controls for users to adjust simulation parameters on the fly.
+- **Extended Simulation Scenarios:** Support more complex scenarios like traffic incidents, road closures, and traffic light effects.
 
 ## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request or open an issue for any improvements or bug fixes.
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes. For major changes, please open an issue to discuss what you would like to change.
 
 ## License
+
 This project is licensed under the MIT License.
-
----
-
-
-Feel free to modify the README to fit your specific needs.
