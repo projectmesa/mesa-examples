@@ -1,11 +1,6 @@
 Adding a "Purpose" section to the README will help clarify the motivation and goals behind the project. Here's the updated README:
 
 ---
-<img width="728" alt="Screenshot 2024-06-14 at 4 27 23 PM" src="https://github.com/projectmesa/mesa-examples/assets/153541511/e6464cf9-d709-4106-b8fb-a579fec7bca1">
-
-
-![vehicle_movement](https://github.com/PRIYANSHU2026/mesa-examples/assets/153541511/00d606a8-6af4-47cc-94d8-d233b854a036)
-
 
 # GIS-Based Traffic Simulation using Mesa-Geo
 
@@ -147,5 +142,6 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 This project is licensed under the MIT License.
 
 ---
+
 
 Feel free to modify the README to fit your specific needs.
