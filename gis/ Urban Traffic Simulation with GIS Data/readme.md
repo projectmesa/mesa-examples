@@ -2,11 +2,13 @@
 
 # GIS-Based Traffic Simulation with Mesa-Geo
 
+![alt text](Road_traffic_congestion-1.gif)
+
 ## Overview
 
 This project is a GIS-based traffic simulation platform developed using the Mesa-Geo extension for Mesa. The application models and visualizes vehicle movements on a road network, providing insights into traffic patterns and enabling the analysis of traffic management strategies. This simulation tool is valuable for urban planners, researchers, and policymakers in understanding and optimizing traffic flow in cities.
 
-gis/ Urban Traffic Simulation with GIS Data/Road_traffic_congestion.gif
+
 
 
 ## Why GIS-Based Traffic Simulation?
@@ -35,25 +37,8 @@ Traffic congestion is a significant issue in urban areas, leading to increased t
 - OSMnx
 - NetworkX
 - Folium
-- PyQt5
+-shapely.geometry
 
-### Installation Steps
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/yourusername/gis-traffic-simulation.git
-   cd gis-traffic-simulation
-   ```
-
-2. **Install Required Packages:**
-   ```bash
-   pip install mesa mesa-geo osmnx networkx folium pyqt5
-   ```
-
-3. **Run the Application:**
-   ```bash
-   python main.py
-   ```
 
 ## Usage
 
