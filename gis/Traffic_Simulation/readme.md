@@ -2,7 +2,7 @@
 
 # GIS-Based Traffic Simulation with Mesa-Geo
 
-![alt text](Road_traffic_congestion-1.gif) ![alt text](<Screenshot 2024-07-07 at 12.40.38 AM.png>)
+![alt text](<Screenshot 2024-07-07 at 12.40.38 AM.png>)
 
 ## Overview
 
