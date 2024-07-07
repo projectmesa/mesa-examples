@@ -7,6 +7,7 @@ import osmnx as ox
 from mesa.visualization.ModularVisualization import ModularServer
 from flask import Flask
 
+
 def vehicle_portrayal(agent):
     if agent is None:
         return
@@ -16,10 +17,11 @@ def vehicle_portrayal(agent):
         "Color": "red",
         "Filled": "true",
         "Layer": 1,
-        "r": 3
+        "r": 3,
     }
 
     return portrayal
+
 
 def road_portrayal(road):
     return {
@@ -30,15 +32,18 @@ def road_portrayal(road):
         "coordinates": [(coord[1], coord[0]) for coord in road.shape.coords],
     }
 
+
 class RoadAgent(GeoAgent):
     def __init__(self, unique_id, model, shape, crs):
         super().__init__(unique_id, model, shape, crs)
 
+
 def create_road_agents(model):
     edges = ox.graph_to_gdfs(model.graph, nodes=False, edges=True)
     for i, row in edges.iterrows():
-        road = RoadAgent(i, model, row['geometry'], crs="epsg:4326")
+        road = RoadAgent(i, model, row["geometry"], crs="epsg:4326")
         model.space.add_agents(road)
+
 
 map_module = mg.visualization.MapModule(
     portrayal_method=vehicle_portrayal,
@@ -57,6 +62,7 @@ model_params = {
     "west": mesa.visualization.NumberInput("West", -73.994),
     "steps": mesa.visualization.Slider("Simulation Steps", 10, 1, 100, 1),
 }
+
 
 class CustomModularServer(ModularServer):
     def __init__(self, *args, **kwargs):
@@ -84,11 +90,9 @@ class CustomModularServer(ModularServer):
             self.model.step()
         self.model.running = False
 
+
 server = CustomModularServer(
-    TrafficModel,
-    [map_module],
-    "Traffic Simulation",
-    model_params
+    TrafficModel, [map_module], "Traffic Simulation", model_params
 )
 
 server.port = 8522  # Change to a different port if necessary
@@ -119,7 +123,7 @@ index_html = """
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         var simulate = function() {
             fetch('/simulate', { method: 'POST' });
         };
