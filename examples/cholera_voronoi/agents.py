@@ -8,27 +8,27 @@ REMOVED = 2
 class Person(CellAgent):
     def __init__(self, unique_id, model, mortality_chance, recovery_chance):
         super().__init__(unique_id, model)
-        self.health_state = SUSCEPTIBLE
+        self.state = SUSCEPTIBLE
         self.mortality_chance = mortality_chance
         self.recovery_chance = recovery_chance
 
     def step(self):
-        if self.health_state == REMOVED:
+        if self.state == REMOVED:
             return
 
         if (
-            self.health_state == INFECTIOUS
+            self.state == INFECTIOUS
             and self.model.random.random() < self.recovery_chance
         ):
-            self.health_state = SUSCEPTIBLE
+            self.state = SUSCEPTIBLE
             self.model.infectious -= 1
             self.model.susceptible += 1
 
         if (
-            self.health_state == INFECTIOUS
+            self.state == INFECTIOUS
             and self.model.random.random() < self.mortality_chance
         ):
-            self.health_state = REMOVED
+            self.state = REMOVED
             self.model.infectious -= 1
             self.model.removed += 1
 
@@ -55,15 +55,15 @@ class Pump(CellAgent):
             people = [
                 obj
                 for obj in self.cell.agents
-                if isinstance(obj, Person) and obj.health_state is not REMOVED
+                if isinstance(obj, Person) and obj.state is not REMOVED
             ]
             for person in people:
                 if (
-                    person.health_state is SUSCEPTIBLE
+                    person.state is SUSCEPTIBLE
                     and self.model.random.random()
                     < self.pumps_person_contamination_chance
                 ):
-                    person.health_state = INFECTIOUS
+                    person.state = INFECTIOUS
                     self.model.susceptible -= 1
                     self.model.infectious += 1
 
@@ -76,7 +76,7 @@ class Pump(CellAgent):
                     self.model.infected_pumps += 1
 
             # If cases in total is too high, fix pump
-            cases = sum(1 for a in people if a.health_state is INFECTIOUS)
+            cases = sum(1 for a in people if a.state is INFECTIOUS)
             cases_ratio = cases / (self.model.susceptible + self.model.infectious)
             if cases_ratio > self.cases_ratio_to_fix_pump:
                 self.state = SUSCEPTIBLE
