@@ -25,16 +25,16 @@ class IsingModel(mesa.Model):
         self.running = True
 
     def step(self):
-        self._steps += 1
         agents_list = list(self.agents)
-        random_spin = self.random.choice(agents_list)
-        dE = self.get_energy_change(random_spin)
-        if dE < 0:
-            random_spin.state *= -1
-        else:
-            if self.random.random() < self.boltzmann(dE):
-                print("change spin")
+        self._steps += 1000
+        for i in range(1000):
+            random_spin = self.random.choice(agents_list)
+            dE = self.get_energy_change(random_spin)
+            if dE < 0:
                 random_spin.state *= -1
+            else:
+                if self.random.random() < self.boltzmann(dE):
+                    random_spin.state *= -1
 
     def get_energy_change(self, spin: Spin):
         neighbors = spin.neighbors()
@@ -44,6 +44,4 @@ class IsingModel(mesa.Model):
         return sum_over_neighbors * 2 * spin.state
 
     def boltzmann(self, dE):
-        v = np.exp(-dE / self.temperature)
-        print(v)
-        return v
+        return np.exp(-dE / self.temperature)
