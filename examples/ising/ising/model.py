@@ -5,14 +5,12 @@ from .spin import Spin
 
 
 class IsingModel(mesa.Model):
-    BOLTZMANN_CONSTANT = 1.380649e-23
-
     def __init__(
         self,
         width=50,
         height=50,
-        spin_up_probability: float = 0.5,
-        temperature: float = 2.27,
+        spin_up_probability: float = 0.7,
+        temperature: float = 1,
     ):
         super().__init__()
         self.temperature = temperature
@@ -27,6 +25,7 @@ class IsingModel(mesa.Model):
         self.running = True
 
     def step(self):
+        self._steps += 1
         agents_list = list(self.agents)
         random_spin = self.random.choice(agents_list)
         dE = self.get_energy_change(random_spin)
@@ -34,14 +33,17 @@ class IsingModel(mesa.Model):
             random_spin.state *= -1
         else:
             if self.random.random() < self.boltzmann(dE):
+                print("change spin")
                 random_spin.state *= -1
 
     def get_energy_change(self, spin: Spin):
         neighbors = spin.neighbors()
         sum_over_neighbors = 0
         for neighbor in neighbors:
-            sum_over_neighbors += spin.state * neighbor.state
-        return -1 * sum_over_neighbors
+            sum_over_neighbors += neighbor.state
+        return sum_over_neighbors * 2 * spin.state
 
     def boltzmann(self, dE):
-        return np.exp(-dE / (self.BOLTZMANN_CONSTANT * self.temperature))
+        v = np.exp(-dE / self.temperature)
+        print(v)
+        return v

@@ -9,6 +9,7 @@ def Page():
     JupyterViz(
         IsingModel,
         {},
-        name="Ising Model Model",
+        name="Ising Model",
         agent_portrayal=portraySpin,
+        play_interval=1,
     )

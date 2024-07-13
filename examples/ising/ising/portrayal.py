@@ -8,12 +8,12 @@ def portraySpin(spin):
     if spin is None:
         raise AssertionError
     return {
-        "Shape": "rect",
+        "marker": "s",
         "w": 1,
         "h": 1,
         "Filled": "true",
         "Layer": 0,
         "x": spin.x,
         "y": spin.y,
-        "Color": "black" if spin.state is spin.UP else "white",
+        "color": "grey" if spin.state is spin.UP else "black",
     }
