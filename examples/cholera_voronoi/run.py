@@ -1,5 +1,5 @@
 import solara
-from mesa.visualization import JupyterViz
+from mesa.visualization import JupyterViz, Slider
 from model import Cholera, Pump
 
 SUSCEPTIBLE = 0
@@ -26,51 +26,47 @@ model_params = {
     #     'type': 'SliderFloat',
     #     'label': "Ratio of cases in a neighborhood / total person in system to fix pump",
     #     'value': 0.1,
-    #     'min_value': 0,
-    #     'max_value': 0.3,
+    #     'min': 0,
+    #     'max': 0.3,
     #     'step': 0.001
-    # },
-    "pumps_neighbor_contamination_chance": {
-        "type": "SliderFloat",
-        "label": "Neighbor contamination ratio",
-        "value": 2e-1,
-        "min_value": 0,
-        "max_value": 1,
-        "step": 0.05,
-    },
-    "pumps_person_contamination_chance": {
-        "type": "SliderFloat",
-        "label": "Person contamination ratio",
-        "value": 2e-1,
-        "min_value": 0,
-        "max_value": 1,
-        "step": 0.05,
-    },
-    "recovery_chance": {
-        "type": "SliderFloat",
-        "label": "Recovery chance",
-        "value": 2e-1,
-        "min_value": 0,
-        "max_value": 1,
-        "step": 0.05,
-    },
-    "mortality_chance": {
-        "type": "SliderFloat",
-        "label": "Mortality chance",
-        "value": 1e-1,
-        "min_value": 0,
-        "max_value": 1,
-        "step": 0.05,
-    },
+    # ),
+    "pumps_neighbor_contamination_chance": Slider(
+        label="Neighbor contamination ratio",
+        value=2e-1,
+        min=0,
+        max=1,
+        step=0.05,
+    ),
+    "pumps_person_contamination_chance": Slider(
+        label="Person contamination ratio",
+        value=2e-1,
+        min=0,
+        max=1,
+        step=0.05,
+    ),
+    "recovery_chance": Slider(
+        label="Recovery chance",
+        value=2e-1,
+        min=0,
+        max=1,
+        step=0.05,
+    ),
+    "mortality_chance": Slider(
+        label="Mortality chance",
+        value=1e-1,
+        min=0,
+        max=1,
+        step=0.05,
+    ),
 }
 
 
 def agent_portrayal(agent):
     if isinstance(agent, Pump):
         if agent.state == INFECTIOUS:
-            return {"size": 30, "color": "tab:orange"}
+            return {"size": 50, "color": "tab:orange"}
         elif agent.state == SUSCEPTIBLE:
-            return {"size": 30, "color": "tab:blue"}
+            return {"size": 50, "color": "tab:blue"}
     return {"size": 0, "color": "tab:blue"}
 
 

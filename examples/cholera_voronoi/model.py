@@ -51,7 +51,7 @@ class Cholera(mesa.Model):
             centroids_coordinates=pumps_location,
             capacity=int(self.susceptible + 1),
             random=self.random,
-            cell_coloring_attribute="cases_ratio",
+            cell_coloring_property="cases_ratio",
         )
 
         for population, cell, contaminated in zip(
