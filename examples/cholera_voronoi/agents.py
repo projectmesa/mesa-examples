@@ -77,7 +77,10 @@ class Pump(CellAgent):
 
             # If cases in total is too high, fix pump
             cases = sum(1 for a in people if a.state is INFECTIOUS)
-            cases_ratio = cases / (self.model.susceptible + self.model.infectious)
+            cases_ratio = cases / (
+                self.model.susceptible + self.model.infectious + 1e-1
+            )
+            self.cell.properties["cases_ratio"] = cases_ratio
             if cases_ratio > self.cases_ratio_to_fix_pump:
                 self.state = SUSCEPTIBLE
                 self.model.infected_pumps -= 1

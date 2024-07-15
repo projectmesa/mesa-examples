@@ -68,9 +68,9 @@ model_params = {
 def agent_portrayal(agent):
     if isinstance(agent, Pump):
         if agent.state == INFECTIOUS:
-            return {"size": 200, "color": "tab:orange"}
+            return {"size": 30, "color": "tab:orange"}
         elif agent.state == SUSCEPTIBLE:
-            return {"size": 200, "color": "tab:blue"}
+            return {"size": 30, "color": "tab:blue"}
     return {"size": 0, "color": "tab:blue"}
 
 
