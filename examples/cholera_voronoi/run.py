@@ -1,6 +1,6 @@
 import solara
+from cholera_voronoi.model import Cholera, Pump
 from mesa.visualization import JupyterViz, Slider
-from model import Cholera, Pump
 
 SUSCEPTIBLE = 0
 INFECTIOUS = 1

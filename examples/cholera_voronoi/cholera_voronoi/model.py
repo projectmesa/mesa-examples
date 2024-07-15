@@ -1,7 +1,8 @@
 from collections.abc import Sequence
 
 import mesa
-from agents import Person, Pump
+
+from .agents import Person, Pump
 
 SUSCEPTIBLE = 0
 INFECTIOUS = 1
