@@ -1,0 +1,6 @@
+jupyter
+matplotlib
+mesa~=2.0
+solara
+networkx
+# git+https://github.com/projectmesa/mesa-examples
