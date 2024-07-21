@@ -2,6 +2,7 @@ import mesa
 import networkx as nx
 from .agents.py import DriverAgent, RideAgent
 
+
 class CityModel(mesa.Model):
     def __init__(self, num_drivers, num_rides, width, height):
         self.num_drivers = num_drivers
@@ -13,7 +14,7 @@ class CityModel(mesa.Model):
         self.grid = mesa.space.NetworkGrid(nx.grid_2d_graph(width, height))
 
         self.G = nx.grid_2d_graph(width, height)
-        
+
         for i in range(self.num_drivers):
             x, y = self.random.choice(list(self.G.nodes))
             driver = DriverAgent(i, self, (x, y))
