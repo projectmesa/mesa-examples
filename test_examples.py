@@ -37,8 +37,8 @@ def test_model_steps(model_class):
 
 def get_batch_scripts():
     return [
-        ('examples.bank_reserves', 'batch_run'),
-        ('examples.sugarscape_g1mt', 'run')
+        ("examples.bank_reserves", "batch_run"),
+        ("examples.sugarscape_g1mt", "run"),
     ]
 
 
@@ -54,4 +54,3 @@ def test_batch_run(example_dir, script_module):
     finally:
         # Restore the original sys.path
         sys.path = old_sys_path
-
