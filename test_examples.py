@@ -35,10 +35,7 @@ def test_model_steps(model_class):
 
 
 def get_batch_scripts():
-    return [
-        'examples.bank_reserves.batch_run',
-        'examples.sugarscape_g1mt.run'
-    ]
+    return ["examples.bank_reserves.batch_run", "examples.sugarscape_g1mt.run"]
 
 
 @pytest.mark.parametrize("script_module", get_batch_scripts())
