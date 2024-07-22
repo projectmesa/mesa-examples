@@ -32,3 +32,16 @@ def test_model_steps(model_class):
     model = model_class()  # Assume no arguments are needed
     for _ in range(10):
         model.step()
+
+
+def get_batch_scripts():
+    return [
+        'examples.bank_reserves.batch_run',
+        'examples.sugarscape_g1mt.run'
+    ]
+
+
+@pytest.mark.parametrize("script_module", get_batch_scripts())
+def test_batch_run(script_module):
+    module = importlib.import_module(script_module)
+    module.main()  # Call the main function
