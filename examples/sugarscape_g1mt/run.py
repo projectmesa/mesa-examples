@@ -100,6 +100,6 @@ def main():
     else:
         raise Exception("Option not found")
 
+
 if __name__ == "__main__":
     main()
-

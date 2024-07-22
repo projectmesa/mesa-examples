@@ -185,6 +185,7 @@ br_params = {
     "reserve_percent": 5,
 }
 
+
 def main():
     # The existing batch run logic here
     data = mesa.batch_run(
@@ -193,6 +194,7 @@ def main():
     )
     br_df = pd.DataFrame(data)
     br_df.to_csv("BankReservesModel_Data.csv")
+
 
 if __name__ == "__main__":
     main()
