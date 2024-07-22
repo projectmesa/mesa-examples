@@ -1,5 +1,6 @@
 import importlib
 import os
+import sys
 
 import pytest
 from mesa import Model
