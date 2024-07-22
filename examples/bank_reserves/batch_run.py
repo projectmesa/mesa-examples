@@ -185,7 +185,9 @@ br_params = {
     "reserve_percent": 5,
 }
 
-if __name__ == "__main__":
+
+def main():
+    # The existing batch run logic here
     data = mesa.batch_run(
         BankReservesModel,
         br_params,
@@ -193,30 +195,6 @@ if __name__ == "__main__":
     br_df = pd.DataFrame(data)
     br_df.to_csv("BankReservesModel_Data.csv")
 
-    # The commented out code below is the equivalent code as above, but done
-    # via the legacy BatchRunner class. This is a good example to look at if
-    # you want to migrate your code to use `batch_run()` from `BatchRunner`.
-    # Things to note:
-    # - You have to set "reserve_percent" in br_params to `[5]`, because the
-    #   legacy BatchRunner doesn't auto-detect that it is single-valued.
-    # - The model reporters need to be explicitly specified in the legacy
-    #   BatchRunner
-    """
-    from mesa.batchrunner import BatchRunnerMP
-    br = BatchRunnerMP(
-        BankReservesModel,
-        nr_processes=2,
-        variable_parameters=br_params,
-        iterations=2,
-        max_steps=1000,
-        model_reporters={"Data Collector": lambda m: m.datacollector},
-    )
-    br.run_all()
-    br_df = br.get_model_vars_dataframe()
-    br_step_data = pd.DataFrame()
-    for i in range(len(br_df["Data Collector"])):
-        if isinstance(br_df["Data Collector"][i], DataCollector):
-            i_run_data = br_df["Data Collector"][i].get_model_vars_dataframe()
-            br_step_data = br_step_data.append(i_run_data, ignore_index=True)
-    br_step_data.to_csv("BankReservesModel_Step_Data.csv")
-    """
+
+if __name__ == "__main__":
+    main()
