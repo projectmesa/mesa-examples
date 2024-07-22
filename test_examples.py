@@ -35,10 +35,21 @@ def test_model_steps(model_class):
 
 
 def get_batch_scripts():
-    return ["examples.bank_reserves.batch_run", "examples.sugarscape_g1mt.run"]
+    return [
+        'examples.bank_reserves.batch_run',
+        'examples.sugarscape_g1mt.run'
+    ]
 
 
 @pytest.mark.parametrize("script_module", get_batch_scripts())
 def test_batch_run(script_module):
-    module = importlib.import_module(script_module)
-    module.main()  # Call the main function
+    # Save the old sys.path
+    old_sys_path = sys.path[:]
+    try:
+        # Add the examples directory to the sys.path
+        sys.path.insert(0, os.path.abspath('examples'))
+        module = importlib.import_module(script_module)
+        module.main()  # Call the main function
+    finally:
+        # Restore the original sys.path
+        sys.path = old_sys_path
