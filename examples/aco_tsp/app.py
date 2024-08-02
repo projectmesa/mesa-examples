@@ -19,7 +19,7 @@ def circle_portrayal_example(agent):
     return {}
 
 
-model_params = {"num_agents": 2, "num_cities": 5}
+model_params = {"num_agents": 20, "num_cities": 20}
 
 def make_graph(model):
     # Note: you must initialize a figure using this method instead of
@@ -41,9 +41,19 @@ def make_graph(model):
     
     solara.FigureMatplotlib(fig)
 
+def extract_data(model):
+    fig = Figure()
+    ax = fig.subplots()
+    ant_distances = model.datacollector.get_agent_vars_dataframe()
+    # Plot so that the step index is the x-axis, there's a line for each agent, 
+    # and the y-axis is the distance traveled
+    ant_distances['traveled_distance'].unstack(level=1).plot(ax=ax)
+    # print(ant_distances)
+    solara.FigureMatplotlib(fig)
+
 page = SolaraViz(
     AcoTspModel,
     model_params,
-    measures=["num_steps", make_graph],
+    measures=["num_steps", make_graph, extract_data],
     agent_portrayal=circle_portrayal_example
 )
