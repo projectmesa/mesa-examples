@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-    - main
+    - mesa-2.x
     - release**
     paths-ignore:
       - '**.md'
