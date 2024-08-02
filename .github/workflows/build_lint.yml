@@ -24,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-stable:
+  build-2-stable:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -33,26 +33,11 @@ jobs:
       with:
         python-version: "3.12"
     - name: Install dependencies
-      run: pip install mesa pytest
+      run: pip install mesa<3 pytest
     - name: Test with pytest
       run: pytest test_examples.py
 
-  build-pre:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-    - name: Install dependencies
-      run: |
-        pip install mesa --pre
-        pip install pytest
-    - name: Test with pytest
-      run: pytest test_examples.py
-
-  build-main:
+  build-2-git:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -63,6 +48,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pytest
-        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
+        pip install -U git+https://github.com/projectmesa/mesa@2.3.x-maintenance#egg=mesa
     - name: Test with pytest
       run: pytest test_examples.py
