@@ -14,12 +14,13 @@ class AntTSP(mesa.Agent):  # noqa
         """
         self.unique_id = unique_id
         super().__init__(unique_id, model)
-        self.cities_visited = set()
+        self.cities_visited = list()
+        self.traveled_distance = 0
 
     def decide_next_city(self):
         # Random
-        # new_city = self.random.choice(list(self.model.all_cities - self.cities_visited))
-        # Choose closest city
+        # new_city = self.random.choice(list(self.model.all_cities - set(self.cities_visited)))
+        # Choose closest city not yet visited
         g = self.model.grid.G
         current_city = self.pos
         neighbors = list(g.neighbors(current_city))
@@ -32,6 +33,7 @@ class AntTSP(mesa.Agent):  # noqa
             if distance < min_distance:
                 min_distance = distance
                 new_city = neighbor
+                self.traveled_distance += distance
         if new_city is None:
             # No unvisited neighbors, so stay put
             new_city = current_city
@@ -45,7 +47,7 @@ class AntTSP(mesa.Agent):  # noqa
         # Pick a random city that isn't in the list of cities visited
         new_city = self.decide_next_city()
         print(f"Moving Ant {self.unique_id} from city {self.pos} to {new_city}")
-        self.cities_visited.add(new_city)
+        self.cities_visited.append(new_city)
         self.model.grid.move_agent(self, new_city)
         
 
@@ -75,11 +77,16 @@ class AcoTspModel(mesa.Model):
 
             city = self.random.randrange(self.num_cities)
             self.grid.place_agent(agent, city)
-            agent.cities_visited.add(city)
+            agent.cities_visited.append(city) 
 
-        # example data collector
         self.num_steps = 0
-        self.datacollector = mesa.datacollection.DataCollector({"num_steps": "num_steps"})
+        self.best_path = None
+        self.best_distance = float('inf')
+
+        self.datacollector = mesa.datacollection.DataCollector(
+            model_reporters={"num_steps": "num_steps", "best_distance": "best_distance", "best_path": "best_path"},
+            agent_reporters={"traveled_distance": "traveled_distance", "cities_visited": "cities_visited"}
+        )
 
         self.running = True
         self.datacollector.collect(self)
@@ -107,6 +114,11 @@ class AcoTspModel(mesa.Model):
 
         # Check len of cities visited by an agent
         for agent in self.schedule.agents:
-            if len(agent.cities_visited) == self.num_cities:
-                print(f"Ant {agent.unique_id} has visited all cities")
+            if len(agent.cities_visited) == self.num_cities: 
+                # Check for best path
+                if agent.traveled_distance < self.best_distance:
+                    self.best_distance = agent.traveled_distance
+                    self.best_path = agent.cities_visited
+                    print(f"New best path found:  distance={self.best_distance}; path={self.best_path}")
+                
                 self.running = False
