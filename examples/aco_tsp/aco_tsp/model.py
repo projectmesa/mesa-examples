@@ -24,12 +24,12 @@ class AntTSP(mesa.Agent):  # noqa
         g = self.model.grid.G
         current_city = self.pos
         neighbors = list(g.neighbors(current_city))
-        min_distance = float('inf')
+        min_distance = float("inf")
         new_city = None
         for neighbor in neighbors:
             if neighbor in self.cities_visited:
                 continue
-            distance = g[current_city][neighbor]['distance']
+            distance = g[current_city][neighbor]["distance"]
             if distance < min_distance:
                 min_distance = distance
                 new_city = neighbor
@@ -49,7 +49,7 @@ class AntTSP(mesa.Agent):  # noqa
         print(f"Moving Ant {self.unique_id} from city {self.pos} to {new_city}")
         self.cities_visited.append(new_city)
         self.model.grid.move_agent(self, new_city)
-        
+
 
 class AcoTspModel(mesa.Model):
     """
@@ -77,33 +77,39 @@ class AcoTspModel(mesa.Model):
 
             city = self.random.randrange(self.num_cities)
             self.grid.place_agent(agent, city)
-            agent.cities_visited.append(city) 
+            agent.cities_visited.append(city)
 
         self.num_steps = 0
         self.best_path = None
-        self.best_distance = float('inf')
+        self.best_distance = float("inf")
 
         self.datacollector = mesa.datacollection.DataCollector(
-            model_reporters={"num_steps": "num_steps", "best_distance": "best_distance", "best_path": "best_path"},
-            agent_reporters={"traveled_distance": "traveled_distance", "cities_visited": "cities_visited"}
+            model_reporters={
+                "num_steps": "num_steps",
+                "best_distance": "best_distance",
+                "best_path": "best_path",
+            },
+            agent_reporters={
+                "traveled_distance": "traveled_distance",
+                "cities_visited": "cities_visited",
+            },
         )
 
         self.running = True
         self.datacollector.collect(self)
 
     def create_graph(self, num_cities):
-        g = nx.random_geometric_graph(num_cities, 2.).to_directed()
-        self.pos = {k: v['pos'] for k, v in dict(g.nodes.data()).items()}
+        g = nx.random_geometric_graph(num_cities, 2.0).to_directed()
+        self.pos = {k: v["pos"] for k, v in dict(g.nodes.data()).items()}
 
         for u, v in g.edges():
-            u_x, u_y = g.nodes[u]['pos']
-            v_x, v_y = g.nodes[v]['pos']
-            g[u][v]['distance'] = ((u_x - v_x) ** 2 + (u_y - v_y) ** 2) ** 0.5
-            g[u][v]['weight'] = 1 / g[u][v]['distance']
+            u_x, u_y = g.nodes[u]["pos"]
+            v_x, v_y = g.nodes[v]["pos"]
+            g[u][v]["distance"] = ((u_x - v_x) ** 2 + (u_y - v_y) ** 2) ** 0.5
+            g[u][v]["weight"] = 1 / g[u][v]["distance"]
 
         return g
 
-    
     def step(self):
         """
         A model step. Used for collecting data and advancing the schedule
@@ -114,11 +120,13 @@ class AcoTspModel(mesa.Model):
 
         # Check len of cities visited by an agent
         for agent in self.schedule.agents:
-            if len(agent.cities_visited) == self.num_cities: 
+            if len(agent.cities_visited) == self.num_cities:
                 # Check for best path
                 if agent.traveled_distance < self.best_distance:
                     self.best_distance = agent.traveled_distance
                     self.best_path = agent.cities_visited
-                    print(f"New best path found:  distance={self.best_distance}; path={self.best_path}")
-                
+                    print(
+                        f"New best path found:  distance={self.best_distance}; path={self.best_path}"
+                    )
+
                 self.running = False
