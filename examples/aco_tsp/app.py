@@ -7,7 +7,7 @@ import networkx as nx
 
 from mesa.visualization import SolaraViz
 
-from aco_tsp.model import AcoTspModel  # noqa
+from aco_tsp.model import AcoTspModel, create_graph  # noqa
 
 
 def circle_portrayal_example(agent):
@@ -18,8 +18,13 @@ def circle_portrayal_example(agent):
     # }
     return {}
 
+num_cities = 20
+graph, node_positions = create_graph(num_cities, seed=0)
+model_params = {
+    "num_agents": 20, "num_cities": num_cities, 
+    "g": graph, "pos": node_positions
+}
 
-model_params = {"num_agents": 20, "num_cities": 20}
 
 def make_graph(model):
     # Note: you must initialize a figure using this method instead of
@@ -55,5 +60,6 @@ page = SolaraViz(
     AcoTspModel,
     model_params,
     measures=["num_steps", make_graph, extract_data],
-    agent_portrayal=circle_portrayal_example
+    agent_portrayal=circle_portrayal_example,
+    play_interval=1,
 )
