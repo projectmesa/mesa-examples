@@ -1,5 +1,6 @@
 import importlib
 import os
+import sys
 
 import pytest
 from mesa import Model
@@ -32,3 +33,24 @@ def test_model_steps(model_class):
     model = model_class()  # Assume no arguments are needed
     for _ in range(10):
         model.step()
+
+
+def get_batch_scripts():
+    return [
+        ("examples.bank_reserves", "batch_run"),
+        ("examples.sugarscape_g1mt", "run"),
+    ]
+
+
+@pytest.mark.parametrize("example_dir, script_module", get_batch_scripts())
+def test_batch_run(example_dir, script_module):
+    # Save the old sys.path
+    old_sys_path = sys.path[:]
+    try:
+        # Add the example directory to the sys.path
+        sys.path.insert(0, os.path.abspath(example_dir))
+        module = importlib.import_module(f"{example_dir}.{script_module}")
+        module.main()  # Call the main function
+    finally:
+        # Restore the original sys.path
+        sys.path = old_sys_path
