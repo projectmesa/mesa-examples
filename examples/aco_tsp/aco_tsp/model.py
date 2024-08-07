@@ -1,4 +1,6 @@
+from dataclasses import dataclass
 from typing import Dict, Tuple
+
 
 import networkx as nx
 import numpy as np
@@ -6,18 +8,102 @@ import numpy as np
 import mesa
 
 
-def create_graph(num_cities: int, pheromone_init: float = 1e-6, seed: int = 0) -> Tuple[nx.Graph, Dict]:
-    g = nx.random_geometric_graph(num_cities, 2., seed=seed).to_directed()
-    pos = {k: v['pos'] for k, v in dict(g.nodes.data()).items()}
+@dataclass
+class NodeCoordinates:
+    city: int
+    x: float
+    y: float
 
-    for u, v in g.edges():
-        u_x, u_y = g.nodes[u]['pos']
-        v_x, v_y = g.nodes[v]['pos']
-        g[u][v]['distance'] = ((u_x - v_x) ** 2 + (u_y - v_y) ** 2) ** 0.5
-        g[u][v]['visibility'] = 1 / g[u][v]['distance']
-        g[u][v]['pheromone'] = pheromone_init
+    @classmethod
+    def from_line(cls, line: str):
+        city, x, y = line.split()
+        return cls(int(city), float(x), float(y))
+    
+class TSPGraph:
 
-    return g, pos
+    def __init__(self, g: nx.Graph, pheromone_init: float = 1e-6):
+        self.g = g
+        self.pheromone_init = pheromone_init
+        self._add_edge_properties()
+
+    def update_pheromone(
+        self, 
+        model: mesa.Model, 
+        q: float = 100, 
+        ro: float=0.5
+    ):
+        # tau_ij(t+1) = (1-ro)*tau_ij(t) + delta_tau_ij(t)
+        # delta_tau_ij(t) = sum_k^M {Q/L^k} * I[i,j \in T^k]
+        delta_tau_ij = dict()
+        for k, agent in enumerate(model.schedule.agents):
+            delta_tau_ij[k] = agent.calculate_pheromone_delta(q)
+
+        for i, j in self.g.edges():
+            # Evaporate
+            tau_ij =  (1-ro)*self.g[i][j]['pheromone']
+            # Add ant's contribution
+            for k, delta_tau_ij_k in delta_tau_ij.items():
+                tau_ij += delta_tau_ij_k.get((i,j), 0.)
+
+            self.g[i][j]['pheromone'] = tau_ij
+
+    @property
+    def pos(self):
+        return {k: v['pos'] for k, v in dict(self.g.nodes.data()).items()}
+    
+    @property
+    def cities(self):
+        return list(self.g.nodes)
+    
+    @property
+    def num_cities(self):
+        return len(self.g.nodes)
+    
+    def _add_edge_properties(self):
+        for u, v in self.g.edges():
+            u_x, u_y = self.g.nodes[u]['pos']
+            v_x, v_y = self.g.nodes[v]['pos']
+            self.g[u][v]['distance'] = ((u_x - v_x) ** 2 + (u_y - v_y) ** 2) ** 0.5
+            self.g[u][v]['visibility'] = 1 / self.g[u][v]['distance']
+            self.g[u][v]['pheromone'] = self.pheromone_init
+
+    @classmethod
+    def from_random(
+        cls, 
+        num_cities: int,  
+        seed: int = 0
+    ) -> 'TSPGraph':
+        g = nx.random_geometric_graph(num_cities, 2., seed=seed).to_directed()
+
+        return cls(g)
+    
+    @classmethod
+    def from_tsp_file(cls, file_path: str) -> 'TSPGraph':
+        with open(file_path, "r") as f:
+            lines = f.readlines()
+            # Skip lines until reach the text "NODE_COORD_SECTION"
+            while lines.pop(0).strip() != "NODE_COORD_SECTION":
+                pass
+
+            g = nx.Graph()
+            for line in lines:
+                if line.strip() == "EOF":
+                    break
+                node_coordinate = NodeCoordinates.from_line(line)
+
+                g.add_node(
+                    node_coordinate.city, 
+                    pos=(node_coordinate.x, node_coordinate.y)
+                )
+
+        # Add edges between all nodes to make a complete graph
+        for u in g.nodes():
+            for v in g.nodes():
+                if u == v:
+                    continue
+                g.add_edge(u, v)
+            
+        return cls(g)
 
 
 class AntTSP(mesa.Agent):  # noqa
@@ -92,20 +178,19 @@ class AcoTspModel(mesa.Model):
     The scheduler is a special model component which controls the order in which agents are activated.
     """
 
-    def __init__(self, num_agents: int, num_cities: int, g: nx.Graph, pos: Dict):
+    def __init__(self, num_agents: int, tsp_graph: TSPGraph):
         super().__init__()
         self.num_agents = num_agents
-        self.num_cities = num_cities
+        self.num_cities = tsp_graph.num_cities
         self.all_cities = set(range(self.num_cities))
         self.schedule = mesa.time.RandomActivation(self)
-        self.pos = pos
-        self.grid = mesa.space.NetworkGrid(g)
+        self.grid = mesa.space.NetworkGrid(tsp_graph.g)
 
         for i in range(self.num_agents):
             agent = AntTSP(i, self)
             self.schedule.add(agent)
 
-            city = self.random.randrange(self.num_cities)
+            city = tsp_graph.cities[self.random.randrange(self.num_cities)]
             self.grid.place_agent(agent, city)
             agent.cities_visited.append(city) 
 
