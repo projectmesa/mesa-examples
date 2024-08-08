@@ -90,11 +90,13 @@ class AntTSP(mesa.Agent):  # noqa
     An agent
     """
 
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model, alpha: float = 1.0, beta: float = 5.0):
         """
         Customize the agent
         """
         self.unique_id = unique_id
+        self.alpha = alpha 
+        self.beta = beta
         super().__init__(unique_id, model)
         self._cities_visited = list()
         self._traveled_distance = 0
@@ -109,7 +111,7 @@ class AntTSP(mesa.Agent):  # noqa
 
         return results
     
-    def decide_next_city(self, alpha: float = 1.0, beta: float = 5.0):
+    def decide_next_city(self):
         # Random
         # new_city = self.random.choice(list(self.model.all_cities - set(self.cities_visited)))
         # Choose closest city not yet visited
@@ -123,7 +125,7 @@ class AntTSP(mesa.Agent):  # noqa
         # p_ij(t) = 1/Z*[(tau_ij)**alpha * (1/distance)**beta]
         results = list()
         for city in candidates:
-            val = (g[current_city][city]["pheromone"])**alpha * (g[current_city][city]["visibility"])**beta
+            val = (g[current_city][city]["pheromone"])**self.alpha * (g[current_city][city]["visibility"])**self.beta
             results.append(val)
         
         results = np.array(results)
@@ -166,9 +168,17 @@ class AcoTspModel(mesa.Model):
     The scheduler is a special model component which controls the order in which agents are activated.
     """
 
-    def __init__(self, num_agents: int, tsp_graph: TSPGraph, max_steps: int = int(1e6)):
+    def __init__(
+            self, 
+            num_agents: int, 
+            tsp_graph: TSPGraph, 
+            max_steps: int = int(1e6),
+            ant_alpha: float = 1.0,
+            ant_beta: float = 5.0,
+        ):
         super().__init__()
         self.num_agents = num_agents
+        self.tsp_graph = tsp_graph
         self.num_cities = tsp_graph.num_cities
         self.all_cities = set(range(self.num_cities))
         self.max_steps = max_steps
@@ -176,7 +186,7 @@ class AcoTspModel(mesa.Model):
         self.grid = mesa.space.NetworkGrid(tsp_graph.g)
 
         for i in range(self.num_agents):
-            agent = AntTSP(i, self)
+            agent = AntTSP(unique_id=i, model=self, alpha=ant_alpha, beta=ant_beta)
             self.schedule.add(agent)
 
             city = tsp_graph.cities[self.random.randrange(self.num_cities)]
@@ -230,6 +240,7 @@ class AcoTspModel(mesa.Model):
         self.datacollector.collect(self)
         self.schedule.step()
         self.num_steps += 1
+        self.update_pheromone()
 
         # Check len of cities visited by an agent
         best_instance_iter = float('inf')
