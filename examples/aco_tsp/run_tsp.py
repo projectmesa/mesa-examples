@@ -30,9 +30,6 @@ def main():
             best_distance = model.best_distance
             best_path = model.best_path
             print(f"New best distance:  distance={best_distance}")
-        
-        # tsp_graph.update_pheromone(model=model)
-        model.update_pheromone()
 
     print(f"Best distance: {best_distance}")
     print(f"Best path: {best_path}")
@@ -42,7 +39,6 @@ def main():
     ax.plot(results["best_distance"])
     ax.set(xlabel="Episode", ylabel="Best distance", title="Best distance per episode")
     plt.show()
-
 
 
 if __name__ == "__main__":
