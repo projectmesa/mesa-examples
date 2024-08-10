@@ -2,9 +2,8 @@ import mesa
 
 
 class Walker(mesa.Agent):
-    def __init__(self, unique_id, model, pos, heading=(1, 0)):
+    def __init__(self, unique_id, model, heading=(1, 0)):
         super().__init__(unique_id, model)
-        self.pos = pos
         self.heading = heading
         self.headings = {(1, 0), (0, 1), (-1, 0), (0, -1)}
 
@@ -31,7 +30,7 @@ class ShapeExample(mesa.Model):
             # heading = (1, 0)
             if self.grid.is_cell_empty(pos):
                 print(f"Creating agent {unique_id} at ({x}, {y})")
-                a = Walker(unique_id, self, pos, heading)
+                a = Walker(unique_id, self, heading)
                 self.schedule.add(a)
                 self.grid.place_agent(a, pos)
                 unique_id += 1
