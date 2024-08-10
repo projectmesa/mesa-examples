@@ -1,4 +1,3 @@
-import pytest
 from epstein_civil_violence.epstein_civil_violence import EpsteinCivilViolence
 
 
