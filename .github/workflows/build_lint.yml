@@ -65,4 +65,4 @@ jobs:
         pip install pytest
         pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
     - name: Test with pytest
-      run: pytest test_examples.py
+      run: pytest -v test_examples.py
