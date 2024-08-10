@@ -1,4 +1,3 @@
-import pytest
 from wolf_sheep.wolf_sheep import WolfSheep
 
 
