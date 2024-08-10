@@ -145,7 +145,7 @@ class BankReserves(mesa.Model):
             # set x, y coords randomly within the grid
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            p = Person(i, (x, y), self, True, self.bank, self.rich_threshold)
+            p = Person(i, self, True, self.bank, self.rich_threshold)
             # place the Person object on the grid at coordinates (x, y)
             self.grid.place_agent(p, (x, y))
             # add the Person object to the model schedule
