@@ -1,6 +1,7 @@
 import mesa
 from .random_walk import RandomWalker
 
+
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
         super().__init__(unique_id, model)
@@ -14,6 +15,7 @@ class GrassPatch(mesa.Agent):
                 self.countdown = self.model.grass_regrowth_time
             else:
                 self.countdown -= 1
+
 
 class Animal(mesa.Agent):
     def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
@@ -59,6 +61,7 @@ class Animal(mesa.Agent):
         elif self.random.random() < self.p_reproduce:
             self.spawn_offspring()
 
+
 class Sheep(Animal):
     """
     A sheep that walks around, reproduces (asexually) and gets eaten.
@@ -71,6 +74,7 @@ class Sheep(Animal):
         if grass_patch.fully_grown:
             self.energy += self.energy_from_food
             grass_patch.fully_grown = False
+
 
 class Wolf(Animal):
     """
