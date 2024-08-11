@@ -4,6 +4,7 @@ Generalized behavior for random walking, one grid cell at a time.
 
 import mesa
 
+
 class RandomWalker(mesa.Agent):
     """
     Class implementing random walker methods in a generalized manner.
