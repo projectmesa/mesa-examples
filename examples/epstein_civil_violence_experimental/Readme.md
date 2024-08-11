@@ -32,16 +32,15 @@ To run the model interactively, run `mesa runserver` in this directory. e.g.
 
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
 
-Alternatively, you can run the batch model directly by executing the `run.py` file. e.g.
+Alternatively, you can run the batch model directly by executing the `app.py` file. e.g.
 
 ## Files
 
 * `epstein_civil_violence_experimental/agent.py`: Defines the Citizen and Cop agent classes.
 * `epstein_civil_violence_experimental/model.py`: Defines the Epstein Civil Violence model itself, including the initialization of the grid, agents, and data collection.
-* `epstein_civil_violence_experimental/run.py`: Launches a batch run of the model.
 * `epstein_civil_violence_experimental/epstein_civil_violence.py`: Contains the main logic for the Epstein Civil Violence model, including agent behaviors and interactions.
 * `epstein_civil_violence_experimental/test_epstein_civil_violence.py`: Contains unit tests for the Epstein Civil Violence model to ensure correctness of the implementation.
-* `epstein_civil_violence_experimental/app.py`: Sets up the interactive visualization server for the model using SolaraViz.
+* `epstein_civil_violence_experimental/app.py`: Sets up the interactive visualization server for the model using SolaraViz and launches a batch run of the model.
 * `epstein_civil_violence_experimental/requirements.txt`: Lists the dependencies required to run the model.
 * `epstein_civil_violence_experimental/Readme.md`: Provides an overview and instructions for the model.
 
