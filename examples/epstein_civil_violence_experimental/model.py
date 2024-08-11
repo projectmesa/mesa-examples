@@ -1,7 +1,6 @@
 from mesa import Model
 from mesa.space import SingleGrid
-from agent import Citizen, Cop
-
+from .agent import Citizen, Cop
 
 class EpsteinCivilViolence(Model):
     """
