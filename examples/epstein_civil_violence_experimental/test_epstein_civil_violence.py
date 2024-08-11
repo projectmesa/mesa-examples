@@ -1,6 +1,7 @@
 import unittest
 from model import EpsteinCivilViolence
 
+
 class TestEpsteinCivilViolence(unittest.TestCase):
     def setUp(self):
         self.model = EpsteinCivilViolence(seed=15)
@@ -14,6 +15,7 @@ class TestEpsteinCivilViolence(unittest.TestCase):
     def test_step(self):
         self.model.step()
         # Add assertions to test the behavior of the model after a step
+
 
 if __name__ == "__main__":
     unittest.main()
