@@ -9,6 +9,7 @@ from mesa.time import RandomActivation
 from mesa.visualization.TextVisualization import TextGrid, TextVisualization
 from wolf_sheep.random_walk import RandomWalker
 
+
 class WalkerAgent(RandomWalker):
     """
     Agent which only walks around.
@@ -16,6 +17,7 @@ class WalkerAgent(RandomWalker):
 
     def step(self):
         self.random_move()
+
 
 class WalkerWorld(Model):
     """
@@ -50,6 +52,7 @@ class WalkerWorld(Model):
     def step(self):
         self.schedule.step()
 
+
 class WalkerWorldViz(TextVisualization):
     """
     ASCII Visualization for a WalkerWorld agent.
@@ -67,6 +70,7 @@ class WalkerWorldViz(TextVisualization):
         grid_viz = TextGrid(self.model.grid, None)
         grid_viz.converter = lambda x: str(len(x))
         self.elements = [grid_viz]
+
 
 if __name__ == "__main__":
     print("Testing 10x10 world, with 50 random walkers, for 10 steps.")
