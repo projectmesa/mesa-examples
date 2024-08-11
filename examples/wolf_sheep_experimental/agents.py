@@ -1,6 +1,4 @@
 import mesa
-from .random_walk import RandomWalker
-
 
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
