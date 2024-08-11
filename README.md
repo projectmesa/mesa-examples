@@ -60,7 +60,7 @@ Grid-based demographic prisoner's dilemma model, demonstrating how simple rules 
 
 ### [Epstein Civil Violence Model](https://github.com/projectmesa/mesa-examples/tree/main/examples/epstein_civil_violence)
 
-Joshua Epstein's [model](http://www.uvm.edu/~pdodds/files/papers/others/2002/epstein2002a.pdf) of how a decentralized uprising can be suppressed or reach a critical mass of support.
+Joshua Epstein's [model](http://www.uvm.edu/~pdodds/files/papers/others/2002/epstein2002a.pdf) of how a decentralized uprising can be suppressed or reach a critical mass of support. This model simulates the interactions between citizens and law enforcement in a grid space, considering factors such as citizen density, cop density, vision, legitimacy, and arrest probability.
 
 ### [Forest Fire Model](https://github.com/projectmesa/mesa-examples/tree/main/examples/forest_fire)
 
@@ -85,7 +85,7 @@ This is Epstein & Axtell's Sugarscape model with Traders, a detailed description
 
 ### [Wolf-Sheep Predation Model](https://github.com/projectmesa/mesa-examples/tree/main/examples/wolf_sheep)
 
-Implementation of an ecological model of predation and reproduction, based on the NetLogo [Wolf Sheep Predation](http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation) model.
+Implementation of an ecological model of predation and reproduction, based on the NetLogo [Wolf Sheep Predation](http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation) model. This model simulates the dynamics of predator-prey interactions between wolves and sheep, including factors such as energy expenditure, reproduction, and grass regrowth.
 
 ## Continuous Space Examples
 
