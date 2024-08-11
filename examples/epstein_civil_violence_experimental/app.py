@@ -5,13 +5,14 @@ from mesa.visualization.ModularVisualization import ModularServer
 from .model import EpsteinCivilViolence
 from .agent import Citizen, Cop, AgentState
 
+
 def agent_portrayal(agent):
     if isinstance(agent, Citizen):
         portrayal = {
             "Shape": "circle",
             "Color": "blue" if agent.condition == AgentState.QUIESCENT else "red",
             "Filled": "true",
-            "r": 0.5
+            "r": 0.5,
         }
     elif isinstance(agent, Cop):
         portrayal = {
@@ -19,15 +20,17 @@ def agent_portrayal(agent):
             "Color": "black",
             "Filled": "true",
             "w": 0.5,
-            "h": 0.5
+            "h": 0.5,
         }
     return portrayal
+
 
 def get_citizen_cop_ratio(model):
     citizen_count = sum(isinstance(agent, Citizen) for agent in model.schedule.agents)
     cop_count = sum(isinstance(agent, Cop) for agent in model.schedule.agents)
-    ratio = citizen_count / cop_count if cop_count > 0 else float('inf')
+    ratio = citizen_count / cop_count if cop_count > 0 else float("inf")
     return f"Citizen/Cop Ratio: {ratio:.2f}"
+
 
 grid = CanvasGrid(agent_portrayal, 40, 40, 500, 500)
 
@@ -57,12 +60,14 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
+
 @solara.component
 def App():
     solara.Title("Epstein Civil Violence Model")
     solara.Markdown("# Epstein Civil Violence Model")
     solara.Markdown("This is a visualization of the Epstein Civil Violence Model.")
     page.show()
+
 
 if __name__ == "__main__":
     solara.run(App)
