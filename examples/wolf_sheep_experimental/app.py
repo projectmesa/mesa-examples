@@ -1,7 +1,6 @@
 import solara
 from mesa.visualization import SolaraViz, make_text, make_plot
 from mesa.visualization.modules import CanvasGrid
-from mesa.visualization.ModularVisualization import ModularServer
 from .model import WolfSheep
 from .agents import Sheep, Wolf, GrassPatch
 
