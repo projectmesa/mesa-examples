@@ -39,16 +39,15 @@ To run the model interactively, run `mesa runserver` in this directory. e.g.
 
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
 
-Alternatively, you can run the batch model directly by executing the `run.py` file. e.g.
+Alternatively, you can run the batch model directly by executing the `app.py` file. e.g.
 
 ## Files
 
 * `wolf_sheep_experimental/agents.py`: Defines the Wolf, Sheep, and GrassPatch agent classes.
 * `wolf_sheep_experimental/model.py`: Defines the Wolf-Sheep Predation model itself, including the initialization of the grid, agents, and data collection.
-* `wolf_sheep_experimental/run.py`: Launches a batch run of the model and visualizes the results using matplotlib.
 * `wolf_sheep_experimental/wolf_sheep.py`: Contains the main logic for the Wolf-Sheep model, including agent behaviors and interactions.
 * `wolf_sheep_experimental/test_wolf_sheep.py`: Contains unit tests for the Wolf-Sheep model to ensure correctness of the implementation.
-* `wolf_sheep_experimental/app.py`: Sets up the interactive visualization server for the model.
+* `wolf_sheep_experimental/app.py`: Sets up the interactive visualization server for the model and launches a batch run of the model and visualizes the results using matplotlib.
 * `wolf_sheep_experimental/requirements.txt`: Lists the dependencies required to run the model.
 * `wolf_sheep_experimental/Readme.md`: Provides an overview and instructions for the model.
 
