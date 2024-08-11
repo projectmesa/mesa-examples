@@ -4,8 +4,19 @@ from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 from agent import Sheep, Wolf, GrassPatch
 
+
 class WolfSheepPredation(Model):
-    def __init__(self, width, height, initial_sheep, initial_wolves, sheep_reproduce, wolf_reproduce, sheep_gain_from_food, wolf_gain_from_food):
+    def __init__(
+        self,
+        width,
+        height,
+        initial_sheep,
+        initial_wolves,
+        sheep_reproduce,
+        wolf_reproduce,
+        sheep_gain_from_food,
+        wolf_gain_from_food,
+    ):
         self.width = width
         self.height = height
         self.initial_sheep = initial_sheep
@@ -19,19 +30,27 @@ class WolfSheepPredation(Model):
         self.grid = MultiGrid(width, height, torus=True)
 
         self.datacollector = DataCollector(
-            {"Wolves": lambda m: self.count_type(m, Wolf),
-             "Sheep": lambda m: self.count_type(m, Sheep),
-             "Grass": lambda m: self.count_type(m, GrassPatch)}
+            {
+                "Wolves": lambda m: self.count_type(m, Wolf),
+                "Sheep": lambda m: self.count_type(m, Sheep),
+                "Grass": lambda m: self.count_type(m, GrassPatch),
+            }
         )
 
         for _ in range(self.initial_sheep):
             sheep = Sheep(self.next_id(), self)
-            self.grid.place_agent(sheep, (self.random.randrange(self.width), self.random.randrange(self.height)))
+            self.grid.place_agent(
+                sheep,
+                (self.random.randrange(self.width), self.random.randrange(self.height)),
+            )
             self.schedule.add(sheep)
 
         for _ in range(self.initial_wolves):
             wolf = Wolf(self.next_id(), self)
-            self.grid.place_agent(wolf, (self.random.randrange(self.width), self.random.randrange(self.height)))
+            self.grid.place_agent(
+                wolf,
+                (self.random.randrange(self.width), self.random.randrange(self.height)),
+            )
             self.schedule.add(wolf)
 
         for agent, x, y in self.grid.coord_iter():

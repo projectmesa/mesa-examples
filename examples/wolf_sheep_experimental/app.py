@@ -1,7 +1,12 @@
 import solara
 from mesa.experimental import JupyterViz, make_text
 from model import WolfSheepPredation
-from agents import Sheep, Wolf, GrassPatch  # Assuming these classes are defined in agents.py
+from agents import (
+    Sheep,
+    Wolf,
+    GrassPatch,
+)  # Assuming these classes are defined in agents.py
+
 
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):
@@ -10,6 +15,7 @@ def agent_portrayal(agent):
         return {"size": 10, "color": "tab:red"}
     elif isinstance(agent, GrassPatch):
         return {"size": 5, "color": "tab:blue" if agent.fully_grown else "tab:brown"}
+
 
 model_params = {
     "width": 20,

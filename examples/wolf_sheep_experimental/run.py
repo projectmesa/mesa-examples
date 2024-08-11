@@ -2,6 +2,7 @@ from model import WolfSheepPredation
 from mesa.batchrunner import BatchRunner
 import matplotlib.pyplot as plt
 
+
 def run_model():
     model_params = {
         "width": 20,
@@ -19,9 +20,11 @@ def run_model():
         model_params,
         iterations=5,
         max_steps=200,
-        model_reporters={"Wolves": lambda m: m.count_type(m, Wolf),
-                         "Sheep": lambda m: m.count_type(m, Sheep),
-                         "Grass": lambda m: m.count_type(m, GrassPatch)}
+        model_reporters={
+            "Wolves": lambda m: m.count_type(m, Wolf),
+            "Sheep": lambda m: m.count_type(m, Sheep),
+            "Grass": lambda m: m.count_type(m, GrassPatch),
+        },
     )
 
     batch_run.run_all()
@@ -29,6 +32,7 @@ def run_model():
     run_data = batch_run.get_model_vars_dataframe()
     run_data.plot()
     plt.show()
+
 
 if __name__ == "__main__":
     run_model()
