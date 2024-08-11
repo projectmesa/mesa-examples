@@ -1,93 +1,88 @@
-from mesa import Agent
+import mesa
+from .random_walk import RandomWalker
 
-
-class Sheep(Agent):
-    def __init__(self, unique_id, model):
+class GrassPatch(mesa.Agent):
+    def __init__(self, unique_id, model, fully_grown, countdown):
         super().__init__(unique_id, model)
-        self.energy = self.random.randint(2, 4)
-
-    def step(self):
-        self.move()
-        self.eat_grass()
-        self.reproduce()
-        self.die()
-
-    def move(self):
-        possible_steps = self.model.grid.get_neighborhood(
-            self.pos, moore=True, include_center=False
-        )
-        new_position = self.random.choice(possible_steps)
-        self.model.grid.move_agent(self, new_position)
-
-    def eat_grass(self):
-        cell_contents = self.model.grid.get_cell_list_contents([self.pos])
-        grass_patch = [obj for obj in cell_contents if isinstance(obj, GrassPatch)][0]
-        if grass_patch.fully_grown:
-            self.energy += self.model.sheep_gain_from_food
-            grass_patch.fully_grown = False
-
-    def reproduce(self):
-        if self.random.random() < self.model.sheep_reproduce:
-            lamb = Sheep(self.model.next_id(), self.model)
-            self.model.grid.place_agent(lamb, self.pos)
-            self.model.schedule.add(lamb)
-
-    def die(self):
-        self.energy -= 1
-        if self.energy < 0:
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-
-
-class Wolf(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-        self.energy = self.random.randint(2, 4)
-
-    def step(self):
-        self.move()
-        self.eat_sheep()
-        self.reproduce()
-        self.die()
-
-    def move(self):
-        possible_steps = self.model.grid.get_neighborhood(
-            self.pos, moore=True, include_center=False
-        )
-        new_position = self.random.choice(possible_steps)
-        self.model.grid.move_agent(self, new_position)
-
-    def eat_sheep(self):
-        cell_contents = self.model.grid.get_cell_list_contents([self.pos])
-        sheep = [obj for obj in cell_contents if isinstance(obj, Sheep)]
-        if len(sheep) > 0:
-            sheep_to_eat = self.random.choice(sheep)
-            self.energy += self.model.wolf_gain_from_food
-            self.model.grid.remove_agent(sheep_to_eat)
-            self.model.schedule.remove(sheep_to_eat)
-
-    def reproduce(self):
-        if self.random.random() < self.model.wolf_reproduce:
-            cub = Wolf(self.model.next_id(), self.model)
-            self.model.grid.place_agent(cub, self.pos)
-            self.model.schedule.add(cub)
-
-    def die(self):
-        self.energy -= 1
-        if self.energy < 0:
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-
-
-class GrassPatch(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-        self.fully_grown = True
-        self.countdown = self.random.randint(2, 10)
+        self.fully_grown = fully_grown
+        self.countdown = countdown
 
     def step(self):
         if not self.fully_grown:
-            self.countdown -= 1
             if self.countdown <= 0:
                 self.fully_grown = True
-                self.countdown = self.random.randint(2, 10)
+                self.countdown = self.model.grass_regrowth_time
+            else:
+                self.countdown -= 1
+
+class Animal(mesa.Agent):
+    def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
+        super().__init__(unique_id, model)
+        self.energy = energy
+        self.p_reproduce = p_reproduce
+        self.energy_from_food = energy_from_food
+        self.moore = moore
+
+    def random_move(self):
+        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
+        next_move = self.random.choice(next_moves)
+        # Now move:
+        self.model.grid.move_agent(self, next_move)
+
+    def spawn_offspring(self):
+        self.energy /= 2
+        offspring = self.__class__(
+            self.model.next_id(),
+            self.model,
+            self.moore,
+            self.energy,
+            self.p_reproduce,
+            self.energy_from_food,
+        )
+        self.model.grid.place_agent(offspring, self.pos)
+
+    def feed(self):
+        pass
+
+    def die(self):
+        self.model.grid.remove_agent(self)
+        self.model.schedule.remove(self)
+
+    def step(self):
+        self.random_move()
+        self.energy -= 1
+
+        self.feed()
+
+        if self.energy < 0:
+            self.die()
+        elif self.random.random() < self.p_reproduce:
+            self.spawn_offspring()
+
+class Sheep(Animal):
+    """
+    A sheep that walks around, reproduces (asexually) and gets eaten.
+    """
+
+    def feed(self):
+        # If there is grass available, eat it
+        agents = self.model.grid.get_cell_list_contents(self.pos)
+        grass_patch = next(obj for obj in agents if isinstance(obj, GrassPatch))
+        if grass_patch.fully_grown:
+            self.energy += self.energy_from_food
+            grass_patch.fully_grown = False
+
+class Wolf(Animal):
+    """
+    A wolf that walks around, reproduces (asexually) and eats sheep.
+    """
+
+    def feed(self):
+        agents = self.model.grid.get_cell_list_contents(self.pos)
+        sheep = [obj for obj in agents if isinstance(obj, Sheep)]
+        if len(sheep) > 0:
+            sheep_to_eat = self.random.choice(sheep)
+            self.energy += self.energy_from_food
+
+            # Kill the sheep
+            sheep_to_eat.die()
