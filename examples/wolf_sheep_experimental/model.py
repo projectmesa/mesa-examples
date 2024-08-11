@@ -8,7 +8,7 @@ Replication of the model found in NetLogo:
     Center for Connected Learning and Computer-Based Modeling,
     Northwestern University, Evanston, IL.
 """
-
+import mesa
 from mesa import Model
 from mesa.space import MultiGrid
 from mesa.time import RandomActivation
