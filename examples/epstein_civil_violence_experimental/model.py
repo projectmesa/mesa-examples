@@ -2,6 +2,7 @@ from mesa import Model
 from mesa.space import SingleGrid
 from .agent import Citizen, Cop
 
+
 class EpsteinCivilViolence(Model):
     """
     Model 1 from "Modeling civil violence: An agent-based computational
