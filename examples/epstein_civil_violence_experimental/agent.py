@@ -1,10 +1,12 @@
 import enum
 from mesa import Agent
 
+
 class AgentState(enum.IntEnum):
     QUIESCENT = enum.auto()
     ARRESTED = enum.auto()
     ACTIVE = enum.auto()
+
 
 class EpsteinAgent(Agent):
     def __init__(self, unique_id, model, vision, movement):
@@ -12,8 +14,20 @@ class EpsteinAgent(Agent):
         self.vision = vision
         self.movement = movement
 
+
 class Citizen(EpsteinAgent):
-    def __init__(self, unique_id, model, vision, movement, hardship, regime_legitimacy, risk_aversion, threshold, arrest_prob_constant):
+    def __init__(
+        self,
+        unique_id,
+        model,
+        vision,
+        movement,
+        hardship,
+        regime_legitimacy,
+        risk_aversion,
+        threshold,
+        arrest_prob_constant,
+    ):
         super().__init__(unique_id, model, vision, movement)
         self.hardship = hardship
         self.regime_legitimacy = regime_legitimacy
@@ -30,6 +44,7 @@ class Citizen(EpsteinAgent):
         self.condition = AgentState.ARRESTED
         self.jail_term = jail_term
 
+
 class Cop(EpsteinAgent):
     def __init__(self, unique_id, model, vision, movement, max_jail_term):
         super().__init__(unique_id, model, vision, movement)
@@ -37,7 +52,11 @@ class Cop(EpsteinAgent):
 
     def step(self):
         self.update_neighbors()
-        active_neighbors = [agent for agent in self.neighbors if isinstance(agent, Citizen) and agent.condition == AgentState.ACTIVE]
+        active_neighbors = [
+            agent
+            for agent in self.neighbors
+            if isinstance(agent, Citizen) and agent.condition == AgentState.ACTIVE
+        ]
         if active_neighbors:
             arrestee = self.random.choice(active_neighbors)
             arrestee.sent_to_jail(self.random.randint(0, self.max_jail_term))
@@ -46,6 +65,10 @@ class Cop(EpsteinAgent):
             self.model.grid.move_agent(self, new_pos)
 
     def update_neighbors(self):
-        self.neighborhood = self.model.grid.get_neighborhood(self.pos, moore=True, radius=self.vision)
+        self.neighborhood = self.model.grid.get_neighborhood(
+            self.pos, moore=True, radius=self.vision
+        )
         self.neighbors = self.model.grid.get_cell_list_contents(self.neighborhood)
-        self.empty_neighbors = [c for c in self.neighborhood if self.model.grid.is_cell_empty(c)]
+        self.empty_neighbors = [
+            c for c in self.neighborhood if self.model.grid.is_cell_empty(c)
+        ]
