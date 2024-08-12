@@ -1,5 +1,33 @@
 import mesa
 
+class RandomWalker(mesa.Agent):
+    """
+    Class implementing random walker methods in a generalized manner.
+
+    Not intended to be used on its own, but to inherit its methods to multiple
+    other agents.
+    """
+
+    def __init__(self, unique_id, model, moore=True):
+        """
+        grid: The MultiGrid object in which the agent lives.
+        x: The agent's current x coordinate
+        y: The agent's current y coordinate
+        moore: If True, may move in all 8 directions.
+                Otherwise, only up, down, left, right.
+        """
+        super().__init__(unique_id, model)
+        self.moore = moore
+
+    def random_move(self):
+        """
+        Step one cell in any allowable direction.
+        """
+        # Pick the next cell from the adjacent cells.
+        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
+        next_move = self.random.choice(next_moves)
+        # Now move:
+        self.model.grid.move_agent(self, next_move)
 
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
@@ -15,20 +43,12 @@ class GrassPatch(mesa.Agent):
             else:
                 self.countdown -= 1
 
-
-class Animal(mesa.Agent):
+class Animal(RandomWalker):
     def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
-        super().__init__(unique_id, model)
+        super().__init__(unique_id, model, moore)
         self.energy = energy
         self.p_reproduce = p_reproduce
         self.energy_from_food = energy_from_food
-        self.moore = moore
-
-    def random_move(self):
-        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
-        next_move = self.random.choice(next_moves)
-        # Now move:
-        self.model.grid.move_agent(self, next_move)
 
     def spawn_offspring(self):
         self.energy /= 2
@@ -41,6 +61,7 @@ class Animal(mesa.Agent):
             self.energy_from_food,
         )
         self.model.grid.place_agent(offspring, self.pos)
+        self.model.schedule.add(offspring)
 
     def feed(self):
         pass
