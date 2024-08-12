@@ -1,5 +1,6 @@
 import mesa
 
+
 class RandomWalker(mesa.Agent):
     """
     Class implementing random walker methods in a generalized manner.
@@ -29,6 +30,7 @@ class RandomWalker(mesa.Agent):
         # Now move:
         self.model.grid.move_agent(self, next_move)
 
+
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
         super().__init__(unique_id, model)
@@ -42,6 +44,7 @@ class GrassPatch(mesa.Agent):
                 self.countdown = self.model.grass_regrowth_time
             else:
                 self.countdown -= 1
+
 
 class Animal(RandomWalker):
     def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
