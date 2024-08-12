@@ -24,7 +24,7 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 
 ## How to Run
 
-You can run the batch model directly by executing the `app.py` file. as 
+You can run the batch model directly by executing the `app.py` file. as
 
 ```
     python app.py
