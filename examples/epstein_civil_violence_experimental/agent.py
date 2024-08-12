@@ -2,16 +2,19 @@ import enum
 import math
 from mesa import Agent
 
+
 class AgentState(enum.IntEnum):
     QUIESCENT = 0
     ARRESTED = 1
     ACTIVE = 2
+
 
 class EpsteinAgent(Agent):
     def __init__(self, unique_id, model, vision, movement):
         super().__init__(unique_id, model)
         self.vision = vision
         self.movement = movement
+
 
 class Citizen(EpsteinAgent):
     def __init__(
@@ -82,6 +85,7 @@ class Citizen(EpsteinAgent):
     def release_from_jail(self):
         self.model.schedule.add(self)
         self.condition = AgentState.QUIESCENT
+
 
 class Cop(EpsteinAgent):
     def __init__(self, unique_id, model, vision, movement, max_jail_term):
