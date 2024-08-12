@@ -4,7 +4,6 @@ from mesa.visualization.modules import CanvasGrid
 from .model import WolfSheep
 from .agents import Sheep, Wolf, GrassPatch
 
-
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):
         portrayal = {
@@ -77,4 +76,15 @@ def App():
 
 
 if __name__ == "__main__":
+    import time
+    from mesa.experimental.devs.simulator import ABMSimulator
+
+    simulator = ABMSimulator()
+    model = WolfSheep(25, 25, 60, 40, 0.2, 0.1, 20, simulator=simulator, seed=15)
+    simulator.setup(model)
+    start_time = time.perf_counter()
+    simulator.run(100)
+    print(simulator.time)
+    print("Time:", time.perf_counter() - start_time)
+
     solara.run(App)
