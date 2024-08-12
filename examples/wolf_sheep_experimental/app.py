@@ -63,7 +63,7 @@ def App():
     solara.Title("Wolf-Sheep Predation Model")
     solara.Markdown("# Wolf-Sheep Predation Model")
     solara.Markdown("This is a visualization of the Wolf-Sheep Predation Model.")
-    
+
     # Add color legend
     solara.Markdown("""
     ## Color Legend
@@ -72,7 +72,7 @@ def App():
     - Green: Fully grown grass
     - Brown: Eaten grass (regrowing)
     """)
-    
+
     page.show()
 
 if __name__ == "__main__":
