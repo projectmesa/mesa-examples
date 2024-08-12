@@ -1,6 +1,5 @@
 import mesa
 
-
 class RandomWalker(mesa.Agent):
     """
     Class implementing random walker methods in a generalized manner.
@@ -24,12 +23,12 @@ class RandomWalker(mesa.Agent):
         """
         Step one cell in any allowable direction.
         """
-        # Pick the next cell from the adjacent cells.
-        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
-        next_move = self.random.choice(next_moves)
-        # Now move:
-        self.model.grid.move_agent(self, next_move)
-
+        if self.pos is not None:
+            # Pick the next cell from the adjacent cells.
+            next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
+            next_move = self.random.choice(next_moves)
+            # Now move:
+            self.model.grid.move_agent(self, next_move)
 
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
@@ -45,13 +44,13 @@ class GrassPatch(mesa.Agent):
             else:
                 self.countdown -= 1
 
-
 class Animal(RandomWalker):
     def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
         super().__init__(unique_id, model, moore)
         self.energy = energy
         self.p_reproduce = p_reproduce
         self.energy_from_food = energy_from_food
+        self.is_alive = True
 
     def spawn_offspring(self):
         self.energy /= 2
@@ -70,10 +69,18 @@ class Animal(RandomWalker):
         pass
 
     def die(self):
-        self.model.grid.remove_agent(self)
-        self.model.schedule.remove(self)
+        if self.is_alive:
+            self.is_alive = False
+            if self.pos is not None:
+                self.model.grid.remove_agent(self)
+            try:
+                self.model.schedule.remove(self)
+            except KeyError:
+                pass  # Agent was already removed from schedule
 
     def step(self):
+        if not self.is_alive:
+            return
         self.random_move()
         self.energy -= 1
 
@@ -84,20 +91,19 @@ class Animal(RandomWalker):
         elif self.random.random() < self.p_reproduce:
             self.spawn_offspring()
 
-
 class Sheep(Animal):
     """
     A sheep that walks around, reproduces (asexually) and gets eaten.
     """
 
     def feed(self):
-        # If there is grass available, eat it
-        agents = self.model.grid.get_cell_list_contents(self.pos)
-        grass_patch = next(obj for obj in agents if isinstance(obj, GrassPatch))
-        if grass_patch.fully_grown:
-            self.energy += self.energy_from_food
-            grass_patch.fully_grown = False
-
+        if self.pos is not None:
+            # If there is grass available, eat it
+            agents = self.model.grid.get_cell_list_contents([self.pos])
+            grass_patch = next((obj for obj in agents if isinstance(obj, GrassPatch)), None)
+            if grass_patch and grass_patch.fully_grown:
+                self.energy += self.energy_from_food
+                grass_patch.fully_grown = False
 
 class Wolf(Animal):
     """
@@ -105,11 +111,12 @@ class Wolf(Animal):
     """
 
     def feed(self):
-        agents = self.model.grid.get_cell_list_contents(self.pos)
-        sheep = [obj for obj in agents if isinstance(obj, Sheep)]
-        if len(sheep) > 0:
-            sheep_to_eat = self.random.choice(sheep)
-            self.energy += self.energy_from_food
+        if self.pos is not None:
+            agents = self.model.grid.get_cell_list_contents([self.pos])
+            sheep = [obj for obj in agents if isinstance(obj, Sheep)]
+            if len(sheep) > 0:
+                sheep_to_eat = self.random.choice(sheep)
+                self.energy += self.energy_from_food
 
-            # Kill the sheep
-            sheep_to_eat.die()
+                # Kill the sheep
+                sheep_to_eat.die()
