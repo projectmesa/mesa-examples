@@ -1,6 +1,7 @@
 import time
 import solara
-from mesa.visualization.solara_viz import SolaraViz, make_textfrom model import WolfSheep
+from mesa.visualization.solara_viz import SolaraViz, make_text
+from .model import WolfSheep
 from .agents import Sheep, Wolf, GrassPatch
 
 
