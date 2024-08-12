@@ -15,7 +15,7 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 
 ```
     # First, we clone the Mesa repo
-    $ git clone https://github.com/projectmesa/mesa.git
+    $ git clone https://github.com/projectmesa/mesa-examples.git
     $ cd mesa
     # Then we cd to the example directory
     $ cd examples/epstein_civil_violence_experimental
