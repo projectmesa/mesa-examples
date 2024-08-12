@@ -164,8 +164,8 @@ class AcoTspModel(mesa.Model):
 
     def __init__(
         self,
-        num_agents: int,
-        tsp_graph: TSPGraph,
+        num_agents: int = 20,
+        tsp_graph: TSPGraph = TSPGraph.from_random(20),
         max_steps: int = int(1e6),
         ant_alpha: float = 1.0,
         ant_beta: float = 5.0,
