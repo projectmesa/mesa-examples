@@ -1,12 +1,7 @@
-import sys
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
-
-# Add the mesa-examples-main directory to the Python path
-sys.path.append("mesa-examples\\examples\\epstein_civil_violence_experimental")
-
 from model import EpsteinCivilViolence
-from agent import Citizen, Cop, AgentState
+from .agent import Citizen, Cop, AgentState
 
 
 def agent_portrayal(agent):
