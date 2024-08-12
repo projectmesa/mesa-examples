@@ -6,9 +6,7 @@ This is an experimental implementation of the Wolf-Sheep Predation Model, which 
 
 ## Summary
 
-This model consists of three agent types: wolves, sheep, and grass patches. The wolves and sheep wander around the grid at random, expending energy as they move. Sheep eat fully grown grass to replenish energy, while wolves eat sheep if they occupy the same cell.
-
-Both species reproduce asexually with a certain probability if they have sufficient energy, splitting their energy with offspring. The grass regrows after a set time if enabled in the model. Agents die if their energy depletes.
+This model consists of three agent types: wolves, sheep, and grass patches. The wolves and sheep wander around the grid at random, expending energy as they move. Sheep eat fully grown grass to replenish energy, while wolves eat sheep if they occupy the same cell. Both species reproduce asexually with a certain probability if they have sufficient energy, splitting their energy with offspring. The grass regrows after a set time if enabled in the model. Agents die if their energy depletes.
 
 The model tests and demonstrates several Mesa concepts and features:
  - MultiGrid for spatial representation.
