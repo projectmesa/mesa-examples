@@ -10,7 +10,6 @@ Replication of the model found in NetLogo:
 """
 
 import mesa
-from mesa import Model
 from .agents import GrassPatch, Sheep, Wolf
 from .scheduler import RandomActivationByTypeFiltered
 
