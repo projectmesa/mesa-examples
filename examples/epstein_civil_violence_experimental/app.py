@@ -4,6 +4,7 @@ from mesa.visualization.modules import CanvasGrid
 from .model import EpsteinCivilViolence
 from .agents import Citizen, Cop, AgentState
 
+
 def agent_portrayal(agent):
     if isinstance(agent, Citizen):
         portrayal = {
@@ -22,11 +23,13 @@ def agent_portrayal(agent):
         }
     return portrayal
 
+
 def get_citizen_cop_ratio(model):
     citizen_count = sum(isinstance(agent, Citizen) for agent in model.schedule.agents)
     cop_count = sum(isinstance(agent, Cop) for agent in model.schedule.agents)
     ratio = citizen_count / cop_count if cop_count > 0 else float("inf")
     return f"Citizen/Cop Ratio: {ratio:.2f}"
+
 
 grid = CanvasGrid(agent_portrayal, 40, 40, 500, 500)
 
@@ -56,12 +59,14 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
+
 @solara.component
 def App():
     solara.Title("Epstein Civil Violence Model")
     solara.Markdown("# Epstein Civil Violence Model")
     solara.Markdown("This is a visualization of the Epstein Civil Violence Model.")
     page.show()
+
 
 if __name__ == "__main__":
     solara.run(App)
