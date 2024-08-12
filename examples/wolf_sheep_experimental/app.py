@@ -4,7 +4,6 @@ from mesa.visualization.modules import CanvasGrid
 from .model import WolfSheep
 from .agents import Sheep, Wolf, GrassPatch
 
-
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):
         portrayal = {
