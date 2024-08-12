@@ -4,17 +4,20 @@ This is an experimental implementation of the Wolf-Sheep Predation Model, which 
 
 ## Summary
 
-This model consists of three agent types: wolves, sheep, and grass. The wolves and the sheep wander around the grid at random. Wolves and sheep both expend energy moving around and replenish it by eating. Sheep eat grass, and wolves eat sheep if they end up on the same grid cell.
+## Summary
 
-If wolves and sheep have enough energy, they reproduce, creating a new wolf or sheep (in this simplified model, only one parent is needed for reproduction). The grass on each cell regrows at a constant rate. If any wolves and sheep run out of energy, they die.
+This model consists of three agent types: wolves, sheep, and grass patches. The wolves and sheep wander around the grid at random, expending energy as they move. Sheep eat fully grown grass to replenish energy, while wolves eat sheep if they occupy the same cell. 
+
+Both species reproduce asexually with a certain probability if they have sufficient energy, splitting their energy with offspring. The grass regrows after a set time if enabled in the model. Agents die if their energy depletes.
 
 The model tests and demonstrates several Mesa concepts and features:
- - MultiGrid
- - Multiple agent types (wolves, sheep, grass)
- - Overlay arbitrary text (wolf's energy) on agent's shapes while drawing on CanvasGrid
- - Agents inheriting a behavior (random movement) from an abstract parent
- - Writing a model composed of multiple files
- - Dynamically adding and removing agents from the schedule
+ - MultiGrid for spatial representation.
+ - Multiple agent types (wolves, sheep, grass patches).
+ - Agent portrayal with different shapes and colors.
+ - Agents inheriting behavior (random movement) from an abstract parent.
+ - Model composition using multiple files.
+ - Dynamic agent addition and removal from the schedule.
+ - Data collection and visualization using SolaraViz.
 
 ## Installation
 
@@ -36,7 +39,7 @@ You can run the batch model directly by executing the `app.py` file. e.g.
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
 
 ```
-    python app.py
+    solara run app.py
 ```
 
 ## Files
