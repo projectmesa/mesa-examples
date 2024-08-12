@@ -1,13 +1,7 @@
-import sys
 import time
 import solara
-from mesa.visualization.solara_viz import SolaraViz, make_text
-
-# Add the mesa-examples directory to the Python path
-sys.path.append("mesa-examples\\examples\\wolf_sheep_experimental")
-
-from model import WolfSheep
-from agents import Sheep, Wolf, GrassPatch
+from mesa.visualization.solara_viz import SolaraViz, make_textfrom model import WolfSheep
+from .agents import Sheep, Wolf, GrassPatch
 
 
 def agent_portrayal(agent):
