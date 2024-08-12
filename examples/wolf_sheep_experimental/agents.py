@@ -127,3 +127,9 @@ class Wolf(Animal):
 
                 # Kill the sheep
                 sheep_to_eat.die()
+
+    def remove(self):
+        if self.pos is not None:
+            self.model.grid.remove_agent(self)
+            with suppress(KeyError):
+                self.model.schedule.remove(self)
