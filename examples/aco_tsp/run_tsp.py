@@ -26,7 +26,7 @@ def main():
         results["best_distance"].append(model.best_distance)
         results["best_path"].append(model.best_path)
         print(
-            f"Episode={e+1}; Min. distance={model.best_distance}; pheromone_1_8={model.grid.G[17][15]['pheromone']}"
+            f"Episode={e + 1}; Min. distance={model.best_distance}; pheromone_1_8={model.grid.G[17][15]['pheromone']}"
         )
         if model.best_distance < best_distance:
             best_distance = model.best_distance
