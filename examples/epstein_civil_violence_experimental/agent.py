@@ -1,6 +1,5 @@
 import enum
 import math
-import mesa
 from mesa import Agent
 
 
