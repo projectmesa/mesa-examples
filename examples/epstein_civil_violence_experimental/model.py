@@ -1,34 +1,14 @@
+import sys
 from mesa import Model
+from mesa.time import RandomActivation
 from mesa.space import SingleGrid
-from .agent import Citizen, Cop
 
+# Add the mesa-examples-main directory to the Python path
+sys.path.append('mesa-examples\\examples\\epstein_civil_violence_experimental')
+
+from agent import Citizen, Cop
 
 class EpsteinCivilViolence(Model):
-    """
-    Model 1 from "Modeling civil violence: An agent-based computational
-    approach," by Joshua Epstein.
-    http://www.pnas.org/content/99/suppl_3/7243.full
-    Attributes:
-        height: grid height
-        width: grid width
-        citizen_density: approximate % of cells occupied by citizens.
-        cop_density: approximate % of cells occupied by cops.
-        citizen_vision: number of cells in each direction (N, S, E and W) that
-            citizen can inspect
-        cop_vision: number of cells in each direction (N, S, E and W) that cop
-            can inspect
-        legitimacy:  (L) citizens' perception of regime legitimacy, equal
-            across all citizens
-        max_jail_term: (J_max)
-        active_threshold: if (grievance - (risk_aversion * arrest_probability))
-            > threshold, citizen rebels
-        arrest_prob_constant: set to ensure agents make plausible arrest
-            probability estimates
-        movement: binary, whether agents try to move at step end
-        max_iters: model may not have a natural stopping point, so we set a
-            max.
-    """
-
     def __init__(
         self,
         width=40,
@@ -57,6 +37,7 @@ class EpsteinCivilViolence(Model):
         self.max_iters = max_iters
 
         self.grid = SingleGrid(self.width, self.height, torus=True)
+        self.schedule = RandomActivation(self)
 
         for _, pos in self.grid.coord_iter():
             if self.random.random() < self.cop_density:
@@ -82,8 +63,9 @@ class EpsteinCivilViolence(Model):
             else:
                 continue
             self.grid.place_agent(agent, pos)
+            self.schedule.add(agent)
 
-        self.active_agents = self.agents
+        self.active_agents = self.schedule.agents
 
     def step(self):
-        self.active_agents.shuffle(inplace=True).do("step")
+        self.schedule.step()
