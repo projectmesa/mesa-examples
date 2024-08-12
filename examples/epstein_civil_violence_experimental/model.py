@@ -1,12 +1,7 @@
-import sys
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import SingleGrid
-
-# Add the mesa-examples-main directory to the Python path
-sys.path.append("mesa-examples\\examples\\epstein_civil_violence_experimental")
-
-from agent import Citizen, Cop
+from .agent import Citizen, Cop
 
 
 class EpsteinCivilViolence(Model):
