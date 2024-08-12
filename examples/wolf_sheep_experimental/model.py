@@ -9,11 +9,11 @@ Replication of the model found in NetLogo:
     Northwestern University, Evanston, IL.
 """
 
-import mesa
 from mesa import Model
-from mesa.time import RandomActivation
-from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+from mesa.time import RandomActivation
+
 from .agents import GrassPatch, Sheep, Wolf
 
 

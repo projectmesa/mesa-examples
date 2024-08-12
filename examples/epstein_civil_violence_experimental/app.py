@@ -1,7 +1,8 @@
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
 from model import EpsteinCivilViolence
-from .agent import Citizen, Cop, AgentState
+
+from .agent import AgentState, Citizen, Cop
 
 
 def agent_portrayal(agent):
