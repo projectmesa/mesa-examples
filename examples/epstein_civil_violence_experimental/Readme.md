@@ -27,7 +27,7 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 You can run the batch model directly by executing the `app.py` file. as
 
 ```
-    python app.py
+    solara run app.py
 ```
 
 Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/)
