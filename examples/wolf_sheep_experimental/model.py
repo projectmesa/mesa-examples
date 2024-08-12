@@ -9,16 +9,12 @@ Replication of the model found in NetLogo:
     Northwestern University, Evanston, IL.
 """
 
-import sys
 import mesa
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
-
-sys.path.append("mesa-examples\\examples\\epstein_civil_violence_experimental")
-
-from agents import GrassPatch, Sheep, Wolf
+from .agents import GrassPatch, Sheep, Wolf
 
 
 class WolfSheep(Model):
