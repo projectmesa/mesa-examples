@@ -1,4 +1,4 @@
-from mesa
+import mesa
 from mesa.space import SingleGrid
 from mesa.time import RandomActivation
 from .agent import Citizen, Cop, AgentState
