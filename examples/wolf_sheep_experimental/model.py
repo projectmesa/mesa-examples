@@ -13,12 +13,13 @@ from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
 from mesa.time import RandomActivation
+from mesa.experimental.devs.simulator import ABMSimulator
 
 from .agents import GrassPatch, Sheep, Wolf
 
 
 class WolfSheep(Model):
-    """Wolf-Sheep Predation Model"""
+    """ Wolf-Sheep Predation Model """
 
     def __init__(
         self,
@@ -33,18 +34,6 @@ class WolfSheep(Model):
         grass_regrowth_time=30,
         sheep_gain_from_food=4,
     ):
-        """
-        Create a new Wolf-Sheep model with the given parameters.
-        Args:
-            initial_sheep: Number of sheep to start with
-            initial_wolves: Number of wolves to start with
-            sheep_reproduce: Probability of each sheep reproducing each step
-            wolf_reproduce: Probability of each wolf reproducing each step
-            wolf_gain_from_food: Energy a wolf gains from eating a sheep
-            grass: Whether to have the sheep eat grass for energy
-            grass_regrowth_time: How long it takes for a grass patch to regrow once it is eaten
-            sheep_gain_from_food: Energy sheep gain from grass, if enabled.
-        """
         super().__init__()
         self.width = width
         self.height = height
@@ -62,22 +51,24 @@ class WolfSheep(Model):
 
         self.datacollector = DataCollector(
             model_reporters={"Wolf/Sheep Ratio": get_wolf_sheep_ratio},
-            agent_reporters={"Energy": "energy"},
+            agent_reporters={"Energy": "energy"}
         )
 
+        self.simulator = ABMSimulator()
+        self.simulator.setup(self)
+
+        self._init_population()
+
+        self.running = True
+        self.datacollector.collect(self)
+
+    def _init_population(self):
         # Create sheep
         for i in range(self.initial_sheep):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(
-                self.next_id(),
-                self,
-                True,
-                energy,
-                self.sheep_reproduce,
-                self.sheep_gain_from_food,
-            )
+            sheep = Sheep(self.next_id(), self, True, energy, self.sheep_reproduce, self.sheep_gain_from_food)
             self.grid.place_agent(sheep, (x, y))
             self.schedule.add(sheep)
 
@@ -86,14 +77,7 @@ class WolfSheep(Model):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.wolf_gain_from_food)
-            wolf = Wolf(
-                self.next_id(),
-                self,
-                True,
-                energy,
-                self.wolf_reproduce,
-                self.wolf_gain_from_food,
-            )
+            wolf = Wolf(self.next_id(), self, True, energy, self.wolf_reproduce, self.wolf_gain_from_food)
             self.grid.place_agent(wolf, (x, y))
             self.schedule.add(wolf)
 
@@ -109,17 +93,12 @@ class WolfSheep(Model):
                 self.grid.place_agent(patch, (x, y))
                 self.schedule.add(patch)
 
-        self.running = True
-        self.datacollector.collect(self)
-
     def step(self):
         self.schedule.step()
         self.datacollector.collect(self)
 
     def run_model(self, step_count=200):
-        for _ in range(step_count):
-            self.step()
-
+        self.simulator.run_for(time_delta=step_count)
 
 def get_wolf_sheep_ratio(model):
     wolf_count = sum(isinstance(agent, Wolf) for agent in model.schedule.agents)
