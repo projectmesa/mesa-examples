@@ -31,6 +31,7 @@ class RandomWalker(mesa.Agent):
             # Now move:
             self.model.grid.move_agent(self, next_move)
 
+
 class GrassPatch(mesa.Agent):
     def __init__(self, unique_id, model, fully_grown, countdown):
         super().__init__(unique_id, model)
@@ -44,6 +45,7 @@ class GrassPatch(mesa.Agent):
                 self.countdown = self.model.grass_regrowth_time
             else:
                 self.countdown -= 1
+
 
 class Animal(RandomWalker):
     def __init__(self, unique_id, model, moore, energy, p_reproduce, energy_from_food):
@@ -92,6 +94,7 @@ class Animal(RandomWalker):
         elif self.random.random() < self.p_reproduce:
             self.spawn_offspring()
 
+
 class Sheep(Animal):
     """
     A sheep that walks around, reproduces (asexually) and gets eaten.
@@ -101,10 +104,13 @@ class Sheep(Animal):
         if self.pos is not None:
             # If there is grass available, eat it
             agents = self.model.grid.get_cell_list_contents([self.pos])
-            grass_patch = next((obj for obj in agents if isinstance(obj, GrassPatch)), None)
+            grass_patch = next(
+                (obj for obj in agents if isinstance(obj, GrassPatch)), None
+            )
             if grass_patch and grass_patch.fully_grown:
                 self.energy += self.energy_from_food
                 grass_patch.fully_grown = False
+
 
 class Wolf(Animal):
     """
