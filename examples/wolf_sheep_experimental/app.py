@@ -56,6 +56,7 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
+
 @solara.component
 def App():
     solara.Title("Wolf-Sheep Predation Model")
@@ -72,6 +73,7 @@ def App():
     """)
 
     page.show()
+
 
 if __name__ == "__main__":
     model = WolfSheep(25, 25, 60, 40, 0.2, 0.1, 20)
