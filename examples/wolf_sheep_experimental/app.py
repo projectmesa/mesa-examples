@@ -1,6 +1,7 @@
 import time
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
+from mesa.experimental.devs.simulator import ABMSimulator
 from .model import WolfSheep
 from .agents import Sheep, Wolf, GrassPatch
 
@@ -55,7 +56,6 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
-
 @solara.component
 def App():
     solara.Title("Wolf-Sheep Predation Model")
@@ -73,11 +73,11 @@ def App():
 
     page.show()
 
-
 if __name__ == "__main__":
     model = WolfSheep(25, 25, 60, 40, 0.2, 0.1, 20)
+    simulator = ABMSimulator()
+    simulator.setup(model)
     start_time = time.perf_counter()
-    for _ in range(100):
-        model.step()
+    simulator.run_for(time_delta=100)
     print("Time:", time.perf_counter() - start_time)
     App()
