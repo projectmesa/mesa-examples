@@ -16,6 +16,7 @@ The model tests and demonstrates several Mesa concepts and features:
  - Model composition using multiple files.
  - Dynamic agent addition and removal from the schedule.
  - Data collection and visualization using SolaraViz.
+ - Experimental feature: ABMSimulator
 
 ## Installation
 
