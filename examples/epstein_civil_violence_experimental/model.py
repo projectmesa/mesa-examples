@@ -1,11 +1,13 @@
+import random
+import uuid
 from mesa import Model
 from mesa.space import SingleGrid
 from mesa.time import RandomActivation
+from mesa.experimental.devs.simulator import ABMSimulator
+from .agent import Citizen, Cop, AgentState
 
-from .agent import Citizen, Cop
 
-
-class EpsteinCivilViolence(Model):
+class EpsteinCivilViolence(mesa.Model):
     def __init__(
         self,
         width=40,
@@ -61,6 +63,32 @@ class EpsteinCivilViolence(Model):
                 continue
             self.grid.place_agent(agent, pos)
             self.schedule.add(agent)
+
+        self.datacollector = mesa.DataCollector(
+            {"unhappy": "unhappy", "happy": "happy"}
+        )
+        self.datacollector.collect(self)
+
+        self.running = True
+
+    @property
+    def unhappy(self):
+        num_unhappy = 0
+        for agent in self.schedule.agents:
+            if isinstance(agent, Citizen) and agent.condition == AgentState.ACTIVE:
+                num_unhappy += 1
+        return num_unhappy
+
+    @property
+    def happy(self):
+        return len(self.schedule.agents) - self.unhappy
+
+    def step(self):
+        self.schedule.step()
+        self.datacollector.collect(self)
+
+        if not self.unhappy:
+            self.running = False
 
         self.active_agents = self.schedule.agents
 
