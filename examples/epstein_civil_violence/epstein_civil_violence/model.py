@@ -1,4 +1,5 @@
 import mesa
+from mesa.experimental import DataCollector
 
 from .agent import Citizen, Cop
 
@@ -61,23 +62,6 @@ class EpsteinCivilViolence(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
-        model_reporters = {
-            "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
-            "Active": lambda m: self.count_type_citizens(m, "Active"),
-            "Jailed": self.count_jailed,
-            "Cops": self.count_cops,
-        }
-        agent_reporters = {
-            "x": lambda a: a.pos[0],
-            "y": lambda a: a.pos[1],
-            "breed": lambda a: a.breed,
-            "jail_sentence": lambda a: getattr(a, "jail_sentence", None),
-            "condition": lambda a: getattr(a, "condition", None),
-            "arrest_probability": lambda a: getattr(a, "arrest_probability", None),
-        }
-        self.datacollector = mesa.DataCollector(
-            model_reporters=model_reporters, agent_reporters=agent_reporters
-        )
         unique_id = 0
         if self.cop_density + self.citizen_density > 1:
             raise ValueError("Cop density + citizen density must be less than 1")
@@ -102,8 +86,32 @@ class EpsteinCivilViolence(mesa.Model):
                 self.grid[x][y] = citizen
                 self.schedule.add(citizen)
 
-        self.running = True
-        self.datacollector.collect(self)
+        model_reporters = {
+            "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
+            "Active": lambda m: self.count_type_citizens(m, "Active"),
+            "Jailed": self.count_jailed,
+            "Cops": self.count_cops,
+        }
+        agent_reporters = {
+            "x": lambda agents: [pos[0] for pos in agents.get("pos")],
+            "y": lambda agents: [pos[1] for pos in agents.get("pos")],
+            "breed": "breed",
+        }
+        self.citizens = self.get_agents_of_type(Citizen)
+        self.datacollector = DataCollector(
+            self,
+            {
+                "model": model_reporters,
+                "agents": agent_reporters,
+                "citizens": {
+                    "jail_sentence": "jail_sentence",
+                    "condition": "condition",
+                    "arrest_probability": "arrest_probability",
+                },
+            },
+        )
+
+        self.datacollector.collect()
 
     def step(self):
         """
@@ -111,7 +119,7 @@ class EpsteinCivilViolence(mesa.Model):
         """
         self.schedule.step()
         # collect data
-        self.datacollector.collect(self)
+        self.datacollector.collect()
         self.iteration += 1
         if self.iteration > self.max_iters:
             self.running = False
