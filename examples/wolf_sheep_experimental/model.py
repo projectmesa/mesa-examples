@@ -19,7 +19,7 @@ from .agents import GrassPatch, Sheep, Wolf
 
 
 class WolfSheep(Model):
-    """ Wolf-Sheep Predation Model """
+    """Wolf-Sheep Predation Model"""
 
     def __init__(
         self,
@@ -51,7 +51,7 @@ class WolfSheep(Model):
 
         self.datacollector = DataCollector(
             model_reporters={"Wolf/Sheep Ratio": get_wolf_sheep_ratio},
-            agent_reporters={"Energy": "energy"}
+            agent_reporters={"Energy": "energy"},
         )
 
         self.simulator = ABMSimulator()
@@ -68,7 +68,14 @@ class WolfSheep(Model):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(self.next_id(), self, True, energy, self.sheep_reproduce, self.sheep_gain_from_food)
+            sheep = Sheep(
+                self.next_id(),
+                self,
+                True,
+                energy,
+                self.sheep_reproduce,
+                self.sheep_gain_from_food,
+            )
             self.grid.place_agent(sheep, (x, y))
             self.schedule.add(sheep)
 
@@ -77,7 +84,14 @@ class WolfSheep(Model):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.wolf_gain_from_food)
-            wolf = Wolf(self.next_id(), self, True, energy, self.wolf_reproduce, self.wolf_gain_from_food)
+            wolf = Wolf(
+                self.next_id(),
+                self,
+                True,
+                energy,
+                self.wolf_reproduce,
+                self.wolf_gain_from_food,
+            )
             self.grid.place_agent(wolf, (x, y))
             self.schedule.add(wolf)
 
@@ -99,6 +113,7 @@ class WolfSheep(Model):
 
     def run_model(self, step_count=200):
         self.simulator.run_for(time_delta=step_count)
+
 
 def get_wolf_sheep_ratio(model):
     wolf_count = sum(isinstance(agent, Wolf) for agent in model.schedule.agents)
