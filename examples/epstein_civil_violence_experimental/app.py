@@ -1,7 +1,7 @@
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
+from mesa.experimental.devs.simulator import ABMSimulator
 from model import EpsteinCivilViolence
-
 from .agent import AgentState, Citizen, Cop
 
 
@@ -23,7 +23,6 @@ def agent_portrayal(agent):
         "size": 50,
     }
 
-
 def get_citizen_cop_ratio(model):
     if model.schedule is None:
         return "Citizen/Cop Ratio: N/A"
@@ -31,7 +30,6 @@ def get_citizen_cop_ratio(model):
     cop_count = sum(isinstance(agent, Cop) for agent in model.schedule.agents)
     ratio = citizen_count / cop_count if cop_count > 0 else float("inf")
     return f"Citizen/Cop Ratio: {ratio:.2f}"
-
 
 # Define the SolaraViz visualization
 page = SolaraViz(
@@ -57,13 +55,13 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
-
 @solara.component
 def App():
     solara.Title("Epstein Civil Violence Model")
     solara.Markdown("# Epstein Civil Violence Model")
     solara.Markdown("This is a visualization of the Epstein Civil Violence Model.")
-
+    
+    # Add color legend
     solara.Markdown("""
     ## Color Legend
     - Blue: Quiescent Citizens
@@ -74,6 +72,9 @@ def App():
 
     page.show()
 
-
 if __name__ == "__main__":
+    model = EpsteinCivilViolence(seed=15)
+    simulator = ABMSimulator()
+    simulator.setup(model)
+    simulator.run_for(time_delta=100)  
     App()
