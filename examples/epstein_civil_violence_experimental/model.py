@@ -1,9 +1,6 @@
-import random
-import uuid
-from mesa import Model
+from mesa
 from mesa.space import SingleGrid
 from mesa.time import RandomActivation
-from mesa.experimental.devs.simulator import ABMSimulator
 from .agent import Citizen, Cop, AgentState
 
 
