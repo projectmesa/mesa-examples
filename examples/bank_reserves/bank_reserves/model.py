@@ -1,17 +1,10 @@
-import sys
 import mesa
-import numpy as np
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import SingleGrid
 from mesa.experimental.devs.simulator import ABMSimulator
 
-# Add the mesa-examples-main directory to the Python path
-sys.path.append(
-    "E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\bank_reserves\\bank_reserves"
-)
-
-from agents import Bank, Person
+from .agents import Bank, Person
 
 # Start of datacollector functions
 
