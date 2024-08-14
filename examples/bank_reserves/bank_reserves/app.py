@@ -1,15 +1,8 @@
-import sys
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
 from mesa.experimental.devs.simulator import ABMSimulator
-
-# Add the mesa-examples-main directory to the Python path
-sys.path.append(
-    "E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\bank_reserves\\bank_reserves"
-)
-
-from model import BankReserves
-from agents import Person, Bank
+from .model import BankReserves
+from .agents import Person, Bank
 
 
 def agent_portrayal(agent):
