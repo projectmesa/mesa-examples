@@ -1,19 +1,42 @@
-"""
-The following code was adapted from the Bank Reserves model included in Netlogo
-Model information can be found at:
-http://ccl.northwestern.edu/netlogo/models/BankReserves
-Accessed on: November 2, 2017
-Author of NetLogo code:
-    Wilensky, U. (1998). NetLogo Bank Reserves model.
-    http://ccl.northwestern.edu/netlogo/models/BankReserves.
-    Center for Connected Learning and Computer-Based Modeling,
-    Northwestern University, Evanston, IL.
-"""
-
 import mesa
 
-from .random_walk import RandomWalker
+class RandomWalker(mesa.Agent):
+    """
+    Class implementing random walker methods in a generalized manner.
+    Not intended to be used on its own, but to inherit its methods to multiple
+    other agents.
+    """
 
+    grid = None
+    x = None
+    y = None
+    # use a Moore neighborhood
+    moore = True
+
+    def __init__(self, unique_id, pos, model, moore=True):
+        """
+        grid: The MultiGrid object in which the agent lives.
+        x: The agent's current x coordinate
+        y: The agent's current y coordinate
+        moore: If True, may move in all 8 directions.
+                Otherwise, only up, down, left, right.
+        """
+        super().__init__(unique_id, model)
+        self.pos = pos
+        self.moore = moore
+
+    def random_move(self):
+        """
+        Step one cell in any allowable direction.
+        """
+        # Pick the next cell from the adjacent cells.
+        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
+        # Filter out occupied cells
+        empty_moves = [move for move in next_moves if self.model.grid.is_cell_empty(move)]
+        if empty_moves:
+            next_move = self.random.choice(empty_moves)
+            # Now move:
+            self.model.grid.move_agent(self, next_move)
 
 class Bank(mesa.Agent):
     def __init__(self, unique_id, model, reserve_percent=50):
@@ -39,12 +62,11 @@ class Bank(mesa.Agent):
         self.reserves = (self.reserve_percent / 100) * self.deposits
         self.bank_to_loan = self.deposits - (self.reserves + self.bank_loans)
 
-
 # subclass of RandomWalker, which is subclass to Mesa Agent
 class Person(RandomWalker):
-    def __init__(self, unique_id, model, moore, bank, rich_threshold):
+    def __init__(self, unique_id, pos, model, moore, bank, rich_threshold):
         # init parent class with required parameters
-        super().__init__(unique_id, model, moore=moore)
+        super().__init__(unique_id, pos, model, moore=moore)
         # the amount each person has in savings
         self.savings = 0
         # total loan amount person has outstanding
@@ -168,7 +190,7 @@ class Person(RandomWalker):
         outstanding loans"""
         self.loans += amount
         self.wallet += amount
-        # decresae the amount the bank can loan right now
+        # decrease the amount the bank can loan right now
         self.bank.bank_to_loan -= amount
         # increase the bank's outstanding loans
         self.bank.bank_loans += amount
