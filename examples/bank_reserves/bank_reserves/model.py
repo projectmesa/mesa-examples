@@ -7,43 +7,60 @@ from mesa.space import SingleGrid
 from mesa.experimental.devs.simulator import ABMSimulator
 
 # Add the mesa-examples-main directory to the Python path
-sys.path.append('E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\bank_reserves\\bank_reserves')
+sys.path.append(
+    "E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\bank_reserves\\bank_reserves"
+)
 
 from agents import Bank, Person
 
 # Start of datacollector functions
 
+
 def get_num_rich_agents(model):
     """return number of rich agents"""
-    rich_agents = [a for a in model.schedule.agents if isinstance(a, Person) and a.savings > model.rich_threshold]
+    rich_agents = [
+        a
+        for a in model.schedule.agents
+        if isinstance(a, Person) and a.savings > model.rich_threshold
+    ]
     return len(rich_agents)
+
 
 def get_num_poor_agents(model):
     """return number of poor agents"""
-    poor_agents = [a for a in model.schedule.agents if isinstance(a, Person) and a.loans > 10]
+    poor_agents = [
+        a for a in model.schedule.agents if isinstance(a, Person) and a.loans > 10
+    ]
     return len(poor_agents)
+
 
 def get_num_mid_agents(model):
     """return number of middle class agents"""
     mid_agents = [
-        a for a in model.schedule.agents
+        a
+        for a in model.schedule.agents
         if isinstance(a, Person) and a.loans <= 10 and a.savings <= model.rich_threshold
     ]
     return len(mid_agents)
+
 
 def get_total_savings(model):
     """sum of all agents' savings"""
     return sum(a.savings for a in model.schedule.agents if isinstance(a, Person))
 
+
 def get_total_wallets(model):
     """sum of amounts of all agents' wallets"""
     return sum(a.wallet for a in model.schedule.agents if isinstance(a, Person))
 
+
 def get_total_money(model):
     return get_total_wallets(model) + get_total_savings(model)
 
+
 def get_total_loans(model):
     return sum(a.loans for a in model.schedule.agents if isinstance(a, Person))
+
 
 class BankReserves(mesa.Model):
     grid_h = 20
@@ -78,7 +95,11 @@ class BankReserves(mesa.Model):
                 "Money": get_total_money,
                 "Loans": get_total_loans,
             },
-            agent_reporters={"Wealth": lambda x: getattr(x, "wealth", None) if isinstance(x, Person) else None},
+            agent_reporters={
+                "Wealth": lambda x: getattr(x, "wealth", None)
+                if isinstance(x, Person)
+                else None
+            },
         )
 
         # Create the bank and place it on the grid
@@ -86,7 +107,7 @@ class BankReserves(mesa.Model):
         self.bank = Bank(1, self, self.reserve_percent)
         self.grid.place_agent(self.bank, bank_pos)
         # Note: We're not adding the bank to the schedule anymore
-        
+
         # Create people
         for i in range(self.init_people):
             self.create_person(i + 2)
@@ -102,7 +123,7 @@ class BankReserves(mesa.Model):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             pos = (x, y)
-        
+
         person = Person(unique_id, pos, self, True, self.bank, self.rich_threshold)
         self.grid.remove_agent(person)
         self.grid.place_agent(person, pos)

@@ -1,5 +1,6 @@
 import mesa
 
+
 class RandomWalker(mesa.Agent):
     """
     Class implementing random walker methods in a generalized manner.
@@ -32,11 +33,14 @@ class RandomWalker(mesa.Agent):
         # Pick the next cell from the adjacent cells.
         next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
         # Filter out occupied cells
-        empty_moves = [move for move in next_moves if self.model.grid.is_cell_empty(move)]
+        empty_moves = [
+            move for move in next_moves if self.model.grid.is_cell_empty(move)
+        ]
         if empty_moves:
             next_move = self.random.choice(empty_moves)
             # Now move:
             self.model.grid.move_agent(self, next_move)
+
 
 class Bank(mesa.Agent):
     def __init__(self, unique_id, model, reserve_percent=50):
@@ -61,6 +65,7 @@ class Bank(mesa.Agent):
     def bank_balance(self):
         self.reserves = (self.reserve_percent / 100) * self.deposits
         self.bank_to_loan = self.deposits - (self.reserves + self.bank_loans)
+
 
 # subclass of RandomWalker, which is subclass to Mesa Agent
 class Person(RandomWalker):
