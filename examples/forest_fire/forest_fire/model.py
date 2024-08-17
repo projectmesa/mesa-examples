@@ -61,7 +61,7 @@ class ForestFire(mesa.Model):
         Helper method to count trees in a given condition in a given model.
         """
         count = 0
-        for tree in model.schedule.agents:
+        for tree in model.agents:
             if tree.condition == tree_condition:
                 count += 1
         return count
