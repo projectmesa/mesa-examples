@@ -10,15 +10,12 @@ Author of NetLogo code:
     Northwestern University, Evanston, IL.
 """
 
-import mesa
-
 from .random_walk import RandomWalker
 
 
-class Bank(mesa.Agent):
-    def __init__(self, unique_id, model, reserve_percent=50):
-        # initialize the parent class with required parameters
-        super().__init__(unique_id, model)
+class Bank:
+    def __init__(self, model, reserve_percent=50):
+        self.model = model
         # for tracking total value of loans outstanding
         self.bank_loans = 0
         """percent of deposits the bank must keep in reserves - this is set via

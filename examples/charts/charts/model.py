@@ -119,7 +119,7 @@ class Charts(mesa.Model):
         )
 
         # create a single bank for the model
-        self.bank = Bank(1, self, self.reserve_percent)
+        self.bank = Bank(self, self.reserve_percent)
 
         # create people for the model according to number of people set by user
         for i in range(self.init_people):
