@@ -14,7 +14,7 @@ class ShapeExample(mesa.Model):
         self.N = N  # num of agents
         self.headings = ((1, 0), (0, 1), (-1, 0), (0, -1))  # tuples are fast
         self.grid = mesa.space.SingleGrid(width, height, torus=False)
-        self.schedule = mesa.time.RandomActivation(self)
+
         self.make_walker_agents()
         self.running = True
 
@@ -36,4 +36,4 @@ class ShapeExample(mesa.Model):
                 unique_id += 1
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle().do("step")
