@@ -1,7 +1,7 @@
 
 
 # GIS-Based Traffic Simulation with Mesa
-![bangalore_traffic_congestion](https://github.com/user-attachments/assets/861218c2-3bc0-4f74-a2a7-41eb892a9e61)
+
 
 
 ## Overview
@@ -35,6 +35,11 @@ By developing and refining this traffic simulation project, we aim to deliver mo
 - **OSMnx Integration**: Utilizes OSMnx to extract and visualize road networks from OpenStreetMap.
 - **Animated Visualization**: Generates an animated GIF showing traffic patterns and vehicle movements.
 - **Dynamic Visualization**: Updates the visualization in real-time to reflect vehicle positions on the map.
+
+## Mesa is Playing a Main Role in This Model
+Mesa provides a straightforward and efficient framework to create, manage, and simulate the movement of vehicles on a road network. It allows for the simple creation of agents (vehicles) that follow predefined paths, interact within a given space, and produce simulation results without unnecessary complexity.
+
+**Mesa** is used because it enables you to build a functional and effective traffic simulation without overcomplicating the model. Its integration with other libraries like **OSMnx** and **NetworkX** ensures that the model remains easy to understand and maintain, focusing on delivering practical insights rather than adding complexity.
 
 ## Requirements
 
