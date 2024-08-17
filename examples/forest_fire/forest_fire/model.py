@@ -38,7 +38,6 @@ class ForestFire(mesa.Model):
                 if x == 0:
                     new_tree.condition = "On Fire"
                 self.grid.place_agent(new_tree, (x, y))
-                self.schedule.add(new_tree)
 
         self.running = True
         self.datacollector.collect(self)

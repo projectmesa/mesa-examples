@@ -30,7 +30,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(i, self)
-            self.schedule.add(a)
+
             # Add the agent to a random node
             self.grid.place_agent(a, list_of_random_nodes[i])
 

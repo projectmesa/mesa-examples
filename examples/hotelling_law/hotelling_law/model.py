@@ -188,7 +188,7 @@ class HotellingModel(Model):
                 mobile_agents_assigned += 1
 
             agent = StoreAgent(unique_id, self, can_move=can_move, strategy=strategy)
-            self.schedule.add(agent)
+
             self.store_agents.add(agent)
 
             # Randomly place agents on the grid for a grid environment.
@@ -200,7 +200,7 @@ class HotellingModel(Model):
         for i in range(self.num_consumers):
             # Ensure unique ID across all agents
             consumer = ConsumerAgent(self.num_agents + i, self)
-            self.schedule.add(consumer)
+
             self.consumer_agents.add(consumer)
             # Place consumer randomly on the grid
             x = self.random.randrange(self.grid.width)

@@ -21,7 +21,6 @@ class HexSnowflake(mesa.Model):
         for contents, pos in self.grid.coord_iter():
             cell = Cell(pos, self)
             self.grid.place_agent(cell, pos)
-            self.schedule.add(cell)
 
         # activate the center(ish) cell.
         centerishCell = self.grid[width // 2][height // 2]

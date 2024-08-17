@@ -160,8 +160,6 @@ class BankReservesModel(mesa.Model):
             p = Person(i, (x, y), self, True, self.bank, self.rich_threshold)
             # place the Person object on the grid at coordinates (x, y)
             self.grid.place_agent(p, (x, y))
-            # add the Person object to the model schedule
-            self.schedule.add(p)
 
         self.running = True
 
