@@ -53,13 +53,13 @@ By developing and refining this traffic simulation project, we aim to deliver mo
 
    Execute the script to run the traffic simulation and generate the animated GIF:
 
-   
+
 
 3. **View the Results**
 
    The resulting animated GIF will be saved in the `Data` directory. You can view it directly from your file explorer or display it within a Jupyter Notebook using:
 
-  
+
 
 ## Code Overview
 
@@ -75,7 +75,7 @@ The project can be extended to address the following aspects:
 - **Advanced Traffic Management**: Incorporate real-time traffic data and predictive analytics for dynamic traffic management.
 - **Integration with Smart City Solutions**: Connect with IoT sensors and smart traffic lights for a more integrated approach.
 - **Scenario Testing**: Simulate various scenarios such as road closures, construction, or major events to evaluate their impact on traffic.
-  
+
 ## Acknowledgments
 
 - **OSMnx**: For providing easy access to OpenStreetMap data.
