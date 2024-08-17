@@ -43,22 +43,7 @@ By developing and refining this traffic simulation project, we aim to deliver mo
 - **Mesa**: `pip install mesa`
 - **PIL**: `pip install pillow`
 
-## Setup
 
-1. **Clone the Repository**
-
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
-
-2. **Install Dependencies**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Usage
 
 1. **Update Bounding Box Coordinates**
 
@@ -68,18 +53,13 @@ By developing and refining this traffic simulation project, we aim to deliver mo
 
    Execute the script to run the traffic simulation and generate the animated GIF:
 
-    ```bash
-    python traffic_simulation.py
-    ```
+   
 
 3. **View the Results**
 
    The resulting animated GIF will be saved in the `Data` directory. You can view it directly from your file explorer or display it within a Jupyter Notebook using:
 
-    ```python
-    from IPython.display import Image as IPImage, display
-    display(IPImage(filename='Data/bangalore_traffic_congestion.gif'))
-    ```
+  
 
 ## Code Overview
 
@@ -95,19 +75,9 @@ The project can be extended to address the following aspects:
 - **Advanced Traffic Management**: Incorporate real-time traffic data and predictive analytics for dynamic traffic management.
 - **Integration with Smart City Solutions**: Connect with IoT sensors and smart traffic lights for a more integrated approach.
 - **Scenario Testing**: Simulate various scenarios such as road closures, construction, or major events to evaluate their impact on traffic.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
+  
 ## Acknowledgments
 
 - **OSMnx**: For providing easy access to OpenStreetMap data.
 - **Mesa**: For the agent-based modeling framework.
 - **Folium**: For interactive map visualizations.
-
-For any questions or issues, please open an issue on the [GitHub repository](<repository-url>).
-
----
-
-Feel free to modify or expand upon this README based on any additional details or specific requirements of your project.
