@@ -94,8 +94,6 @@ class HotellingModel(Model):
         self.consumer_preferences = consumer_preferences
         # Type of environment ('grid' or 'line').
         self.environment_type = environment_type
-        # Scheduler to activate agents one at a time, in random order.
-        self.schedule = RandomActivation(self)
         # Initialize AgentSets for store and consumer agents
         self.store_agents = AgentSet([], self)
         self.consumer_agents = AgentSet([], self)
@@ -218,8 +216,8 @@ class HotellingModel(Model):
         """Advance the model by one step."""
         # Collect data for the current step.
         self.datacollector.collect(self)
-        # Activate the next agent in the schedule.
-        self.schedule.step()
+        # Activate all agents in random order
+        self.agents.shuffle().do("step")
         # Update market dynamics based on the latest actions
         self.recalculate_market_share()
 
