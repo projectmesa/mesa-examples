@@ -5,7 +5,6 @@ from mesa import Model
 from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
-from mesa.time import RandomActivation
 
 from .agents import ConsumerAgent, StoreAgent
 

@@ -38,5 +38,5 @@ class ElFarolBar(mesa.Model):
         # We ensure that the length of history is constant
         # after each step.
         self.history.pop(0)
-        self.history.append(self.update_attendance())
+        self.history.append(self.attendance)
         self.agents.shuffle().do("update_strategies")
