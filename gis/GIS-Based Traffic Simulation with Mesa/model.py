@@ -4,6 +4,7 @@ import random
 import osmnx as ox
 from agent import VehicleAgent
 
+
 class TrafficGeoSpace(mesa.space.ContinuousSpace):
     def __init__(self, G, min_x, min_y, max_x, max_y, crs="EPSG:3857"):
         x_max = max_x - min_x
