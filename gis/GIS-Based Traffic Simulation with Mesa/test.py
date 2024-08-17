@@ -1,10 +1,11 @@
-import os
-import osmnx as ox
-import networkx as nx
-import folium
 import io
-from PIL import Image
+import os
+
+import folium
+import networkx as nx
+import osmnx as ox
 from model import TrafficModel, VehicleAgent
+from PIL import Image
 
 # Bounding box coordinates for Bangalore
 north, south, east, west = 12.976, 12.961, 77.599, 77.579

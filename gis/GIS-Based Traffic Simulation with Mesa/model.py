@@ -1,6 +1,7 @@
+import random
+
 import mesa
 import networkx as nx
-import random
 import osmnx as ox
 from agent import VehicleAgent
 
