@@ -31,7 +31,7 @@ class ShapeExample(mesa.Model):
             if self.grid.is_cell_empty(pos):
                 print(f"Creating agent {unique_id} at ({x}, {y})")
                 a = Walker(unique_id, self, heading)
-                self.schedule.add(a)
+
                 self.grid.place_agent(a, pos)
                 unique_id += 1
 

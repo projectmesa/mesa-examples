@@ -53,7 +53,6 @@ class SugarscapeCg(mesa.Model):
             sugar = Sugar(agent_id, self, max_sugar)
             agent_id += 1
             self.grid.place_agent(sugar, (x, y))
-            self.schedule.add(sugar)
 
         # Create agent:
         for i in range(self.initial_population):
@@ -65,7 +64,6 @@ class SugarscapeCg(mesa.Model):
             ssa = SsAgent(agent_id, self, False, sugar, metabolism, vision)
             agent_id += 1
             self.grid.place_agent(ssa, (x, y))
-            self.schedule.add(ssa)
 
         self.running = True
         self.datacollector.collect(self)

@@ -84,7 +84,6 @@ class ColorPatches(mesa.Model):
                 (row, col), self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
             )
             self._grid.place_agent(cell, (row, col))
-            self.schedule.add(cell)
 
         self.running = True
 
