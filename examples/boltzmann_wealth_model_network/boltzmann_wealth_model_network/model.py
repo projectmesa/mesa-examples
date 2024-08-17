@@ -19,7 +19,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
         self.grid = mesa.space.NetworkGrid(self.G)
-        self.schedule = mesa.time.RandomActivation(self)
+
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},
             agent_reporters={"Wealth": lambda _: _.wealth},
@@ -38,7 +38,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.datacollector.collect(self)
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle().do("step")
         # collect data
         self.datacollector.collect(self)
 

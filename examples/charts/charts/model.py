@@ -99,7 +99,7 @@ class Charts(mesa.Model):
         self.height = height
         self.width = width
         self.init_people = init_people
-        self.schedule = mesa.time.RandomActivation(self)
+
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         # rich_threshold is the amount of savings a person needs to be considered "rich"
         self.rich_threshold = rich_threshold
@@ -137,7 +137,7 @@ class Charts(mesa.Model):
 
     def step(self):
         # tell all the agents in the model to run their step function
-        self.schedule.step()
+        self.agents.shuffle().do("step")
         # collect data
         self.datacollector.collect(self)
 
