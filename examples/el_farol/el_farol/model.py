@@ -34,10 +34,9 @@ class ElFarolBar(mesa.Model):
     def step(self):
         self.datacollector.collect(self)
         self.attendance = 0
-        self.agents.shuffle.do("step")
+        self.agents.shuffle().do("update_attendance")
         # We ensure that the length of history is constant
         # after each step.
         self.history.pop(0)
-        self.history.append(self.attendance)
-        for agent in self.schedule.agents:
-            agent.update_strategies()
+        self.history.append(self.update_attendance())
+        self.agents.shuffle().do("update_strategies")

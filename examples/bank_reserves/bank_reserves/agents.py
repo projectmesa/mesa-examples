@@ -173,7 +173,6 @@ class Person(RandomWalker):
         # increase the bank's outstanding loans
         self.bank.bank_loans += amount
 
-    # step is called for each agent in model.BankReservesModel.schedule.step()
     def step(self):
         # move to a cell in my Moore neighborhood
         self.random_move()
