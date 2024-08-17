@@ -1,6 +1,8 @@
 
 
 # GIS-Based Traffic Simulation with Mesa
+![bangalore_traffic_congestion](https://github.com/user-attachments/assets/861218c2-3bc0-4f74-a2a7-41eb892a9e61)
+
 
 ## Overview
 
