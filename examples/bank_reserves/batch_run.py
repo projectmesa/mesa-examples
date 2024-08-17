@@ -37,7 +37,7 @@ from bank_reserves.agents import Bank, Person
 def get_num_rich_agents(model):
     """list of rich agents"""
 
-    rich_agents = [a for a in model.schedule.agents if a.savings > model.rich_threshold]
+    rich_agents = [a for a in model.agents if a.savings > model.rich_threshold]
     # return number of rich agents
     return len(rich_agents)
 
@@ -45,7 +45,7 @@ def get_num_rich_agents(model):
 def get_num_poor_agents(model):
     """list of poor agents"""
 
-    poor_agents = [a for a in model.schedule.agents if a.loans > 10]
+    poor_agents = [a for a in model.agents if a.loans > 10]
     # return number of poor agents
     return len(poor_agents)
 
@@ -54,9 +54,7 @@ def get_num_mid_agents(model):
     """list of middle class agents"""
 
     mid_agents = [
-        a
-        for a in model.schedule.agents
-        if a.loans < 10 and a.savings < model.rich_threshold
+        a for a in model.agents if a.loans < 10 and a.savings < model.rich_threshold
     ]
     # return number of middle class agents
     return len(mid_agents)
@@ -65,7 +63,7 @@ def get_num_mid_agents(model):
 def get_total_savings(model):
     """list of amounts of all agents' savings"""
 
-    agent_savings = [a.savings for a in model.schedule.agents]
+    agent_savings = [a.savings for a in model.agents]
     # return the sum of agents' savings
     return np.sum(agent_savings)
 
@@ -73,7 +71,7 @@ def get_total_savings(model):
 def get_total_wallets(model):
     """list of amounts of all agents' wallets"""
 
-    agent_wallets = [a.wallet for a in model.schedule.agents]
+    agent_wallets = [a.wallet for a in model.agents]
     # return the sum of all agents' wallets
     return np.sum(agent_wallets)
 
@@ -91,7 +89,7 @@ def get_total_money(model):
 def get_total_loans(model):
     """list of amounts of all agents' loans"""
 
-    agent_loans = [a.loans for a in model.schedule.agents]
+    agent_loans = [a.loans for a in model.agents]
     # return sum of all agents' loans
     return np.sum(agent_loans)
 
