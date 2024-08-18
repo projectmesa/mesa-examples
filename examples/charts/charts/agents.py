@@ -14,6 +14,12 @@ from .random_walk import RandomWalker
 
 
 class Bank:
+    """Note that the Bank class is not a Mesa Agent, but just a regular Python
+    class. This is because there is only one bank in this model, and it does not
+    use any Mesa-specific features like the scheduler or the grid, and doesn't
+    have a step method. It is just used to keep track of the bank's reserves and
+    the amount it can loan out, for Person agents to interact with."""
+
     def __init__(self, model, reserve_percent=50):
         self.model = model
         # for tracking total value of loans outstanding
