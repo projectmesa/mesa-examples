@@ -1,4 +1,4 @@
-from mesa.visualization.solara_viz.py import Slider, SolaraViz, make_text
+from mesa.visualization.solara_viz import Slider, SolaraViz, make_text
 from model import Schelling
 
 
