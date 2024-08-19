@@ -8,11 +8,13 @@ from model import TrafficModel, VehicleAgent
 from PIL import Image
 
 # Bounding box coordinates for Bangalore
+# Note that OSMnx 2.0 uses (north, south, east, west) order, so OSMnx < 2 is required (tested on 1.9.4)
+# See https://github.com/gboeing/osmnx/pull/1196
 north, south, east, west = 12.976, 12.961, 77.599, 77.579
 bbox = (north, south, east, west)
 
 # Create a graph from the bounding box using the bbox parameter
-G = ox.graph_from_bbox(north, south, east, west, network_type="drive")
+G = ox.graph_from_bbox(bbox=bbox, network_type="drive")
 
 # Extract graph bounds for the TrafficGeoSpace
 min_x = min(nx.get_node_attributes(G, "x").values())
