@@ -8,8 +8,8 @@ from .agent import GrassPatch, Sheep, Wolf
 
 
 def get_wolf_sheep_ratio(model):
-    wolf_count = sum(isinstance(agent, Wolf) for agent in self.schedule.agents)
-    sheep_count = sum(isinstance(agent, Sheep) for agent in self.schedule.agents)
+    wolf_count = sum(isinstance(agent, Wolf) for agent in model.schedule.agents)
+    sheep_count = sum(isinstance(agent, Sheep) for agent in model.schedule.agents)
     ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
     return ratio
 
