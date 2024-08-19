@@ -1,3 +1,4 @@
+import mesa
 import random
 import numpy as np
 from mesa import Model
@@ -6,8 +7,11 @@ from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 from .agent import AgentState, Citizen, Cop
 
+
 def compute_gini(model):
-    agent_hardships = [agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)]
+    agent_hardships = [
+        agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)
+    ]
     if len(agent_hardships) == 0:
         return 0
     sorted_hardships = sorted(agent_hardships)
@@ -16,7 +20,12 @@ def compute_gini(model):
     B = sum(cumulative_hardship) / (N * cumulative_hardship[-1])
     return 1 + (1 / N) - 2 * B
 
+<<<<<<< HEAD
 class EpsteinCivilViolence(Model):
+=======
+
+class EpsteinCivilViolence(mesa.Model):
+>>>>>>> 16952af217121a75efed5031713c3a39645fad49
     def __init__(
         self,
         width=40,
@@ -56,13 +65,19 @@ class EpsteinCivilViolence(Model):
 
         self.datacollector = DataCollector(
             model_reporters={"Gini": compute_gini},
-            agent_reporters={"Hardship": "hardship"}
+            agent_reporters={"Hardship": "hardship"},
         )
 
         unique_id = 0
         for contents, (x, y) in self.grid.coord_iter():
             if self.random.random() < self.cop_density:
-                cop = Cop(unique_id, self, vision=self.cop_vision, movement=self.movement, max_jail_term=self.max_jail_term)
+                cop = Cop(
+                    unique_id,
+                    self,
+                    vision=self.cop_vision,
+                    movement=self.movement,
+                    max_jail_term=self.max_jail_term,
+                )
                 unique_id += 1
                 self.grid.place_agent(cop, (x, y))
                 self.schedule.add(cop)
