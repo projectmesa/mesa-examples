@@ -1,4 +1,3 @@
-import mesa
 import random
 import numpy as np
 from mesa import Model
