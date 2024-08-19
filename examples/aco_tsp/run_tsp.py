@@ -26,16 +26,16 @@ def main():
         results["best_distance"].append(model.best_distance)
         results["best_path"].append(model.best_path)
         print(
-            f"Episode={e + 1}; Min. distance={model.best_distance}; pheromone_1_8={model.grid.G[17][15]['pheromone']}"
+            f"Episode={e + 1}; Min. distance={model.best_distance:.2f}; pheromone_1_8={model.grid.G[17][15]['pheromone']:.4f}"
         )
         if model.best_distance < best_distance:
             best_distance = model.best_distance
             best_path = model.best_path
-            print(f"New best distance:  distance={best_distance}")
+            print(f"New best distance:  distance={best_distance:.2f}")
 
-    print(f"Best distance: {best_distance}")
+    print(f"Best distance: {best_distance:.2f}")
     print(f"Best path: {best_path}")
-    print(model.datacollector.get_model_vars_dataframe())
+    # print(model.datacollector.get_model_vars_dataframe())
 
     _, ax = plt.subplots()
     ax.plot(results["best_distance"])

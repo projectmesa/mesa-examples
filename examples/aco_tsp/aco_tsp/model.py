@@ -191,6 +191,8 @@ class AcoTspModel(mesa.Model):
         self.best_path = None
         self.best_distance = float("inf")
         self.best_distance_iter = float("inf")
+        # Re-initialize pheromone levels
+        tsp_graph._add_edge_properties()
 
         self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={
