@@ -124,8 +124,8 @@ class AntTSP(mesa.Agent):
             results.append(val)
 
         results = np.array(results)
-        Z = results.sum()
-        results /= Z
+        norm = results.sum()
+        results /= norm
 
         new_city = self.model.random.choices(candidates, weights=results)[0]
 
