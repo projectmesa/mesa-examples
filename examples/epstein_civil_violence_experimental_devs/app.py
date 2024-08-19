@@ -1,14 +1,9 @@
-import sys
 import solara
 from mesa.visualization.solara_viz import SolaraViz, make_text
 from mesa.experimental.devs.simulator import ABMSimulator
 from matplotlib.figure import Figure
-
-# Add the mesa-examples-main directory to the Python path
-sys.path.append('E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\epstein_civil_violence_experimental')
-
-from model import EpsteinCivilViolence
-from agent import Citizen, Cop, AgentState
+from .model import EpsteinCivilViolence, compute_gini
+from .agent import Citizen, Cop, AgentState
 
 def agent_portrayal(agent):
     if isinstance(agent, Citizen):
