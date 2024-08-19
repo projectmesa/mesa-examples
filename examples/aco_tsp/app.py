@@ -39,6 +39,7 @@ model_params = {
 def make_graph(model):
     fig = Figure()
     ax = fig.subplots()
+    ax.set_title("Cities and pheromone trails")
     graph = model.grid.G
     pos = model.tsp_graph.pos
     weights = [graph[u][v]["pheromone"] for u, v in graph.edges()]
@@ -68,6 +69,7 @@ def ant_level_distances(model):
 page = SolaraViz(
     AcoTspModel,
     model_params,
+    space_drawer=None,
     measures=["best_distance_iter", "best_distance", make_graph],
     agent_portrayal=circle_portrayal_example,
     play_interval=1,
