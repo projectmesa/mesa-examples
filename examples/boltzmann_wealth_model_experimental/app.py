@@ -1,4 +1,4 @@
-from mesa.experimental import JupyterViz
+from mesa.visualization import SolaraViz
 from model import BoltzmannWealthModel
 
 
@@ -24,7 +24,7 @@ model_params = {
     "height": 10,
 }
 
-page = JupyterViz(
+page = SolaraViz(
     BoltzmannWealthModel,
     model_params,
     measures=["Gini"],

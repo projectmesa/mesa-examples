@@ -5,7 +5,7 @@ import solara
 from hotelling_law.agents import ConsumerAgent, StoreAgent
 from hotelling_law.model import HotellingModel
 from matplotlib.figure import Figure
-from mesa.experimental import JupyterViz
+from mesa.visualization import SolaraViz
 
 model_params = {
     "N_stores": {
@@ -340,8 +340,8 @@ def make_revenue_line_chart(model):
     return solara.FigureMatplotlib(fig)
 
 
-# Instantiate the JupyterViz component with your model
-page = JupyterViz(
+# Instantiate the SolaraViz component with your model
+page = SolaraViz(
     model_class=HotellingModel,
     model_params=model_params,
     measures=[
