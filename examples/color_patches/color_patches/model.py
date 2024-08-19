@@ -36,7 +36,7 @@ class ColorCell(mesa.Agent):
         """Return the current state (OPINION) of this cell."""
         return self._state
 
-    def step(self):
+    def determine_opinion(self):
         """
         Determines the agent opinion for the next step by polling its neighbors
         The opinion is determined by the majority of the 8 neighbors' opinion
@@ -54,7 +54,7 @@ class ColorCell(mesa.Agent):
 
         self._next_state = self.random.choice(tied_opinions)[0]
 
-    def advance(self):
+    def assume_opinion(self):
         """
         Set the state of the agent to the next state
         """
@@ -73,7 +73,6 @@ class ColorPatches(mesa.Model):
         """
         super().__init__()
         self._grid = mesa.space.SingleGrid(width, height, torus=False)
-        self.schedule = mesa.time.SimultaneousActivation(self)
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row
@@ -85,23 +84,17 @@ class ColorPatches(mesa.Model):
                 (row, col), self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
             )
             self._grid.place_agent(cell, (row, col))
-            self.schedule.add(cell)
 
         self.running = True
 
     def step(self):
         """
-        Advance the model one step.
+        Perform the model step in two stages:
+        - First, all agents determine their next opinion based on their neighbors current opinions
+        - Then, all agents update their opinion to the next opinion
         """
-        self.schedule.step()
-
-    # the following is a temporary fix for the framework classes accessing
-    # model attributes directly
-    # I don't think it should
-    #   --> it imposes upon the model builder to use the attributes names that
-    #       the framework expects.
-    #
-    # Traceback included in docstrings
+        self.agents.do("determine_opinion")
+        self.agents.do("assume_opinion")
 
     @property
     def grid(self):

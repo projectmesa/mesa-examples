@@ -14,7 +14,7 @@ class BarCustomer(mesa.Agent):
         self.utility = 0
         self.update_strategies()
 
-    def step(self):
+    def update_attendance(self):
         prediction = self.predict_attendance(
             self.best_strategy, self.model.history[-self.memory_size :]
         )

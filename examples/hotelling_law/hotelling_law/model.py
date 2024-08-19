@@ -5,7 +5,6 @@ from mesa import Model
 from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
-from mesa.time import RandomActivation
 
 from .agents import ConsumerAgent, StoreAgent
 
@@ -94,8 +93,6 @@ class HotellingModel(Model):
         self.consumer_preferences = consumer_preferences
         # Type of environment ('grid' or 'line').
         self.environment_type = environment_type
-        # Scheduler to activate agents one at a time, in random order.
-        self.schedule = RandomActivation(self)
         # Initialize AgentSets for store and consumer agents
         self.store_agents = AgentSet([], self)
         self.consumer_agents = AgentSet([], self)
@@ -188,7 +185,7 @@ class HotellingModel(Model):
                 mobile_agents_assigned += 1
 
             agent = StoreAgent(unique_id, self, can_move=can_move, strategy=strategy)
-            self.schedule.add(agent)
+
             self.store_agents.add(agent)
 
             # Randomly place agents on the grid for a grid environment.
@@ -200,7 +197,7 @@ class HotellingModel(Model):
         for i in range(self.num_consumers):
             # Ensure unique ID across all agents
             consumer = ConsumerAgent(self.num_agents + i, self)
-            self.schedule.add(consumer)
+
             self.consumer_agents.add(consumer)
             # Place consumer randomly on the grid
             x = self.random.randrange(self.grid.width)
@@ -218,8 +215,8 @@ class HotellingModel(Model):
         """Advance the model by one step."""
         # Collect data for the current step.
         self.datacollector.collect(self)
-        # Activate the next agent in the schedule.
-        self.schedule.step()
+        # Activate all agents in random order
+        self.agents.shuffle().do("step")
         # Update market dynamics based on the latest actions
         self.recalculate_market_share()
 
