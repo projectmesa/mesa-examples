@@ -1,10 +1,8 @@
-import mesa
-from mesa import Model
-from mesa.time import RandomActivation
-from mesa.space import MultiGrid
-from mesa.datacollection import DataCollector
-from mesa.experimental.devs.simulator import ABMSimulator
 import numpy as np
+from mesa import Model
+from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+from mesa.time import RandomActivation
 from .agent import GrassPatch, Sheep, Wolf
 
 class WolfSheep(Model):
@@ -88,6 +86,12 @@ class WolfSheep(Model):
 
     def run_model(self, step_count=200):
         self.simulator.run_for(time_delta=step_count)
+
+    def get_wolf_sheep_ratio(self):
+        wolf_count = sum(isinstance(agent, Wolf) for agent in self.schedule.agents)
+        sheep_count = sum(isinstance(agent, Sheep) for agent in self.schedule.agents)
+        ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
+        return ratio
 
 def compute_gini(model):
     agent_energies = [agent.energy for agent in model.schedule.agents if isinstance(agent, (Sheep, Wolf))]

@@ -1,11 +1,10 @@
 import random
-import mesa
 import numpy as np
 from mesa import Model
-from mesa.time import RandomActivation
 from mesa.space import SingleGrid
-from mesa.experimental.devs.simulator import ABMSimulator
-from .agent import Citizen, Cop, AgentState
+from mesa.time import RandomActivation
+from mesa.datacollection import DataCollector
+from .agent import AgentState, Citizen, Cop
 
 def compute_gini(model):
     agent_hardships = [agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)]

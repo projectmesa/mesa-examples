@@ -1,10 +1,10 @@
 import time
 import solara
-from mesa.visualization.solara_viz import SolaraViz, make_text
-from mesa.experimental.devs.simulator import ABMSimulator
 from matplotlib.figure import Figure
-from .model import WolfSheep, compute_gini
-from .agent import Sheep, Wolf, GrassPatch
+from mesa.experimental.devs.simulator import ABMSimulator
+from mesa.visualization.solara_viz import SolaraViz, make_text
+from .agent import GrassPatch, Sheep, Wolf
+from .model import WolfSheep
 
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):

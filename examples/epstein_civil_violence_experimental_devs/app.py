@@ -1,9 +1,9 @@
 import solara
-from mesa.visualization.solara_viz import SolaraViz, make_text
-from mesa.experimental.devs.simulator import ABMSimulator
 from matplotlib.figure import Figure
-from .model import EpsteinCivilViolence, compute_gini
-from .agent import Citizen, Cop, AgentState
+from mesa.experimental.devs.simulator import ABMSimulator
+from mesa.visualization.solara_viz import SolaraViz, make_text
+from .agent import AgentState, Citizen, Cop
+from .model import EpsteinCivilViolence
 
 def agent_portrayal(agent):
     if isinstance(agent, Citizen):
