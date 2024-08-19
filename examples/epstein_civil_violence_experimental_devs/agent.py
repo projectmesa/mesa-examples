@@ -18,6 +18,30 @@ class EpsteinAgent(Agent):
 
 
 class Citizen(EpsteinAgent):
+    """
+    A member of the general population, may or may not be in active rebellion.
+    Summary of rule: If grievance - risk > threshold, rebel.
+
+    Attributes:
+        unique_id: unique int
+        model :
+        hardship: Agent's 'perceived hardship (i.e., physical or economic
+            privation).' Exogenous, drawn from U(0,1).
+        regime_legitimacy: Agent's perception of regime legitimacy, equal
+            across agents.  Exogenous.
+        risk_aversion: Exogenous, drawn from U(0,1).
+        threshold: if (grievance - (risk_aversion * arrest_probability)) >
+            threshold, go/remain Active
+        vision: number of cells in each direction (N, S, E and W) that agent
+            can inspect
+        condition: Can be "Quiescent" or "Active;" deterministic function of
+            greivance, perceived risk, and
+        grievance: deterministic function of hardship and regime_legitimacy;
+            how aggrieved is agent at the regime?
+        arrest_probability: agent's assessment of arrest probability, given
+            rebellion
+    """
+
     def __init__(
         self,
         unique_id,
@@ -30,6 +54,21 @@ class Citizen(EpsteinAgent):
         threshold,
         arrest_prob_constant,
     ):
+        """
+        Create a new Citizen.
+        Args:
+            unique_id: unique int
+            model : model instance
+            hardship: Agent's 'perceived hardship (i.e., physical or economic
+                privation).' Exogenous, drawn from U(0,1).
+            regime_legitimacy: Agent's perception of regime legitimacy, equal
+                across agents.  Exogenous.
+            risk_aversion: Exogenous, drawn from U(0,1).
+            threshold: if (grievance - (risk_aversion * arrest_probability)) >
+                threshold, go/remain Active
+            vision: number of cells in each direction (N, S, E and W) that
+                agent can inspect. Exogenous.
+        """
         super().__init__(unique_id, model, vision, movement)
         self.hardship = hardship
         self.regime_legitimacy = regime_legitimacy
@@ -60,6 +99,9 @@ class Citizen(EpsteinAgent):
             self.model.grid.move_agent(self, new_pos)
 
     def update_neighbors(self):
+        """
+        Look around and see who my neighbors are
+        """
         self.neighborhood = self.model.grid.get_neighborhood(
             self.pos, moore=True, radius=self.vision
         )
@@ -69,6 +111,10 @@ class Citizen(EpsteinAgent):
         ]
 
     def update_estimated_arrest_probability(self):
+        """
+        Based on the ratio of cops to actives in my neighborhood, estimate the
+        p(Arrest | I go active).
+        """
         cops_in_vision = len([c for c in self.neighbors if isinstance(c, Cop)])
         actives_in_vision = 1.0  # citizen counts herself
         for c in self.neighbors:
@@ -89,11 +135,26 @@ class Citizen(EpsteinAgent):
 
 
 class Cop(EpsteinAgent):
+    """
+    A cop for life.  No defection.
+    Summary of rule: Inspect local vision and arrest a random active agent.
+
+    Attributes:
+        unique_id: unique int
+        x, y: Grid coordinates
+        vision: number of cells in each direction (N, S, E and W) that cop is
+            able to inspect
+    """
+
     def __init__(self, unique_id, model, vision, movement, max_jail_term):
         super().__init__(unique_id, model, vision, movement)
         self.max_jail_term = max_jail_term
 
     def step(self):
+        """
+        Inspect local vision and arrest a random active agent. Move if
+        applicable.
+        """
         self.update_neighbors()
         active_neighbors = []
         for agent in self.neighbors:
@@ -107,6 +168,9 @@ class Cop(EpsteinAgent):
             self.model.grid.move_agent(self, new_pos)
 
     def update_neighbors(self):
+        """
+        Look around and see who my neighbors are.
+        """
         self.neighborhood = self.model.grid.get_neighborhood(
             self.pos, moore=True, radius=self.vision
         )
