@@ -28,6 +28,7 @@ def compute_gini(model):
     B = sum(cumulative_energy) / (N * cumulative_energy[-1])
     return 1 + (1 / N) - 2 * B
 
+
 class WolfSheep(Model):
     """Wolf-Sheep Predation Model"""
 
