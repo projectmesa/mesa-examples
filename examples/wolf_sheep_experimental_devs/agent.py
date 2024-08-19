@@ -1,5 +1,5 @@
-import mesa
 import contextlib
+import mesa
 
 
 class RandomWalker(mesa.Agent):
