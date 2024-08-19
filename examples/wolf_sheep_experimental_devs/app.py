@@ -6,6 +6,7 @@ from matplotlib.figure import Figure
 from .model import WolfSheep, compute_gini
 from .agent import Sheep, Wolf, GrassPatch
 
+
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):
         portrayal = {
@@ -25,25 +26,39 @@ def agent_portrayal(agent):
         }
     return portrayal
 
+
 def get_wolf_sheep_ratio(model):
     wolf_count = sum(isinstance(agent, Wolf) for agent in model.schedule.agents)
     sheep_count = sum(isinstance(agent, Sheep) for agent in model.schedule.agents)
     ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
     return f"Wolf/Sheep Ratio: {ratio:.2f}"
 
+
 def make_histogram(model):
     fig = Figure()
     ax = fig.subplots()
-    energy_vals = [agent.energy for agent in model.schedule.agents if isinstance(agent, (Sheep, Wolf))]
+    energy_vals = [
+        agent.energy
+        for agent in model.schedule.agents
+        if isinstance(agent, (Sheep, Wolf))
+    ]
     if energy_vals:  # Ensure there are energy values to plot
         ax.hist(energy_vals, bins=10)
     else:
-        ax.text(0.5, 0.5, 'No data to display', horizontalalignment='center', verticalalignment='center')
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            horizontalalignment="center",
+            verticalalignment="center",
+        )
     return solara.FigureMatplotlib(fig)
+
 
 def get_gini(model):
     gini_value = model.datacollector.get_model_vars_dataframe()["Gini"].iloc[-1]
     return f"Gini Coefficient: {gini_value:.2f}"  # Ensure the return value is a string
+
 
 model_params = {
     "width": 20,
@@ -70,6 +85,7 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
+
 @solara.component
 def App():
     solara.Title("Wolf-Sheep Predation Model")
@@ -86,6 +102,7 @@ def App():
     """)
 
     page.show()
+
 
 if __name__ == "__main__":
     model = WolfSheep(25, 25, 60, 40, 0.2, 0.1, 20)

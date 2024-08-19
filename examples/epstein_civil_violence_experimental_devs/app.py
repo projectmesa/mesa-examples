@@ -5,6 +5,7 @@ from matplotlib.figure import Figure
 from .model import EpsteinCivilViolence, compute_gini
 from .agent import Citizen, Cop, AgentState
 
+
 def agent_portrayal(agent):
     if isinstance(agent, Citizen):
         if agent.condition == AgentState.QUIESCENT:
@@ -23,6 +24,7 @@ def agent_portrayal(agent):
         "size": 50,
     }
 
+
 def get_citizen_cop_ratio(model):
     if model.schedule is None:
         return "Citizen/Cop Ratio: N/A"
@@ -31,19 +33,30 @@ def get_citizen_cop_ratio(model):
     ratio = citizen_count / cop_count if cop_count > 0 else float("inf")
     return f"Citizen/Cop Ratio: {ratio:.2f}"
 
+
 def make_histogram(model):
     fig = Figure()
     ax = fig.subplots()
-    hardship_vals = [agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)]
+    hardship_vals = [
+        agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)
+    ]
     if hardship_vals:  # Ensure there are hardship values to plot
         ax.hist(hardship_vals, bins=10)
     else:
-        ax.text(0.5, 0.5, 'No data to display', horizontalalignment='center', verticalalignment='center')
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            horizontalalignment="center",
+            verticalalignment="center",
+        )
     return solara.FigureMatplotlib(fig)
+
 
 def get_gini(model):
     gini_value = model.datacollector.get_model_vars_dataframe()["Gini"].iloc[-1]
     return f"Gini Coefficient: {gini_value:.2f}"  # Ensure the return value is a string
+
 
 model_params = {
     "N": {
@@ -92,12 +105,13 @@ page = SolaraViz(
     agent_portrayal=agent_portrayal,
 )
 
+
 @solara.component
 def App():
     solara.Title("Epstein Civil Violence Model")
     solara.Markdown("# Epstein Civil Violence Model")
     solara.Markdown("This is a visualization of the Epstein Civil Violence Model.")
-    
+
     # Add color legend
     solara.Markdown("""
     ## Color Legend
@@ -109,9 +123,10 @@ def App():
 
     page.show()
 
+
 if __name__ == "__main__":
     model = EpsteinCivilViolence(seed=15)
     simulator = ABMSimulator()
     simulator.setup(model)
-    simulator.run_for(time_delta=100)  
+    simulator.run_for(time_delta=100)
     App()

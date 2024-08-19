@@ -2,6 +2,7 @@ import enum
 import math
 from mesa import Agent
 
+
 class AgentState(enum.IntEnum):
     QUIESCENT = 0
     ARRESTED = 1
