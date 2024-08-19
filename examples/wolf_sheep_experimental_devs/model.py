@@ -1,3 +1,4 @@
+import random
 import numpy as np
 from mesa import Model
 from mesa.datacollection import DataCollector
