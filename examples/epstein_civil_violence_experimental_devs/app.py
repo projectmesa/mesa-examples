@@ -2,6 +2,7 @@ import solara
 from matplotlib.figure import Figure
 from mesa.experimental.devs.simulator import ABMSimulator
 from mesa.visualization.solara_viz import SolaraViz, make_text
+
 from .agent import AgentState, Citizen, Cop
 from .model import EpsteinCivilViolence
 

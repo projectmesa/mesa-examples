@@ -1,8 +1,10 @@
 import time
+
 import solara
 from matplotlib.figure import Figure
 from mesa.experimental.devs.simulator import ABMSimulator
 from mesa.visualization.solara_viz import SolaraViz, make_text
+
 from .agent import GrassPatch, Sheep, Wolf
 from .model import WolfSheep
 

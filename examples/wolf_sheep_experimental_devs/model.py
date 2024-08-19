@@ -4,6 +4,7 @@ from mesa.datacollection import DataCollector
 from mesa.experimental.devs.simulator import ABMSimulator
 from mesa.space import MultiGrid
 from mesa.time import RandomActivation
+
 from .agent import GrassPatch, Sheep, Wolf
 
 
