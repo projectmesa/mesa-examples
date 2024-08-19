@@ -13,8 +13,8 @@ class VehicleAgent(mesa.Agent):
     def step(self):
         if self.route and self.current_step < len(self.route):
             next_node = self.route[self.current_step]
-            x = self.model.space.G.nodes[next_node]["x"] - self.model.space.min_x
-            y = self.model.space.G.nodes[next_node]["y"] - self.model.space.min_y
+            x = self.model.space.G.nodes[next_node]["x"] - self.model.min_x
+            y = self.model.space.G.nodes[next_node]["y"] - self.model.min_y
             self.model.space.move_agent(self, (x, y))
             self.current_step += 1  # Move to the next step in the route
         else:
