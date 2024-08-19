@@ -4,7 +4,7 @@ from mesa.visualization.solara_viz import SolaraViz, make_text
 from mesa.experimental.devs.simulator import ABMSimulator
 from matplotlib.figure import Figure
 from .model import WolfSheep, compute_gini
-from .agents import Sheep, Wolf, GrassPatch
+from .agent import Sheep, Wolf, GrassPatch
 
 def agent_portrayal(agent):
     if isinstance(agent, Sheep):
