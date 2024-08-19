@@ -20,6 +20,7 @@ def compute_gini(model):
     B = sum(cumulative_hardship) / (N * cumulative_hardship[-1])
     return 1 + (1 / N) - 2 * B
 
+
 class EpsteinCivilViolence(Model):
     def __init__(
         self,
