@@ -2,6 +2,7 @@
 handles the definition of the canvas parameters and
 the drawing of the model representation on the canvas
 """
+
 # import webbrowser
 
 import mesa

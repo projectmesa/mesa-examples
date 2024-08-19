@@ -31,7 +31,6 @@ class Trader(mesa.Agent):
         self,
         unique_id,
         model,
-        pos,
         moore=False,
         sugar=0,
         spice=0,
@@ -40,7 +39,6 @@ class Trader(mesa.Agent):
         vision=0,
     ):
         super().__init__(unique_id, model)
-        self.pos = pos
         self.moore = moore
         self.sugar = sugar
         self.spice = spice
@@ -306,7 +304,7 @@ class Trader(mesa.Agent):
 
         if self.is_starved():
             self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
+            self.remove()
 
     def trade_with_neighbors(self):
         """

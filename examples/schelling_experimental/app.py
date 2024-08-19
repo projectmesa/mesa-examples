@@ -1,4 +1,4 @@
-from mesa.visualization.jupyter_viz import JupyterViz, Slider, make_text
+from mesa.visualization.solara_viz import Slider, SolaraViz, make_text
 from model import Schelling
 
 
@@ -21,7 +21,7 @@ model_params = {
     "height": 20,
 }
 
-page = JupyterViz(
+page = SolaraViz(
     Schelling,
     model_params,
     measures=["happy", make_text(get_happy_agents)],
