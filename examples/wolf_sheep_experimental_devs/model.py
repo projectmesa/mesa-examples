@@ -7,6 +7,27 @@ from mesa.time import RandomActivation
 from .agent import GrassPatch, Sheep, Wolf
 
 
+def get_wolf_sheep_ratio(model):
+    wolf_count = sum(isinstance(agent, Wolf) for agent in self.schedule.agents)
+    sheep_count = sum(isinstance(agent, Sheep) for agent in self.schedule.agents)
+    ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
+    return ratio
+
+
+def compute_gini(model):
+    agent_energies = [
+        agent.energy
+        for agent in model.schedule.agents
+        if isinstance(agent, (Sheep, Wolf))
+    ]
+    if len(agent_energies) == 0:
+        return 0
+    sorted_energies = sorted(agent_energies)
+    N = len(agent_energies)
+    cumulative_energy = np.cumsum(sorted_energies)
+    B = sum(cumulative_energy) / (N * cumulative_energy[-1])
+    return 1 + (1 / N) - 2 * B
+
 class WolfSheep(Model):
     """Wolf-Sheep Predation Model"""
 
@@ -105,24 +126,3 @@ class WolfSheep(Model):
 
     def run_model(self, step_count=200):
         self.simulator.run_for(time_delta=step_count)
-
-    def get_wolf_sheep_ratio(self):
-        wolf_count = sum(isinstance(agent, Wolf) for agent in self.schedule.agents)
-        sheep_count = sum(isinstance(agent, Sheep) for agent in self.schedule.agents)
-        ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
-        return ratio
-
-
-def compute_gini(model):
-    agent_energies = [
-        agent.energy
-        for agent in model.schedule.agents
-        if isinstance(agent, (Sheep, Wolf))
-    ]
-    if len(agent_energies) == 0:
-        return 0
-    sorted_energies = sorted(agent_energies)
-    N = len(agent_energies)
-    cumulative_energy = np.cumsum(sorted_energies)
-    B = sum(cumulative_energy) / (N * cumulative_energy[-1])
-    return 1 + (1 / N) - 2 * B
