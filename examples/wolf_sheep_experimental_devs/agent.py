@@ -1,4 +1,5 @@
 import mesa
+import contextlib
 
 class RandomWalker(mesa.Agent):
     """
@@ -73,10 +74,8 @@ class Animal(RandomWalker):
             self.is_alive = False
             if self.pos is not None:
                 self.model.grid.remove_agent(self)
-            try:
+            with contextlib.suppress(KeyError):
                 self.model.schedule.remove(self)
-            except KeyError:
-                pass  # Agent was already removed from schedule
 
     def step(self):
         if not self.is_alive:

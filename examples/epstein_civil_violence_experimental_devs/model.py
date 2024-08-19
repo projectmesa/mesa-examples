@@ -16,7 +16,7 @@ def compute_gini(model):
     B = sum(cumulative_hardship) / (N * cumulative_hardship[-1])
     return 1 + (1 / N) - 2 * B
 
-class EpsteinCivilViolence(mesa.Model):
+class EpsteinCivilViolence(Model):
     def __init__(
         self,
         width=40,
@@ -54,7 +54,7 @@ class EpsteinCivilViolence(mesa.Model):
         self.schedule = RandomActivation(self)
         self.grid = SingleGrid(self.width, self.height, torus=True)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = DataCollector(
             model_reporters={"Gini": compute_gini},
             agent_reporters={"Hardship": "hardship"}
         )
