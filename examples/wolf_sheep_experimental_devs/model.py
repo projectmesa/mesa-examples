@@ -1,4 +1,3 @@
-import sys
 import mesa
 from mesa import Model
 from mesa.time import RandomActivation
@@ -6,10 +5,7 @@ from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 from mesa.experimental.devs.simulator import ABMSimulator
 import numpy as np
-
-sys.path.append('E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\epstein_civil_violence_experimental')
-
-from agents import GrassPatch, Sheep, Wolf
+from .agent import GrassPatch, Sheep, Wolf
 
 class WolfSheep(Model):
     """ Wolf-Sheep Predation Model """
@@ -93,12 +89,6 @@ class WolfSheep(Model):
     def run_model(self, step_count=200):
         self.simulator.run_for(time_delta=step_count)
 
-def get_wolf_sheep_ratio(model):
-    wolf_count = sum(isinstance(agent, Wolf) for agent in model.schedule.agents)
-    sheep_count = sum(isinstance(agent, Sheep) for agent in model.schedule.agents)
-    ratio = wolf_count / sheep_count if sheep_count > 0 else float("inf")
-    return ratio
-
 def compute_gini(model):
     agent_energies = [agent.energy for agent in model.schedule.agents if isinstance(agent, (Sheep, Wolf))]
     if len(agent_energies) == 0:
@@ -108,4 +98,3 @@ def compute_gini(model):
     cumulative_energy = np.cumsum(sorted_energies)
     B = sum(cumulative_energy) / (N * cumulative_energy[-1])
     return 1 + (1 / N) - 2 * B
-
