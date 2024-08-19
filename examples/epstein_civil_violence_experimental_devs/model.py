@@ -1,17 +1,11 @@
-import sys
 import random
-import uuid
 import mesa
 import numpy as np
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import SingleGrid
 from mesa.experimental.devs.simulator import ABMSimulator
-
-# Add the mesa-examples-main directory to the Python path
-sys.path.append('E:\\hoping minds OSDS2 machine learning\\mesa-examples-main\\examples\\epstein_civil_violence_experimental')
-
-from agent import Citizen, Cop, AgentState
+from .agent import Citizen, Cop, AgentState
 
 def compute_gini(model):
     agent_hardships = [agent.hardship for agent in model.schedule.agents if isinstance(agent, Citizen)]
