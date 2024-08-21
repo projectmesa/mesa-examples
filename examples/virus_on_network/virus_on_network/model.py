@@ -97,6 +97,8 @@ class VirusOnNetwork(mesa.Model):
 
     def step(self):
         self.agents.shuffle().do("step")
+        # advance model time
+        self._advance_time()
         # collect data
         self.datacollector.collect(self)
 
