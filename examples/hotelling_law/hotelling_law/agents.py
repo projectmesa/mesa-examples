@@ -119,7 +119,7 @@ class StoreAgent(Agent):
 
     def identify_competitors(self):
         competitors = []
-        for agent in self.model.agents:
+        for agent in self.model.schedule.agents:
             if isinstance(agent, StoreAgent) and agent.unique_id != self.unique_id:
                 # Estimate market overlap as a measure of competition
                 overlap = self.estimate_market_overlap(agent)
