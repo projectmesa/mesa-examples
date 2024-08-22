@@ -29,7 +29,7 @@ class Cell(mesa.Agent):
     def considered(self):
         return self.isConsidered is True
 
-    def determine_state(self):
+    def step(self):
         """
         Compute if the cell will be dead or alive at the next tick. A dead
         cell will become alive if it has only one neighbor. The state is not
@@ -53,8 +53,8 @@ class Cell(mesa.Agent):
                 for a in self.neighbors:
                     a.isConsidered = True
 
-    def assume_state(self):
+    def advance(self):
         """
-        Set the state to the new computed state
+        Set the state to the new computed state -- computed in step().
         """
         self.state = self._nextState

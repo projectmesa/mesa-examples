@@ -121,7 +121,7 @@ def space_drawer(model, agent_portrayal):
     cell_store_contents = {}  # Track store agents in each cell
     jitter_amount = 0.3  # Jitter for visual separation
 
-    for agent in model.agents:
+    for agent in model.schedule.agents:
         portrayal = agent_portrayal(agent)
 
         # Track store agents for cell coloring
@@ -150,7 +150,7 @@ def space_drawer(model, agent_portrayal):
             ax.add_patch(rect)
 
     # Jittered scatter plot for all agents
-    for agent in model.agents:
+    for agent in model.schedule.agents:
         portrayal = agent_portrayal(agent)
         jitter_x = np.random.uniform(-jitter_amount, jitter_amount) + agent.pos[0] + 0.5
         jitter_y = np.random.uniform(-jitter_amount, jitter_amount) + agent.pos[1] + 0.5
@@ -177,7 +177,9 @@ def make_market_share_and_price_chart(model):
 
     # Get store agents and sort them by their unique_id
     # to ensure consistent order
-    store_agents = [agent for agent in model.agents if isinstance(agent, StoreAgent)]
+    store_agents = [
+        agent for agent in model.schedule.agents if isinstance(agent, StoreAgent)
+    ]
     store_agents_sorted = sorted(store_agents, key=lambda agent: agent.unique_id)
 
     # Now gather market shares, prices, and labels using the sorted list
@@ -239,7 +241,7 @@ def make_price_changes_line_chart(model):
     # Retrieve agent colors based on their portrayal
     agent_colors = {
         f"Store_{agent.unique_id}_Price": agent_portrayal(agent)["color"]
-        for agent in model.agents
+        for agent in model.schedule.agents
         if isinstance(agent, StoreAgent)
     }
 
@@ -275,7 +277,7 @@ def make_market_share_line_chart(model):
     # Retrieve agent colors based on their portrayal
     agent_colors = {
         f"Store_{agent.unique_id}_Market Share": agent_portrayal(agent)["color"]
-        for agent in model.agents
+        for agent in model.schedule.agents
         if isinstance(agent, StoreAgent)
     }
 
@@ -311,7 +313,7 @@ def make_revenue_line_chart(model):
     # Retrieve agent colors based on their portrayal
     agent_colors = {
         f"Store_{agent.unique_id}_Revenue": agent_portrayal(agent)["color"]
-        for agent in model.agents
+        for agent in model.schedule.agents
         if isinstance(agent, StoreAgent)
     }
 

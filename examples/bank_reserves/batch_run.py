@@ -37,7 +37,7 @@ from bank_reserves.agents import Bank, Person
 def get_num_rich_agents(model):
     """list of rich agents"""
 
-    rich_agents = [a for a in model.agents if a.savings > model.rich_threshold]
+    rich_agents = [a for a in model.schedule.agents if a.savings > model.rich_threshold]
     # return number of rich agents
     return len(rich_agents)
 
@@ -45,7 +45,7 @@ def get_num_rich_agents(model):
 def get_num_poor_agents(model):
     """list of poor agents"""
 
-    poor_agents = [a for a in model.agents if a.loans > 10]
+    poor_agents = [a for a in model.schedule.agents if a.loans > 10]
     # return number of poor agents
     return len(poor_agents)
 
@@ -54,7 +54,9 @@ def get_num_mid_agents(model):
     """list of middle class agents"""
 
     mid_agents = [
-        a for a in model.agents if a.loans < 10 and a.savings < model.rich_threshold
+        a
+        for a in model.schedule.agents
+        if a.loans < 10 and a.savings < model.rich_threshold
     ]
     # return number of middle class agents
     return len(mid_agents)
@@ -63,7 +65,7 @@ def get_num_mid_agents(model):
 def get_total_savings(model):
     """list of amounts of all agents' savings"""
 
-    agent_savings = [a.savings for a in model.agents]
+    agent_savings = [a.savings for a in model.schedule.agents]
     # return the sum of agents' savings
     return np.sum(agent_savings)
 
@@ -71,7 +73,7 @@ def get_total_savings(model):
 def get_total_wallets(model):
     """list of amounts of all agents' wallets"""
 
-    agent_wallets = [a.wallet for a in model.agents]
+    agent_wallets = [a.wallet for a in model.schedule.agents]
     # return the sum of all agents' wallets
     return np.sum(agent_wallets)
 
@@ -89,7 +91,7 @@ def get_total_money(model):
 def get_total_loans(model):
     """list of amounts of all agents' loans"""
 
-    agent_loans = [a.loans for a in model.agents]
+    agent_loans = [a.loans for a in model.schedule.agents]
     # return sum of all agents' loans
     return np.sum(agent_loans)
 
@@ -127,7 +129,7 @@ class BankReservesModel(mesa.Model):
         self.height = height
         self.width = width
         self.init_people = init_people
-
+        self.schedule = mesa.time.RandomActivation(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         # rich_threshold is the amount of savings a person needs to be considered "rich"
         self.rich_threshold = rich_threshold
@@ -148,8 +150,8 @@ class BankReservesModel(mesa.Model):
             agent_reporters={"Wealth": "wealth"},
         )
 
-        # create a single bank object for the model
-        self.bank = Bank(self, self.reserve_percent)
+        # create a single bank for the model
+        self.bank = Bank(1, self, self.reserve_percent)
 
         # create people for the model according to number of people set by user
         for i in range(self.init_people):
@@ -160,6 +162,8 @@ class BankReservesModel(mesa.Model):
             p = Person(i, (x, y), self, True, self.bank, self.rich_threshold)
             # place the Person object on the grid at coordinates (x, y)
             self.grid.place_agent(p, (x, y))
+            # add the Person object to the model schedule
+            self.schedule.add(p)
 
         self.running = True
 
@@ -167,7 +171,7 @@ class BankReservesModel(mesa.Model):
         # collect data
         self.datacollector.collect(self)
         # tell all the agents in the model to run their step function
-        self.agents.shuffle().do("step")
+        self.schedule.step()
 
     def run_model(self):
         for i in range(self.run_time):

@@ -18,7 +18,7 @@ class ForestFire(mesa.Model):
         """
         super().__init__()
         # Set up model objects
-
+        self.schedule = mesa.time.RandomActivation(self)
         self.grid = mesa.space.SingleGrid(width, height, torus=False)
 
         self.datacollector = mesa.DataCollector(
@@ -38,6 +38,7 @@ class ForestFire(mesa.Model):
                 if x == 0:
                     new_tree.condition = "On Fire"
                 self.grid.place_agent(new_tree, (x, y))
+                self.schedule.add(new_tree)
 
         self.running = True
         self.datacollector.collect(self)
@@ -46,7 +47,7 @@ class ForestFire(mesa.Model):
         """
         Advance the model by one step.
         """
-        self.agents.shuffle().do("step")
+        self.schedule.step()
         # collect data
         self.datacollector.collect(self)
 
@@ -60,7 +61,7 @@ class ForestFire(mesa.Model):
         Helper method to count trees in a given condition in a given model.
         """
         count = 0
-        for tree in model.agents:
+        for tree in model.schedule.agents:
             if tree.condition == tree_condition:
                 count += 1
         return count
