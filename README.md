@@ -103,6 +103,10 @@ This is the same [Boltzmann Wealth](https://github.com/projectmesa/mesa-examples
 
 This model is based on the NetLogo [Virus on a Network](https://ccl.northwestern.edu/netlogo/models/VirusonaNetwork) model.
 
+### [Ant System for Traveling Salesman Problem](https://github.com/projectmesa/mesa-examples/tree/main/examples/aco_tsp)
+
+This is based on Dorigo's Ant System "Swarm Intelligence" algorithm for generating solutions for the Traveling Salesman Problem.
+
 ## Visualization Examples
 
 ### [Boltzmann Wealth Model (Experimental)](https://github.com/projectmesa/mesa-examples/tree/main/examples/boltzmann_wealth_model_experimental)
