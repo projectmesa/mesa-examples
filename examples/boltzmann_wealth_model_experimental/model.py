@@ -1,10 +1,10 @@
 import mesa
+from mesa.experimental import DataCollector
 
 
 def compute_gini(model):
-    agent_wealths = [agent.wealth for agent in model.schedule.agents]
-    x = sorted(agent_wealths)
-    N = model.num_agents
+    x = sorted(model.agents.get("wealth"))
+    N = len(x)
     B = sum(xi * (N - i) for i, xi in enumerate(x)) / (N * sum(x))
     return 1 + (1 / N) - 2 * B
 
@@ -22,9 +22,6 @@ class BoltzmannWealthModel(mesa.Model):
         self.num_agents = N
         self.grid = mesa.space.MultiGrid(width, height, True)
         self.schedule = mesa.time.RandomActivation(self)
-        self.datacollector = mesa.DataCollector(
-            model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
-        )
         # Create agents
         for i in range(self.num_agents):
             a = MoneyAgent(i, self)
@@ -34,13 +31,19 @@ class BoltzmannWealthModel(mesa.Model):
             y = self.random.randrange(self.grid.height)
             self.grid.place_agent(a, (x, y))
 
-        self.running = True
-        self.datacollector.collect(self)
+        self.datacollector = DataCollector(
+            self,
+            {
+                "model": {"Gini": compute_gini},
+                "agents": {"Wealth": "wealth"},
+            },
+        )
+        self.datacollector.collect()
 
     def step(self):
         self.schedule.step()
         # collect data
-        self.datacollector.collect(self)
+        self.datacollector.collect()
 
     def run_model(self, n):
         for i in range(n):
