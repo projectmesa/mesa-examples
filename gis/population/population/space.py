@@ -14,10 +14,11 @@ class UgandaCell(Cell):
 
     def __init__(
         self,
+        model,
         pos: mesa.space.Coordinate | None = None,
         indices: mesa.space.Coordinate | None = None,
     ):
-        super().__init__(pos, indices)
+        super().__init__(model, pos, indices)
         self.population = None
 
     def step(self):
@@ -38,6 +39,7 @@ class UgandaArea(GeoSpace):
             f"/vsigzip/{population_gzip_file}",
             cell_cls=UgandaCell,
             attr_name="population",
+            model=model,
         )
         raster_layer.crs = world_size.crs
         raster_layer.total_bounds = world_size.total_bounds
