@@ -24,6 +24,7 @@ class GeoSir(mesa.Model):
         :param infection_risk:      Probability of agent to become infected,
                                     if it has been exposed to another infected
         """
+        super().__init__()
         self.schedule = mesa.time.BaseScheduler(self)
         self.space = mg.GeoSpace(warn_crs_conversion=False)
         self.steps = 0
