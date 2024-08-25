@@ -64,6 +64,7 @@ class UrbanGrowth(mesa.Model):
             width=self.world_width,
             height=self.world_height,
             crs="epsg:3857",
+            model=self,
             total_bounds=[-901575.0, 1442925.0, -885645.0, 1454745.0],
         )
         self.space.load_datasets(

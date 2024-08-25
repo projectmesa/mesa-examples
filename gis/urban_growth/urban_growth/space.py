@@ -78,10 +78,10 @@ class UrbanCell(mg.Cell):
 
 
 class City(mg.GeoSpace):
-    def __init__(self, width, height, crs, total_bounds):
+    def __init__(self, width, height, crs, total_bounds, model):
         super().__init__(crs=crs)
         self.add_layer(
-            mg.RasterLayer(width, height, crs, total_bounds, cell_cls=UrbanCell)
+            mg.RasterLayer(width, height, crs, total_bounds, model, cell_cls=UrbanCell)
         )
 
     def load_datasets(
