@@ -26,10 +26,11 @@ class UrbanCell(mg.Cell):
 
     def __init__(
         self,
+        model: mesa.Model | None = None,
         pos: mesa.space.Coordinate | None = None,
         indices: mesa.space.Coordinate | None = None,
     ):
-        super().__init__(pos, indices)
+        super().__init__(model, pos, indices)
         self.urban = None
         self.slope = None
         self.road_1 = None
