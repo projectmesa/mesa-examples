@@ -66,7 +66,7 @@ class Rainfall(mesa.Model):
         self.export_data = export_data
         self.num_steps = num_steps
 
-        self.space = CraterLake(crs="epsg:4326", water_height=water_height)
+        self.space = CraterLake(crs="epsg:4326", water_height=water_height, model=self)
         self.schedule = mesa.time.RandomActivation(self)
         self.datacollector = mesa.DataCollector(
             {

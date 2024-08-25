@@ -12,10 +12,11 @@ class LakeCell(mg.Cell):
 
     def __init__(
         self,
+        model,
         pos: mesa.space.Coordinate | None = None,
         indices: mesa.space.Coordinate | None = None,
     ):
-        super().__init__(pos, indices)
+        super().__init__(model, pos, indices)
         self.elevation = None
         self.water_level = None
         self.water_level_normalized = None
@@ -25,14 +26,18 @@ class LakeCell(mg.Cell):
 
 
 class CraterLake(mg.GeoSpace):
-    def __init__(self, crs, water_height):
+    def __init__(self, crs, water_height, model):
         super().__init__(crs=crs)
+        self.model = model
         self.water_height = water_height
         self.outflow = 0
 
     def set_elevation_layer(self, elevation_gzip_file, crs):
         raster_layer = mg.RasterLayer.from_file(
-            f"/vsigzip/{elevation_gzip_file}", cell_cls=LakeCell, attr_name="elevation"
+            f"/vsigzip/{elevation_gzip_file}",
+            cell_cls=LakeCell,
+            attr_name="elevation",
+            model=self.model,
         )
         raster_layer.crs = crs
         raster_layer.apply_raster(
