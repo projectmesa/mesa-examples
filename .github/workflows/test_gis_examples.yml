@@ -40,7 +40,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install mesa mesa-geo --pre
-        pip install 
+        pip install .[test_gis]
         pip install pytest
     - name: Test with pytest
       run: pytest -rA -Werror test_gis_examples.py
