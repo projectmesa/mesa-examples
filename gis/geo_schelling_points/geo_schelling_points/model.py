@@ -4,8 +4,8 @@ import uuid
 import mesa
 import mesa_geo as mg
 
-from .agents import PersonAgent, RegionAgent
-from .space import Nuts2Eu
+from agents import PersonAgent, RegionAgent
+from space import Nuts2Eu
 
 
 class GeoSchellingPoints(mesa.Model):

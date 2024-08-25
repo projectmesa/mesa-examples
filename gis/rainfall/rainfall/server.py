@@ -3,8 +3,8 @@ from typing import Tuple
 import mesa
 import mesa_geo as mg
 
-from .model import Rainfall
-from .space import LakeCell
+from model import Rainfall
+from space import LakeCell
 
 model_params = {
     "rain_rate": mesa.visualization.Slider("rain rate", 500, 0, 500, 5),

@@ -2,8 +2,8 @@ import mesa
 import mesa_geo as mg
 from shapely.geometry import Point, Polygon
 
-from .model import Population
-from .space import UgandaCell
+from model import Population
+from space import UgandaCell
 
 
 class NumAgentsElement(mesa.visualization.TextElement):

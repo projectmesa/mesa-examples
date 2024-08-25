@@ -5,7 +5,7 @@ import mesa_geo as mg
 import numpy as np
 from shapely.geometry import Point
 
-from .space import CraterLake
+from space import CraterLake
 
 
 class RaindropAgent(mg.GeoAgent):

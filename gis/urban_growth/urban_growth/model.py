@@ -1,7 +1,7 @@
 import mesa
 import numpy as np
 
-from .space import City
+from space import City
 
 
 class UrbanGrowth(mesa.Model):

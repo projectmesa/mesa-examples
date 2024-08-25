@@ -3,7 +3,7 @@ from typing import Dict
 
 import mesa_geo as mg
 
-from .agents import RegionAgent
+from agents import RegionAgent
 
 
 class Nuts2Eu(mg.GeoSpace):

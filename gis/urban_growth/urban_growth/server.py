@@ -3,8 +3,8 @@ from typing import Tuple
 import mesa
 import mesa_geo as mg
 
-from .model import UrbanGrowth
-from .space import UrbanCell
+from model import UrbanGrowth
+from space import UrbanCell
 
 
 def cell_portrayal(cell: UrbanCell) -> Tuple[float, float, float, float]:

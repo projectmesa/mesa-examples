@@ -1,8 +1,8 @@
 import mesa
 import mesa_geo as mg
 
-from .agents import PersonAgent, RegionAgent
-from .model import GeoSchellingPoints
+from agents import PersonAgent, RegionAgent
+from model import GeoSchellingPoints
 
 
 class HappyElement(mesa.visualization.TextElement):
