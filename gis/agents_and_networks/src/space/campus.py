@@ -6,8 +6,8 @@ import mesa
 import mesa_geo as mg
 from shapely.geometry import Point
 
-from src.agent.building import Building
-from src.agent.commuter import Commuter
+from ..agent.building import Building
+from ..agent.commuter import Commuter
 
 
 class Campus(mg.GeoSpace):
