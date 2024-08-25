@@ -76,9 +76,7 @@ class Rainfall(mesa.Model):
             }
         )
 
-        data_path = os.path.join(
-            script_directory, "../data/elevation.asc.gz"
-        )
+        data_path = os.path.join(script_directory, "../data/elevation.asc.gz")
         self.space.set_elevation_layer(data_path, crs="epsg:4326")
 
     @property

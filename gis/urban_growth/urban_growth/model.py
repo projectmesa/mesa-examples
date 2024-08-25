@@ -75,7 +75,10 @@ class UrbanGrowth(mesa.Model):
         #     data_path = os.path.join(script_directory, f"data/{label}_santafe.asc.gz")
 
         self.space.load_datasets(
-            *(os.path.join(script_directory, f"../data/{label}_santafe.asc.gz") for label in labels)
+            *(
+                os.path.join(script_directory, f"../data/{label}_santafe.asc.gz")
+                for label in labels
+            )
         )
 
     def _check_suitability(self) -> None:
