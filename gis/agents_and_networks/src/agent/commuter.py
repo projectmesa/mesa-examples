@@ -8,8 +8,8 @@ import numpy as np
 import pyproj
 from shapely.geometry import LineString, Point
 
-from src.agent.building import Building
-from src.space.utils import UnitTransformer, redistribute_vertices
+from ..space.utils import UnitTransformer, redistribute_vertices
+from .building import Building
 
 
 class Commuter(mg.GeoAgent):

@@ -7,11 +7,11 @@ import mesa_geo as mg
 import pandas as pd
 from shapely.geometry import Point
 
-from src.agent.building import Building
-from src.agent.commuter import Commuter
-from src.agent.geo_agents import Driveway, LakeAndRiver, Walkway
-from src.space.campus import Campus
-from src.space.road_network import CampusWalkway
+from ..agent.building import Building
+from ..agent.commuter import Commuter
+from ..agent.geo_agents import Driveway, LakeAndRiver, Walkway
+from ..space.campus import Campus
+from ..space.road_network import CampusWalkway
 
 
 def get_time(model) -> pd.Timedelta:
