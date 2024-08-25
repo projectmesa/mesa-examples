@@ -1,3 +1,4 @@
+import os
 import random
 import uuid
 
@@ -6,6 +7,8 @@ import mesa_geo as mg
 
 from .agents import PersonAgent, RegionAgent
 from .space import Nuts2Eu
+
+script_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class GeoSchellingPoints(mesa.Model):
@@ -24,9 +27,10 @@ class GeoSchellingPoints(mesa.Model):
 
         # Set up the grid with patches for every NUTS region
         ac = mg.AgentCreator(RegionAgent, model=self)
-        regions = ac.from_file(
-            "data/nuts_rg_60M_2013_lvl_2.geojson", unique_id="NUTS_ID"
+        data_path = os.path.join(
+            script_directory, "../data/nuts_rg_60M_2013_lvl_2.geojson"
         )
+        regions = ac.from_file(data_path, unique_id="NUTS_ID")
         self.space.add_regions(regions)
 
         for region in regions:
