@@ -1,7 +1,10 @@
+import os
 import random
 
 import mesa
 import mesa_geo as mg
+
+script_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class SchellingAgent(mg.GeoAgent):
@@ -52,6 +55,7 @@ class GeoSchelling(mesa.Model):
     """Model class for the Schelling segregation model."""
 
     def __init__(self, density=0.6, minority_pc=0.2, export_data=False):
+        super().__init__()
         self.density = density
         self.minority_pc = minority_pc
         self.export_data = export_data
@@ -66,7 +70,10 @@ class GeoSchelling(mesa.Model):
 
         # Set up the grid with patches for every NUTS region
         ac = mg.AgentCreator(SchellingAgent, model=self)
-        agents = ac.from_file("data/nuts_rg_60M_2013_lvl_2.geojson")
+        data_path = os.path.join(
+            script_directory, "data/nuts_rg_60M_2013_lvl_2.geojson"
+        )
+        agents = ac.from_file(filename=data_path)
         self.space.add_agents(agents)
 
         # Set up agents

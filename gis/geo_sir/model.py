@@ -1,14 +1,20 @@
+import os
+
 import mesa
 import mesa_geo as mg
 from agents import NeighbourhoodAgent, PersonAgent
 from shapely.geometry import Point
+
+script_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class GeoSir(mesa.Model):
     """Model class for a simplistic infection model."""
 
     # Geographical parameters for desired map
-    geojson_regions = "data/TorontoNeighbourhoods.geojson"
+    geojson_regions = os.path.join(
+        script_directory, "data/TorontoNeighbourhoods.geojson"
+    )
     unique_id = "HOODNUM"
 
     def __init__(
@@ -23,6 +29,7 @@ class GeoSir(mesa.Model):
         :param infection_risk:      Probability of agent to become infected,
                                     if it has been exposed to another infected
         """
+        super().__init__()
         self.schedule = mesa.time.BaseScheduler(self)
         self.space = mg.GeoSpace(warn_crs_conversion=False)
         self.steps = 0
