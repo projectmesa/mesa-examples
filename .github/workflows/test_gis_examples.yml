@@ -39,9 +39,8 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install mesa mesa-geo --pre
+        pip install mesa-geo --pre
         pip install .[test_gis]
-        pip install pytest
     - name: Test with pytest
       run: pytest -rA -Werror test_gis_examples.py
 
@@ -55,8 +54,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install pytest
-        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
         pip install -U git+https://github.com/projectmesa/mesa-geo@main#egg=mesa-geo
+        pip install .[test_gis]
     - name: Test with pytest
       run: pytest -rA -Werror test_gis_examples.py
