@@ -9,6 +9,12 @@ license = {file = "LICENSE"}
 readme = "README.rst"
 requires-python = ">=3.8"
 
+[project.optional-dependencies]
+test = [""]
+test_gis = [
+  "momepy",
+]
+
 [build-system]
 requires = [
     "setuptools",
