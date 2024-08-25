@@ -9,7 +9,7 @@ import networkx as nx
 import pyproj
 from sklearn.neighbors import KDTree
 
-from src.space.utils import segmented
+from .utils import segmented
 
 
 class RoadNetwork:

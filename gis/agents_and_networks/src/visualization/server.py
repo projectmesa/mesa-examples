@@ -1,8 +1,8 @@
 import mesa
 
-from src.agent.building import Building
-from src.agent.commuter import Commuter
-from src.agent.geo_agents import Driveway, LakeAndRiver, Walkway
+from ..agent.building import Building
+from ..agent.commuter import Commuter
+from ..agent.geo_agents import Driveway, LakeAndRiver, Walkway
 
 
 class ClockElement(mesa.visualization.TextElement):
