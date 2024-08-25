@@ -1,0 +1,62 @@
+name: Test GIS models
+
+on:
+  push:
+    paths:
+      - 'gis/**/*.py'  # If a gis model is modified
+      - 'test_gis_examples.py'  # If the gis test script is modified
+      - '.github/workflows/test_gis_examples.yml'  # If this workflow is modified
+  pull_request:
+    paths:
+      - 'gis/**/*.py'
+      - 'test_gis_examples.py'
+      - '.github/workflows/test_gis_examples.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'  # Monday at 6:00 UTC
+
+jobs:
+  # build-stable:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: "3.12"
+  #   - name: Install dependencies
+  #     run: pip install mesa pytest
+  #   - name: Test with pytest
+  #     run: pytest -rA -Werror test_examples.py
+
+  build-pre:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        pip install mesa mesa-geo --pre
+        pip install 
+        pip install pytest
+    - name: Test with pytest
+      run: pytest -rA -Werror test_gis_examples.py
+
+  build-main:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        pip install pytest
+        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
+        pip install -U git+https://github.com/projectmesa/mesa-geo@main#egg=mesa-geo
+    - name: Test with pytest
+      run: pytest -rA -Werror test_gis_examples.py
