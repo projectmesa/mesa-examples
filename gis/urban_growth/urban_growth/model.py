@@ -1,6 +1,7 @@
+import os
+
 import mesa
 import numpy as np
-import os
 
 from .space import City
 
