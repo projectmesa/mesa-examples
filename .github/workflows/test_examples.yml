@@ -1,27 +1,22 @@
-name: build
+name: Test example models
 
 on:
   push:
     branches:
     - mesa-2.x
     - release**
-    paths-ignore:
-      - '**.md'
-      - '**.rst'
+    paths:
+      - 'examples/**/*.py'  # If an example model is modified
+      - 'test_examples.py'  # If the test script is modified
+      - '.github/workflows/test_examples.yml'  # If this workflow is modified
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.rst'
+    paths:
+      - 'examples/**/*.py'
+      - 'test_examples.py'
+      - '.github/workflows/test_examples.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * 1'  # Monday at 6:00 UTC
-
-# This will cancel previous run if a newer job that obsoletes the said previous
-# run, is started.
-# Based on https://github.com/zulip/zulip/commit/4a11642cee3c8aec976d305d51a86e60e5d70522
-concurrency:
-  group: "${{ github.workflow }}-${{ github.head_ref || github.run_id }}"
-  cancel-in-progress: true
 
 jobs:
   build-2-stable:
