@@ -3,7 +3,6 @@ import uuid
 
 import mesa
 import mesa_geo as mg
-
 from agents import PersonAgent, RegionAgent
 from space import Nuts2Eu
 

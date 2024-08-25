@@ -2,7 +2,6 @@ import random
 from typing import Dict
 
 import mesa_geo as mg
-
 from agents import RegionAgent
 
 

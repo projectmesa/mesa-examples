@@ -6,7 +6,6 @@ import mesa
 import mesa_geo as mg
 import numpy as np
 from shapely.geometry import Point
-
 from space import UgandaArea
 
 

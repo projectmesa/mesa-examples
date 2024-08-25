@@ -1,8 +1,7 @@
 import mesa
 import mesa_geo as mg
-from shapely.geometry import Point
-
 from agents import NeighbourhoodAgent, PersonAgent
+from shapely.geometry import Point
 
 
 class GeoSir(mesa.Model):
