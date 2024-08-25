@@ -52,6 +52,7 @@ class GeoSchelling(mesa.Model):
     """Model class for the Schelling segregation model."""
 
     def __init__(self, density=0.6, minority_pc=0.2, export_data=False):
+        super().__init__()
         self.density = density
         self.minority_pc = minority_pc
         self.export_data = export_data
