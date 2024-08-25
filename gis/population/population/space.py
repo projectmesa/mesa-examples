@@ -32,7 +32,7 @@ class UgandaArea(GeoSpace):
     def __init__(self, crs):
         super().__init__(crs=crs)
 
-    def load_data(self, population_gzip_file, lake_zip_file, world_zip_file):
+    def load_data(self, population_gzip_file, lake_zip_file, world_zip_file, model):
         world_size = gpd.GeoDataFrame.from_file(world_zip_file)
         raster_layer = RasterLayer.from_file(
             f"/vsigzip/{population_gzip_file}",
@@ -43,7 +43,7 @@ class UgandaArea(GeoSpace):
         raster_layer.total_bounds = world_size.total_bounds
         self.add_layer(raster_layer)
         self.lake = gpd.GeoDataFrame.from_file(lake_zip_file).geometry[0]
-        self.add_agents(GeoAgent(uuid.uuid4().int, None, self.lake, self.crs))
+        self.add_agents(GeoAgent(uuid.uuid4().int, model, self.lake, self.crs))
 
     @property
     def population_layer(self):
