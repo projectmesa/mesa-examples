@@ -40,7 +40,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install mesa --pre
-        pip install pytest
+        pip install .[test]
     - name: Test with pytest
       run: pytest -rA -Werror test_examples.py
 
@@ -54,7 +54,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install pytest
+        pip install .[test]
         pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
     - name: Test with pytest
       run: pytest -rA -Werror test_examples.py
