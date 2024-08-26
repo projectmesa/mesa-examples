@@ -8,6 +8,7 @@ from ray.rllib.env import MultiAgentEnv
 from .agent import CITIZEN_RL, COP_RL
 from .utility import create_intial_agents, grid_to_observation
 
+
 class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
     """
     Custom environment class for the Epstein Civil Violence model with reinforcement learning.

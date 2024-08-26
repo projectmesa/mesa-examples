@@ -12,6 +12,7 @@ from .utility import grid_to_observation
 
 ray.init(local_mode=True)
 
+
 class EpsteinCivilViolenceServer(EPSTEINCIVILVIOLENCE_RL):
     def __init__(
         self,
