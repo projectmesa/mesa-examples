@@ -1,5 +1,5 @@
-import os
 import uuid
+from pathlib import Path
 
 import mesa
 import mesa_geo as mg
@@ -8,7 +8,7 @@ from shapely.geometry import Point
 
 from .space import CraterLake
 
-script_directory = os.path.dirname(os.path.abspath(__file__))
+script_directory = Path(__file__).resolve().parent
 
 
 class RaindropAgent(mg.GeoAgent):
@@ -76,7 +76,7 @@ class Rainfall(mesa.Model):
             }
         )
 
-        data_path = os.path.join(script_directory, "../data/elevation.asc.gz")
+        data_path = script_directory / "../data/elevation.asc.gz"
         self.space.set_elevation_layer(data_path, crs="epsg:4326")
 
     @property

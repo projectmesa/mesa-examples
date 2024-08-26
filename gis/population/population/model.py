@@ -1,7 +1,7 @@
 import math
-import os
 import random
 import uuid
+from pathlib import Path
 
 import mesa
 import mesa_geo as mg
@@ -10,7 +10,7 @@ from shapely.geometry import Point
 
 from .space import UgandaArea
 
-script_directory = os.path.dirname(os.path.abspath(__file__))
+script_directory = Path(__file__).resolve().parent
 
 
 class Person(mg.GeoAgent):
@@ -62,9 +62,9 @@ class Population(mesa.Model):
         super().__init__()
         self.space = UgandaArea(crs="epsg:4326")
         self.space.load_data(
-            os.path.normpath(os.path.join(script_directory, population_gzip_file)),
-            os.path.join(script_directory, lake_zip_file),
-            os.path.join(script_directory, world_zip_file),
+            script_directory / population_gzip_file,
+            script_directory / lake_zip_file,
+            script_directory / world_zip_file,
             model=self,
         )
         pixel_size_x, pixel_size_y = self.space.population_layer.resolution
