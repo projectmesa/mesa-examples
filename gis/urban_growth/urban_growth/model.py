@@ -1,7 +1,11 @@
+from pathlib import Path
+
 import mesa
 import numpy as np
 
 from .space import City
+
+script_directory = Path(__file__).resolve().parent
 
 
 class UrbanGrowth(mesa.Model):
@@ -64,14 +68,14 @@ class UrbanGrowth(mesa.Model):
             width=self.world_width,
             height=self.world_height,
             crs="epsg:3857",
+            model=self,
             total_bounds=[-901575.0, 1442925.0, -885645.0, 1454745.0],
         )
+
+        labels = ["urban", "slope", "road1", "excluded", "landuse"]
+
         self.space.load_datasets(
-            urban_data="data/urban_santafe.asc.gz",
-            slope_data="data/slope_santafe.asc.gz",
-            road_data="data/road1_santafe.asc.gz",
-            excluded_data="data/excluded_santafe.asc.gz",
-            land_use_data="data/landuse_santafe.asc.gz",
+            *(script_directory / f"../data/{label}_santafe.asc.gz" for label in labels)
         )
 
     def _check_suitability(self) -> None:

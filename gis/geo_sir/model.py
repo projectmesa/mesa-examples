@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import mesa
 import mesa_geo as mg
@@ -6,16 +6,14 @@ from shapely.geometry import Point
 
 from .agents import NeighbourhoodAgent, PersonAgent
 
-script_directory = os.path.dirname(os.path.abspath(__file__))
+script_directory = Path(__file__).resolve().parent
 
 
 class GeoSir(mesa.Model):
     """Model class for a simplistic infection model."""
 
     # Geographical parameters for desired map
-    geojson_regions = os.path.join(
-        script_directory, "data/TorontoNeighbourhoods.geojson"
-    )
+    geojson_regions = script_directory / "data/TorontoNeighbourhoods.geojson"
     unique_id = "HOODNUM"
 
     def __init__(
