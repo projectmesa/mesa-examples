@@ -1,13 +1,14 @@
-import mesa
-import numpy as np
 import gymnasium as gym
-from ray.rllib.env import MultiAgentEnv
-from .agent import Cop_RL, Citizen_RL
-from .utility import create_intial_agents, grid_to_observation
+import numpy as np
+
+import mesa
 from mesa_models.epstein_civil_violence.model import EpsteinCivilViolence
+from ray.rllib.env import MultiAgentEnv
 
+from .agent import CITIZEN_RL, COP_RL
+from .utility import create_intial_agents, grid_to_observation
 
-class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
+class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
     """
     Custom environment class for the Epstein Civil Violence model with reinforcement learning.
     Inherits from EpsteinCivilViolence and MultiAgentEnv.
@@ -28,7 +29,7 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         max_iters=200,
     ):
         """
-        Initialize the EpsteinCivilViolence_RL environment.
+        Initialize the EPSTEINCIVILVIOLENCE_RL environment.
 
         Parameters:
         - width: Width of the grid.
@@ -92,7 +93,7 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         rewards = self.cal_reward()
 
         # Update matrix for observation space
-        grid_to_observation(self, Citizen_RL)
+        grid_to_observation(self, CITIZEN_RL)
         observation = {}
         for agent in self.schedule.agents:
             observation[agent.unique_id] = [
@@ -104,14 +105,17 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         done = {a.unique_id: False for a in self.schedule.agents}
         truncated = {a.unique_id: False for a in self.schedule.agents}
         truncated["__all__"] = np.all(list(truncated.values()))
-        done["__all__"] = True if self.schedule.time > self.max_iters else False
+        if self.schedule.time > self.max_iters:
+            done["__all__"] = True
+        else:
+            done["__all__"] = False
 
         return observation, rewards, done, truncated, {}
 
     def cal_reward(self):
         rewards = {}
         for agent in self.schedule.agents:
-            if isinstance(agent, Cop_RL):
+            if isinstance(agent, COP_RL):
                 if agent.arrest_made:
                     # Cop is rewarded for making an arrest
                     rewards[agent.unique_id] = 1
@@ -146,8 +150,8 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         # Using base scheduler to maintain the order of agents
         self.schedule = mesa.time.BaseScheduler(self)
         self.grid = mesa.space.SingleGrid(self.width, self.height, torus=True)
-        create_intial_agents(self, Citizen_RL, Cop_RL)
-        grid_to_observation(self, Citizen_RL)
+        create_intial_agents(self, CITIZEN_RL, COP_RL)
+        grid_to_observation(self, CITIZEN_RL)
         # Intialize action dictionary with no action
         self.action_dict = {a.unique_id: (0, 0) for a in self.schedule.agents}
         # Update neighbors for observation space

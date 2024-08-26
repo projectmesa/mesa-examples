@@ -1,8 +1,8 @@
-from .utility import move
 from mesa_models.epstein_civil_violence.agent import Citizen, Cop
+from .utility import move
 
 
-class Citizen_RL(Citizen):
+class CITIZEN_RL(Citizen):
     def step(self):
         # If in jail decrease sentence, else update condition
         if self.jail_sentence:
@@ -28,7 +28,7 @@ class Citizen_RL(Citizen):
         self.update_neighbors()
 
 
-class Cop_RL(Cop):
+class COP_RL(Cop):
     def step(self):
         # RL Logics
         # Arrest if active citizen is indicated in action

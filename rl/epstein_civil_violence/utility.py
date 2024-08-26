@@ -1,20 +1,20 @@
-def create_intial_agents(self, Citizen_RL, Cop_RL):
+def create_intial_agents(self, CITIZEN_RL, COP_RL):
     # Create agents
     unique_id = 0
     if self.cop_density + self.citizen_density > 1:
-        raise ValueError("Cop_RL density + citizen density must be less than 1")
+        raise ValueError("COP_RL density + citizen density must be less than 1")
     cops = []
     citizens = []
     for contents, (x, y) in self.grid.coord_iter():
         if self.random.random() < self.cop_density:
             unique_id_str = f"cop_{unique_id}"
-            cop = Cop_RL(unique_id_str, self, (x, y), vision=self.cop_vision)
+            cop = COP_RL(unique_id_str, self, (x, y), vision=self.cop_vision)
             unique_id += 1
             self.grid[x][y] = cop
             cops.append(cop)
         elif self.random.random() < (self.cop_density + self.citizen_density):
             unique_id_str = f"citizen_{unique_id}"
-            citizen = Citizen_RL(
+            citizen = CITIZEN_RL(
                 unique_id_str,
                 self,
                 (x, y),
@@ -35,7 +35,7 @@ def create_intial_agents(self, Citizen_RL, Cop_RL):
         self.schedule.add(citizen)
 
 
-def grid_to_observation(self, Citizen_RL):
+def grid_to_observation(self, CITIZEN_RL):
     # Convert neighborhood to observation grid
     self.obs_grid = []
     for i in self.grid._grid:
@@ -43,7 +43,7 @@ def grid_to_observation(self, Citizen_RL):
         for j in i:
             if j is None:
                 row.append(0)  # Empty cell
-            elif isinstance(j, Citizen_RL):
+            elif isinstance(j, CITIZEN_RL):
                 if j.condition == "Quiescent":
                     row.append(
                         3 if j.jail_sentence > 0 else 1

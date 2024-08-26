@@ -13,7 +13,7 @@ Next, ensure all dependencies are installed by following the instructions in the
 To begin, let’s import the required modules for the Epstein Civil Violence model:
 
 ```python
-from epstein_civil_violence.model import EpsteinCivilViolence_RL
+from epstein_civil_violence.model import EPSTEINCIVILVIOLENCE_RL
 from epstein_civil_violence.server import run_model
 from epstein_civil_violence.train import config
 from train import train_model
@@ -21,7 +21,7 @@ from train import train_model
 
 Here’s a breakdown of the modules:
 
-- `EpsteinCivilViolence_RL`: Contains the core model and environment.
+- `EPSTEINCIVILVIOLENCE_RL`: Contains the core model and environment.
 - `run_model`: Configures and runs the model for inference.
 - `config`: Defines the parameters for training the model.
 - `train_model`: Includes functions for training the RL agent using RLlib.
@@ -31,7 +31,7 @@ Here’s a breakdown of the modules:
 Let's load and reset the environment. This also allows us to inspect the observation space:
 
 ```python
-env = EpsteinCivilViolence_RL()
+env = EPSTEINCIVILVIOLENCE_RL()
 observation, info = env.reset(seed=42)
 ```
 
