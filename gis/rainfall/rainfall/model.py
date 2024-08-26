@@ -1,4 +1,5 @@
 import uuid
+from pathlib import Path
 
 import mesa
 import mesa_geo as mg
@@ -6,6 +7,8 @@ import numpy as np
 from shapely.geometry import Point
 
 from .space import CraterLake
+
+script_directory = Path(__file__).resolve().parent
 
 
 class RaindropAgent(mg.GeoAgent):
@@ -63,7 +66,7 @@ class Rainfall(mesa.Model):
         self.export_data = export_data
         self.num_steps = num_steps
 
-        self.space = CraterLake(crs="epsg:4326", water_height=water_height)
+        self.space = CraterLake(crs="epsg:4326", water_height=water_height, model=self)
         self.schedule = mesa.time.RandomActivation(self)
         self.datacollector = mesa.DataCollector(
             {
@@ -73,7 +76,8 @@ class Rainfall(mesa.Model):
             }
         )
 
-        self.space.set_elevation_layer("data/elevation.asc.gz", crs="epsg:4326")
+        data_path = script_directory / "../data/elevation.asc.gz"
+        self.space.set_elevation_layer(data_path, crs="epsg:4326")
 
     @property
     def contained(self):
