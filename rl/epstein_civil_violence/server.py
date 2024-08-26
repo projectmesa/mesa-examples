@@ -1,19 +1,18 @@
-import numpy as np
-
 import mesa
-from mesa_models.epstein_civil_violence.portrayal import citizen_cop_portrayal
+import numpy as np
 import ray
+from mesa_models.epstein_civil_violence.portrayal import citizen_cop_portrayal
 from ray import tune
 from ray.rllib.algorithms.algorithm import Algorithm
 
-from .agent import CITIZEN_RL
-from .model import EPSTEINCIVILVIOLENCE_RL
+from .agent import CitizenRL
+from .model import EpsteinCivilViolenceRL
 from .utility import grid_to_observation
 
 ray.init(local_mode=True)
 
 
-class EpsteinCivilViolenceServer(EPSTEINCIVILVIOLENCE_RL):
+class EpsteinCivilViolenceServer(EpsteinCivilViolenceRL):
     def __init__(
         self,
         height=20,
@@ -40,7 +39,7 @@ class EpsteinCivilViolenceServer(EPSTEINCIVILVIOLENCE_RL):
         self.iteration = 0
 
         def env_creator(_):
-            return EPSTEINCIVILVIOLENCE_RL(
+            return EpsteinCivilViolenceRL(
                 height,
                 width,
                 citizen_density,
@@ -62,7 +61,7 @@ class EpsteinCivilViolenceServer(EPSTEINCIVILVIOLENCE_RL):
     def step(self):
         if self.iteration == 0:
             self.reset()
-        grid_to_observation(self, CITIZEN_RL)
+        grid_to_observation(self, CitizenRL)
         observation = {}
         for agent in self.schedule.agents:
             observation[agent.unique_id] = [

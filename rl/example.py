@@ -1,10 +1,10 @@
-from epstein_civil_violence.model import EPSTEINCIVILVIOLENCE_RL
+from epstein_civil_violence.model import EpsteinCivilViolenceRL
 from epstein_civil_violence.server import run_model
 from epstein_civil_violence.train_config import config
 from train import train_model
 
 # Load the environment
-env = EPSTEINCIVILVIOLENCE_RL()
+env = EpsteinCivilViolenceRL()
 observation, info = env.reset(seed=42)
 # Running the environment on some random actions
 for _ in range(10):

@@ -1,15 +1,14 @@
 import gymnasium as gym
-import numpy as np
-
 import mesa
+import numpy as np
 from mesa_models.epstein_civil_violence.model import EpsteinCivilViolence
 from ray.rllib.env import MultiAgentEnv
 
-from .agent import CITIZEN_RL, COP_RL
+from .agent import CitizenRL, CopRL
 from .utility import create_intial_agents, grid_to_observation
 
 
-class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
+class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
     """
     Custom environment class for the Epstein Civil Violence model with reinforcement learning.
     Inherits from EpsteinCivilViolence and MultiAgentEnv.
@@ -30,7 +29,7 @@ class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
         max_iters=200,
     ):
         """
-        Initialize the EPSTEINCIVILVIOLENCE_RL environment.
+        Initialize the EpsteinCivilViolenceRL environment.
 
         Parameters:
         - width: Width of the grid.
@@ -94,7 +93,7 @@ class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
         rewards = self.cal_reward()
 
         # Update matrix for observation space
-        grid_to_observation(self, CITIZEN_RL)
+        grid_to_observation(self, CitizenRL)
         observation = {}
         for agent in self.schedule.agents:
             observation[agent.unique_id] = [
@@ -116,7 +115,7 @@ class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
     def cal_reward(self):
         rewards = {}
         for agent in self.schedule.agents:
-            if isinstance(agent, COP_RL):
+            if isinstance(agent, CopRL):
                 if agent.arrest_made:
                     # Cop is rewarded for making an arrest
                     rewards[agent.unique_id] = 1
@@ -151,8 +150,8 @@ class EPSTEINCIVILVIOLENCE_RL(EpsteinCivilViolence, MultiAgentEnv):
         # Using base scheduler to maintain the order of agents
         self.schedule = mesa.time.BaseScheduler(self)
         self.grid = mesa.space.SingleGrid(self.width, self.height, torus=True)
-        create_intial_agents(self, CITIZEN_RL, COP_RL)
-        grid_to_observation(self, CITIZEN_RL)
+        create_intial_agents(self, CitizenRL, CopRL)
+        grid_to_observation(self, CitizenRL)
         # Intialize action dictionary with no action
         self.action_dict = {a.unique_id: (0, 0) for a in self.schedule.agents}
         # Update neighbors for observation space

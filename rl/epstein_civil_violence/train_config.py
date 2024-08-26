@@ -3,11 +3,11 @@ import os
 from ray.rllib.algorithms.ppo import PPOConfig
 from ray.rllib.policy.policy import PolicySpec
 
-from .model import EPSTEINCIVILVIOLENCE_RL
+from .model import EpsteinCivilViolenceRL
 
 
 def env_creator(_):
-    return EPSTEINCIVILVIOLENCE_RL(
+    return EpsteinCivilViolenceRL(
         width=20,
         height=20,
         citizen_density=0.5,
