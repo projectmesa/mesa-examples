@@ -77,4 +77,4 @@ In the example above, we utilized RLlib to integrate reinforcement learning algo
 ### Implementing Your own cases
 If you're ready to explore RL in different agent-based scenarios, you can start by experimenting with various examples we provide at [Mesa-Examples](https://github.com/projectmesa/mesa-examples). These examples cover a range of scenarios and offer a great starting point for understanding how to apply RL within Mesa environments.
 
-If you have your own scenario in mind, you can create it as a Mesa model by following this series of [Tutorials](https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html). Once your scenario is set up as a Mesa model, you can refer to the code in the provided implementations to see how the RL components are built on top of the respective Mesa models. 
+If you have your own scenario in mind, you can create it as a Mesa model by following this series of [Tutorials](https://mesa.readthedocs.io/en/stable/tutorials/intro_tutorial.html). Once your scenario is set up as a Mesa model, you can refer to the code in the provided implementations to see how the RL components are built on top of the respective Mesa models.

@@ -17,10 +17,12 @@ for _ in range(10):
         observation, info = env.reset()
 
 # Training a model
-train_model(config, num_iterations=1, result_path='results.txt', checkpoint_dir='checkpoints')
+train_model(
+    config, num_iterations=1, result_path="results.txt", checkpoint_dir="checkpoints"
+)
 
 # Running the model and visualizing it
-server = run_model(path='checkpoints')
+server = run_model(path="checkpoints")
 # You can also try running pre-trained checkpoints present in model folder
 # server = run_model(path='model/epstein_civil_violence')
 server.port = 6005

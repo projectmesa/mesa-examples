@@ -2,9 +2,10 @@ import mesa
 import numpy as np
 import gymnasium as gym
 from ray.rllib.env import MultiAgentEnv
-from . agent import Cop_RL, Citizen_RL
-from . utility import create_intial_agents, grid_to_observation
+from .agent import Cop_RL, Citizen_RL
+from .utility import create_intial_agents, grid_to_observation
 from mesa_models.epstein_civil_violence.model import EpsteinCivilViolence
+
 
 class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
     """
@@ -43,11 +44,28 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         - max_iters: Maximum number of iterations for the model.
         """
 
-        super().__init__(width, height, citizen_density, cop_density, citizen_vision, cop_vision, legitimacy, max_jail_term, 0, arrest_prob_constant, movement, max_iters)
-        
-        # Defining RL specific attributes    
-        self.observation_space = gym.spaces.Box(low=0, high=4, shape=(((cop_vision*2+1)**2 - 1), ), dtype=np.float32)
-        self.action_space = gym.spaces.Tuple((gym.spaces.Discrete(8), gym.spaces.Discrete(5)))
+        super().__init__(
+            width,
+            height,
+            citizen_density,
+            cop_density,
+            citizen_vision,
+            cop_vision,
+            legitimacy,
+            max_jail_term,
+            0,
+            arrest_prob_constant,
+            movement,
+            max_iters,
+        )
+
+        # Defining RL specific attributes
+        self.observation_space = gym.spaces.Box(
+            low=0, high=4, shape=(((cop_vision * 2 + 1) ** 2 - 1),), dtype=np.float32
+        )
+        self.action_space = gym.spaces.Tuple(
+            (gym.spaces.Discrete(8), gym.spaces.Discrete(5))
+        )
 
     def step(self, action_dict):
         """
@@ -65,7 +83,7 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         """
         # Update the action dictionary for step
         self.action_dict = action_dict
-        
+
         # Step the model
         self.schedule.step()
         self.datacollector.collect(self)
@@ -77,13 +95,16 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         grid_to_observation(self, Citizen_RL)
         observation = {}
         for agent in self.schedule.agents:
-            observation[agent.unique_id] = [self.obs_grid[neighbor[0]][neighbor[1]] for neighbor in agent.neighborhood]  # Get the values from the observation grid for the neighborhood cells
+            observation[agent.unique_id] = [
+                self.obs_grid[neighbor[0]][neighbor[1]]
+                for neighbor in agent.neighborhood
+            ]  # Get the values from the observation grid for the neighborhood cells
 
         # RL specific outputs for the environment
         done = {a.unique_id: False for a in self.schedule.agents}
         truncated = {a.unique_id: False for a in self.schedule.agents}
-        truncated['__all__'] = np.all(list(truncated.values()))
-        done['__all__'] = True if self.schedule.time > self.max_iters else False
+        truncated["__all__"] = np.all(list(truncated.values()))
+        done["__all__"] = True if self.schedule.time > self.max_iters else False
 
         return observation, rewards, done, truncated, {}
 
@@ -102,7 +123,9 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
                 if agent.jail_sentence > 0:
                     rewards[agent.unique_id] = -agent.risk_aversion
                 else:
-                    rewards[agent.unique_id] = 0 if agent.condition == "Quiescent" else agent.grievance * 3
+                    rewards[agent.unique_id] = (
+                        0 if agent.condition == "Quiescent" else agent.grievance * 3
+                    )
 
         return rewards
 
@@ -133,5 +156,8 @@ class EpsteinCivilViolence_RL(EpsteinCivilViolence, MultiAgentEnv):
         self.schedule.step()
         observation = {}
         for agent in self.schedule.agents:
-            observation[agent.unique_id] = [self.obs_grid[neighbor[0]][neighbor[1]] for neighbor in agent.neighborhood]  # Get the values from the observation grid for the neighborhood cells
-        return observation , {}
+            observation[agent.unique_id] = [
+                self.obs_grid[neighbor[0]][neighbor[1]]
+                for neighbor in agent.neighborhood
+            ]  # Get the values from the observation grid for the neighborhood cells
+        return observation, {}

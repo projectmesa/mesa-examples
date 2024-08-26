@@ -32,7 +32,8 @@ def create_intial_agents(self, Citizen_RL, Cop_RL):
     for cop in cops:
         self.schedule.add(cop)
     for citizen in citizens:
-        self.schedule.add(citizen)     
+        self.schedule.add(citizen)
+
 
 def grid_to_observation(self, Citizen_RL):
     # Convert neighborhood to observation grid
@@ -44,12 +45,15 @@ def grid_to_observation(self, Citizen_RL):
                 row.append(0)  # Empty cell
             elif isinstance(j, Citizen_RL):
                 if j.condition == "Quiescent":
-                    row.append(3 if j.jail_sentence > 0 else 1)  # Quiescent citizen (jailed or not)
+                    row.append(
+                        3 if j.jail_sentence > 0 else 1
+                    )  # Quiescent citizen (jailed or not)
                 elif j.condition == "Active":
                     row.append(2)  # Active citizen
             else:
                 row.append(4)  # Cop
         self.obs_grid.append(row)
+
 
 def move(self, action, empty_neighbors):
     action = int(action)
@@ -63,6 +67,9 @@ def move(self, action, empty_neighbors):
         new_position = (self.pos[0], self.pos[1] + 1)  # Move down
     else:
         new_position = self.pos  # Don't move
-    new_position = (new_position[0] % self.model.grid.width, new_position[1] % self.model.grid.height)  # Wrap around the grid
+    new_position = (
+        new_position[0] % self.model.grid.width,
+        new_position[1] % self.model.grid.height,
+    )  # Wrap around the grid
     if new_position in empty_neighbors:
         self.model.grid.move_agent(self, new_position)  # Move to the new position

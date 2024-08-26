@@ -1,7 +1,7 @@
-
 from ray import tune
 from ray.rllib.algorithms.ppo import PPOConfig
 from ray.tune.logger import pretty_print
+
 
 # Custom function to get the configuration
 def get_config(custom_config):
@@ -26,19 +26,22 @@ def get_config(custom_config):
     )
     return config
 
+
 # Training the model
-def train_model(config, num_iterations=5, result_path='results.txt', checkpoint_dir='checkpoints'):
-    tune.register_env(config["env_name"], config['env_creator'])
-    
+def train_model(
+    config, num_iterations=5, result_path="results.txt", checkpoint_dir="checkpoints"
+):
+    tune.register_env(config["env_name"], config["env_creator"])
+
     algo_config = get_config(config)
     algo = algo_config.build()
-    
+
     for i in range(num_iterations):
         result = algo.train()
         print(pretty_print(result))
-    
-    with open(result_path, 'w') as file:
+
+    with open(result_path, "w") as file:
         file.write(pretty_print(result))
-    
+
     checkpoint_dir = algo.save(checkpoint_dir).checkpoint.path
     print(f"Checkpoint saved in directory {checkpoint_dir}")
