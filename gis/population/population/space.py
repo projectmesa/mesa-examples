@@ -39,7 +39,6 @@ class UgandaArea(GeoSpace):
             f"/vsigzip/{population_gzip_file}",
             cell_cls=UgandaCell,
             attr_name="population",
-            model=model,
         )
         raster_layer.crs = world_size.crs
         raster_layer.total_bounds = world_size.total_bounds
