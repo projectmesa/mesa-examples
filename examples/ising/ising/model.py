@@ -33,7 +33,7 @@ class IsingModel(mesa.Model):
             if dE < 0:
                 random_spin.state *= -1
             else:
-                if self.random.random() < self.boltzmann(dE):
+                if self.random.random() < self.boltzmann_factor(dE):
                     random_spin.state *= -1
 
     def get_energy_change(self, spin: Spin):
@@ -43,5 +43,5 @@ class IsingModel(mesa.Model):
             sum_over_neighbors += neighbor.state
         return sum_over_neighbors * 2 * spin.state
 
-    def boltzmann(self, dE):
+    def boltzmann_factor(self, dE):
         return np.exp(-dE / self.temperature)

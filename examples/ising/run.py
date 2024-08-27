@@ -1,6 +1,6 @@
 import solara
 from ising.model import IsingModel
-from ising.portrayal import portraySpin
+from ising.portrayal import portray_spin
 from mesa.visualization import JupyterViz
 from mesa.visualization.UserParam import Slider
 
@@ -24,5 +24,5 @@ def Page():
         IsingModel,
         model_params,
         name="Ising Model",
-        agent_portrayal=portraySpin,
+        agent_portrayal=portray_spin,
     )
