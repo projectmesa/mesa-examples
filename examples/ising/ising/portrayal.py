@@ -8,7 +8,7 @@ def portray_spin(spin):
     if spin is None:
         raise AssertionError
     return {
-        "marker": "s",
+        "shape": "s",
         "x": spin.x,
         "y": spin.y,
         "color": "grey" if spin.state is spin.UP else "black",
