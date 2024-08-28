@@ -1,6 +1,7 @@
 import mesa
 import heapq
 
+
 class Dijkstra_JourneyAgent(mesa.Agent):
     """
     An agent that performs pathfinding using Dijkstra's algorithm.
@@ -40,13 +41,19 @@ class Dijkstra_JourneyAgent(mesa.Agent):
 
         def get_neighbors(position):
             x, y = position
-            neighbors = [(x + dx, y + dy) for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]]
-            neighbors = [(nx, ny) for nx, ny in neighbors if 0 <= nx < width and 0 <= ny < height]
+            neighbors = [
+                (x + dx, y + dy) for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            ]
+            neighbors = [
+                (nx, ny) for nx, ny in neighbors if 0 <= nx < width and 0 <= ny < height
+            ]
             return neighbors
 
-        graph = { (x, y): get_neighbors((x, y)) for x in range(width) for y in range(height) }
+        graph = {
+            (x, y): get_neighbors((x, y)) for x in range(width) for y in range(height)
+        }
 
-        distances = {node: float('inf') for node in graph}
+        distances = {node: float("inf") for node in graph}
         previous_nodes = {node: None for node in graph}
         distances[start] = 0
 
@@ -81,6 +88,7 @@ class Dijkstra_JourneyAgent(mesa.Agent):
         """
         return self.path
 
+
 class Dijkstra_JourneyModel(mesa.Model):
     """
     A model with agents that use Dijkstra's algorithm to find paths.
@@ -98,9 +106,13 @@ class Dijkstra_JourneyModel(mesa.Model):
             agent = Dijkstra_JourneyAgent(i, self, start_pos, goal_pos)
             self.schedule.add(agent)
             self.grid.place_agent(agent, start_pos)
-            agent.path = agent.find_shortest_path(start_pos, goal_pos)  # Compute the path
+            agent.path = agent.find_shortest_path(
+                start_pos, goal_pos
+            )  # Compute the path
 
-        self.datacollector = mesa.datacollection.DataCollector({"num_agents": "num_agents"})
+        self.datacollector = mesa.datacollection.DataCollector(
+            {"num_agents": "num_agents"}
+        )
 
     def step(self):
         """
