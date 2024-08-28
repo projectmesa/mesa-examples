@@ -79,14 +79,16 @@ class WolfSheep(mesa.Model):
         self.sheep_gain_from_food = sheep_gain_from_food
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
+
+
+        collectors = {"Wolves": lambda m: len(m.get_agents_of_type(Wolf)),
+                      "Sheep": lambda m: len(m.get_agents_of_type(Sheep))}
+
+        if grass:
+            collectors["Grass"] = lambda m: len(m.get_agents_of_type(GrassPatch))
+
         self.datacollector = mesa.DataCollector(
-            {
-                "Wolves": lambda m: len(m.get_agents_of_type(Wolf)),
-                "Sheep": lambda m: len(m.get_agents_of_type(Sheep)),
-                "Grass": lambda m: len(
-                    m.get_agents_of_type(GrassPatch).select(lambda a: a.fully_grown)
-                ),
-            }
+            collectors
         )
 
         # Create sheep:
