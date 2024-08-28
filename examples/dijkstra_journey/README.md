@@ -4,7 +4,7 @@ Dijkstra_journey
 Dijkstra's algorithm, developed by Edsger W. Dijkstra in 1956, is a classic algorithm used to find the shortest paths between nodes in a graph. Its applications span network routing, geographical mapping, and various optimization problems.
 
 ## How to run
-To launch the interactive visualization, run `solara run app.py` in this directory.  Tune the $\alpha$ and $\beta$ parameters to modify how much the pheromone and city proximity influence the ants' decisions, respectively.  See the Algorithm details section for more.
+To launch the interactive visualization, run `solara run app.py` in this directory.  
 
 
 ## Algorithm details
