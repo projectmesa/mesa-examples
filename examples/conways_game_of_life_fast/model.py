@@ -1,7 +1,8 @@
 import numpy as np
-from mesa import Model
+from mesa import DataCollector, Model
 from mesa.space import PropertyLayer
 from scipy.signal import convolve2d
+
 
 # fmt: off
 class GameOfLifeModel(Model):
@@ -11,6 +12,16 @@ class GameOfLifeModel(Model):
         self.cell_layer = PropertyLayer("cells", width, height, False, dtype=bool)
         # Randomly set cells to alive
         self.cell_layer.data = np.random.choice([True, False], size=(width, height), p=[alive_fraction, 1 - alive_fraction])
+
+        # Metrics and datacollector
+        self.cells = width * height
+        self.alive_count = 0
+        self.alive_fraction = 0
+        self.datacollector = DataCollector(
+            model_reporters={"Cells alive": "alive_count",
+                             "Fraction alive": "alive_fraction"}
+        )
+        self.datacollector.collect(self)
 
     def step(self):
         self._advance_time()
@@ -34,3 +45,8 @@ class GameOfLifeModel(Model):
             # Rule for live cells
             np.logical_and(~self.cell_layer.data, neighbor_count == 3)  # Rule for dead cells
         )
+
+        # Metrics
+        self.alive_count = np.sum(self.cell_layer.data)
+        self.alive_fraction = self.alive_count / self.cells
+        self.datacollector.collect(self)

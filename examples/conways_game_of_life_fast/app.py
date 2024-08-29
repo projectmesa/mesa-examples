@@ -23,6 +23,7 @@ model_params = {
 page = SolaraViz(
     GameOfLifeModel,
     model_params,
+    measures=["Cells alive", "Fraction alive"],
     space_drawer=None,
     name="Game of Life Model",
 )
