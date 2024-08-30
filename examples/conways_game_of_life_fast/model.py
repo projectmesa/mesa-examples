@@ -24,7 +24,6 @@ class GameOfLifeModel(Model):
         self.datacollector.collect(self)
 
     def step(self):
-        self._advance_time()
         # Define a kernel for counting neighbors. The kernel has 1s around the center cell (which is 0).
         # This setup allows us to count the live neighbors of each cell when we apply convolution.
         kernel = np.array([[1, 1, 1],
