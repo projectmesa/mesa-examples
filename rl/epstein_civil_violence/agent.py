@@ -13,11 +13,7 @@ class CitizenRL(Citizen):
         else:
             # RL Logic
             # Update condition and postion based on action
-            self.condition = (
-                "Active"
-                if action_tuple[0] == 1
-                else "Quiescent"
-            )
+            self.condition = "Active" if action_tuple[0] == 1 else "Quiescent"
             # Update neighbors for updated empty neighbors
             self.update_neighbors()
             if self.model.movement:
