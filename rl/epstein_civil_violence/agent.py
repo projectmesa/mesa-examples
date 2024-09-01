@@ -44,7 +44,7 @@ class CopRL(Cop):
                 and agent.jail_sentence == 0
                 and agent.pos == arrest_pos
             ):
-                agent.jail_sentence = self.random.randint(1, self.model.max_jail_term)  
+                agent.jail_sentence = self.random.randint(1, self.model.max_jail_term)
                 agent.condition = "Quiescent"
                 self.arrest_made = True
                 break
