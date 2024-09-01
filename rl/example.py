@@ -24,6 +24,6 @@ train_model(
 # Running the model and visualizing it
 server = run_model(path="checkpoints")
 # You can also try running pre-trained checkpoints present in model folder
-# server = run_model(path='model/epstein_civil_violence')
+# server = run_model(path='rl_models/epstein_civil_violence')
 server.port = 6005
 server.launch(open_browser=True)

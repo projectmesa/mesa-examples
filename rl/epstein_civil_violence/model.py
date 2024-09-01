@@ -61,9 +61,11 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
         )
 
         # Defining RL specific attributes
+        # Observation space is a grid with agent information centered around each agent
         self.observation_space = gym.spaces.Box(
             low=0, high=4, shape=(((cop_vision * 2 + 1) ** 2 - 1),), dtype=np.float32
         )
+        # Action space is a tuple of two discrete actions, one for movement and one for arrest/protest
         self.action_space = gym.spaces.Tuple(
             (gym.spaces.Discrete(8), gym.spaces.Discrete(5))
         )

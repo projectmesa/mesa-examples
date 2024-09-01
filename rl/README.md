@@ -1,6 +1,6 @@
 # Reinforcement Learning Implementations with Mesa
 
-This repository demonstrates various applications of reinforcement learning (RL) using the Mesa agent-based modeling framework. These implementations were developed as part of my Google Summer of Code 2024 (GSoC'24) project under Project Mesa.
+This repository demonstrates various applications of reinforcement learning (RL) using the Mesa agent-based modeling framework.
 
 <p align="center">
 <img src="wolf_sheep/resources/wolf_sheep.gif" width="500" height="400">
@@ -32,6 +32,13 @@ This repository demonstrates various applications of reinforcement learning (RL)
    pip install -r requirements.txt
    ```
 
+4. **Download Pre-Trained Weights**
+   Download pre-trained weights from hugging face:
+
+   ```bash
+   git clone https://huggingface.co/projectmesa/rl_models/
+   ```
+
 ### Running the Examples
 
 To test the code, simply execute `example.py`:
@@ -40,7 +47,7 @@ To test the code, simply execute `example.py`:
 python example.py
 ```
 
-*Note: Pre-trained models might not work in some cases because of different library versions. In such cases, you can train your own model and use it.*
+*Note: Pre-trained models might not work in some cases because of differnce in versions of libraries used to train and test.*
 
 To learn about individual implementations, please refer to the README files of specific environments.
 
@@ -57,5 +64,3 @@ Here's a refined version of your contribution guide:
 We welcome contributions to our project! A great way to get started is by implementing the remaining examples listed in the [Mesa-Examples](https://github.com/projectmesa/mesa-examples) repository with reinforcement learning (RL).
 
 Additionally, if you have your own Mesa environments that you think would benefit from RL integration, we encourage you to share them with us. Simply start an issue on our GitHub repository with your suggestion, and we can collaborate on bringing it to life!
-
-Your contributions are invaluable in enhancing the project and helping us build a robust library of RL-integrated Mesa environments.

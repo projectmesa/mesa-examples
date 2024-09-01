@@ -56,20 +56,24 @@ def grid_to_observation(self, CitizenRL):
 
 
 def move(self, action, empty_neighbors):
-    action = int(action)
-    if action == 0:
-        new_position = (self.pos[0] + 1, self.pos[1])  # Move right
-    elif action == 1:
-        new_position = (self.pos[0] - 1, self.pos[1])  # Move left
-    elif action == 2:
-        new_position = (self.pos[0], self.pos[1] - 1)  # Move up
-    elif action == 3:
-        new_position = (self.pos[0], self.pos[1] + 1)  # Move down
-    else:
-        new_position = self.pos  # Don't move
-    new_position = (
-        new_position[0] % self.model.grid.width,
-        new_position[1] % self.model.grid.height,
-    )  # Wrap around the grid
-    if new_position in empty_neighbors:
-        self.model.grid.move_agent(self, new_position)  # Move to the new position
+    # Define the movement deltas  
+    moves = {  
+        0: (1, 0),   # Move right  
+        1: (-1, 0),  # Move left  
+        2: (0, -1),  # Move up  
+        3: (0, 1),   # Move down  
+    }  
+    
+    # Get the delta for the action, defaulting to (0, 0) if the action is invalid  
+    dx, dy = moves.get(int(action), (0, 0))  
+    
+    # Calculate the new position and wrap around the grid  
+    new_position = (  
+        (self.pos[0] + dx) % self.model.grid.width,  
+        (self.pos[1] + dy) % self.model.grid.height  
+    )  
+    
+    # Move the agent if the new position is in empty_neighbors  
+    if new_position in empty_neighbors:  
+        self.model.grid.move_agent(self, new_position)  
+
