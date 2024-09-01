@@ -8,7 +8,7 @@ class CitizenRL(Citizen):
         # Get action from action_dict
         action_tuple = self.model.action_dict[self.unique_id]
         # If in jail decrease sentence, else update condition
-        if self.jail_sentence:
+        if self.jail_sentence > 0:
             self.jail_sentence -= 1
         else:
             # RL Logic

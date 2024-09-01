@@ -18,9 +18,9 @@ test_gis = [
     "momepy",
 ]
 rl_example = [
-    "stable-baselines3"
-    "seaborn"
-    'mesa"
+    "stable-baselines3",
+    "seaborn",
+    'mesa",
     "tensorboard"
 ]
 
