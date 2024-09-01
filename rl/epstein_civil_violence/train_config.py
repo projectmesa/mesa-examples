@@ -5,6 +5,7 @@ from ray.rllib.policy.policy import PolicySpec
 
 from .model import EpsteinCivilViolenceRL
 
+
 # Configuration for the PPO algorithm
 # You can change the configuration as per your requirements
 def env_creator(_):

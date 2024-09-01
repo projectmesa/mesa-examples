@@ -20,7 +20,7 @@ test_gis = [
 rl_example = [
     "stable-baselines3",
     "seaborn",
-    'mesa",
+    "mesa",
     "tensorboard"
 ]
 
