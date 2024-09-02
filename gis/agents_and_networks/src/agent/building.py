@@ -35,3 +35,6 @@ class Building(mg.GeoAgent):
         if isinstance(other, Building):
             return self.unique_id == other.unique_id
         return False
+
+    def __hash__(self) -> int:
+        return hash(self.unique_id)
