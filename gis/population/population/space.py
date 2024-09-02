@@ -38,6 +38,7 @@ class UgandaArea(GeoSpace):
         world_size = gpd.GeoDataFrame.from_file(world_zip_file)
         raster_layer = RasterLayer.from_file(
             population_gzip_file,
+            model=model,
             cell_cls=UgandaCell,
             attr_name="population",
             rio_opener=gzip.open,
