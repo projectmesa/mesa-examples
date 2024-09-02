@@ -35,6 +35,7 @@ class CraterLake(mg.GeoSpace):
     def set_elevation_layer(self, elevation_gzip_file, crs):
         raster_layer = mg.RasterLayer.from_file(
             f"/vsigzip/{elevation_gzip_file}",
+            model=self.model,
             cell_cls=LakeCell,
             attr_name="elevation",
         )
