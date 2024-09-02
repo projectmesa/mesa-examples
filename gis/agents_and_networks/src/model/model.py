@@ -1,5 +1,6 @@
 import uuid
 from functools import partial
+from pathlib import Path
 
 import geopandas as gpd
 import mesa
@@ -12,6 +13,8 @@ from ..agent.commuter import Commuter
 from ..agent.geo_agents import Driveway, LakeAndRiver, Walkway
 from ..space.campus import Campus
 from ..space.road_network import CampusWalkway
+
+script_directory = Path(__file__).resolve().parent
 
 
 def get_time(model) -> pd.Timedelta:
@@ -59,14 +62,14 @@ class AgentsAndNetworks(mesa.Model):
 
     def __init__(
         self,
-        campus: str,
-        data_crs: str,
-        buildings_file: str,
-        walkway_file: str,
-        lakes_file: str,
-        rivers_file: str,
-        driveway_file: str,
-        num_commuters,
+        campus="ub",
+        data_crs="epsg:4326",
+        buildings_file=script_directory / "../../data/ub/UB_bld.zip",
+        walkway_file=script_directory / "../../data/ub/UB_walkway_line.zip",
+        lakes_file=script_directory / "../../data/ub/hydrop.zip",
+        rivers_file=script_directory / "../../data/ub/hydrol.zip",
+        driveway_file=script_directory / "../../data/data/ub/UB_Rds.zip",
+        num_commuters=50,
         commuter_min_friends=5,
         commuter_max_friends=10,
         commuter_happiness_increase=0.5,
