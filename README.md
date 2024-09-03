@@ -2,7 +2,7 @@
 
 This repository contains examples that work with Mesa and illustrate different features of Mesa.
 
-This is the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) legacy branch, with examples that work with Mesa 2.x releases.
+This is the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) legacy branch, with examples that work with Mesa 2.x releases and Mesa-Geo 0.8.x releases.
 
 To contribute to this repository, see [CONTRIBUTING.rst](https://github.com/projectmesa/mesa-examples/blob/main/CONTRIBUTING.rst).
 
