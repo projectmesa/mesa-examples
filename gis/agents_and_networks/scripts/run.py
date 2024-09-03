@@ -39,6 +39,7 @@ if __name__ == "__main__":
         "lakes_file": f"data/{args.campus}/hydrop.zip",
         "rivers_file": f"data/{args.campus}/hydrol.zip",
         "driveway_file": f"data/{args.campus}/{data_file_prefix}_Rds.zip",
+        "output_dir": "outputs",
         "show_walkway": True,
         "show_lakes_and_rivers": True,
         "show_driveway": True,
