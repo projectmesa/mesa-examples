@@ -2,8 +2,8 @@
 
 This repository contains examples that work with Mesa and illustrate different features of Mesa. For more information on each model, see its own Readme and documentation.
 
-- Mesa examples that work on the Mesa main development branch are available here on the [`main`](https://github.com/projectmesa/mesa-examples) branch.
-- Mesa examples that work for Mesa 2.x releases are available here on the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) branch.
+- Mesa examples that work on the Mesa and Mesa-Geo main development branches are available here on the [`main`](https://github.com/projectmesa/mesa-examples) branch.
+- Mesa examples that work with Mesa 2.x releases and Mesa-Geo 0.8.x releases are available here on the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) branch.
 
 To contribute to this repository, see [CONTRIBUTING.rst](https://github.com/projectmesa/mesa-examples/blob/main/CONTRIBUTING.rst).
 
