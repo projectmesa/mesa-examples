@@ -29,7 +29,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install mesa<3
+        pip install "mesa<3"
         pip install .[test]
     - name: Test with pytest
       run: pytest test_examples.py
