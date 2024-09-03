@@ -69,6 +69,7 @@ class AgentsAndNetworks(mesa.Model):
         lakes_file=script_directory / "../../data/ub/hydrop.zip",
         rivers_file=script_directory / "../../data/ub/hydrol.zip",
         driveway_file=script_directory / "../../data/data/ub/UB_Rds.zip",
+        output_dir=script_directory / "../../outputs",
         num_commuters=50,
         commuter_min_friends=5,
         commuter_max_friends=10,
@@ -97,7 +98,9 @@ class AgentsAndNetworks(mesa.Model):
         Commuter.CHANCE_NEW_FRIEND = chance_new_friend
 
         self._load_buildings_from_file(buildings_file, crs=model_crs, campus=campus)
-        self._load_road_vertices_from_file(walkway_file, crs=model_crs, campus=campus)
+        self._load_road_vertices_from_file(
+            walkway_file, crs=model_crs, campus=campus, output_dir=output_dir
+        )
         self._set_building_entrance()
         self.got_to_destination = 0
         self._create_commuters()
@@ -167,14 +170,16 @@ class AgentsAndNetworks(mesa.Model):
         self.space.add_buildings(buildings)
 
     def _load_road_vertices_from_file(
-        self, walkway_file: str, crs: str, campus: str
+        self, walkway_file: str, crs: str, campus: str, output_dir: str
     ) -> None:
         walkway_df = (
             gpd.read_file(walkway_file)
             .set_crs(self.data_crs, allow_override=True)
             .to_crs(crs)
         )
-        self.walkway = CampusWalkway(campus=campus, lines=walkway_df["geometry"])
+        self.walkway = CampusWalkway(
+            campus=campus, lines=walkway_df["geometry"], output_dir=output_dir
+        )
         if self.show_walkway:
             walkway_creator = mg.AgentCreator(Walkway, model=self)
             walkway = walkway_creator.from_GeoDataFrame(walkway_df)
