@@ -38,9 +38,7 @@ def schelling_draw(agent):
 
 
 happy_element = HappyElement()
-map_element = mg.visualization.MapModule(
-    schelling_draw, [52, 12], 4, tiles=xyz.CartoDB.Positron
-)
+map_element = mg.visualization.MapModule(schelling_draw, tiles=xyz.CartoDB.Positron)
 happy_chart = mesa.visualization.ChartModule([{"Label": "happy", "Color": "Black"}])
 server = mesa.visualization.ModularServer(
     GeoSchelling, [map_element, happy_element, happy_chart], "Schelling", model_params
