@@ -41,8 +41,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        # TODO: Update to Mesa-Geo 0.8.x-maintenance branch, once it exists
-        pip install -U git+https://github.com/projectmesa/mesa-geo@main#egg=mesa-geo
+        pip install -U git+https://github.com/projectmesa/mesa-geo@0.8.x-maintenance#egg=mesa-geo
         pip install .[test_gis]
     - name: Test with pytest
       run: pytest -rA -Werror test_gis_examples.py
