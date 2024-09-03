@@ -1,5 +1,7 @@
 # GIS Examples
 
+_Note: This is the Mesa-examples `mesa-2.x` maintenance branch. These GIS examples work with Mesa 2.x and Mesa-Geo 0.8.x._
+
 ## Vector Data
 
 - [GeoSchelling Model (Polygons)](https://github.com/projectmesa/mesa-examples/tree/main/gis/geo_schelling)
