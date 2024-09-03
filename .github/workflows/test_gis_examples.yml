@@ -16,20 +16,7 @@ on:
     - cron: '0 6 * * 1'  # Monday at 6:00 UTC
 
 jobs:
-  # build-stable:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v5
-  #     with:
-  #       python-version: "3.12"
-  #   - name: Install dependencies
-  #     run: pip install mesa pytest
-  #   - name: Test with pytest
-  #     run: pytest -rA -Werror test_examples.py
-
-  build-pre:
+  build-08-stable:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -39,12 +26,12 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install mesa-geo --pre
+        pip install "mesa-geo<0.9"
         pip install .[test_gis]
     - name: Test with pytest
       run: pytest -rA -Werror test_gis_examples.py
 
-  build-main:
+  build-08-git:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -54,6 +41,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
+        # TODO: Update to Mesa-Geo 0.8.x-maintenance branch, once it exists
         pip install -U git+https://github.com/projectmesa/mesa-geo@main#egg=mesa-geo
         pip install .[test_gis]
     - name: Test with pytest
