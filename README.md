@@ -19,6 +19,7 @@ $ pip install -U -e git+https://github.com/projectmesa/mesa-examples@mesa-2.x#eg
 ```
 ```python
 from mesa_models.boltzmann_wealth_model.model import BoltzmannWealthModel
+
 ```
 You can see the available models at [setup.cfg](https://github.com/projectmesa/mesa-examples/blob/main/setup.cfg).
 

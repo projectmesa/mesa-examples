@@ -18,6 +18,12 @@ test_gis = [
     "pytest",
     "momepy",
 ]
+rl_example = [
+    "stable-baselines3",
+    "seaborn",
+    "mesa",
+    "tensorboard"
+]
 
 [build-system]
 requires = [
