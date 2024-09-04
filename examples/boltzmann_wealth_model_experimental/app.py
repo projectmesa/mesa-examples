@@ -1,4 +1,8 @@
-from mesa.visualization import SolaraViz, make_plot_measure, make_space_matplotlib
+from mesa.visualization import (
+    SolaraViz,
+    make_plot_measure,
+    make_space_matplotlib,
+)
 from model import BoltzmannWealthModel
 
 

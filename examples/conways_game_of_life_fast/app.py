@@ -1,4 +1,4 @@
-from mesa.visualization import SolaraViz
+from mesa.visualization import SolaraViz, make_plot_measure
 from model import GameOfLifeModel
 
 model_params = {
@@ -20,11 +20,11 @@ model_params = {
     },
 }
 
+model = GameOfLifeModel(10, 10)
+
 page = SolaraViz(
-    GameOfLifeModel,
-    model_params,
-    measures=["Cells alive", "Fraction alive"],
-    space_drawer=None,
+    model,
+    components=[make_plot_measure(["Cells alive", "Fraction alive"])],
     name="Game of Life Model",
 )
 page  # noqa
