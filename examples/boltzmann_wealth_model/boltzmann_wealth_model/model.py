@@ -26,7 +26,7 @@ class BoltzmannWealthModel(mesa.Model):
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
         )
         # Create agents
-        for i in range(self.num_agents):
+        for _ in range(self.num_agents):
             a = MoneyAgent(self)
 
             # Add the agent to a random grid cell
