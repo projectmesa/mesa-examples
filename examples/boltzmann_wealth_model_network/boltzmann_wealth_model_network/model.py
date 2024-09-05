@@ -28,7 +28,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         list_of_random_nodes = self.random.sample(list(self.G), self.num_agents)
 
         # Create agents
-        for _ in range(self.num_agents):
+        for i in range(self.num_agents):
             a = MoneyAgent(self)
 
             # Add the agent to a random node
