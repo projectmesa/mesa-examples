@@ -99,7 +99,7 @@ class WolfSheep(mesa.Model):
             self.grid.place_agent(sheep, (x, y))
 
         # Create wolves
-        for i in range(self.initial_wolves):
+        for _ in range(self.initial_wolves):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.wolf_gain_from_food)
