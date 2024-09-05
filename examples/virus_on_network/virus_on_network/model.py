@@ -65,7 +65,7 @@ class VirusOnNetwork(mesa.Model):
         )
 
         # Create agents
-        for _, node in enumerate(self.G.nodes()):
+        for node in self.G.nodes():
             a = VirusAgent(
                 self,
                 State.SUSCEPTIBLE,
