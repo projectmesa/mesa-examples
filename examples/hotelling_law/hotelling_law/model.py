@@ -178,13 +178,13 @@ class HotellingModel(Model):
         )  # Calculate number of mobile agents.
         mobile_agents_assigned = 0
 
-        for unique_id in range(self.num_agents):
+        for _ in range(self.num_agents):
             strategy = random.choices(["Budget", "Premium"], weights=[70, 30], k=1)[0]
             can_move = mobile_agents_assigned < num_mobile_agents
             if can_move:
                 mobile_agents_assigned += 1
 
-            agent = StoreAgent(unique_id, self, can_move=can_move, strategy=strategy)
+            agent = StoreAgent(self, can_move=can_move, strategy=strategy)
 
             self.store_agents.add(agent)
 
@@ -194,9 +194,9 @@ class HotellingModel(Model):
             self.grid.place_agent(agent, (x, y))
 
         # Place consumer agents
-        for i in range(self.num_consumers):
+        for _ in range(self.num_consumers):
             # Ensure unique ID across all agents
-            consumer = ConsumerAgent(self.num_agents + i, self)
+            consumer = ConsumerAgent(self)
 
             self.consumer_agents.add(consumer)
             # Place consumer randomly on the grid

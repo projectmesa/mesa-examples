@@ -18,7 +18,7 @@ class ColorCell(mesa.Agent):
         """
         Create a cell, in the given state, at the given row, col position.
         """
-        super().__init__(pos, model)
+        super().__init__(model)
         self._row = pos[0]
         self._col = pos[1]
         self._state = initial_state

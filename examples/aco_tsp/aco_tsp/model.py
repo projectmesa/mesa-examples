@@ -82,14 +82,13 @@ class AntTSP(mesa.Agent):
     An agent
     """
 
-    def __init__(self, unique_id, model, alpha: float = 1.0, beta: float = 5.0):
+    def __init__(self, model, alpha: float = 1.0, beta: float = 5.0):
         """
         Customize the agent
         """
-        self.unique_id = unique_id
+        super().__init__(model)
         self.alpha = alpha
         self.beta = beta
-        super().__init__(unique_id, model)
         self._cities_visited = []
         self._traveled_distance = 0
         self.tsp_solution = []
@@ -176,8 +175,8 @@ class AcoTspModel(mesa.Model):
         self.max_steps = max_steps
         self.grid = mesa.space.NetworkGrid(tsp_graph.g)
 
-        for i in range(self.num_agents):
-            agent = AntTSP(unique_id=i, model=self, alpha=ant_alpha, beta=ant_beta)
+        for _ in range(self.num_agents):
+            agent = AntTSP(model=self, alpha=ant_alpha, beta=ant_beta)
 
             city = tsp_graph.cities[self.random.randrange(self.num_cities)]
             self.grid.place_agent(agent, city)

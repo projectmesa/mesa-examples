@@ -29,7 +29,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
 
         # Create agents
         for i in range(self.num_agents):
-            a = MoneyAgent(i, self)
+            a = MoneyAgent(self)
 
             # Add the agent to a random node
             self.grid.place_agent(a, list_of_random_nodes[i])
@@ -50,8 +50,8 @@ class BoltzmannWealthModelNetwork(mesa.Model):
 class MoneyAgent(mesa.Agent):
     """An agent with fixed initial wealth."""
 
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
+    def __init__(self, model):
+        super().__init__(model)
         self.wealth = 1
 
     def move(self):
