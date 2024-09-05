@@ -122,11 +122,11 @@ class Charts(mesa.Model):
         self.bank = Bank(self, self.reserve_percent)
 
         # create people for the model according to number of people set by user
-        for i in range(self.init_people):
+        for _ in range(self.init_people):
             # set x, y coords randomly within the grid
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            p = Person(i, self, True, self.bank, self.rich_threshold)
+            p = Person(self, True, self.bank, self.rich_threshold)
             # place the Person object on the grid at coordinates (x, y)
             self.grid.place_agent(p, (x, y))
 

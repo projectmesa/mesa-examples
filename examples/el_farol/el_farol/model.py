@@ -23,8 +23,8 @@ class ElFarolBar(mesa.Model):
         # strategies would have worked.
         self.history = np.random.randint(0, 100, size=memory_size * 2).tolist()
         self.attendance = self.history[-1]
-        for i in range(self.num_agents):
-            BarCustomer(i, self, memory_size, crowd_threshold, num_strategies)
+        for _ in range(self.num_agents):
+            BarCustomer(self, memory_size, crowd_threshold, num_strategies)
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Customers": "attendance"},

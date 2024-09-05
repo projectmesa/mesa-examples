@@ -6,15 +6,14 @@ class SchellingAgent(mesa.Agent):
     Schelling segregation agent
     """
 
-    def __init__(self, unique_id, model, agent_type):
+    def __init__(self, model, agent_type):
         """
         Create a new Schelling agent.
 
         Args:
-           unique_id: Unique identifier for the agent.
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
-        super().__init__(unique_id, model)
+        super().__init__(model)
         self.type = agent_type
 
     def step(self):
@@ -55,7 +54,7 @@ class Schelling(mesa.Model):
         for _, pos in self.grid.coord_iter():
             if self.random.random() < density:
                 agent_type = 1 if self.random.random() < minority_pc else 0
-                agent = SchellingAgent(self.next_id(), self, agent_type)
+                agent = SchellingAgent(self, agent_type)
                 self.grid.place_agent(agent, pos)
 
         self.datacollector.collect(self)

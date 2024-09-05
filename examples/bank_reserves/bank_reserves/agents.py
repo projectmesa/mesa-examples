@@ -45,9 +45,9 @@ class Bank:
 
 # subclass of RandomWalker, which is subclass to Mesa Agent
 class Person(RandomWalker):
-    def __init__(self, unique_id, model, moore, bank, rich_threshold):
+    def __init__(self, model, moore, bank, rich_threshold):
         # init parent class with required parameters
-        super().__init__(unique_id, model, moore=moore)
+        super().__init__(model, moore=moore)
         # the amount each person has in savings
         self.savings = 0
         # total loan amount person has outstanding
