@@ -94,7 +94,7 @@ class SugarscapeG1mt(mesa.Model):
             resource = Resource(self, max_sugar, max_spice)
             self.grid.place_agent(resource, (x, y))
 
-        for i in range(self.initial_population):
+        for _ in range(self.initial_population):
             # get agent position
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
