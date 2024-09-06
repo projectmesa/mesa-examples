@@ -15,7 +15,6 @@ class ElFarolBar(mesa.Model):
         super().__init__()
         self.running = True
         self.num_agents = N
-        self.schedule = mesa.time.RandomActivation(self)
 
         # Initialize the previous attendance randomly so the agents have a history
         # to work with from the start.
@@ -24,9 +23,9 @@ class ElFarolBar(mesa.Model):
         # strategies would have worked.
         self.history = np.random.randint(0, 100, size=memory_size * 2).tolist()
         self.attendance = self.history[-1]
-        for i in range(self.num_agents):
-            a = BarCustomer(i, self, memory_size, crowd_threshold, num_strategies)
-            self.schedule.add(a)
+        for _ in range(self.num_agents):
+            BarCustomer(self, memory_size, crowd_threshold, num_strategies)
+
         self.datacollector = mesa.DataCollector(
             model_reporters={"Customers": "attendance"},
             agent_reporters={"Utility": "utility", "Attendance": "attend"},
@@ -35,10 +34,9 @@ class ElFarolBar(mesa.Model):
     def step(self):
         self.datacollector.collect(self)
         self.attendance = 0
-        self.schedule.step()
+        self.agents.shuffle().do("update_attendance")
         # We ensure that the length of history is constant
         # after each step.
         self.history.pop(0)
         self.history.append(self.attendance)
-        for agent in self.schedule.agents:
-            agent.update_strategies()
+        self.agents.shuffle().do("update_strategies")

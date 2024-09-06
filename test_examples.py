@@ -32,3 +32,4 @@ def test_model_steps(model_class):
     model = model_class()  # Assume no arguments are needed
     for _ in range(10):
         model.step()
+    assert model.steps == 10

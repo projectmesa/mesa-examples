@@ -82,14 +82,13 @@ class AntTSP(mesa.Agent):
     An agent
     """
 
-    def __init__(self, unique_id, model, alpha: float = 1.0, beta: float = 5.0):
+    def __init__(self, model, alpha: float = 1.0, beta: float = 5.0):
         """
         Customize the agent
         """
-        self.unique_id = unique_id
+        super().__init__(model)
         self.alpha = alpha
         self.beta = beta
-        super().__init__(unique_id, model)
         self._cities_visited = []
         self._traveled_distance = 0
         self.tsp_solution = []
@@ -158,8 +157,6 @@ class AcoTspModel(mesa.Model):
 
     There is only one model-level parameter: how many agents the model contains. When a new model
     is started, we want it to populate itself with the given number of agents.
-
-    The scheduler is a special model component which controls the order in which agents are activated.
     """
 
     def __init__(
@@ -176,12 +173,10 @@ class AcoTspModel(mesa.Model):
         self.num_cities = tsp_graph.num_cities
         self.all_cities = set(range(self.num_cities))
         self.max_steps = max_steps
-        self.schedule = mesa.time.RandomActivation(self)
         self.grid = mesa.space.NetworkGrid(tsp_graph.g)
 
-        for i in range(self.num_agents):
-            agent = AntTSP(unique_id=i, model=self, alpha=ant_alpha, beta=ant_beta)
-            self.schedule.add(agent)
+        for _ in range(self.num_agents):
+            agent = AntTSP(model=self, alpha=ant_alpha, beta=ant_beta)
 
             city = tsp_graph.cities[self.random.randrange(self.num_cities)]
             self.grid.place_agent(agent, city)
@@ -206,6 +201,7 @@ class AcoTspModel(mesa.Model):
                 "tsp_solution": "tsp_solution",
             },
         )
+        self.datacollector.collect(self)  # Collect initial state at steps=0
 
         self.running = True
 
@@ -213,7 +209,7 @@ class AcoTspModel(mesa.Model):
         # tau_ij(t+1) = (1-ro)*tau_ij(t) + delta_tau_ij(t)
         # delta_tau_ij(t) = sum_k^M {Q/L^k} * I[i,j \in T^k]
         delta_tau_ij = {}
-        for k, agent in enumerate(self.schedule.agents):
+        for k, agent in enumerate(self.agents):
             delta_tau_ij[k] = agent.calculate_pheromone_delta(q)
 
         for i, j in self.grid.G.edges():
@@ -227,16 +223,14 @@ class AcoTspModel(mesa.Model):
 
     def step(self):
         """
-        A model step. Used for collecting data and advancing the schedule
+        A model step. Used for activating the agents and collecting data.
         """
-        self.datacollector.collect(self)
-        self.schedule.step()
-        self.num_steps += 1
+        self.agents.shuffle().do("step")
         self.update_pheromone()
 
         # Check len of cities visited by an agent
         best_instance_iter = float("inf")
-        for agent in self.schedule.agents:
+        for agent in self.agents:
             # Check for best path
             if agent.tsp_distance < self.best_distance:
                 self.best_distance = agent.tsp_distance
@@ -249,3 +243,5 @@ class AcoTspModel(mesa.Model):
 
         if self.num_steps >= self.max_steps:
             self.running = False
+
+        self.datacollector.collect(self)

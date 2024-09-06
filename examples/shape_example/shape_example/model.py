@@ -2,8 +2,8 @@ import mesa
 
 
 class Walker(mesa.Agent):
-    def __init__(self, unique_id, model, heading=(1, 0)):
-        super().__init__(unique_id, model)
+    def __init__(self, model, heading=(1, 0)):
+        super().__init__(model)
         self.heading = heading
         self.headings = {(1, 0), (0, 1), (-1, 0), (0, -1)}
 
@@ -14,7 +14,7 @@ class ShapeExample(mesa.Model):
         self.N = N  # num of agents
         self.headings = ((1, 0), (0, 1), (-1, 0), (0, -1))  # tuples are fast
         self.grid = mesa.space.SingleGrid(width, height, torus=False)
-        self.schedule = mesa.time.RandomActivation(self)
+
         self.make_walker_agents()
         self.running = True
 
@@ -30,10 +30,10 @@ class ShapeExample(mesa.Model):
             # heading = (1, 0)
             if self.grid.is_cell_empty(pos):
                 print(f"Creating agent {unique_id} at ({x}, {y})")
-                a = Walker(unique_id, self, heading)
-                self.schedule.add(a)
+                a = Walker(self, heading)
+
                 self.grid.place_agent(a, pos)
                 unique_id += 1
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle().do("step")

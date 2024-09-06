@@ -2,8 +2,8 @@
 
 This repository contains examples that work with Mesa and illustrate different features of Mesa. For more information on each model, see its own Readme and documentation.
 
-- Mesa examples that work on the Mesa main development branch are available here on the [`main`](https://github.com/projectmesa/mesa-examples) branch.
-- Mesa examples that work for Mesa 2.x releases are available here on the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) branch.
+- Mesa examples that work on the Mesa and Mesa-Geo main development branches are available here on the [`main`](https://github.com/projectmesa/mesa-examples) branch.
+- Mesa examples that work with Mesa 2.x releases and Mesa-Geo 0.8.x releases are available here on the [`mesa-2.x`](https://github.com/projectmesa/mesa-examples/tree/mesa-2.x) branch.
 
 To contribute to this repository, see [CONTRIBUTING.rst](https://github.com/projectmesa/mesa-examples/blob/main/CONTRIBUTING.rst).
 
@@ -50,6 +50,10 @@ A cellular automaton model where agents opinions are influenced by that of their
 ### [Conway's Game Of "Life" Model](https://github.com/projectmesa/mesa-examples/tree/main/examples/conways_game_of_life)
 
 Implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), a cellular automata where simple rules can give rise to complex patterns.
+
+### [Conway's Game Of "Life" Model (Fast)](https://github.com/projectmesa/mesa-examples/tree/main/examples/conways_game_of_life_fast)
+
+A very fast performance optimized version of Conway's Game of Life using the Mesa [`PropertyLayer`](https://github.com/projectmesa/mesa/pull/1898). About 100x as fast as the regular versions, but limited visualisation (for [now](https://github.com/projectmesa/mesa/issues/2138)).
 
 ### [Conway's Game Of "Life" Model on a Hexagonal Grid](https://github.com/projectmesa/mesa-examples/tree/main/examples/hex_snowflake)
 

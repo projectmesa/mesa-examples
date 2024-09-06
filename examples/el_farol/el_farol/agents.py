@@ -3,8 +3,8 @@ import numpy as np
 
 
 class BarCustomer(mesa.Agent):
-    def __init__(self, unique_id, model, memory_size, crowd_threshold, num_strategies):
-        super().__init__(unique_id, model)
+    def __init__(self, model, memory_size, crowd_threshold, num_strategies):
+        super().__init__(model)
         # Random values from -1.0 to 1.0
         self.strategies = np.random.rand(num_strategies, memory_size + 1) * 2 - 1
         self.best_strategy = self.strategies[0]
@@ -14,7 +14,7 @@ class BarCustomer(mesa.Agent):
         self.utility = 0
         self.update_strategies()
 
-    def step(self):
+    def update_attendance(self):
         prediction = self.predict_attendance(
             self.best_strategy, self.model.history[-self.memory_size :]
         )

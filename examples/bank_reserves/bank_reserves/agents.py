@@ -10,15 +10,18 @@ Author of NetLogo code:
     Northwestern University, Evanston, IL.
 """
 
-import mesa
-
 from .random_walk import RandomWalker
 
 
-class Bank(mesa.Agent):
-    def __init__(self, unique_id, model, reserve_percent=50):
-        # initialize the parent class with required parameters
-        super().__init__(unique_id, model)
+class Bank:
+    """Note that the Bank class is not a Mesa Agent, but just a regular Python
+    class. This is because there is only one bank in this model, and it does not
+    use any Mesa-specific features like the scheduler or the grid, and doesn't
+    have a step method. It is just used to keep track of the bank's reserves and
+    the amount it can loan out, for Person agents to interact with."""
+
+    def __init__(self, model, reserve_percent=50):
+        self.model = model
         # for tracking total value of loans outstanding
         self.bank_loans = 0
         """percent of deposits the bank must keep in reserves - this is set via
@@ -42,9 +45,9 @@ class Bank(mesa.Agent):
 
 # subclass of RandomWalker, which is subclass to Mesa Agent
 class Person(RandomWalker):
-    def __init__(self, unique_id, model, moore, bank, rich_threshold):
+    def __init__(self, model, moore, bank, rich_threshold):
         # init parent class with required parameters
-        super().__init__(unique_id, model, moore=moore)
+        super().__init__(model, moore=moore)
         # the amount each person has in savings
         self.savings = 0
         # total loan amount person has outstanding
@@ -173,7 +176,6 @@ class Person(RandomWalker):
         # increase the bank's outstanding loans
         self.bank.bank_loans += amount
 
-    # step is called for each agent in model.BankReservesModel.schedule.step()
     def step(self):
         # move to a cell in my Moore neighborhood
         self.random_move()
