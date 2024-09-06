@@ -3,7 +3,7 @@ from mesa_models.wolf_sheep.agents import GrassPatch, Sheep, Wolf
 from .utility import move
 
 
-class Sheep_RL(Sheep):
+class SheepRL(Sheep):
 
     def step(self):
         """
@@ -36,13 +36,13 @@ class Sheep_RL(Sheep):
             if self.model.grass:
                 self.energy /= 2
             unique_id_str = f"sheep_{self.model.next_id()}"
-            lamb = Sheep_RL(
+            lamb = SheepRL(
                 unique_id_str, self.pos, self.model, self.moore, self.energy
             )
             self.model.grid.place_agent(lamb, self.pos)
             self.model.schedule.add(lamb)
 
-class Wolf_RL(Wolf):
+class WolfRL(Wolf):
 
     def step(self):
         """
@@ -74,7 +74,7 @@ class Wolf_RL(Wolf):
                 # Create a new wolf cub
                 self.energy /= 2
                 unique_id_str = f"wolf_{self.model.next_id()}"
-                cub = Wolf_RL(
+                cub = WolfRL(
                     unique_id_str, self.pos, self.model, self.moore, self.energy
                 )
                 self.model.grid.place_agent(cub, cub.pos)

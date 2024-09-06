@@ -6,13 +6,13 @@ from mesa_models.wolf_sheep.model import WolfSheep
 from mesa_models.wolf_sheep.scheduler import RandomActivationByTypeFiltered
 from ray.rllib.env import MultiAgentEnv
 
-from .agents import Sheep_RL, Wolf_RL
+from .agents import SheepRL, WolfRL
 from .utility import create_intial_agents, grid_to_observation
 
 
-class WolfSheep_RL(WolfSheep, MultiAgentEnv):
+class WolfSheepRL(WolfSheep, MultiAgentEnv):
     """
-    Wolf_RL-Sheep Predation Model
+    WolfRL-Sheep Predation Model
     """
 
     def __init__(
@@ -30,7 +30,7 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
         vision=4
     ):
         """
-        Create a new Wolf_RL-Sheep model with the given parameters.
+        Create a new WolfRL-Sheep model with the given parameters.
         """
         super().__init__(width, height, initial_sheep, initial_wolves, sheep_reproduce, wolf_reproduce, wolf_gain_from_food, grass, grass_regrowth_time, sheep_gain_from_food)
         # Defining RL specific attributes 
@@ -45,8 +45,8 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
         self.max_steps = 500
         self.datacollector = mesa.DataCollector(
             {
-                "Wolves": lambda m: m.schedule.get_type_count(Wolf_RL),
-                "Sheep": lambda m: m.schedule.get_type_count(Sheep_RL),
+                "Wolves": lambda m: m.schedule.get_type_count(WolfRL),
+                "Sheep": lambda m: m.schedule.get_type_count(SheepRL),
                 "Grass": lambda m: m.schedule.get_type_count(
                     GrassPatch, lambda x: x.fully_grown
                 ),
@@ -64,10 +64,10 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
 
         # Get observations
         # We convert grid to a matrix and then neighbors of each agent is extracted
-        grid_to_observation(self, Sheep_RL, Wolf_RL, GrassPatch)
+        grid_to_observation(self, SheepRL, WolfRL, GrassPatch)
         obs = { }
         for agent in self.schedule.agents:
-            if isinstance(agent, (Sheep_RL, Wolf_RL)):
+            if isinstance(agent, (SheepRL, WolfRL)):
                 neighbors = agent.model.grid.get_neighborhood(
                             agent.pos, moore=True, radius=self.vision)
 
@@ -76,22 +76,22 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
                     'energy': np.array([agent.energy])}        
         
         # Either time finishes or either wolves or sheep are extinct
-        done = {a.unique_id: False for a in self.schedule.agents if isinstance(a, (Sheep_RL, Wolf_RL))}
+        done = {a.unique_id: False for a in self.schedule.agents if isinstance(a, (SheepRL, WolfRL))}
 
         # Check if either wolves or sheep are extinct
-        if self.schedule.get_type_count(Wolf_RL) == 0 or self.schedule.get_type_count(Sheep_RL) == 0 or self.schedule.time > self.max_steps:
+        if self.schedule.get_type_count(WolfRL) == 0 or self.schedule.get_type_count(SheepRL) == 0 or self.schedule.time > self.max_steps:
             done['__all__'] = True
         else:
             done['__all__'] = False
 
         # Prepare info dictionary
-        truncated = {a.unique_id: False for a in self.schedule.agents if isinstance(a, (Sheep_RL, Wolf_RL))}
+        truncated = {a.unique_id: False for a in self.schedule.agents if isinstance(a, (SheepRL, WolfRL))}
         truncated['__all__'] = np.all(list(truncated.values()))
 
         # All the agents that dies during this step are marked as done and rewarded penalty
         sample = next(iter(obs.values()))  
-        for agent_id in action_dict.keys():
-            if agent_id not in rewards.keys():
+        for agent_id in action_dict:
+            if agent_id not in rewards:
                 done[agent_id] = True
                 rewards[agent.unique_id] = -20 
                 truncated[agent.unique_id] = False
@@ -109,8 +109,8 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
         # Calculate rewards
         # Agents are rewarded for being alive and having energy
         for agent in self.schedule.agents:
-            if isinstance(agent, (Sheep_RL, Wolf_RL)):
-                if isinstance(agent, Sheep_RL):
+            if isinstance(agent, (SheepRL, WolfRL)):
+                if isinstance(agent, SheepRL):
                     rewards[agent.unique_id] = min(4, agent.energy - 4)
                 else:
                     rewards[agent.unique_id] = min(4, agent.energy/5 - 4)
@@ -122,11 +122,11 @@ class WolfSheep_RL(WolfSheep, MultiAgentEnv):
         self.schedule = RandomActivationByTypeFiltered(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         self.current_id = 0
-        create_intial_agents(self, Sheep_RL, Wolf_RL, GrassPatch)
-        grid_to_observation(self, Sheep_RL, Wolf_RL, GrassPatch)
+        create_intial_agents(self, SheepRL, WolfRL, GrassPatch)
+        grid_to_observation(self, SheepRL, WolfRL, GrassPatch)
         obs = {}
         for agent in self.schedule.agents:
-            if isinstance(agent, (Sheep_RL, Wolf_RL)):
+            if isinstance(agent, (SheepRL, WolfRL)):
                 neighbors = agent.model.grid.get_neighborhood(
                             agent.pos, moore=True, radius=self.vision)
 

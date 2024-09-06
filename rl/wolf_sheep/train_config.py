@@ -3,13 +3,12 @@ import os
 from ray.rllib.algorithms.ppo import PPOConfig
 from ray.rllib.policy.policy import PolicySpec
 
-from .agents import Sheep_RL
-from .model import WolfSheep_RL
+from .model import WolfSheepRL
 
 # Configuration to train the model
 # Feel free to adjust the configuration as necessary
 def env_creator(_):
-    return WolfSheep_RL(width=20, height=20, initial_sheep=100, initial_wolves=25, sheep_reproduce=0.04, wolf_reproduce=0.05, wolf_gain_from_food=20, grass=True, grass_regrowth_time=30, sheep_gain_from_food=4)
+    return WolfSheepRL(width=20, height=20, initial_sheep=100, initial_wolves=25, sheep_reproduce=0.04, wolf_reproduce=0.05, wolf_gain_from_food=20, grass=True, grass_regrowth_time=30, sheep_gain_from_food=4)
 
 config = {
     "env_name": "WorldSheepModel-v0",

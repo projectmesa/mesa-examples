@@ -1,11 +1,11 @@
-def create_intial_agents(self, Sheep_RL, Wolf_RL, GrassPatch):
+def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
     # Create sheep:
     for i in range(self.initial_sheep):
         x = self.random.randrange(self.width)
         y = self.random.randrange(self.height)
         energy = self.random.randrange(2 * self.sheep_gain_from_food)
         unique_id_str = f"sheep_{self.next_id()}"
-        sheep = Sheep_RL(unique_id_str, None, self, True, energy)
+        sheep = SheepRL(unique_id_str, None, self, True, energy)
         self.grid.place_agent(sheep, (x, y))
         self.schedule.add(sheep)
 
@@ -15,7 +15,7 @@ def create_intial_agents(self, Sheep_RL, Wolf_RL, GrassPatch):
         y = self.random.randrange(self.height)
         energy = self.random.randrange(2 * self.wolf_gain_from_food)
         unique_id_str = f"wolf_{self.next_id()}"
-        wolf = Wolf_RL(unique_id_str, None, self, True, energy)
+        wolf = WolfRL(unique_id_str, None, self, True, energy)
         self.grid.place_agent(wolf, (x, y))
         self.schedule.add(wolf)
 
@@ -63,7 +63,7 @@ def move(self, action):
     if new_position in empty_neighbors:
         self.model.grid.move_agent(self, new_position)
 
-def grid_to_observation(self, Sheep_RL, Wolf_RL, GrassPatch):
+def grid_to_observation(self, SheepRL, WolfRL, GrassPatch):
     # Convert grid to matrix for better representation
     self.obs_grid = []
     for i in self.grid._grid:
@@ -71,9 +71,9 @@ def grid_to_observation(self, Sheep_RL, Wolf_RL, GrassPatch):
         for j in i:
             value = [0, 0, 0]
             for agent in j:
-                if isinstance(agent, Sheep_RL):
+                if isinstance(agent, SheepRL):
                     value[0] = 1
-                elif isinstance(agent, Wolf_RL):
+                elif isinstance(agent, WolfRL):
                     value[1] = 1
                 elif isinstance(agent, GrassPatch) and agent.fully_grown:
                     value[2] = 1

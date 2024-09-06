@@ -6,16 +6,16 @@ from mesa_models.wolf_sheep.agents import GrassPatch
 from ray import tune
 from ray.rllib.algorithms.algorithm import Algorithm
 
-from .agents import Sheep_RL, Wolf_RL
-from .model import WolfSheep_RL
+from .agents import SheepRL, WolfRL
+from .model import WolfSheepRL
 from .utility import grid_to_observation
 
 
-class WolfSheepServer(WolfSheep_RL):
+class WolfSheepServer(WolfSheepRL):
     def __init__(self, width=20, height=20, initial_sheep=100, initial_wolves=25, sheep_reproduce=0.04, wolf_reproduce=0.05, wolf_gain_from_food=20, grass=True, grass_regrowth_time=30, sheep_gain_from_food=4, model_path=None):
         super().__init__(width, height, initial_sheep, initial_wolves, sheep_reproduce, wolf_reproduce, wolf_gain_from_food, grass, grass_regrowth_time, sheep_gain_from_food)
         def env_creator(_):
-            return WolfSheep_RL(width, height, initial_sheep, initial_wolves, sheep_reproduce, wolf_reproduce, wolf_gain_from_food, grass, grass_regrowth_time, sheep_gain_from_food)
+            return WolfSheepRL(width, height, initial_sheep, initial_wolves, sheep_reproduce, wolf_reproduce, wolf_gain_from_food, grass, grass_regrowth_time, sheep_gain_from_food)
         tune.register_env("WorldSheepModel-v0", env_creator)
         self.iteration = 0
         # Load the model from checkpoint
@@ -29,24 +29,24 @@ class WolfSheepServer(WolfSheep_RL):
             self.reset()
         self.datacollector.collect(self)
         # Get the observation for each agent
-        grid_to_observation(self, Sheep_RL, Wolf_RL, GrassPatch)
+        grid_to_observation(self, SheepRL, WolfRL, GrassPatch)
         obs = {}
         for agent in self.schedule.agents:
-            if isinstance(agent, (Sheep_RL, Wolf_RL)):
+            if isinstance(agent, (SheepRL, WolfRL)):
                 neighbors = agent.model.grid.get_neighborhood(agent.pos, moore=True, radius=self.vision)
                 obs[agent.unique_id] = {'grid': np.array([self.obs_grid[neighbor[0]][neighbor[1]] for neighbor in neighbors]), 'energy': np.array([agent.energy])}    
         action_dict = {}
         # Get the action for each agent
         for agent in self.schedule.agents:
-            if isinstance(agent, Sheep_RL):
+            if isinstance(agent, SheepRL):
                 action_dict[agent.unique_id] = self.sheep_policy.compute_single_action(obs[agent.unique_id], explore=False)[0]
-            elif isinstance(agent, Wolf_RL):
+            elif isinstance(agent, WolfRL):
                 action_dict[agent.unique_id] = self.wolf_policy.compute_single_action(obs[agent.unique_id], explore=False)[0]
         self.action_dict = action_dict
         # Take a step in the environment
         self.schedule.step()
         self.iteration += 1
-        if self.schedule.get_type_count(Wolf_RL) == 0 or self.schedule.get_type_count(Sheep_RL) == 0 or self.schedule.time > self.max_steps:
+        if self.schedule.get_type_count(WolfRL) == 0 or self.schedule.get_type_count(SheepRL) == 0 or self.schedule.time > self.max_steps:
             self.running = False
 
 def wolf_sheep_portrayal(agent):
@@ -57,12 +57,12 @@ def wolf_sheep_portrayal(agent):
     file_path = os.path.dirname(os.path.abspath(__file__))
     resources_path = os.path.join(file_path, "resources")
 
-    if type(agent) is Sheep_RL:
+    if type(agent) is SheepRL:
         portrayal["Shape"] = os.path.join(resources_path, "sheep.png")
         portrayal["scale"] = 0.9
         portrayal["Layer"] = 1
         
-    elif type(agent) is Wolf_RL:
+    elif type(agent) is WolfRL:
         portrayal["Shape"] = os.path.join(resources_path, "wolf.png")
         portrayal["scale"] = 0.9
         portrayal["Layer"] = 2

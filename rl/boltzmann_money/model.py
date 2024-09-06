@@ -26,7 +26,7 @@ from mesa_models.boltzmann_wealth_model.model import (
 NUM_AGENTS = 10
 
 # Define the agent class
-class MoneyAgent_RL(MoneyAgent):
+class MoneyAgentRL(MoneyAgent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.wealth = np.random.randint(1, NUM_AGENTS)
@@ -78,7 +78,7 @@ class MoneyAgent_RL(MoneyAgent):
 
 
 # Define the model class
-class BoltzmannWealthModel_RL(BoltzmannWealthModel, gymnasium.Env):
+class BoltzmannWealthModelRL(BoltzmannWealthModel, gymnasium.Env):
     def __init__(self, N, width, height):
         super().__init__(N, width, height)
         # Define the observation and action space for the RL model
@@ -140,8 +140,8 @@ class BoltzmannWealthModel_RL(BoltzmannWealthModel, gymnasium.Env):
         self.grid = mesa.space.MultiGrid(self.grid.width, self.grid.height, True)
         self.schedule = mesa.time.RandomActivation(self)
         for i in range(self.num_agents):
-            # Create MoneyAgent_RL instances and add them to the schedule
-            a = MoneyAgent_RL(i, self)
+            # Create MoneyAgentRL instances and add them to the schedule
+            a = MoneyAgentRL(i, self)
             self.schedule.add(a)
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
@@ -153,6 +153,6 @@ class BoltzmannWealthModel_RL(BoltzmannWealthModel, gymnasium.Env):
         # The observation is the wealth of each agent and their position
         obs = []
         for a in self.schedule.agents:
-            obs.append([a.wealth] + list(a.pos))
+            obs.append([a.wealth, *list(a.pos)])
         return np.array(obs)
 

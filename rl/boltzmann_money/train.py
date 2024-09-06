@@ -1,14 +1,14 @@
 import argparse
 
-from model import NUM_AGENTS, BoltzmannWealthModel_RL
+from model import NUM_AGENTS, BoltzmannWealthModelRL
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 
 
 def rl_model(args):
     # Create the environment
-    env = BoltzmannWealthModel_RL(N=NUM_AGENTS, width=NUM_AGENTS, height=NUM_AGENTS)
-    eval_env = BoltzmannWealthModel_RL(N=NUM_AGENTS, width=NUM_AGENTS, height=NUM_AGENTS)
+    env = BoltzmannWealthModelRL(N=NUM_AGENTS, width=NUM_AGENTS, height=NUM_AGENTS)
+    eval_env = BoltzmannWealthModelRL(N=NUM_AGENTS, width=NUM_AGENTS, height=NUM_AGENTS)
     eval_callback = EvalCallback(eval_env, best_model_save_path='./logs/',
                                  log_path='./logs/', eval_freq=5000)
     # Define the PPO model
