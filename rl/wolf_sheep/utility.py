@@ -34,34 +34,33 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
             self.grid.place_agent(patch, (x, y))
             self.schedule.add(patch)
 
-def move(self, action):
 
+def move(self, action):
     empty_neighbors = self.model.grid.get_neighborhood(
-    self.pos,
-    moore=True,
-    include_center=False
+        self.pos, moore=True, include_center=False
     )
-    
+
     # Define the movement deltas
     moves = {
-        0: (1, 0),   # Move right
+        0: (1, 0),  # Move right
         1: (-1, 0),  # Move left
         2: (0, -1),  # Move up
-        3: (0, 1),   # Move down
+        3: (0, 1),  # Move down
     }
-    
+
     # Get the delta for the action, defaulting to (0, 0) if the action is invalid
     dx, dy = moves.get(int(action), (0, 0))
-    
+
     # Calculate the new position and wrap around the grid
     new_position = (
         (self.pos[0] + dx) % self.model.grid.width,
-        (self.pos[1] + dy) % self.model.grid.height
+        (self.pos[1] + dy) % self.model.grid.height,
     )
-    
+
     # Move the agent if the new position is in empty_neighbors
     if new_position in empty_neighbors:
         self.model.grid.move_agent(self, new_position)
+
 
 def grid_to_observation(self, SheepRL, WolfRL, GrassPatch):
     # Convert grid to matrix for better representation

@@ -1,4 +1,4 @@
-# This code implements a multi-agent model called MoneyModel using the Mesa library. 
+# This code implements a multi-agent model called MoneyModel using the Mesa library.
 # The model simulates the distribution of wealth among agents in a grid environment.
 # Each agent has a randomly assigned wealth and can move to neighboring cells.
 # Agents can also give money to other agents in the same cell if they have greater wealth.
@@ -25,6 +25,7 @@ from mesa_models.boltzmann_wealth_model.model import (
 
 NUM_AGENTS = 10
 
+
 # Define the agent class
 class MoneyAgentRL(MoneyAgent):
     def __init__(self, unique_id, model):
@@ -32,27 +33,28 @@ class MoneyAgentRL(MoneyAgent):
         self.wealth = np.random.randint(1, NUM_AGENTS)
 
     def move(self, action):
-
-        empty_neighbors = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
+        empty_neighbors = self.model.grid.get_neighborhood(
+            self.pos, moore=True, include_center=False
+        )
 
         # Define the movement deltas
         moves = {
-            0: (1, 0),   # Move right
+            0: (1, 0),  # Move right
             1: (-1, 0),  # Move left
             2: (0, -1),  # Move up
-            3: (0, 1),   # Move down
-            4: (0, 0),   # Stay in place
+            3: (0, 1),  # Move down
+            4: (0, 0),  # Stay in place
         }
-        
+
         # Get the delta for the action, defaulting to (0, 0) if the action is invalid
         dx, dy = moves.get(int(action), (0, 0))
-        
+
         # Calculate the new position and wrap around the grid
         new_position = (
             (self.pos[0] + dx) % self.model.grid.width,
-            (self.pos[1] + dy) % self.model.grid.height
+            (self.pos[1] + dy) % self.model.grid.height,
         )
-        
+
         # Move the agent if the new position is in empty_neighbors
         if new_position in empty_neighbors:
             self.model.grid.move_agent(self, new_position)
@@ -108,18 +110,18 @@ class BoltzmannWealthModelRL(BoltzmannWealthModel, gymnasium.Env):
         elif new_gini < 0.1:
             # Terminate the episode if the Gini coefficient is below a certain threshold
             done = True
-            reward = 50/self.schedule.time
+            reward = 50 / self.schedule.time
         else:
             done = False
         info = {}
         truncated = False
         return obs, reward, done, truncated, info
-    
+
     def calculate_reward(self, new_gini):
         if new_gini < self.prev_gini:
             # Compute the reward based on the decrease in Gini coefficient
             reward = (self.prev_gini - new_gini) * 20
-        else: 
+        else:
             # Penalize for increase in Gini coefficient
             reward = -0.05
         self.prev_gini = new_gini
@@ -155,4 +157,3 @@ class BoltzmannWealthModelRL(BoltzmannWealthModel, gymnasium.Env):
         for a in self.schedule.agents:
             obs.append([a.wealth, *list(a.pos)])
         return np.array(obs)
-

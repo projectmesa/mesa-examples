@@ -4,14 +4,13 @@ from .utility import move
 
 
 class SheepRL(Sheep):
-
     def step(self):
         """
         The code is exactly same as mesa-example with the only difference being the move function and new sheep creation class.
         """
         action = self.model.action_dict[self.unique_id]
         move(self, action)
-        
+
         living = True
 
         if self.model.grass:
@@ -36,21 +35,19 @@ class SheepRL(Sheep):
             if self.model.grass:
                 self.energy /= 2
             unique_id_str = f"sheep_{self.model.next_id()}"
-            lamb = SheepRL(
-                unique_id_str, self.pos, self.model, self.moore, self.energy
-            )
+            lamb = SheepRL(unique_id_str, self.pos, self.model, self.moore, self.energy)
             self.model.grid.place_agent(lamb, self.pos)
             self.model.schedule.add(lamb)
 
-class WolfRL(Wolf):
 
+class WolfRL(Wolf):
     def step(self):
         """
         The code is exactly same as mesa-example with the only difference being the move function and new wolf creation class.
         """
         action = self.model.action_dict[self.unique_id]
-        move(self, action)       
-        
+        move(self, action)
+
         self.energy -= 1
 
         # If there are sheep present, eat one
