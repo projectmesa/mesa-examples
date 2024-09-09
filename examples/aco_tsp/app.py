@@ -4,7 +4,6 @@ Configure visualization elements and instantiate a server
 
 import networkx as nx
 import solara
-from mesa.visualization.utils import update_counter
 from aco_tsp.model import AcoTspModel, TSPGraph
 from matplotlib.figure import Figure
 from mesa.visualization import SolaraViz, make_plot_measure
