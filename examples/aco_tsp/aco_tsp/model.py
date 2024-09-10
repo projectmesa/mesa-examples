@@ -149,7 +149,7 @@ class AntTSP(CellAgent):
             new_city = self.decide_next_city()
             self.move_to(new_city)
 
-        self.tsp_solution = self._cities_visited.copy()
+        self.tsp_solution = [entry.coordinate for entry in self._cities_visited]
         self.tsp_distance = self._traveled_distance
         self._cities_visited = []
         self._traveled_distance = 0
