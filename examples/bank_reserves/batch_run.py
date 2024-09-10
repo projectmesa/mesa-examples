@@ -32,12 +32,14 @@ import pandas as pd
 
 from bank_reserves.model import BankReservesModel
 
+
 def track_params(model):
     return (model.init_people, model.rich_threshold, model.reserve_percent)
 
 
 def track_run(model):
     return model.uid
+
 
 # parameter lists for each parameter to be tested in batch run
 br_params = {
