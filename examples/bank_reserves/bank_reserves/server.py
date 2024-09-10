@@ -1,7 +1,7 @@
 import mesa
 
 from .agents import Person
-from .model import BankReserves
+from .model import BankReservesModel
 
 """
 Citation:

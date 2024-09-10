@@ -29,70 +29,8 @@ import itertools
 import mesa
 import numpy as np
 import pandas as pd
-from bank_reserves.agents import Bank, Person
 
-# Start of datacollector functions
-
-
-def get_num_rich_agents(model):
-    """list of rich agents"""
-
-    rich_agents = [a for a in model.agents if a.savings > model.rich_threshold]
-    # return number of rich agents
-    return len(rich_agents)
-
-
-def get_num_poor_agents(model):
-    """list of poor agents"""
-
-    poor_agents = [a for a in model.agents if a.loans > 10]
-    # return number of poor agents
-    return len(poor_agents)
-
-
-def get_num_mid_agents(model):
-    """list of middle class agents"""
-
-    mid_agents = [
-        a for a in model.agents if a.loans < 10 and a.savings < model.rich_threshold
-    ]
-    # return number of middle class agents
-    return len(mid_agents)
-
-
-def get_total_savings(model):
-    """list of amounts of all agents' savings"""
-
-    agent_savings = [a.savings for a in model.agents]
-    # return the sum of agents' savings
-    return np.sum(agent_savings)
-
-
-def get_total_wallets(model):
-    """list of amounts of all agents' wallets"""
-
-    agent_wallets = [a.wallet for a in model.agents]
-    # return the sum of all agents' wallets
-    return np.sum(agent_wallets)
-
-
-def get_total_money(model):
-    """sum of all agents' wallets"""
-
-    wallet_money = get_total_wallets(model)
-    # sum of all agents' savings
-    savings_money = get_total_savings(model)
-    # return sum of agents' wallets and savings for total money
-    return wallet_money + savings_money
-
-
-def get_total_loans(model):
-    """list of amounts of all agents' loans"""
-
-    agent_loans = [a.loans for a in model.agents]
-    # return sum of all agents' loans
-    return np.sum(agent_loans)
-
+from bank_reserves.model import BankReservesModel
 
 def track_params(model):
     return (model.init_people, model.rich_threshold, model.reserve_percent)
