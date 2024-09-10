@@ -7,6 +7,7 @@ import numpy as np
 
 from mesa.spaces import CellAgent, Network
 
+
 @dataclass
 class NodeCoordinates:
     city: int
@@ -108,9 +109,10 @@ class AntTSP(CellAgent):
     def move_to(self, cell) -> None:
         self._cities_visited.append(cell)
         if self.cell:
-            self._traveled_distance += self.graph[self.cell.coordinate][cell.coordinate]["distance"]
+            self._traveled_distance += self.graph[self.cell.coordinate][
+                cell.coordinate
+            ]["distance"]
         super().move_to(cell)
-
 
     def decide_next_city(self):
         # Random
@@ -125,8 +127,10 @@ class AntTSP(CellAgent):
         results = []
         for city in candidates:
             val = (
-                (self.graph[self.cell.coordinate][city.coordinate]["pheromone"]) ** self.alpha
-                * (self.graph[self.cell.coordinate][city.coordinate]["visibility"]) ** self.beta
+                (self.graph[self.cell.coordinate][city.coordinate]["pheromone"])
+                ** self.alpha
+                * (self.graph[self.cell.coordinate][city.coordinate]["visibility"])
+                ** self.beta
             )
             results.append(val)
 
