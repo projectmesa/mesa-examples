@@ -182,7 +182,7 @@ class AcoTspModel(mesa.Model):
         self.num_cities = tsp_graph.num_cities
         self.all_cities = set(range(self.num_cities))
         self.max_steps = max_steps
-        self.grid = Network(tsp_graph.g)
+        self.grid = Network(tsp_graph.g, random=self.random)
 
         for _ in range(self.num_agents):
             agent = AntTSP(model=self, alpha=ant_alpha, beta=ant_beta)
