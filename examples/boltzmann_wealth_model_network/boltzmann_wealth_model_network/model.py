@@ -18,7 +18,8 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.num_agents = num_agents
         self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
-        self.grid = mesa.space.NetworkGrid(self.G)
+        self.grid = mesa.spaces.Network(self.G, random=self.random, capacity=1)
+
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},
@@ -28,11 +29,11 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         list_of_random_nodes = self.random.sample(list(self.G), self.num_agents)
 
         # Create agents
-        for i in range(self.num_agents):
-            a = MoneyAgent(self)
+        for position in list_of_random_nodes:
+            agent = MoneyAgent(self)
 
             # Add the agent to a random node
-            self.grid.place_agent(a, list_of_random_nodes[i])
+            agent.move_to(self.grid[position])
 
         self.running = True
         self.datacollector.collect(self)
@@ -47,31 +48,25 @@ class BoltzmannWealthModelNetwork(mesa.Model):
             self.step()
 
 
-class MoneyAgent(mesa.Agent):
+class MoneyAgent(mesa.spaces.CellAgent):
     """An agent with fixed initial wealth."""
 
     def __init__(self, model):
         super().__init__(model)
         self.wealth = 1
 
-    def move(self):
-        possible_steps = [
-            node
-            for node in self.model.grid.get_neighborhood(self.pos, include_center=False)
-            if self.model.grid.is_cell_empty(node)
-        ]
-        if len(possible_steps) > 0:
-            new_position = self.random.choice(possible_steps)
-            self.model.grid.move_agent(self, new_position)
 
     def give_money(self):
-        neighbors = self.model.grid.get_neighbors(self.pos, include_center=False)
+        neighbors = [agent for agent in self.cell.neighborhood().agents if not self]
         if len(neighbors) > 0:
             other = self.random.choice(neighbors)
             other.wealth += 1
             self.wealth -= 1
 
     def step(self):
-        self.move()
+        empty_neighbors = [cell for cell in self.cell.neighborhood() if cell.is_empty]
+        if empty_neighbors:
+            self.move_to(self.random.choice(empty_neighbors))
+
         if self.wealth > 0:
             self.give_money()

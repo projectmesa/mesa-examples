@@ -20,19 +20,19 @@ class BoltzmannWealthModel(mesa.Model):
     def __init__(self, N=100, width=10, height=10):
         super().__init__()
         self.num_agents = N
-        self.grid = mesa.space.MultiGrid(width, height, True)
+        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
         )
         # Create agents
         for _ in range(self.num_agents):
-            a = MoneyAgent(self)
+            agent = MoneyAgent(self)
 
             # Add the agent to a random grid cell
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            self.grid.place_agent(a, (x, y))
+            x = self.random.randrange(width)
+            y = self.random.randrange(height)
+            agent.move_to(self.grid[(x, y)])
 
         self.running = True
         self.datacollector.collect(self)
@@ -47,31 +47,21 @@ class BoltzmannWealthModel(mesa.Model):
             self.step()
 
 
-class MoneyAgent(mesa.Agent):
+class MoneyAgent(mesa.spaces.CellAgent):
     """An agent with fixed initial wealth."""
 
     def __init__(self, model):
         super().__init__(model)
         self.wealth = 1
 
-    def move(self):
-        possible_steps = self.model.grid.get_neighborhood(
-            self.pos, moore=True, include_center=False
-        )
-        new_position = self.random.choice(possible_steps)
-        self.model.grid.move_agent(self, new_position)
-
     def give_money(self):
-        cellmates = self.model.grid.get_cell_list_contents([self.pos])
-        cellmates.pop(
-            cellmates.index(self)
-        )  # Ensure agent is not giving money to itself
+        cellmates = [agent for agent in self.cell.agents if agent is not self]
         if len(cellmates) > 0:
             other = self.random.choice(cellmates)
             other.wealth += 1
             self.wealth -= 1
 
     def step(self):
-        self.move()
+        self.move_to(self.cell.neighborhood().select_random_cell())
         if self.wealth > 0:
             self.give_money()

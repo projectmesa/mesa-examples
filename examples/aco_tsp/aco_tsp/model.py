@@ -3,8 +3,6 @@ from dataclasses import dataclass
 import mesa
 import networkx as nx
 import numpy as np
-
-
 from mesa.spaces import CellAgent, Network
 
 
