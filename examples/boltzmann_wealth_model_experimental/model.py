@@ -20,7 +20,9 @@ class BoltzmannWealthModel(mesa.Model):
     def __init__(self, N=100, width=10, height=10):
         super().__init__()
         self.num_agents = N
-        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=True, random=self.random)
+        self.grid = mesa.spaces.OrthogonalMooreGrid(
+            (width, height), torus=True, random=self.random
+        )
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}

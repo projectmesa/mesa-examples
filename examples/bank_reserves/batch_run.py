@@ -24,7 +24,6 @@ directory from which Python was run. The CSV file will contain the data from
 every step of every run.
 """
 
-
 import mesa
 import pandas as pd
 from bank_reserves.model import BankReservesModel

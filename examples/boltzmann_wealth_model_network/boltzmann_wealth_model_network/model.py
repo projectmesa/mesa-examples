@@ -20,7 +20,6 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
         self.grid = mesa.spaces.Network(self.G, random=self.random, capacity=1)
 
-
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},
             agent_reporters={"Wealth": lambda _: _.wealth},
@@ -54,7 +53,6 @@ class MoneyAgent(mesa.spaces.CellAgent):
     def __init__(self, model):
         super().__init__(model)
         self.wealth = 1
-
 
     def give_money(self):
         neighbors = [agent for agent in self.cell.neighborhood().agents if not self]
