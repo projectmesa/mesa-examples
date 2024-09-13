@@ -20,7 +20,9 @@ class BoltzmannWealthModel(mesa.Model):
     def __init__(self, N=100, width=10, height=10):
         super().__init__()
         self.num_agents = N
-        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=True, random=self.random)
+        self.grid = mesa.spaces.OrthogonalMooreGrid(
+            (width, height), torus=True, random=self.random
+        )
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
@@ -32,7 +34,7 @@ class BoltzmannWealthModel(mesa.Model):
             # Add the agent to a random grid cell
             x = self.random.randrange(width)
             y = self.random.randrange(height)
-            agent.move_to(self.grid[(x,y)])
+            agent.move_to(self.grid[(x, y)])
 
         self.running = True
         self.datacollector.collect(self)
@@ -55,7 +57,9 @@ class MoneyAgent(mesa.spaces.CellAgent):
         self.wealth = 1
 
     def give_money(self):
-        cellmates = [agent for agent in self.cell.agents if agent is not self]  # Ensure agent is not giving money to itself
+        cellmates = [
+            agent for agent in self.cell.agents if agent is not self
+        ]  # Ensure agent is not giving money to itself
         if len(cellmates) > 0:
             other = self.random.choice(cellmates)
             other.wealth += 1
