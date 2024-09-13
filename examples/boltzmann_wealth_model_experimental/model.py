@@ -32,13 +32,13 @@ class BoltzmannWealthModel(mesa.Model):
             # Add the agent to a random grid cell
             x = self.random.randrange(width)
             y = self.random.randrange(height)
-            agent.move_to(self.grid[(x,y)])
+            agent.move_to(self.grid[(x, y)])
 
         self.running = True
         self.datacollector.collect(self)
 
     def step(self):
-        self.agents.shuffle_do("step")
+        self.agents.shuffle().do("step")
         # collect data
         self.datacollector.collect(self)
 
@@ -55,7 +55,7 @@ class MoneyAgent(mesa.spaces.CellAgent):
         self.wealth = 1
 
     def give_money(self):
-        cellmates = [agent for agent in self.cell.agents if agent is not self]  # Ensure agent is not giving money to itself
+        cellmates = [agent for agent in self.cell.agents if agent is not self]
         if len(cellmates) > 0:
             other = self.random.choice(cellmates)
             other.wealth += 1
