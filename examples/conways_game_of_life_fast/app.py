@@ -22,12 +22,13 @@ model_params = {
 
 gol = GameOfLifeModel(10, 10)
 
-AlivePlot = make_plot_measure("Cells alive", "Fraction alive")
+TotalAlivePlot = make_plot_measure("Cells alive")
+FractionAlivePlot = make_plot_measure("Fraction alive")
 
 
 page = SolaraViz(
     gol,
-    components=[AlivePlot],
+    components=[TotalAlivePlot, FractionAlivePlot],
     model_params=model_params,
     name="Game of Life Model",
 )

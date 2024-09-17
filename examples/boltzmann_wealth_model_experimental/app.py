@@ -33,9 +33,9 @@ model1 = BoltzmannWealthModel(50, 10, 10)
 
 # Create visualization elements. The visualization elements are solara components
 # that receive the model instance as a "prop" and display it in a certain way.
-# Under the hood these are just functions that receive the model instance.
-# You can also author your own visualization elements, they just have to return
-# a valid solara component or an ipywidget.
+# Under the hood these are just classes that receive the model instance.
+# You can also author your own visualization elements, which can also be functions
+# that receive the model instance and return a valid solara component.
 SpaceGraph = make_space_matplotlib(agent_portrayal)
 GiniPlot = make_plot_measure("Gini")
 
