@@ -1,4 +1,4 @@
-from mesa.visualization.solara_viz import Slider, SolaraViz, make_text
+from mesa.visualization import Slider, SolaraViz, make_plot_measure
 from model import Schelling
 
 
@@ -21,10 +21,13 @@ model_params = {
     "height": 20,
 }
 
+model1 = Schelling(20, 20, 0.8, 0.2, 3)
+
+HappyPlot = make_plot_measure("happy")
+
 page = SolaraViz(
-    Schelling,
-    model_params,
-    measures=["happy", make_text(get_happy_agents)],
-    agent_portrayal=agent_portrayal,
+    model1,
+    components=[HappyPlot, get_happy_agents],
+    model_params=model_params,
 )
 page  # noqa

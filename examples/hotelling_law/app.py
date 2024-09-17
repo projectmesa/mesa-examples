@@ -5,7 +5,7 @@ import solara
 from hotelling_law.agents import ConsumerAgent, StoreAgent
 from hotelling_law.model import HotellingModel
 from matplotlib.figure import Figure
-from mesa.visualization import SolaraViz
+from mesa.visualization import SolaraViz, make_plot_measure
 
 model_params = {
     "N_stores": {
@@ -108,7 +108,8 @@ def agent_portrayal(agent):
     return portrayal
 
 
-def space_drawer(model, agent_portrayal):
+@solara.component
+def SpaceDrawer(model):
     fig = Figure(figsize=(8, 5), dpi=100)
     ax = fig.subplots()
 
@@ -338,20 +339,20 @@ def make_revenue_line_chart(model):
     return solara.FigureMatplotlib(fig)
 
 
+model1 = HotellingModel(20, 20)
+
 # Instantiate the SolaraViz component with your model
 page = SolaraViz(
-    model_class=HotellingModel,
-    model_params=model_params,
-    measures=[
+    model1,
+    components=[
+        SpaceDrawer,
         make_price_changes_line_chart,
         make_market_share_and_price_chart,
         make_market_share_line_chart,
-        "Price Variance",
+        make_plot_measure("Price Variance"),
         make_revenue_line_chart,
     ],
     name="Hotelling's Law Model",
-    agent_portrayal=agent_portrayal,
-    space_drawer=space_drawer,
     play_interval=150,
 )
 
