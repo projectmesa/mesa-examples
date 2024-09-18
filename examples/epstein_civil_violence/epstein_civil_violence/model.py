@@ -59,7 +59,9 @@ class EpsteinCivilViolence(mesa.Model):
         self.max_iters = max_iters
         self.iteration = 0
 
-        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), capacity=1,torus=True)
+        self.grid = mesa.spaces.OrthogonalMooreGrid(
+            (width, height), capacity=1, torus=True
+        )
 
         model_reporters = {
             "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
@@ -119,15 +121,22 @@ class EpsteinCivilViolence(mesa.Model):
         citizens = model.agents_by_type[Citizen]
 
         if exclude_jailed:
-            return len([c for c in citizens if (c.condition == condition) and (c.jail_sentence==0)])
+            return len(
+                [
+                    c
+                    for c in citizens
+                    if (c.condition == condition) and (c.jail_sentence == 0)
+                ]
+            )
         else:
-            return len([c for c in citizens if c.condition==condition])
+            return len([c for c in citizens if c.condition == condition])
+
     @staticmethod
     def count_jailed(model):
         """
         Helper method to count jailed agents.
         """
-        return len([a for a in model.agents_by_type[Citizen] if a.jail_sentence > 0 ])
+        return len([a for a in model.agents_by_type[Citizen] if a.jail_sentence > 0])
 
     @staticmethod
     def count_cops(model):
