@@ -7,34 +7,28 @@ from collections import Counter
 import mesa
 
 
-class ColorCell(mesa.Agent):
+class ColorCell(mesa.spaces.CellAgent):
     """
     Represents a cell's opinion (visualized by a color)
     """
 
     OPINIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-    def __init__(self, pos, model, initial_state):
+    def __init__(self, model, initial_state):
         """
         Create a cell, in the given state, at the given row, col position.
         """
         super().__init__(model)
-        self._row = pos[0]
-        self._col = pos[1]
-        self._state = initial_state
-        self._next_state = None
+        self.state = initial_state
+        self.next_state = None
 
     def get_col(self):
         """Return the col location of this cell."""
-        return self._col
+        return self.cell.coordinate[0]
 
     def get_row(self):
         """Return the row location of this cell."""
-        return self._row
-
-    def get_state(self):
-        """Return the current state (OPINION) of this cell."""
-        return self._state
+        return self.cell.coordinate[1]
 
     def determine_opinion(self):
         """
@@ -43,8 +37,8 @@ class ColorCell(mesa.Agent):
         A choice is made at random in case of a tie
         The next state is stored until all cells have been polled
         """
-        _neighbor_iter = self.model.grid.iter_neighbors((self._row, self._col), True)
-        neighbors_opinion = Counter(n.get_state() for n in _neighbor_iter)
+        neighbors = self.cell.neighborhood().agents
+        neighbors_opinion = Counter(n.state for n in neighbors)
         # Following is a a tuple (attribute, occurrences)
         polled_opinions = neighbors_opinion.most_common()
         tied_opinions = []
@@ -52,13 +46,13 @@ class ColorCell(mesa.Agent):
             if neighbor[1] == polled_opinions[0][1]:
                 tied_opinions.append(neighbor)
 
-        self._next_state = self.random.choice(tied_opinions)[0]
+        self.next_state = self.random.choice(tied_opinions)[0]
 
     def assume_opinion(self):
         """
         Set the state of the agent to the next state
         """
-        self._state = self._next_state
+        self.state = self.next_state
 
 
 class ColorPatches(mesa.Model):
@@ -72,18 +66,17 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
         super().__init__()
-        self._grid = mesa.space.SingleGrid(width, height, torus=False)
+        self._grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=False)
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row
         #  -->but only col & row
         # for (contents, col, row) in self._grid.coord_iter():
         # replaced content with _ to appease linter
-        for _, (row, col) in self._grid.coord_iter():
-            cell = ColorCell(
-                (row, col), self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
+        for cell in self._grid.all_cells:
+            agent = ColorCell(self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
             )
-            self._grid.place_agent(cell, (row, col))
+            agent.move_to(cell)
 
         self.running = True
 

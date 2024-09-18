@@ -9,9 +9,7 @@ Author of NetLogo code:
     Center for Connected Learning and Computer-Based Modeling,
     Northwestern University, Evanston, IL.
 """
-
-from .random_walk import RandomWalker
-
+from mesa.spaces import CellAgent
 
 class Bank:
     """Note that the Bank class is not a Mesa Agent, but just a regular Python
@@ -44,10 +42,10 @@ class Bank:
 
 
 # subclass of RandomWalker, which is subclass to Mesa Agent
-class Person(RandomWalker):
-    def __init__(self, model, moore, bank, rich_threshold):
+class Person(CellAgent):
+    def __init__(self, model, bank, rich_threshold):
         # init parent class with required parameters
-        super().__init__(model, moore=moore)
+        super().__init__(model)
         # the amount each person has in savings
         self.savings = 0
         # total loan amount person has outstanding
@@ -67,14 +65,14 @@ class Person(RandomWalker):
         bank can loan them any money"""
         if self.savings > 0 or self.wallet > 0 or self.bank.bank_to_loan > 0:
             # create list of people at my location (includes self)
-            my_cell = self.model.grid.get_cell_list_contents([self.pos])
+            my_cell = [a for a in self.cell.agents if not a == self]
             # check if other people are at my location
             if len(my_cell) > 1:
                 # set customer to self for while loop condition
                 customer = self
                 while customer == self:
-                    """select a random person from the people at my location
-                    to trade with"""
+                    # select a random person from the people at my location
+                    # to trade with
                     customer = self.random.choice(my_cell)
                 # 50% chance of trading with customer
                 if self.random.randint(0, 1) == 0:
@@ -178,7 +176,7 @@ class Person(RandomWalker):
 
     def step(self):
         # move to a cell in my Moore neighborhood
-        self.random_move()
+        self.move_to(self.cell.neighborhood().select_random_cell())
         # trade
         self.do_business()
         # deposit money or take out a loan
