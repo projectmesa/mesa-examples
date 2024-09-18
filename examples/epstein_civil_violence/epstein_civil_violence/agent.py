@@ -2,8 +2,8 @@ import math
 
 import mesa
 
-class EpsteinAgent(mesa.spaces.CellAgent):
 
+class EpsteinAgent(mesa.spaces.CellAgent):
     def update_neighbors(self):
         """
         Look around and see who my neighbors are
@@ -91,7 +91,6 @@ class Citizen(EpsteinAgent):
             new_cell = self.random.choice(self.empty_neighbors)
             self.move_to(new_cell)
 
-
     def update_estimated_arrest_probability(self):
         """
         Based on the ratio of cops to actives in my neighborhood, estimate the
@@ -157,4 +156,3 @@ class Cop(EpsteinAgent):
         if self.model.movement and self.empty_neighbors:
             new_pos = self.random.choice(self.empty_neighbors)
             self.move_to(new_pos)
-

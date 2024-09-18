@@ -9,7 +9,9 @@ Author of NetLogo code:
     Center for Connected Learning and Computer-Based Modeling,
     Northwestern University, Evanston, IL.
 """
+
 from mesa.spaces import CellAgent
+
 
 class Bank:
     """Note that the Bank class is not a Mesa Agent, but just a regular Python
