@@ -18,7 +18,7 @@ class Cell(mesa.Agent):
         self.isConsidered = False
 
     @property
-    def isAlive(self):
+    def is_alive(self):
         return self.state == self.ALIVE
 
     @property
@@ -43,10 +43,10 @@ class Cell(mesa.Agent):
         # assume no state change
         self._nextState = self.state
 
-        if not self.isAlive and self.isConsidered:
+        if not self.is_alive and self.isConsidered:
             # Get the neighbors and apply the rules on whether to be alive or dead
             # at the next tick.
-            live_neighbors = sum(neighbor.isAlive for neighbor in self.neighbors)
+            live_neighbors = sum(neighbor.is_alive for neighbor in self.neighbors)
 
             if live_neighbors == 1:
                 self._nextState = self.ALIVE

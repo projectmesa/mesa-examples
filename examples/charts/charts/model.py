@@ -14,6 +14,7 @@ import mesa
 import numpy as np
 
 from .agents import Bank, Person
+from mesa.spaces import OrthogonalMooreGrid
 
 """
 If you want to perform a parameter sweep, call batch_run.py instead of run.py.
@@ -100,7 +101,7 @@ class Charts(mesa.Model):
         self.width = width
         self.init_people = init_people
 
-        self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
+        self.grid = OrthogonalMooreGrid((self.width, self.height), torus=True)
         # rich_threshold is the amount of savings a person needs to be considered "rich"
         self.rich_threshold = rich_threshold
         self.reserve_percent = reserve_percent
@@ -126,9 +127,9 @@ class Charts(mesa.Model):
             # set x, y coords randomly within the grid
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            p = Person(self, True, self.bank, self.rich_threshold)
+            p = Person(self, self.bank, self.rich_threshold)
             # place the Person object on the grid at coordinates (x, y)
-            self.grid.place_agent(p, (x, y))
+            p.move_to(self.grid[(x, y)])
 
         self.running = True
         self.datacollector.collect(self)

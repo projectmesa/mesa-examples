@@ -15,15 +15,15 @@ class ConwaysGameOfLife(mesa.Model):
         """
         super().__init__()
         # Use a simple grid, where edges wrap around.
-        self.grid = mesa.space.SingleGrid(width, height, torus=True)
+        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=True)
 
         # Place a cell at each location, with some initialized to
         # ALIVE and some to DEAD.
-        for contents, (x, y) in self.grid.coord_iter():
-            cell = Cell((x, y), self)
+        for cell in self.grid.all_cells:
+            cell_agent = Cell(self)
             if self.random.random() < 0.1:
-                cell.state = cell.ALIVE
-            self.grid.place_agent(cell, (x, y))
+                cell_agent.state = cell_agent.ALIVE
+            cell_agent.move_to(cell)
 
         self.running = True
 
