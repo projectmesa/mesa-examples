@@ -56,7 +56,7 @@ class VirusOnNetwork(mesa.Model):
         self.recovery_chance = recovery_chance
         self.gain_resistance_chance = gain_resistance_chance
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {
                 "Infected": number_infected,
                 "Susceptible": number_susceptible,

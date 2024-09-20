@@ -42,7 +42,7 @@ class GeoSir(mesa.Model):
         self.infection_risk = infection_risk
 
         self.running = True
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {
                 "infected": get_infected_count,
                 "susceptible": get_susceptible_count,

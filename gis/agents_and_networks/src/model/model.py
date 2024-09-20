@@ -58,7 +58,7 @@ class AgentsAndNetworks(mesa.Model):
     day: int
     hour: int
     minute: int
-    datacollector: mesa.DataCollector
+    datacollector: mesa.datacollection.DataCollector
 
     def __init__(
         self,
@@ -114,7 +114,7 @@ class AgentsAndNetworks(mesa.Model):
             self._load_lakes_and_rivers_from_file(lakes_file, crs=model_crs)
             self._load_lakes_and_rivers_from_file(rivers_file, crs=model_crs)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={
                 "time": get_time,
                 "status_home": partial(get_num_commuters_by_status, status="home"),

@@ -41,7 +41,7 @@ class PdGrid(mesa.Model):
                 self.grid.place_agent(agent, (x, y))
                 self.schedule.add(agent)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {
                 "Cooperating_Agents": lambda m: len(
                     [a for a in m.schedule.agents if a.move == "C"]

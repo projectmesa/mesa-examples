@@ -26,7 +26,7 @@ class ElFarolBar(mesa.Model):
         for _ in range(self.num_agents):
             BarCustomer(self, memory_size, crowd_threshold, num_strategies)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={"Customers": "attendance"},
             agent_reporters={"Utility": "utility", "Attendance": "attend"},
         )

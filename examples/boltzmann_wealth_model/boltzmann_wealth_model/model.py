@@ -22,7 +22,7 @@ class BoltzmannWealthModel(mesa.Model):
         self.num_agents = N
         self.grid = mesa.space.MultiGrid(width, height, True)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
         )
         # Create agents

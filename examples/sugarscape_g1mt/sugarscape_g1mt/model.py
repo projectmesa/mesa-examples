@@ -71,7 +71,7 @@ class SugarscapeG1mt(mesa.Model):
         # initiate mesa grid class
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         # initiate datacollector
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={
                 "Trader": lambda m: len(m.agents_by_type[Trader]),
                 "Trade Volume": lambda m: sum(

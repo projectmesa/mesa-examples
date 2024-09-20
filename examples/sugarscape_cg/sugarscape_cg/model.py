@@ -39,7 +39,7 @@ class SugarscapeCg(mesa.Model):
 
         self.schedule = mesa.time.RandomActivationByType(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)}
         )
 

@@ -21,7 +21,7 @@ class ForestFire(mesa.Model):
 
         self.grid = mesa.space.SingleGrid(width, height, torus=False)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {
                 "Fine": lambda m: self.count_type(m, "Fine"),
                 "On Fire": lambda m: self.count_type(m, "On Fire"),

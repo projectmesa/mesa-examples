@@ -70,7 +70,7 @@ class Schelling(mesa.Model):
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
         self.happy = 0
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={"happy": "happy"},  # Model-level count of happy agents
         )
 

@@ -81,7 +81,7 @@ class GeoSchelling(mesa.Model):
         self.space = mg.GeoSpace(warn_crs_conversion=False)
 
         self.happy = 0
-        self.datacollector = mesa.DataCollector({"happy": "happy"})
+        self.datacollector = mesa.datacollection.DataCollector({"happy": "happy"})
 
         self.running = True
 

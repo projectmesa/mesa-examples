@@ -20,7 +20,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
         self.grid = mesa.space.NetworkGrid(self.G)
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={"Gini": compute_gini},
             agent_reporters={"Wealth": lambda _: _.wealth},
         )
