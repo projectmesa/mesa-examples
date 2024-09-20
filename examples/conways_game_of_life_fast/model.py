@@ -1,5 +1,6 @@
 import numpy as np
-from mesa import DataCollector, Model
+from mesa import Model
+from mesa.datacollection import DataCollector
 from mesa.space import PropertyLayer
 from scipy.signal import convolve2d
 
