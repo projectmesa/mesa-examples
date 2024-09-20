@@ -86,7 +86,7 @@ def main():
             "metabolism_max": [2, 3, 4, 5],
         }
 
-        results_batch = mesa.batch_run(
+        results_batch = mesa.batchrunner.batch_run(
             SugarscapeG1mt,
             parameters=params,
             iterations=1,

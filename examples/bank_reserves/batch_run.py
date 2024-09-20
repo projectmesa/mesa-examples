@@ -184,7 +184,7 @@ br_params = {
 
 def main():
     # The existing batch run logic here
-    data = mesa.batch_run(
+    data = mesa.batchrunner.batch_run(
         BankReservesModel,
         br_params,
     )
