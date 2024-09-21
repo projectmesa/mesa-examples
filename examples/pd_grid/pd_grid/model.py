@@ -6,11 +6,7 @@ from .agent import PDAgent
 class PdGrid(mesa.Model):
     """Model class for iterated, spatial prisoner's dilemma model."""
 
-    schedule_types = {
-        "Sequential": mesa.time.BaseScheduler,
-        "Random": mesa.time.RandomActivation,
-        "Simultaneous": mesa.time.SimultaneousActivation,
-    }
+    activation_regimes = ["Sequential", "Random", "Simultaneous"]
 
     # This dictionary holds the payoff for this agent,
     # keyed on: (my_move, other_move)

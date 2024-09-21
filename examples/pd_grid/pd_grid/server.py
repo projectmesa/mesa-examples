@@ -10,9 +10,9 @@ model_params = {
     "height": 50,
     "width": 50,
     "activation_order": mesa.visualization.Choice(
-        "Scheduler type",
+        "Activation regime",
         value="Random",
-        choices=list(PdGrid.schedule_types.keys()),
+        choices=PdGrid.activation_regimes,
     ),
 }
 
