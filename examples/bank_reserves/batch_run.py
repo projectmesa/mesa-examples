@@ -133,7 +133,7 @@ class BankReservesModel(mesa.Model):
         self.rich_threshold = rich_threshold
         self.reserve_percent = reserve_percent
         # see datacollector functions above
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters={
                 "Rich": get_num_rich_agents,
                 "Poor": get_num_poor_agents,
@@ -184,7 +184,7 @@ br_params = {
 
 def main():
     # The existing batch run logic here
-    data = mesa.batch_run(
+    data = mesa.batchrunner.batch_run(
         BankReservesModel,
         br_params,
     )

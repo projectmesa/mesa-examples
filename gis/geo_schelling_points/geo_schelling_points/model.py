@@ -21,7 +21,7 @@ class GeoSchellingPoints(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
         self.space = Nuts2Eu()
 
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {"unhappy": "unhappy", "happy": "happy"}
         )
 

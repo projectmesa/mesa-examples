@@ -75,7 +75,7 @@ class EpsteinCivilViolence(mesa.Model):
             "condition": lambda a: getattr(a, "condition", None),
             "arrest_probability": lambda a: getattr(a, "arrest_probability", None),
         }
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             model_reporters=model_reporters, agent_reporters=agent_reporters
         )
         if self.cop_density + self.citizen_density > 1:

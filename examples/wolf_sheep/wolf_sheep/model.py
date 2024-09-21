@@ -88,7 +88,7 @@ class WolfSheep(mesa.Model):
         if grass:
             collectors["Grass"] = lambda m: len(m.agents_by_type[GrassPatch])
 
-        self.datacollector = mesa.DataCollector(collectors)
+        self.datacollector = mesa.datacollection.DataCollector(collectors)
 
         # Create sheep:
         for i in range(self.initial_sheep):

@@ -68,7 +68,7 @@ class Rainfall(mesa.Model):
 
         self.space = CraterLake(crs="epsg:4326", water_height=water_height, model=self)
         self.schedule = mesa.time.RandomActivation(self)
-        self.datacollector = mesa.DataCollector(
+        self.datacollector = mesa.datacollection.DataCollector(
             {
                 "Total Amount of Water": "water_amount",
                 "Total Contained": "contained",
