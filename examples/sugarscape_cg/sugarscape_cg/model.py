@@ -75,10 +75,14 @@ class SugarscapeCg(mesa.Model):
 
     def run_model(self, step_count=200):
         if self.verbose:
-            print(f"Initial number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}")
+            print(
+                f"Initial number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}"
+            )
 
         for i in range(step_count):
             self.step()
 
         if self.verbose:
-            print(f"\nFinal number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}")
+            print(
+                f"\nFinal number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}"
+            )
