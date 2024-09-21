@@ -9,7 +9,7 @@ canvas_element = mesa.visualization.CanvasGrid(portrayPDAgent, 50, 50, 500, 500)
 model_params = {
     "height": 50,
     "width": 50,
-    "schedule_type": mesa.visualization.Choice(
+    "activation_order": mesa.visualization.Choice(
         "Scheduler type",
         value="Random",
         choices=list(PdGrid.schedule_types.keys()),
