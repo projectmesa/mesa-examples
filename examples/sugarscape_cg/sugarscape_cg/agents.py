@@ -67,7 +67,7 @@ class SsAgent(mesa.Agent):
         self.eat()
         if self.sugar <= 0:
             self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
+            self.remove()
 
 
 class Sugar(mesa.Agent):

@@ -37,10 +37,9 @@ class SugarscapeCg(mesa.Model):
         self.height = height
         self.initial_population = initial_population
 
-        self.schedule = mesa.time.RandomActivationByType(self)
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         self.datacollector = mesa.DataCollector(
-            {"SsAgent": lambda m: m.schedule.get_type_count(SsAgent)}
+            {"SsAgent": lambda m: len(m.agents_by_type[SsAgent])}
         )
 
         # Create sugar
@@ -51,7 +50,6 @@ class SugarscapeCg(mesa.Model):
             max_sugar = sugar_distribution[x, y]
             sugar = Sugar(self, max_sugar)
             self.grid.place_agent(sugar, (x, y))
-            self.schedule.add(sugar)
 
         # Create agent:
         for i in range(self.initial_population):
@@ -62,31 +60,29 @@ class SugarscapeCg(mesa.Model):
             vision = self.random.randrange(1, 6)
             ssa = SsAgent(self, False, sugar, metabolism, vision)
             self.grid.place_agent(ssa, (x, y))
-            self.schedule.add(ssa)
 
         self.running = True
         self.datacollector.collect(self)
 
     def step(self):
-        self.schedule.step()
+        # Step suger and agents
+        self.agents_by_type[Sugar].do("step")
+        self.agents_by_type[SsAgent].shuffle_do("step")
         # collect data
         self.datacollector.collect(self)
         if self.verbose:
-            print([self.schedule.time, self.schedule.get_type_count(SsAgent)])
+            print(f"Step: {self.steps}, SsAgents: {len(self.agents_by_type[SsAgent])}")
 
     def run_model(self, step_count=200):
         if self.verbose:
             print(
-                "Initial number Sugarscape Agent: ",
-                self.schedule.get_type_count(SsAgent),
+                f"Initial number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}"
             )
 
         for i in range(step_count):
             self.step()
 
         if self.verbose:
-            print("")
             print(
-                "Final number Sugarscape Agent: ",
-                self.schedule.get_type_count(SsAgent),
+                f"\nFinal number Sugarscape Agents: {len(self.agents_by_type[SsAgent])}"
             )
