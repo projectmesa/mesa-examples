@@ -21,7 +21,7 @@ The model is tests and demonstrates several Mesa concepts and features:
  - MultiGrid
  - Multiple agent types (ants, sugar patches)
  - Overlay arbitrary text (wolf's energy) on agent's shapes while drawing on CanvasGrid
- - Dynamically removing agents from the grid and schedule when they die
+ - Dynamically removing agents from the grid when they die
 
 ## Installation
 
@@ -44,7 +44,6 @@ Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and p
 ## Files
 
 * ``sugarscape/agents.py``: Defines the SsAgent, and Sugar agent classes.
-* ``sugarscape/schedule.py``: This is exactly based on wolf_sheep/schedule.py.
 * ``sugarscape/model.py``: Defines the Sugarscape Constant Growback model itself
 * ``sugarscape/server.py``: Sets up the interactive visualization server
 * ``run.py``: Launches a model visualization server.
