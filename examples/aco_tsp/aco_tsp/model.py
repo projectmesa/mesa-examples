@@ -225,7 +225,7 @@ class AcoTspModel(mesa.Model):
         """
         A model step. Used for activating the agents and collecting data.
         """
-        self.agents.shuffle().do("step")
+        self.agents.shuffle_do("step")
         self.update_pheromone()
 
         # Check len of cities visited by an agent

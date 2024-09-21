@@ -167,7 +167,7 @@ class BankReservesModel(mesa.Model):
         # collect data
         self.datacollector.collect(self)
         # tell all the agents in the model to run their step function
-        self.agents.shuffle().do("step")
+        self.agents.shuffle_do("step")
 
     def run_model(self):
         for i in range(self.run_time):
