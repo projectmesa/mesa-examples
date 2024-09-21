@@ -21,7 +21,7 @@ The model is tests and demonstrates several Mesa concepts and features:
  - MultiGrid
  - Multiple agent types (ants, sugar patches)
  - Overlay arbitrary text (wolf's energy) on agent's shapes while drawing on CanvasGrid
- - Dynamically removing agents from the grid when they die
+ - Dynamically removing agents from the grid and model when they die
 
 ## Installation
 
