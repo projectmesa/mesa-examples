@@ -30,11 +30,8 @@ class IsingModel(mesa.Model):
         for i in range(1000):
             random_spin = self.random.choice(agents_list)
             dE = self.get_energy_change(random_spin)
-            if dE < 0:
+            if dE < 0 or self.random.random() < self.boltzmann_factor(dE):
                 random_spin.state *= -1
-            else:
-                if self.random.random() < self.boltzmann_factor(dE):
-                    random_spin.state *= -1
 
     def get_energy_change(self, spin: Spin):
         neighbors = spin.neighbors()

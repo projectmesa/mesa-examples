@@ -1,7 +1,6 @@
 import solara
 from ising.model import IsingModel
-from ising.portrayal import portray_spin
-from mesa.visualization import JupyterViz
+from mesa.visualization import SolaraViz
 from mesa.visualization.UserParam import Slider
 
 model_params = {
@@ -20,9 +19,9 @@ model_params = {
 
 @solara.component
 def Page():
-    JupyterViz(
+    SolaraViz(
         IsingModel,
-        model_params,
-        name="Ising Model",
-        agent_portrayal=portray_spin,
+        # model_params,
+        # name="Ising Model",
+        # agent_portrayal=portray_spin,
     )
