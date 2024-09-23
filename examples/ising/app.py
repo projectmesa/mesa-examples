@@ -1,19 +1,24 @@
 import solara
 from ising.model import IsingModel
 from mesa.visualization import SolaraViz
-from mesa.visualization.UserParam import Slider
 
 model_params = {
-    "temperature": Slider(
-        label="Temperature", value=2, min=0.01, max=10, step=0.06, dtype=float
-    ),
-    "spin_up_probability": Slider(
-        label="Spin Up Probability",
-        value=0.5,
-        min=0,
-        max=1,
-        step=0.05,
-    ),
+    "temperature": {
+        "type": "SliderFloat",
+        "label": "Temperature",
+        "value": 2,
+        "min": 0.01,
+        "max": 10,
+        "step": 0.06,
+    },
+    "spin_up_probability": {
+        "type": "SliderFloat",
+        "label": "Spin Up Probability",
+        "value": 0.5,
+        "min": 0,
+        "max": 1,
+        "step": 0.05,
+    },
 }
 
 
@@ -21,7 +26,7 @@ model_params = {
 def Page():
     SolaraViz(
         IsingModel,
-        # model_params,
-        # name="Ising Model",
+        model_params,
+        name="Ising Model",
         # agent_portrayal=portray_spin,
     )
