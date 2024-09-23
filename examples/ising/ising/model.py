@@ -26,7 +26,7 @@ class IsingModel(mesa.Model):
 
     def step(self):
         agents_list = list(self.agents)
-        self._steps += 1000
+        self.steps += 1000
         for i in range(1000):
             random_spin = self.random.choice(agents_list)
             dE = self.get_energy_change(random_spin)

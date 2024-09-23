@@ -16,4 +16,4 @@ class Spin(mesa.Agent):
         self.state = init_state
 
     def neighbors(self):
-        return self.model.grid.iter_neighbors((self.x, self.y), True)
+        return self.model.grid.iter_neighbors((self.x, self.y), moore=True)
