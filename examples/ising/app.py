@@ -26,12 +26,13 @@ model_params = {
 }
 
 SpaceGraph = make_space_matplotlib(portray_spin)
+model = IsingModel()
 
 
 @solara.component
 def Page():
     SolaraViz(
-        IsingModel,
+        model,
         components=[SpaceGraph],
         model_params=model_params,
         name="Ising Model",
