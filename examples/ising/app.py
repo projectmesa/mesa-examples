@@ -1,6 +1,10 @@
 import solara
 from ising.model import IsingModel
-from mesa.visualization import SolaraViz
+from ising.portrayal import portray_spin
+from mesa.visualization import (
+    SolaraViz,
+    make_space_matplotlib,
+)
 
 model_params = {
     "temperature": {
@@ -21,12 +25,14 @@ model_params = {
     },
 }
 
+SpaceGraph = make_space_matplotlib(portray_spin)
+
 
 @solara.component
 def Page():
     SolaraViz(
         IsingModel,
-        model_params,
+        components=[SpaceGraph],
+        model_params=model_params,
         name="Ising Model",
-        # agent_portrayal=portray_spin,
     )
