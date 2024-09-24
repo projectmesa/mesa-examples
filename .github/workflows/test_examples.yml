@@ -45,6 +45,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install .[test]
-        pip install -U git+https://github.com/projectmesa/mesa@2.3.x-maintenance#egg=mesa
+        pip install -U git+https://github.com/projectmesa/mesa@2.4.x-maintenance#egg=mesa
     - name: Test with pytest
       run: pytest test_examples.py
