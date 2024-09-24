@@ -11,7 +11,7 @@ class Spin(mesa.Agent):
         """
         Create a cell, in the given state, at the given x, y position.
         """
-        super().__init__(position, model)
+        super().__init__(model)
         self.x, self.y = position
         self.state = init_state
 
