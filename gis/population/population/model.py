@@ -70,7 +70,6 @@ class Population(mesa.Model):
         Person.MOBILITY_RANGE_X = pixel_size_x / 2.0
         Person.MOBILITY_RANGE_Y = pixel_size_y / 2.0
 
-        self.schedule = mesa.time.RandomActivation(self)
         self._create_agents()
 
     def _create_agents(self):
@@ -90,7 +89,6 @@ class Population(mesa.Model):
                         )
                         person.set_random_world_coord()
                         self.space.add_agents(person)
-                        self.schedule.add(person)
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle_do("step")

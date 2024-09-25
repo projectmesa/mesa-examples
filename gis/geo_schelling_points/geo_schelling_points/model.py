@@ -17,7 +17,6 @@ class GeoSchellingPoints(mesa.Model):
         self.red_percentage = red_percentage
         PersonAgent.SIMILARITY_THRESHOLD = similarity_threshold
 
-        self.schedule = mesa.time.RandomActivation(self)
         self.space = Nuts2Eu()
 
         self.datacollector = mesa.DataCollector(
@@ -40,7 +39,6 @@ class GeoSchellingPoints(mesa.Model):
                     region_id=region.unique_id,
                 )
                 self.space.add_person_to_region(person, region_id=region.unique_id)
-                self.schedule.add(person)
 
         self.datacollector.collect(self)
 
@@ -57,7 +55,7 @@ class GeoSchellingPoints(mesa.Model):
         return self.space.num_people - self.unhappy
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
         if not self.unhappy:
