@@ -2,6 +2,7 @@ from pathlib import Path
 
 import mesa
 import numpy as np
+from mesa import DataCollector
 
 from .space import City
 
@@ -54,9 +55,10 @@ class UrbanGrowth(mesa.Model):
             cell.model = self
             self.schedule.add(cell)
 
-        self.initialize_data_collector(
+        self.datacollector = DataCollector(
             model_reporters={"Percentage Urbanized": "pct_urbanized"}
         )
+        self.datacollector.collect(self)
 
     @property
     def pct_urbanized(self) -> float:
