@@ -1,5 +1,4 @@
 import random
-import uuid
 from pathlib import Path
 
 import mesa
@@ -34,7 +33,6 @@ class GeoSchellingPoints(mesa.Model):
         for region in regions:
             for _ in range(region.init_num_people):
                 person = PersonAgent(
-                    unique_id=uuid.uuid4().int,
                     model=self,
                     crs=self.space.crs,
                     geometry=region.random_point(),

@@ -7,7 +7,6 @@ class PersonAgent(mg.GeoAgent):
 
     def __init__(
         self,
-        unique_id,
         model,
         geometry,
         crs,
@@ -19,14 +18,13 @@ class PersonAgent(mg.GeoAgent):
     ):
         """
         Create a new person agent.
-        :param unique_id:   Unique identifier for the agent
         :param model:       Model in which the agent runs
         :param geometry:    Shape object for the agent
         :param agent_type:  Indicator if agent is infected
                             ("infected", "susceptible", "recovered" or "dead")
         :param mobility_range:  Range of distance to move in one step
         """
-        super().__init__(unique_id, model, geometry, crs)
+        super().__init__(model, geometry, crs)
         # Agent parameters
         self.atype = agent_type
         self.mobility_range = mobility_range
@@ -84,9 +82,7 @@ class PersonAgent(mg.GeoAgent):
 class NeighbourhoodAgent(mg.GeoAgent):
     """Neighbourhood agent. Changes color according to number of infected inside it."""
 
-    def __init__(
-        self, unique_id, model, geometry, crs, agent_type="safe", hotspot_threshold=1
-    ):
+    def __init__(self, model, geometry, crs, agent_type="safe", hotspot_threshold=1):
         """
         Create a new Neighbourhood agent.
         :param unique_id:   Unique identifier for the agent
@@ -97,7 +93,7 @@ class NeighbourhoodAgent(mg.GeoAgent):
         :param hotspot_threshold:   Number of infected agents in region
                                     to be considered a hot-spot
         """
-        super().__init__(unique_id, model, geometry, crs)
+        super().__init__(model, geometry, crs)
         self.atype = agent_type
         self.hotspot_threshold = (
             hotspot_threshold  # When a neighborhood is considered a hot-spot

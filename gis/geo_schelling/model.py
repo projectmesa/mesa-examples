@@ -27,14 +27,14 @@ def get_largest_connected_components(gdf):
 class SchellingAgent(mg.GeoAgent):
     """Schelling segregation agent."""
 
-    def __init__(self, unique_id, model, geometry, crs, agent_type=None):
+    def __init__(self, model, geometry, crs, agent_type=None):
         """Create a new Schelling agent.
 
         Args:
             unique_id: Unique identifier for the agent.
             agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
-        super().__init__(unique_id, model, geometry, crs)
+        super().__init__(model, geometry, crs)
         self.atype = agent_type
 
     def step(self):
