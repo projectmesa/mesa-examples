@@ -55,12 +55,11 @@ class SchellingAgent(mg.GeoAgent):
         if similar < different:
             # Select an empty region
             empties = [a for a in self.model.space.agents if a.atype is None]
-            # Switch atypes and add/remove from scheduler
+            # Switch atypes
             new_region = random.choice(empties)
             new_region.atype = self.atype
-            self.model.schedule.add(new_region)
             self.atype = None
-            self.model.schedule.remove(self)
+            self.remove()
         else:
             self.model.happy += 1
 
@@ -77,7 +76,6 @@ class GeoSchelling(mesa.Model):
         self.minority_pc = minority_pc
         self.export_data = export_data
 
-        self.schedule = mesa.time.RandomActivation(self)
         self.space = mg.GeoSpace(warn_crs_conversion=False)
 
         self.happy = 0
@@ -100,7 +98,6 @@ class GeoSchelling(mesa.Model):
                     agent.atype = 1
                 else:
                     agent.atype = 0
-                self.schedule.add(agent)
 
     def export_agents_to_file(self) -> None:
         self.space.get_agents_as_GeoDataFrame(agent_cls=SchellingAgent).to_crs(
@@ -113,10 +110,10 @@ class GeoSchelling(mesa.Model):
         If All agents are happy, halt the model.
         """
         self.happy = 0  # Reset counter of happy agents
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
-        if self.happy == self.schedule.get_agent_count():
+        if self.happy == len(self.agents):
             self.running = False
 
         if not self.running and self.export_data:

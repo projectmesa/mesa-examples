@@ -44,7 +44,7 @@ class RaindropAgent(mg.GeoAgent):
 
     def step(self):
         if self.is_at_boundary:
-            self.model.schedule.remove(self)
+            self.remove()
         else:
             lowest_pos = min(
                 self.model.space.raster_layer.get_neighboring_cells(
@@ -65,7 +65,6 @@ class Rainfall(mesa.Model):
         self.num_steps = num_steps
 
         self.space = CraterLake(crs="epsg:4326", water_height=water_height, model=self)
-        self.schedule = mesa.time.RandomActivation(self)
         self.datacollector = mesa.DataCollector(
             {
                 "Total Amount of Water": "water_amount",
@@ -101,10 +100,9 @@ class Rainfall(mesa.Model):
                 pos=(random_x, random_y),
             )
             self.space.add_raindrop(raindrop)
-            self.schedule.add(raindrop)
             self.water_amount += 1
 
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
         current_water_level = self.space.raster_layer.get_raster("water_level")
@@ -113,8 +111,7 @@ class Rainfall(mesa.Model):
             "water_level_normalized",
         )
 
-        self.num_steps -= 1
-        if self.num_steps == 0:
+        if self.steps >= self.num_steps:
             self.running = False
         if not self.running and self.export_data:
             self.export_water_level_to_file()

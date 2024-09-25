@@ -22,7 +22,9 @@ def get_time(model) -> pd.Timedelta:
 
 def get_num_commuters_by_status(model, status: str) -> int:
     commuters = [
-        commuter for commuter in model.schedule.agents if commuter.status == status
+        commuter
+        for commuter in model.agents_by_type[Commuter]
+        if commuter.status == status
     ]
     return len(commuters)
 
@@ -30,11 +32,11 @@ def get_num_commuters_by_status(model, status: str) -> int:
 def get_total_friendships_by_type(model, friendship_type: str) -> int:
     if friendship_type == "home":
         num_friendships = [
-            commuter.num_home_friends for commuter in model.schedule.agents
+            commuter.num_home_friends for commuter in model.agents_by_type[Commuter]
         ]
     elif friendship_type == "work":
         num_friendships = [
-            commuter.num_work_friends for commuter in model.schedule.agents
+            commuter.num_work_friends for commuter in model.agents_by_type[Commuter]
         ]
     else:
         raise ValueError(
@@ -45,7 +47,6 @@ def get_total_friendships_by_type(model, friendship_type: str) -> int:
 
 class AgentsAndNetworks(mesa.Model):
     running: bool
-    schedule: mesa.time.RandomActivation
     show_walkway: bool
     show_lakes_and_rivers: bool
     current_id: int
@@ -82,7 +83,6 @@ class AgentsAndNetworks(mesa.Model):
         show_driveway=False,
     ) -> None:
         super().__init__()
-        self.schedule = mesa.time.RandomActivation(self)
         self.show_walkway = show_walkway
         self.show_lakes_and_rivers = show_lakes_and_rivers
         self.data_crs = data_crs
@@ -144,7 +144,6 @@ class AgentsAndNetworks(mesa.Model):
             commuter.set_work(random_work)
             commuter.status = "home"
             self.space.add_commuter(commuter)
-            self.schedule.add(commuter)
 
     def _load_buildings_from_file(
         self, buildings_file: str, crs: str, campus: str
@@ -215,7 +214,7 @@ class AgentsAndNetworks(mesa.Model):
 
     def step(self) -> None:
         self.__update_clock()
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
     def __update_clock(self) -> None:
