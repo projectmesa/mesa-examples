@@ -96,8 +96,9 @@ class GeoSir(mesa.Model):
         """Run one step of the model."""
         self.reset_counts()
 
-        # Activate PersonAgents first, in random order, then activate NeighbourhoodAgents.
+        # Activate PersonAgents in random order
         self.agents_by_type[PersonAgent].shuffle_do("step")
+        # For NeighbourhoodAgents the order doesn't matter, since they update independently from each other
         self.agents_by_type[NeighbourhoodAgent].do("step")
 
         self.datacollector.collect(self)
