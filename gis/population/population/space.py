@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import gzip
-import uuid
 
 import geopandas as gpd
 import mesa
@@ -47,7 +46,7 @@ class UgandaArea(GeoSpace):
         raster_layer.total_bounds = world_size.total_bounds
         self.add_layer(raster_layer)
         self.lake = gpd.GeoDataFrame.from_file(lake_zip_file).geometry[0]
-        self.add_agents(GeoAgent(uuid.uuid4().int, model, self.lake, self.crs))
+        self.add_agents(GeoAgent(model, self.lake, self.crs))
 
     @property
     def population_layer(self):

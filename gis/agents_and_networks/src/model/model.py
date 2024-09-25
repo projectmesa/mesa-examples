@@ -1,4 +1,3 @@
-import uuid
 from functools import partial
 from pathlib import Path
 
@@ -137,7 +136,6 @@ class AgentsAndNetworks(mesa.Model):
             random_home = self.space.get_random_home()
             random_work = self.space.get_random_work()
             commuter = Commuter(
-                unique_id=uuid.uuid4().int,
                 model=self,
                 geometry=Point(random_home.centroid),
                 crs=self.space.crs,
