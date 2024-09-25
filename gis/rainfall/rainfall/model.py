@@ -12,9 +12,8 @@ script_directory = Path(__file__).resolve().parent
 
 
 class RaindropAgent(mg.GeoAgent):
-    def __init__(self, unique_id, model, pos):
+    def __init__(self, model, pos):
         super().__init__(
-            unique_id,
             model,
             geometry=None,
             crs=model.space.crs,

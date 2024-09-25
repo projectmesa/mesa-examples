@@ -41,8 +41,8 @@ class Commuter(mg.GeoAgent):
     SPEED: float
     CHANCE_NEW_FRIEND: float  # percent chance to make a new friend every 5 min
 
-    def __init__(self, unique_id, model, geometry, crs) -> None:
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs) -> None:
+        super().__init__(model, geometry, crs)
         self.my_home = None
         self.start_time_h = round(np.random.normal(6.5, 1))
         while self.start_time_h < 6 or self.start_time_h > 9:
