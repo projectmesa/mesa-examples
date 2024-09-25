@@ -29,7 +29,6 @@ class GeoSir(mesa.Model):
                                     if it has been exposed to another infected
         """
         super().__init__()
-        self.schedule = mesa.time.BaseScheduler(self)
         self.space = mg.GeoSpace(warn_crs_conversion=False)
         self.steps = 0
         self.counts = None
@@ -52,7 +51,6 @@ class GeoSir(mesa.Model):
         )
 
         # Set up the Neighbourhood patches for every region in file
-        # (add to schedule later)
         ac = mg.AgentCreator(NeighbourhoodAgent, model=self)
         neighbourhood_agents = ac.from_file(self.geojson_regions)
         self.space.add_agents(neighbourhood_agents)
@@ -64,7 +62,7 @@ class GeoSir(mesa.Model):
             crs=self.space.crs,
             agent_kwargs={"init_infected": init_infected},
         )
-        # Generate random location, add agent to grid and scheduler
+        # Generate random location and add agent to grid
         for i in range(pop_size):
             this_neighbourhood = self.random.randint(
                 0, len(neighbourhood_agents) - 1
@@ -81,12 +79,6 @@ class GeoSir(mesa.Model):
             this_y = center_y[0] + self.random.randint(0, spread_y) - spread_y / 2
             this_person = ac_population.create_agent(Point(this_x, this_y))
             self.space.add_agents(this_person)
-            self.schedule.add(this_person)
-
-        # Add the neighbourhood agents to schedule AFTER person agents,
-        # to allow them to update their color by using BaseScheduler
-        for agent in neighbourhood_agents:
-            self.schedule.add(agent)
 
         self.datacollector.collect(self)
 
@@ -102,9 +94,12 @@ class GeoSir(mesa.Model):
 
     def step(self):
         """Run one step of the model."""
-        self.steps += 1
         self.reset_counts()
-        self.schedule.step()
+
+        # Activate PersonAgents in random order
+        self.agents_by_type[PersonAgent].shuffle_do("step")
+        # For NeighbourhoodAgents the order doesn't matter, since they update independently from each other
+        self.agents_by_type[NeighbourhoodAgent].do("step")
 
         self.datacollector.collect(self)
 
