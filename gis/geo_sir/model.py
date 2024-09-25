@@ -79,9 +79,7 @@ class GeoSir(mesa.Model):
             spread_y = int(this_bounds[3] - this_bounds[1])
             this_x = center_x[0] + self.random.randint(0, spread_x) - spread_x / 2
             this_y = center_y[0] + self.random.randint(0, spread_y) - spread_y / 2
-            this_person = ac_population.create_agent(
-                Point(this_x, this_y), "P" + str(i)
-            )
+            this_person = ac_population.create_agent(Point(this_x, this_y))
             self.space.add_agents(this_person)
             self.schedule.add(this_person)
 
