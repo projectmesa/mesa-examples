@@ -1,4 +1,3 @@
-import uuid
 from pathlib import Path
 
 import mesa
@@ -98,7 +97,6 @@ class Rainfall(mesa.Model):
             random_x = np.random.randint(0, self.space.raster_layer.width)
             random_y = np.random.randint(0, self.space.raster_layer.height)
             raindrop = RaindropAgent(
-                unique_id=uuid.uuid4().int,
                 model=self,
                 pos=(random_x, random_y),
             )

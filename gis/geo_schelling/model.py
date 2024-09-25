@@ -90,7 +90,7 @@ class GeoSchelling(mesa.Model):
         data_path = script_directory / "data/nuts_rg_60M_2013_lvl_2.geojson"
         agents_gdf = gpd.read_file(data_path)
         agents_gdf = get_largest_connected_components(agents_gdf)
-        agents = ac.from_GeoDataFrame(agents_gdf, unique_id="index")
+        agents = ac.from_GeoDataFrame(agents_gdf)
         self.space.add_agents(agents)
 
         # Set up agents

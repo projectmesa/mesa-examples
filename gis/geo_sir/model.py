@@ -54,9 +54,7 @@ class GeoSir(mesa.Model):
         # Set up the Neighbourhood patches for every region in file
         # (add to schedule later)
         ac = mg.AgentCreator(NeighbourhoodAgent, model=self)
-        neighbourhood_agents = ac.from_file(
-            self.geojson_regions, unique_id=self.unique_id
-        )
+        neighbourhood_agents = ac.from_file(self.geojson_regions)
         self.space.add_agents(neighbourhood_agents)
 
         # Generate PersonAgent population
