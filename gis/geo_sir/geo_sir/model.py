@@ -13,7 +13,7 @@ class GeoSir(mesa.Model):
     """Model class for a simplistic infection model."""
 
     # Geographical parameters for desired map
-    geojson_regions = script_directory / "data/TorontoNeighbourhoods.geojson"
+    geojson_regions = script_directory / "../data/TorontoNeighbourhoods.geojson"
     unique_id = "HOODNUM"
 
     def __init__(
