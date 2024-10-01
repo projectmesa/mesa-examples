@@ -1,7 +1,7 @@
 import mesa
 
-class SchellingAgent(mesa.Agent):
 
+class SchellingAgent(mesa.Agent):
     def __init__(self, unique_id, model, agent_type):
         """
         Create a new Schelling agent.
@@ -23,14 +23,15 @@ class SchellingAgent(mesa.Agent):
 
         # If unhappy, decide whether to move:
         if similar < self.model.homophily:
-            if self.random.random() < self.model.move_probability:  # Add randomness to moving
+            if (
+                self.random.random() < self.model.move_probability
+            ):  # Add randomness to moving
                 self.model.grid.move_to_empty(self)
             else:
                 # Agent decides to stay even if unhappy
                 pass
         else:
             self.model.happy += 1
-
 
 
 class Schelling(mesa.Model):
@@ -56,7 +57,7 @@ class Schelling(mesa.Model):
         self.minority_pc = minority_pc
         self.homophily = homophily
         self.radius = radius
-        self.move_probability = move_probability  
+        self.move_probability = move_probability
 
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
