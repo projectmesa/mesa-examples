@@ -45,10 +45,10 @@ model_params = {
         name="Fraction minority", value=0.2, min_value=0.00, max_value=1.0, step=0.05
     ),
     "homophily": mesa.visualization.Slider(
-        name="Homophily", value=3, min_value=0, max_value=8, step=1
+        name="Homophily", value=3, min_value=0, max_value=100, step=1
     ),
     "radius": mesa.visualization.Slider(
-        name="Search Radius", value=1, min_value=1, max_value=5, step=1
+        name="Search Radius", value=1, min_value=1, max_value=25, step=1
     ),
 }
 

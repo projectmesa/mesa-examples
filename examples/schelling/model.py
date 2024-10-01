@@ -1,20 +1,16 @@
 import mesa
 
-
 class SchellingAgent(mesa.Agent):
-    """
-    Schelling segregation agent
-    """
 
-    def __init__(self, model, agent_type):
+    def __init__(self, unique_id, model, agent_type):
         """
         Create a new Schelling agent.
 
         Args:
-           x, y: Agent initial location.
+           unique_id: A unique identifier for the agent.
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
-        super().__init__(model)
+        super().__init__(unique_id, model)
         self.type = agent_type
 
     def step(self):
@@ -25,11 +21,16 @@ class SchellingAgent(mesa.Agent):
             if neighbor.type == self.type:
                 similar += 1
 
-        # If unhappy, move:
+        # If unhappy, decide whether to move:
         if similar < self.model.homophily:
-            self.model.grid.move_to_empty(self)
+            if self.random.random() < self.model.move_probability:  # Add randomness to moving
+                self.model.grid.move_to_empty(self)
+            else:
+                # Agent decides to stay even if unhappy
+                pass
         else:
             self.model.happy += 1
+
 
 
 class Schelling(mesa.Model):
@@ -45,20 +46,9 @@ class Schelling(mesa.Model):
         radius=1,
         density=0.8,
         minority_pc=0.2,
+        move_probability=0.9,
         seed=None,
     ):
-        """
-        Create a new Schelling model.
-
-        Args:
-            width, height: Size of the space.
-            density: Initial Chance for a cell to populated
-            minority_pc: Chances for an agent to be in minority class
-            homophily: Minimum number of agents of same class needed to be happy
-            radius: Search radius for checking similarity
-            seed: Seed for Reproducibility
-        """
-
         super().__init__(seed=seed)
         self.height = height
         self.width = width
@@ -66,6 +56,7 @@ class Schelling(mesa.Model):
         self.minority_pc = minority_pc
         self.homophily = homophily
         self.radius = radius
+        self.move_probability = move_probability  
 
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
@@ -74,15 +65,14 @@ class Schelling(mesa.Model):
             model_reporters={"happy": "happy"},  # Model-level count of happy agents
         )
 
-        # Set up agents
-        # We use a grid iterator that returns
-        # the coordinates of a cell as well as
-        # its contents. (coord_iter)
+        # Set up agents with unique IDs
+        unique_id = 0  # Initialize unique_id counter
         for _, pos in self.grid.coord_iter():
             if self.random.random() < self.density:
                 agent_type = 1 if self.random.random() < self.minority_pc else 0
-                agent = SchellingAgent(self, agent_type)
+                agent = SchellingAgent(unique_id, self, agent_type)  # Pass unique_id
                 self.grid.place_agent(agent, pos)
+                unique_id += 1  # Increment the unique_id for the next agent
 
         self.datacollector.collect(self)
 
