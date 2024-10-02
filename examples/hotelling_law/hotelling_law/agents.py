@@ -9,7 +9,7 @@ class StoreAgent(Agent):
     """An agent representing a store with a price and ability to move
     and adjust prices."""
 
-    def __init__(self, model, price=10, can_move=True, strategy="Budget"):
+    def __init__(self, model, price=40, can_move=True, strategy="Budget"):
         # Initializes the store agent with a unique ID,
         # the model it belongs to,its initial price,
         # and whether it can move.
