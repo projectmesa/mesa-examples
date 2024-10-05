@@ -1,6 +1,8 @@
 ## Conway's Game of Life (Fast)
 This example demonstrates a fast and efficient implementation of Conway's Game of Life using the [`PropertyLayer`](https://github.com/projectmesa/mesa/pull/1898) from the Mesa framework.
 
+![GoL_fast_screenshot.png](GoL_fast_screenshot.png)
+
 ### Overview
 Conway's [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) is a classic cellular automaton where each cell on a grid can either be alive or dead. The state of each cell changes over time based on a set of simple rules that depend on the number of alive neighbors.
 
@@ -18,8 +20,8 @@ The model is benchmarked in https://github.com/projectmesa/mesa/pull/1898#issuec
 
 ### Getting Started
 #### Prerequisites
-- Python 3.9 or higher
-- Mesa 2.3 or higher
+- Python 3.10 or higher
+- Mesa 2.3 or higher (3.0.0b0 or higher for the visualisation)
 - NumPy and SciPy
 
 #### Running the Model
