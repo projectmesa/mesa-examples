@@ -1,35 +1,49 @@
-from mesa.visualization import SolaraViz, make_plot_measure
+from mesa.visualization import SolaraViz, make_plot_measure, make_space_matplotlib
 from model import GameOfLifeModel
+
+propertylayer_portrayal = {
+    "cell_layer": {
+        "color": "Black",
+        "alpha": 1,
+        "colorbar": False,
+    },
+}
 
 model_params = {
     "width": {
         "type": "SliderInt",
-        "value": 10,
+        "value": 30,
         "label": "Width",
         "min": 5,
-        "max": 25,
+        "max": 60,
         "step": 1,
     },
     "height": {
         "type": "SliderInt",
-        "value": 10,
+        "value": 30,
         "label": "Height",
         "min": 5,
-        "max": 25,
+        "max": 60,
         "step": 1,
+    },
+    "alive_fraction": {
+        "type": "SliderFloat",
+        "value": 0.2,
+        "label": "Cells alive",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
     },
 }
 
-gol = GameOfLifeModel(10, 10)
+gol = GameOfLifeModel()
 
+layer_viz = make_space_matplotlib(propertylayer_portrayal=propertylayer_portrayal)
 TotalAlivePlot = make_plot_measure("Cells alive")
-FractionAlivePlot = make_plot_measure("Fraction alive")
-
 
 page = SolaraViz(
     gol,
-    components=[TotalAlivePlot, FractionAlivePlot],
+    components=[layer_viz, TotalAlivePlot],
     model_params=model_params,
     name="Game of Life Model",
 )
-page  # noqa
