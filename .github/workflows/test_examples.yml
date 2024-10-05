@@ -25,7 +25,7 @@ jobs:
   #     with:
   #       python-version: "3.12"
   #   - name: Install dependencies
-  #     run: pip install mesa pytest
+  #     run: pip install mesa[network] pytest
   #   - name: Test with pytest
   #     run: pytest -rA -Werror test_examples.py
 
@@ -39,7 +39,7 @@ jobs:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        pip install mesa --pre
+        pip install mesa[network] --pre
         pip install .[test]
     - name: Test with pytest
       run: pytest -rA -Werror -Wdefault::FutureWarning test_examples.py
@@ -55,6 +55,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install .[test]
-        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa
+        pip install -U git+https://github.com/projectmesa/mesa@main#egg=mesa[network]
     - name: Test with pytest
       run: pytest -rA -Werror -Wdefault::FutureWarning test_examples.py
