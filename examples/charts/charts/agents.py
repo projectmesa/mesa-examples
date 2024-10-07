@@ -10,7 +10,7 @@ Author of NetLogo code:
     Northwestern University, Evanston, IL.
 """
 
-from mesa.spaces import CellAgent
+from mesa.experimental.cell_space import CellAgent
 
 
 class Bank:
@@ -178,7 +178,7 @@ class Person(CellAgent):
 
     def step(self):
         # move to a cell in my Moore neighborhood
-        self.move_to(self.cell.neighborhood().select_random_cell())
+        self.cell = self.cell.neighborhood.select_random_cell()
         # trade
         self.do_business()
         # deposit money or take out a loan

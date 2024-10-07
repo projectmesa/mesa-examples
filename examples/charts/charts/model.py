@@ -14,7 +14,7 @@ import mesa
 import numpy as np
 
 from .agents import Bank, Person
-from mesa.spaces import OrthogonalMooreGrid
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 """
 If you want to perform a parameter sweep, call batch_run.py instead of run.py.

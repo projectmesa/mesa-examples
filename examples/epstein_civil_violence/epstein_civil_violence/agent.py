@@ -3,12 +3,12 @@ import math
 import mesa
 
 
-class EpsteinAgent(mesa.spaces.CellAgent):
+class EpsteinAgent(mesa.experimental.cell_space.CellAgent):
     def update_neighbors(self):
         """
         Look around and see who my neighbors are
         """
-        self.neighborhood = self.cell.neighborhood(radius=self.vision)
+        self.neighborhood = self.cell.get_neighborhood(radius=self.vision)
 
         self.neighbors = self.neighborhood.agents
         self.empty_neighbors = [c for c in self.neighborhood if c.is_empty]

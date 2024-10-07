@@ -15,7 +15,7 @@ class ConwaysGameOfLife(mesa.Model):
         """
         super().__init__()
         # Use a simple grid, where edges wrap around.
-        self.grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=True)
+        self.grid = mesa.experimental.cell_space.OrthogonalMooreGrid((width, height), torus=True)
 
         # Place a cell at each location, with some initialized to
         # ALIVE and some to DEAD.

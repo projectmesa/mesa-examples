@@ -20,7 +20,7 @@ class BoltzmannWealthModel(mesa.Model):
     def __init__(self, N=100, width=10, height=10):
         super().__init__()
         self.num_agents = N
-        self.grid = mesa.spaces.OrthogonalMooreGrid(
+        self.grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
             (width, height), torus=True, random=self.random
         )
 
@@ -49,7 +49,7 @@ class BoltzmannWealthModel(mesa.Model):
             self.step()
 
 
-class MoneyAgent(mesa.spaces.CellAgent):
+class MoneyAgent(mesa.experimental.cell_space.CellAgent):
     """An agent with fixed initial wealth."""
 
     def __init__(self, model):
@@ -64,6 +64,6 @@ class MoneyAgent(mesa.spaces.CellAgent):
             self.wealth -= 1
 
     def step(self):
-        self.move_to(self.cell.neighborhood().select_random_cell())
+        self.cell = self.cell.neighborhood.select_random_cell()
         if self.wealth > 0:
             self.give_money()

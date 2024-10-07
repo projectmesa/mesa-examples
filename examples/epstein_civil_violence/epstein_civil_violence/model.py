@@ -59,7 +59,7 @@ class EpsteinCivilViolence(mesa.Model):
         self.max_iters = max_iters
         self.iteration = 0
 
-        self.grid = mesa.spaces.OrthogonalMooreGrid(
+        self.grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
             (width, height), capacity=1, torus=True
         )
 
