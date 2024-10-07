@@ -190,7 +190,7 @@ class HotellingModel(Model):
             # Randomly place agents on the grid for a grid environment.
             x = self.random.randrange(self.grid.dimensions[0])
             y = self.random.randrange(self.grid.dimensions[1])
-            agent.cell = self.grid[(x,y)]
+            agent.cell = self.grid[(x, y)]
 
         # Place consumer agents
         for _ in range(self.num_consumers):
@@ -200,7 +200,7 @@ class HotellingModel(Model):
             # Place consumer randomly on the grid
             x = self.random.randrange(self.grid.dimensions[0])
             y = self.random.randrange(self.grid.dimensions[1])
-            consumer.cell = self.grid[(x,y)]
+            consumer.cell = self.grid[(x, y)]
 
     # Method to advance the simulation by one step.
     def step(self):
