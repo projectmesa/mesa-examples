@@ -76,7 +76,7 @@ class HotellingModel(Model):
         consumer_preferences="default",
         environment_type="grid",
         mobility_rate=80,
-        seed = None
+        seed=None,
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,
