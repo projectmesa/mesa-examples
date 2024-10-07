@@ -94,9 +94,6 @@ class HotellingModel(Model):
         self.consumer_preferences = consumer_preferences
         # Type of environment ('grid' or 'line').
         self.environment_type = environment_type
-        # Initialize AgentSets for store and consumer agents
-        self.store_agents = AgentSet([], self)
-        self.consumer_agents = AgentSet([], self)
 
         # Initialize the spatial grid based on the specified environment type.
         if environment_type == "grid":
