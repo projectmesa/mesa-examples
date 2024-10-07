@@ -1,10 +1,12 @@
-# This code implements a multi-agent model called MoneyModel using the Mesa library. 
-# The model simulates the distribution of wealth among agents in a grid environment.
-# Each agent has a randomly assigned wealth and can move to neighboring cells.
-# Agents can also give money to other agents in the same cell if they have greater wealth.
-# The model is trained by a scientist who believes in an equal society and wants to minimize the Gini coefficient, which measures wealth inequality.
-# The model is trained using the Proximal Policy Optimization (PPO) algorithm from the stable-baselines3 library.
-# The trained model is saved as "ppo_money_model".
+'''
+This code implements a multi-agent model called MoneyModel using the Mesa library. 
+The model simulates the distribution of wealth among agents in a grid environment.
+Each agent has a randomly assigned wealth and can move to neighboring cells.
+Agents can also give money to other agents in the same cell if they have greater wealth.
+The model is trained by a scientist who believes in an equal society and wants to minimize the Gini coefficient, which measures wealth inequality.
+The model is trained using the Proximal Policy Optimization (PPO) algorithm from the stable-baselines3 library.
+The trained model is saved as "ppo_money_model". 
+'''
 
 import random
 
