@@ -2,6 +2,7 @@ from pathlib import Path
 
 import mesa
 import numpy as np
+from mesa import DataCollector
 
 from .space import City
 
@@ -33,7 +34,6 @@ class UrbanGrowth(mesa.Model):
         self.slope_coefficient = slope_coefficient
         self.critical_slope = critical_slope
         self.road_influence = road_influence
-        self.schedule = mesa.time.RandomActivation(self)
 
         self.dispersion_value = (dispersion_coefficient * 0.005) * (
             world_width**2 + world_height**2
@@ -52,11 +52,11 @@ class UrbanGrowth(mesa.Model):
             cell.road_found = False
             cell.road_pixel = None
             cell.model = self
-            self.schedule.add(cell)
 
-        self.initialize_data_collector(
+        self.datacollector = DataCollector(
             model_reporters={"Percentage Urbanized": "pct_urbanized"}
         )
+        self.datacollector.collect(self)
 
     @property
     def pct_urbanized(self) -> float:
@@ -110,7 +110,7 @@ class UrbanGrowth(mesa.Model):
 
     def step(self):
         self._spontaneous_growth()
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         if self.road_influence:
             self._road_influenced_growth()
         self.datacollector.collect(self)

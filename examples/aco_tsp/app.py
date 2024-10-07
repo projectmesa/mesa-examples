@@ -6,7 +6,7 @@ import networkx as nx
 import solara
 from aco_tsp.model import AcoTspModel, TSPGraph
 from matplotlib.figure import Figure
-from mesa.visualization import SolaraViz
+from mesa.visualization import SolaraViz, make_plot_measure
 
 
 def circle_portrayal_example(agent):
@@ -35,6 +35,8 @@ model_params = {
     },
 }
 
+model = AcoTspModel()
+
 
 def make_graph(model):
     fig = Figure()
@@ -55,7 +57,7 @@ def make_graph(model):
         edge_color="gray",
     )
 
-    solara.FigureMatplotlib(fig)
+    return solara.FigureMatplotlib(fig)
 
 
 def ant_level_distances(model):
@@ -67,10 +69,8 @@ def ant_level_distances(model):
 
 
 page = SolaraViz(
-    AcoTspModel,
-    model_params,
-    space_drawer=None,
-    measures=["best_distance_iter", "best_distance", make_graph],
-    agent_portrayal=circle_portrayal_example,
+    model,
+    components=[make_plot_measure(["best_distance_iter", "best_distance"]), make_graph],
+    model_params=model_params,
     play_interval=1,
 )

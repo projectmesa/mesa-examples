@@ -7,8 +7,8 @@ from shapely.geometry import Point
 class PersonAgent(mg.GeoAgent):
     SIMILARITY_THRESHOLD = 0.3
 
-    def __init__(self, unique_id, model, geometry, crs, is_red, region_id):
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs, is_red, region_id):
+        super().__init__(model, geometry, crs)
         self.is_red = is_red
         self.region_id = region_id
 
@@ -36,8 +36,8 @@ class RegionAgent(mg.GeoAgent):
     red_cnt: int
     blue_cnt: int
 
-    def __init__(self, unique_id, model, geometry, crs, init_num_people=5):
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs, init_num_people=5):
+        super().__init__(model, geometry, crs)
         self.init_num_people = init_num_people
         self.red_cnt = 0
         self.blue_cnt = 0

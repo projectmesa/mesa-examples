@@ -19,8 +19,8 @@ class Building(mg.GeoAgent):
     function: float  # 1.0 for work, 2.0 for home, 0.0 for neither
     entrance_pos: mesa.space.FloatCoordinate  # nearest vertex on road
 
-    def __init__(self, unique_id, model, geometry, crs) -> None:
-        super().__init__(unique_id=unique_id, model=model, geometry=geometry, crs=crs)
+    def __init__(self, model, geometry, crs) -> None:
+        super().__init__(model=model, geometry=geometry, crs=crs)
         self.entrance = None
         self.name = str(uuid.uuid4())
         self.function = randrange(3)

@@ -46,7 +46,7 @@ class ForestFire(mesa.Model):
         """
         Advance the model by one step.
         """
-        self.agents.shuffle().do("step")
+        self.agents.shuffle_do("step")
         # collect data
         self.datacollector.collect(self)
 

@@ -28,12 +28,12 @@ python3 -m pip install -r requirements.txt
 Then run the model:
 
 ```bash
-python3 scripts/run.py --campus ub
+solara run app.py -- --campus ub
 ```
 
 Change `ub` to `gmu` for a different campus map.
 
-Open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press `Start`.
+Then open your browser to [http://127.0.0.1:8765/](http://127.0.0.1:8765/) and press the play button `▶`.
 
 ## License
 

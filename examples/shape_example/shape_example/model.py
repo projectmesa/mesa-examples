@@ -36,4 +36,4 @@ class ShapeExample(mesa.Model):
                 unique_id += 1
 
     def step(self):
-        self.agents.shuffle().do("step")
+        self.agents.shuffle_do("step")

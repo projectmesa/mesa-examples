@@ -1,6 +1,5 @@
 import math
 import random
-import uuid
 from pathlib import Path
 
 import mesa
@@ -17,8 +16,8 @@ class Person(mg.GeoAgent):
     MOBILITY_RANGE_X = 0.0
     MOBILITY_RANGE_Y = 0.0
 
-    def __init__(self, unique_id, model, geometry, crs, img_coord):
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs, img_coord):
+        super().__init__(model, geometry, crs)
         self.img_coord = img_coord
 
     def set_random_world_coord(self):
@@ -71,7 +70,6 @@ class Population(mesa.Model):
         Person.MOBILITY_RANGE_X = pixel_size_x / 2.0
         Person.MOBILITY_RANGE_Y = pixel_size_y / 2.0
 
-        self.schedule = mesa.time.RandomActivation(self)
         self._create_agents()
 
     def _create_agents(self):
@@ -84,7 +82,6 @@ class Population(mesa.Model):
                     point = Point(self.space.population_layer.transform * cell.indices)
                     if not point.within(self.space.lake):
                         person = Person(
-                            unique_id=uuid.uuid4().int,
                             model=self,
                             crs=self.space.crs,
                             geometry=point,
@@ -92,7 +89,6 @@ class Population(mesa.Model):
                         )
                         person.set_random_world_coord()
                         self.space.add_agents(person)
-                        self.schedule.add(person)
 
     def step(self):
-        self.schedule.step()
+        self.agents.shuffle_do("step")

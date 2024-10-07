@@ -216,7 +216,7 @@ class HotellingModel(Model):
         # Collect data for the current step.
         self.datacollector.collect(self)
         # Activate all agents in random order
-        self.agents.shuffle().do("step")
+        self.agents.shuffle_do("step")
         # Update market dynamics based on the latest actions
         self.recalculate_market_share()
 

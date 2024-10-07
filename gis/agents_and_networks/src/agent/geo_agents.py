@@ -10,8 +10,8 @@ class Driveway(mg.GeoAgent):
     geometry: Point
     crs: pyproj.CRS
 
-    def __init__(self, unique_id, model, geometry, crs) -> None:
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs) -> None:
+        super().__init__(model, geometry, crs)
 
 
 class LakeAndRiver(mg.GeoAgent):
@@ -20,8 +20,8 @@ class LakeAndRiver(mg.GeoAgent):
     geometry: Point
     crs: pyproj.CRS
 
-    def __init__(self, unique_id, model, geometry, crs) -> None:
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs) -> None:
+        super().__init__(model, geometry, crs)
 
 
 class Walkway(mg.GeoAgent):
@@ -30,5 +30,5 @@ class Walkway(mg.GeoAgent):
     geometry: Point
     crs: pyproj.CRS
 
-    def __init__(self, unique_id, model, geometry, crs) -> None:
-        super().__init__(unique_id, model, geometry, crs)
+    def __init__(self, model, geometry, crs) -> None:
+        super().__init__(model, geometry, crs)
