@@ -18,7 +18,9 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.num_agents = num_agents
         self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
-        self.grid = mesa.experimental.cell_space.Network(self.G, random=self.random, capacity=1)
+        self.grid = mesa.experimental.cell_space.Network(
+            self.G, random=self.random, capacity=1
+        )
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},

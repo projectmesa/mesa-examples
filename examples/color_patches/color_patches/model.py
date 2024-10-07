@@ -66,7 +66,9 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
         super().__init__()
-        self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid((width, height), torus=False)
+        self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
+            (width, height), torus=False
+        )
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row
