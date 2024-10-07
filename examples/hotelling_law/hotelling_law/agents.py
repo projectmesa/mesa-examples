@@ -9,11 +9,11 @@ class StoreAgent(Agent):
     """An agent representing a store with a price and ability to move
     and adjust prices."""
 
-    def __init__(self, unique_id, model, price=10, can_move=True, strategy="Budget"):
+    def __init__(self, model, price=10, can_move=True, strategy="Budget"):
         # Initializes the store agent with a unique ID,
         # the model it belongs to,its initial price,
         # and whether it can move.
-        super().__init__(unique_id, model)
+        super().__init__(model)
         self.price = price  # Initial price of the store.
         self.can_move = can_move  # Indicates if the agent can move.
         self.market_share = 0  # Initialize market share
@@ -119,7 +119,7 @@ class StoreAgent(Agent):
 
     def identify_competitors(self):
         competitors = []
-        for agent in self.model.schedule.agents:
+        for agent in self.model.agents:
             if isinstance(agent, StoreAgent) and agent.unique_id != self.unique_id:
                 # Estimate market overlap as a measure of competition
                 overlap = self.estimate_market_overlap(agent)
@@ -160,8 +160,8 @@ class ConsumerAgent(Agent):
     """A consumer agent that chooses a store
     based on price and distance."""
 
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
+    def __init__(self, model):
+        super().__init__(model)
         self.preferred_store = None
 
     def determine_preferred_store(self):

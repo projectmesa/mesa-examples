@@ -8,20 +8,17 @@ class TreeCell(mesa.Agent):
     Attributes:
         x, y: Grid coordinates
         condition: Can be "Fine", "On Fire", or "Burned Out"
-        unique_id: (x,y) tuple.
+        unique_id: int
 
-    unique_id isn't strictly necessary here, but it's good
-    practice to give one to each agent anyway.
     """
 
-    def __init__(self, unique_id, model):
+    def __init__(self, model):
         """
         Create a new tree.
         Args:
-            unique_id: Unique identifier for the agent.
             model: standard model reference for agent.
         """
-        super().__init__(unique_id, model)
+        super().__init__(model)
         self.condition = "Fine"
 
     def step(self):

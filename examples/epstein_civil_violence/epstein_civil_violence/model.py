@@ -58,7 +58,7 @@ class EpsteinCivilViolence(mesa.Model):
         self.movement = movement
         self.max_iters = max_iters
         self.iteration = 0
-        self.schedule = mesa.time.RandomActivation(self)
+
         self.grid = mesa.space.SingleGrid(width, height, torus=True)
 
         model_reporters = {
@@ -78,18 +78,16 @@ class EpsteinCivilViolence(mesa.Model):
         self.datacollector = mesa.DataCollector(
             model_reporters=model_reporters, agent_reporters=agent_reporters
         )
-        unique_id = 0
         if self.cop_density + self.citizen_density > 1:
             raise ValueError("Cop density + citizen density must be less than 1")
+
         for contents, (x, y) in self.grid.coord_iter():
             if self.random.random() < self.cop_density:
-                cop = Cop(unique_id, self, (x, y), vision=self.cop_vision)
-                unique_id += 1
+                cop = Cop(self, (x, y), vision=self.cop_vision)
                 self.grid[x][y] = cop
-                self.schedule.add(cop)
+
             elif self.random.random() < (self.cop_density + self.citizen_density):
                 citizen = Citizen(
-                    unique_id,
                     self,
                     (x, y),
                     hardship=self.random.random(),
@@ -98,9 +96,7 @@ class EpsteinCivilViolence(mesa.Model):
                     threshold=self.active_threshold,
                     vision=self.citizen_vision,
                 )
-                unique_id += 1
                 self.grid[x][y] = citizen
-                self.schedule.add(citizen)
 
         self.running = True
         self.datacollector.collect(self)
@@ -109,7 +105,7 @@ class EpsteinCivilViolence(mesa.Model):
         """
         Advance the model by one step and collect data.
         """
-        self.schedule.step()
+        self.agents.shuffle().do("step")
         # collect data
         self.datacollector.collect(self)
         self.iteration += 1
@@ -122,7 +118,7 @@ class EpsteinCivilViolence(mesa.Model):
         Helper method to count agents by Quiescent/Active.
         """
         count = 0
-        for agent in model.schedule.agents:
+        for agent in model.agents:
             if agent.breed == "cop":
                 continue
             if exclude_jailed and agent.jail_sentence > 0:
@@ -137,7 +133,7 @@ class EpsteinCivilViolence(mesa.Model):
         Helper method to count jailed agents.
         """
         count = 0
-        for agent in model.schedule.agents:
+        for agent in model.agents:
             if agent.breed == "citizen" and agent.jail_sentence > 0:
                 count += 1
         return count
@@ -148,7 +144,7 @@ class EpsteinCivilViolence(mesa.Model):
         Helper method to count jailed agents.
         """
         count = 0
-        for agent in model.schedule.agents:
+        for agent in model.agents:
             if agent.breed == "cop":
                 count += 1
         return count

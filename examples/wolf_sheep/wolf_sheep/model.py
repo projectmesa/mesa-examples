@@ -79,30 +79,31 @@ class WolfSheep(mesa.Model):
         self.sheep_gain_from_food = sheep_gain_from_food
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
-        self.datacollector = mesa.DataCollector(
-            {
-                "Wolves": lambda m: len(m.get_agents_of_type(Wolf)),
-                "Sheep": lambda m: len(m.get_agents_of_type(Sheep)),
-                "Grass": lambda m: len(
-                    m.get_agents_of_type(GrassPatch).select(lambda a: a.fully_grown)
-                ),
-            }
-        )
+
+        collectors = {
+            "Wolves": lambda m: len(m.agents_by_type[Wolf]),
+            "Sheep": lambda m: len(m.agents_by_type[Sheep]),
+        }
+
+        if grass:
+            collectors["Grass"] = lambda m: len(m.agents_by_type[GrassPatch])
+
+        self.datacollector = mesa.DataCollector(collectors)
 
         # Create sheep:
         for i in range(self.initial_sheep):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            sheep = Sheep(self.next_id(), self, True, energy)
+            sheep = Sheep(self, True, energy)
             self.grid.place_agent(sheep, (x, y))
 
         # Create wolves
-        for i in range(self.initial_wolves):
+        for _ in range(self.initial_wolves):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.wolf_gain_from_food)
-            wolf = Wolf(self.next_id(), self, True, energy)
+            wolf = Wolf(self, True, energy)
             self.grid.place_agent(wolf, (x, y))
 
         # Create grass patches
@@ -115,7 +116,7 @@ class WolfSheep(mesa.Model):
                 else:
                     countdown = self.random.randrange(self.grass_regrowth_time)
 
-                patch = GrassPatch(self.next_id(), self, fully_grown, countdown)
+                patch = GrassPatch(self, fully_grown, countdown)
                 self.grid.place_agent(patch, (x, y))
 
         self.running = True
@@ -127,7 +128,7 @@ class WolfSheep(mesa.Model):
         # Conceptually, it can be argued that this should be modelled differently.
         self.random.shuffle(self.agent_types)
         for agent_type in self.agent_types:
-            self.get_agents_of_type(agent_type).do("step")
+            self.agents_by_type[agent_type].do("step")
 
         # collect data
         self.datacollector.collect(self)

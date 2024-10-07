@@ -73,12 +73,12 @@ class SugarscapeG1mt(mesa.Model):
         # initiate datacollector
         self.datacollector = mesa.DataCollector(
             model_reporters={
-                "Trader": lambda m: len(m.get_agents_of_type(Trader)),
+                "Trader": lambda m: len(m.agents_by_type[Trader]),
                 "Trade Volume": lambda m: sum(
-                    len(a.trade_partners) for a in m.get_agents_of_type(Trader)
+                    len(a.trade_partners) for a in m.agents_by_type[Trader]
                 ),
                 "Price": lambda m: geometric_mean(
-                    flatten([a.prices for a in m.get_agents_of_type(Trader)])
+                    flatten([a.prices for a in m.agents_by_type[Trader]])
                 ),
             },
             agent_reporters={"Trade Network": lambda a: get_trade(a)},
@@ -88,15 +88,13 @@ class SugarscapeG1mt(mesa.Model):
         sugar_distribution = np.genfromtxt(Path(__file__).parent / "sugar-map.txt")
         spice_distribution = np.flip(sugar_distribution, 1)
 
-        agent_id = 0
         for _, (x, y) in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
             max_spice = spice_distribution[x, y]
-            resource = Resource(agent_id, self, max_sugar, max_spice)
+            resource = Resource(self, max_sugar, max_spice)
             self.grid.place_agent(resource, (x, y))
-            agent_id += 1
 
-        for i in range(self.initial_population):
+        for _ in range(self.initial_population):
             # get agent position
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
@@ -115,7 +113,6 @@ class SugarscapeG1mt(mesa.Model):
             vision = int(self.random.uniform(self.vision_min, self.vision_max + 1))
             # create Trader object
             trader = Trader(
-                agent_id,
                 self,
                 moore=False,
                 sugar=sugar,
@@ -126,7 +123,6 @@ class SugarscapeG1mt(mesa.Model):
             )
             # place agent
             self.grid.place_agent(trader, (x, y))
-            agent_id += 1
 
     def step(self):
         """
@@ -134,12 +130,12 @@ class SugarscapeG1mt(mesa.Model):
         and then randomly activates traders
         """
         # step Resource agents
-        self.get_agents_of_type(Resource).do("step")
+        self.agents_by_type[Resource].do("step")
 
         # step trader agents
         # to account for agent death and removal we need a seperate data strcuture to
         # iterate
-        trader_shuffle = self.get_agents_of_type(Trader).shuffle()
+        trader_shuffle = self.agents_by_type[Trader].shuffle()
 
         for agent in trader_shuffle:
             agent.prices = []
@@ -150,16 +146,14 @@ class SugarscapeG1mt(mesa.Model):
 
         if not self.enable_trade:
             # If trade is not enabled, return early
-            self._steps += 1
             self.datacollector.collect(self)
             return
 
-        trader_shuffle = self.get_agents_of_type(Trader).shuffle()
+        trader_shuffle = self.agents_by_type[Trader].shuffle()
 
         for agent in trader_shuffle:
             agent.trade_with_neighbors()
 
-        self._steps += 1
         # collect model level data
         self.datacollector.collect(self)
         """
@@ -175,11 +169,11 @@ class SugarscapeG1mt(mesa.Model):
         """
         # Need to remove excess data
         # Create local variable to store trade data
-        agent_trades = self.datacollector._agent_records[self._steps]
+        agent_trades = self.datacollector._agent_records[self.steps]
         # Get rid of all None to reduce data storage needs
         agent_trades = [agent for agent in agent_trades if agent[2] is not None]
         # Reassign the dictionary value with lean trade data
-        self.datacollector._agent_records[self._steps] = agent_trades
+        self.datacollector._agent_records[self.steps] = agent_trades
 
     def run_model(self, step_count=1000):
         for i in range(step_count):

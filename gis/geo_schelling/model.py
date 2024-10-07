@@ -1,10 +1,27 @@
 import random
 from pathlib import Path
 
+import geopandas as gpd
+import libpysal
 import mesa
 import mesa_geo as mg
 
 script_directory = Path(__file__).resolve().parent
+
+
+def get_largest_connected_components(gdf):
+    """Get the largest connected component of a GeoDataFrame."""
+    # create spatial weights matrix
+    W = libpysal.weights.Queen.from_dataframe(
+        gdf, use_index=True, silence_warnings=True
+    )
+    # get component labels
+    gdf["component"] = W.component_labels
+    # get the largest component
+    largest_component = gdf["component"].value_counts().idxmax()
+    # subset the GeoDataFrame
+    gdf = gdf[gdf["component"] == largest_component]
+    return gdf
 
 
 class SchellingAgent(mg.GeoAgent):
@@ -71,7 +88,9 @@ class GeoSchelling(mesa.Model):
         # Set up the grid with patches for every NUTS region
         ac = mg.AgentCreator(SchellingAgent, model=self)
         data_path = script_directory / "data/nuts_rg_60M_2013_lvl_2.geojson"
-        agents = ac.from_file(filename=data_path)
+        agents_gdf = gpd.read_file(data_path)
+        agents_gdf = get_largest_connected_components(agents_gdf)
+        agents = ac.from_GeoDataFrame(agents_gdf, unique_id="index")
         self.space.add_agents(agents)
 
         # Set up agents

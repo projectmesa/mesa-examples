@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gzip
 import uuid
 
 import geopandas as gpd
@@ -36,9 +37,11 @@ class UgandaArea(GeoSpace):
     def load_data(self, population_gzip_file, lake_zip_file, world_zip_file, model):
         world_size = gpd.GeoDataFrame.from_file(world_zip_file)
         raster_layer = RasterLayer.from_file(
-            f"/vsigzip/{population_gzip_file}",
+            population_gzip_file,
+            model=model,
             cell_cls=UgandaCell,
             attr_name="population",
+            rio_opener=gzip.open,
         )
         raster_layer.crs = world_size.crs
         raster_layer.total_bounds = world_size.total_bounds
