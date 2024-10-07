@@ -1,7 +1,6 @@
-import mesa
+from mesa.experimental.cell_space import CellAgent
 
-
-class Cell(mesa.experimental.cell_space.CellAgent):
+class Cell(CellAgent):
     """Represents a single ALIVE or DEAD cell in the simulation."""
 
     DEAD = 0
