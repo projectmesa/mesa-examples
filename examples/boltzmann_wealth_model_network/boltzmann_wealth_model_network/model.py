@@ -18,7 +18,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.num_agents = num_agents
         self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
-        self.grid = mesa.spaces.Network(self.G, random=self.random, capacity=1)
+        self.grid = mesa.experimental.cell_space.Network(self.G, random=self.random, capacity=1)
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},
@@ -47,7 +47,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
             self.step()
 
 
-class MoneyAgent(mesa.spaces.CellAgent):
+class MoneyAgent(mesa.experimental.cell_space.CellAgent):
     """An agent with fixed initial wealth."""
 
     def __init__(self, model):
@@ -55,16 +55,16 @@ class MoneyAgent(mesa.spaces.CellAgent):
         self.wealth = 1
 
     def give_money(self):
-        neighbors = [agent for agent in self.cell.neighborhood().agents if not self]
+        neighbors = [agent for agent in self.cell.neighborhood.agents if not self]
         if len(neighbors) > 0:
             other = self.random.choice(neighbors)
             other.wealth += 1
             self.wealth -= 1
 
     def step(self):
-        empty_neighbors = [cell for cell in self.cell.neighborhood() if cell.is_empty]
+        empty_neighbors = [cell for cell in self.cell.neighborhood if cell.is_empty]
         if empty_neighbors:
-            self.move_to(self.random.choice(empty_neighbors))
+            self.cell = self.random.choice(empty_neighbors)
 
         if self.wealth > 0:
             self.give_money()

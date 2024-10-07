@@ -7,7 +7,7 @@ from collections import Counter
 import mesa
 
 
-class ColorCell(mesa.spaces.CellAgent):
+class ColorCell(mesa.experimental.cell_space.CellAgent):
     """
     Represents a cell's opinion (visualized by a color)
     """
@@ -37,7 +37,7 @@ class ColorCell(mesa.spaces.CellAgent):
         A choice is made at random in case of a tie
         The next state is stored until all cells have been polled
         """
-        neighbors = self.cell.neighborhood().agents
+        neighbors = self.cell.neighborhood.agents
         neighbors_opinion = Counter(n.state for n in neighbors)
         # Following is a a tuple (attribute, occurrences)
         polled_opinions = neighbors_opinion.most_common()
@@ -66,7 +66,7 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
         super().__init__()
-        self._grid = mesa.spaces.OrthogonalMooreGrid((width, height), torus=False)
+        self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid((width, height), torus=False)
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import mesa
 import networkx as nx
 import numpy as np
-from mesa.spaces import CellAgent, Network
+from mesa.experimental.cell_space import CellAgent, Network
 
 
 @dataclass
@@ -116,7 +116,7 @@ class AntTSP(CellAgent):
         # Random
         # new_city = self.random.choice(list(self.model.all_cities - set(self.cities_visited)))
         # Choose closest city not yet visited
-        neighbors = self.cell.neighborhood()
+        neighbors = self.cell.neighborhood
         candidates = [n for n in neighbors if n not in self._cities_visited]
         if len(candidates) == 0:
             return self.cell

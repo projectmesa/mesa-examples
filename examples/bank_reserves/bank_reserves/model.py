@@ -12,7 +12,7 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
-from mesa.spaces import OrthogonalMooreGrid
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agents import Bank, Person
 

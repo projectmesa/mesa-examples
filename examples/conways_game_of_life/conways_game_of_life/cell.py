@@ -1,7 +1,7 @@
 import mesa
 
 
-class Cell(mesa.spaces.CellAgent):
+class Cell(mesa.experimental.cell_space.CellAgent):
     """Represents a single ALIVE or DEAD cell in the simulation."""
 
     DEAD = 0
@@ -21,7 +21,7 @@ class Cell(mesa.spaces.CellAgent):
 
     @property
     def neighbors(self):
-        return self.cell.neighborhood().agents
+        return self.cell.neighborhood.agents
 
     def determine_state(self):
         """
