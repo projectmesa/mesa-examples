@@ -44,7 +44,9 @@ class Cell(FixedAgent):
         if not self.is_alive and self.is_considered:
             # Get the neighbors and apply the rules on whether to be alive or dead
             # at the next tick.
-            live_neighbors = sum(neighbor.is_alive for neighbor in self.cell.neighborhood.agents)
+            live_neighbors = sum(
+                neighbor.is_alive for neighbor in self.cell.neighborhood.agents
+            )
 
             if live_neighbors == 1:
                 self._next_state = self.ALIVE
