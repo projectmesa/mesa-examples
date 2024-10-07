@@ -76,11 +76,12 @@ class HotellingModel(Model):
         consumer_preferences="default",
         environment_type="grid",
         mobility_rate=80,
+        seed = None
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,
         # and mobility rate.
-        super().__init__()
+        super().__init__(seed=seed)
         # Total number of store agents in the model.
         self.num_agents = N_stores
         # Total number of consumers
