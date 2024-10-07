@@ -4,7 +4,7 @@ import numpy as np
 from mesa import Model
 from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
-from mesa.space import MultiGrid
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agents import ConsumerAgent, StoreAgent
 
@@ -99,12 +99,12 @@ class HotellingModel(Model):
 
         # Initialize the spatial grid based on the specified environment type.
         if environment_type == "grid":
-            self.grid = MultiGrid(
-                width, height, True
+            self.grid = OrthogonalMooreGrid(
+                (width, height), True
             )  # A grid where multiple agents can occupy the same cell.
         elif environment_type == "line":
-            self.grid = MultiGrid(
-                1, height, True
+            self.grid = OrthogonalMooreGrid(
+                (1, height), True
             )  # A grid representing a line (single occupancy per cell).
 
         self._initialize_agents()
@@ -186,29 +186,20 @@ class HotellingModel(Model):
 
             agent = StoreAgent(self, can_move=can_move, strategy=strategy)
 
-            self.store_agents.add(agent)
-
             # Randomly place agents on the grid for a grid environment.
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            self.grid.place_agent(agent, (x, y))
+            x = self.random.randrange(self.grid.dimensions[0])
+            y = self.random.randrange(self.grid.dimensions[1])
+            agent.cell = self.grid[(x,y)]
 
         # Place consumer agents
         for _ in range(self.num_consumers):
             # Ensure unique ID across all agents
             consumer = ConsumerAgent(self)
 
-            self.consumer_agents.add(consumer)
             # Place consumer randomly on the grid
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            self.grid.place_agent(consumer, (x, y))
-
-    def get_store_agents(self):
-        return self.store_agents
-
-    def get_consumer_agents(self):
-        return self.consumer_agents
+            x = self.random.randrange(self.grid.dimensions[0])
+            y = self.random.randrange(self.grid.dimensions[1])
+            consumer.cell = self.grid[(x,y)]
 
     # Method to advance the simulation by one step.
     def step(self):
