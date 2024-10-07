@@ -175,11 +175,15 @@ class ConsumerAgent(CellAgent):
         for store in stores:
             # Calculate score based on consumer preference
             if consumer_preference == "proximity":
-                score = self.euclidean_distance(self.cell.coordinate, store.cell.coordinate)
+                score = self.euclidean_distance(
+                    self.cell.coordinate, store.cell.coordinate
+                )
             elif consumer_preference == "price":
                 score = store.price
             else:  # Default case includes both proximity and price
-                score = store.price + self.euclidean_distance(self.cell.coordinate, store.cell.coordinate)
+                score = store.price + self.euclidean_distance(
+                    self.cell.coordinate, store.cell.coordinate
+                )
 
             # Update the list of best stores if a new minimum score is found
             if score < min_score:
