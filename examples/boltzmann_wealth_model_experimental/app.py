@@ -24,9 +24,18 @@ model_params = {
         "max": 100,
         "step": 1,
     },
+    "tax_rate": {
+        "type": "SliderFloat",
+        "value": 0.1,
+        "label": "Tax Rate:",
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+    },
     "width": 10,
     "height": 10,
 }
+
 
 # Create initial model instance
 model1 = BoltzmannWealthModel(50, 10, 10)
