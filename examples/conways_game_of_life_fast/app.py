@@ -34,9 +34,9 @@ model_params = {
         "max": 1,
         "step": 0.01,
     },
-    "randomize_new_cells": { #Новий параметр для ручного регулювання
+    "randomize_new_cells": { # New parameter for manual adjustment
         "type": "SliderFloat",
-        "value": 0.05,  # Початкова ймовірність оживлення нових клітин
+        "value": 0.05,  # The initial probability of reviving new cells
         "label": "New Cells Randomization",
         "min": 0,
         "max": 1,
