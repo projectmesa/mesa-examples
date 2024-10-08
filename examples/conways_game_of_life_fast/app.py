@@ -49,7 +49,7 @@ gol = GameOfLifeModel(
     width=model_params["width"]["value"],
     height=model_params["height"]["value"],
     alive_fraction=model_params["alive_fraction"]["value"],
-    randomize_new_cells=model_params["randomize_new_cells"]["value"]
+    randomize_new_cells=model_params["randomize_new_cells"]["value"],
 )
 
 
