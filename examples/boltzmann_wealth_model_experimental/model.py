@@ -64,15 +64,21 @@ class MoneyAgent(mesa.Agent):
         possible_steps = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False
         )
-        new_position = self.random.choice(possible_steps)  # Randomly choose a new position
+        new_position = self.random.choice(
+            possible_steps
+        )  # Randomly choose a new position
         self.model.grid.move_agent(self, new_position)  # Move agent to new position
 
     def give_money(self):
         # Give money to a random neighbor (cellmate)
-        cellmates = self.model.grid.get_cell_list_contents([self.pos])  # Get agents in the same cell
+        cellmates = self.model.grid.get_cell_list_contents(
+            [self.pos]
+        )  # Get agents in the same cell
         cellmates.pop(cellmates.index(self))  # Remove self from the list of cellmates
         if len(cellmates) > 0 and self.wealth > 0:
-            other = self.random.choice(cellmates)  # Choose a random agent to give money to
+            other = self.random.choice(
+                cellmates
+            )  # Choose a random agent to give money to
             other.wealth += 1
             self.wealth -= 1
 
