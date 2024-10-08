@@ -34,7 +34,7 @@ model_params = {
         "max": 1,
         "step": 0.01,
     },
-    "randomize_new_cells": { #Новий параметр для ручного регулювання
+    "randomize_new_cells": {  # Новий параметр для ручного регулювання
         "type": "SliderFloat",
         "value": 0.05,  # Початкова ймовірність оживлення нових клітин
         "label": "New Cells Randomization",
@@ -49,7 +49,7 @@ gol = GameOfLifeModel(
     width=model_params["width"]["value"],
     height=model_params["height"]["value"],
     alive_fraction=model_params["alive_fraction"]["value"],
-    randomize_new_cells=model_params["randomize_new_cells"]["value"]
+    randomize_new_cells=model_params["randomize_new_cells"]["value"],
 )
 
 

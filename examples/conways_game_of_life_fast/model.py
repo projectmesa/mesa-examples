@@ -35,8 +35,8 @@ class GameOfLifeModel(Model):
         # Count neighbors using convolution
         neighbor_count = convolve2d(self.cell_layer.data, kernel, mode="same", boundary="wrap")
 
-        """ Зміна поведінки клітин так, 
-        щоб вони могли "вмирати від перенаселення", 
+        """ Зміна поведінки клітин так,
+        щоб вони могли "вмирати від перенаселення",
         якщо навколо них більше ніж 4 живих сусіди. """
 
         # Apply Game of Life rules with overpopulation death:
