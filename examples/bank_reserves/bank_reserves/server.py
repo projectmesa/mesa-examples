@@ -1,7 +1,7 @@
 import mesa
 
 from .agents import Person
-from .model import BankReserves
+from .model import BankReservesModel
 
 """
 Citation:
@@ -83,7 +83,7 @@ chart_element = mesa.visualization.ChartModule(
 
 # create instance of Mesa ModularServer
 server = mesa.visualization.ModularServer(
-    BankReserves,
+    BankReservesModel,
     [canvas_element, chart_element],
     "Bank Reserves Model",
     model_params=model_params,

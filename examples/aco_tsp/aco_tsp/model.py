@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import mesa
 import networkx as nx
 import numpy as np
+from mesa.experimental.cell_space import CellAgent, Network
 
 
 @dataclass
@@ -77,7 +78,7 @@ class TSPGraph:
         return cls(g)
 
 
-class AntTSP(mesa.Agent):
+class AntTSP(CellAgent):
     """
     An agent
     """
@@ -93,6 +94,7 @@ class AntTSP(mesa.Agent):
         self._traveled_distance = 0
         self.tsp_solution = []
         self.tsp_distance = 0
+        self.graph = self.model.grid.G
 
     def calculate_pheromone_delta(self, q: float = 100):
         results = {}
@@ -102,23 +104,31 @@ class AntTSP(mesa.Agent):
 
         return results
 
+    def move_to(self, cell) -> None:
+        self._cities_visited.append(cell)
+        if self.cell:
+            self._traveled_distance += self.graph[self.cell.coordinate][
+                cell.coordinate
+            ]["distance"]
+        super().move_to(cell)
+
     def decide_next_city(self):
         # Random
         # new_city = self.random.choice(list(self.model.all_cities - set(self.cities_visited)))
         # Choose closest city not yet visited
-        g = self.model.grid.G
-        current_city = self.pos
-        neighbors = list(g.neighbors(current_city))
+        neighbors = self.cell.neighborhood
         candidates = [n for n in neighbors if n not in self._cities_visited]
         if len(candidates) == 0:
-            return current_city
+            return self.cell
 
         # p_ij(t) = 1/Z*[(tau_ij)**alpha * (1/distance)**beta]
         results = []
         for city in candidates:
             val = (
-                (g[current_city][city]["pheromone"]) ** self.alpha
-                * (g[current_city][city]["visibility"]) ** self.beta
+                (self.graph[self.cell.coordinate][city.coordinate]["pheromone"])
+                ** self.alpha
+                * (self.graph[self.cell.coordinate][city.coordinate]["visibility"])
+                ** self.beta
             )
             results.append(val)
 
@@ -126,7 +136,7 @@ class AntTSP(mesa.Agent):
         norm = results.sum()
         results /= norm
 
-        new_city = self.model.random.choices(candidates, weights=results)[0]
+        new_city = self.random.choices(candidates, weights=results)[0]
 
         return new_city
 
@@ -135,16 +145,13 @@ class AntTSP(mesa.Agent):
         Modify this method to change what an individual agent will do during each step.
         Can include logic based on neighbors states.
         """
-        g = self.model.grid.G
-        for idx in range(self.model.num_cities - 1):
-            # Pick a random city that isn't in the list of cities visited
-            current_city = self.pos
-            new_city = self.decide_next_city()
-            self._cities_visited.append(new_city)
-            self.model.grid.move_agent(self, new_city)
-            self._traveled_distance += g[current_city][new_city]["distance"]
 
-        self.tsp_solution = self._cities_visited.copy()
+        for _ in range(self.model.num_cities - 1):
+            # Pick a random city that isn't in the list of cities visited
+            new_city = self.decide_next_city()
+            self.move_to(new_city)
+
+        self.tsp_solution = [entry.coordinate for entry in self._cities_visited]
         self.tsp_distance = self._traveled_distance
         self._cities_visited = []
         self._traveled_distance = 0
@@ -173,14 +180,15 @@ class AcoTspModel(mesa.Model):
         self.num_cities = tsp_graph.num_cities
         self.all_cities = set(range(self.num_cities))
         self.max_steps = max_steps
-        self.grid = mesa.space.NetworkGrid(tsp_graph.g)
+        self.grid = Network(tsp_graph.g, random=self.random)
 
         for _ in range(self.num_agents):
             agent = AntTSP(model=self, alpha=ant_alpha, beta=ant_beta)
 
-            city = tsp_graph.cities[self.random.randrange(self.num_cities)]
-            self.grid.place_agent(agent, city)
-            agent._cities_visited.append(city)
+            city = self.grid.all_cells.select_random_cell()
+            agent.move_to(city)
+            # self.grid.place_agent(agent, city)
+            # agent._cities_visited.append(city) # FIXME should be endogenous to agent
 
         self.num_steps = 0
         self.best_path = None
