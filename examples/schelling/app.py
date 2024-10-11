@@ -1,4 +1,10 @@
-from mesa.visualization import Slider, SolaraViz, make_plot_measure
+import solara
+from mesa.visualization import (
+    Slider,
+    SolaraViz,
+    make_plot_measure,
+    make_space_matplotlib,
+)
 from model import Schelling
 
 
@@ -6,7 +12,7 @@ def get_happy_agents(model):
     """
     Display a text count of how many happy agents there are.
     """
-    return f"Happy agents: {model.happy}"
+    return solara.Markdown(f"**Happy agents: {model.happy}**")
 
 
 def agent_portrayal(agent):
@@ -27,7 +33,11 @@ HappyPlot = make_plot_measure("happy")
 
 page = SolaraViz(
     model1,
-    components=[HappyPlot, get_happy_agents],
+    components=[
+        make_space_matplotlib(agent_portrayal),
+        make_plot_measure("happy"),
+        get_happy_agents,
+    ],
     model_params=model_params,
 )
 page  # noqa
