@@ -122,10 +122,6 @@ Boltzmann Wealth model with the experimental Juptyer notebook visualization feat
 
 A modified version of the [Bank Reserves](https://github.com/projectmesa/mesa-examples/tree/main/examples/bank_reserves) example made to provide examples of Mesa's charting tools.
 
-### [Schelling Segregation Model (Experimental)](https://github.com/projectmesa/mesa-examples/tree/main/examples/schelling_experimental)
-
-Schelling segregation model with the experimental Juptyer notebook visualization feature.
-
 ### [Shape Example](https://github.com/projectmesa/mesa-examples/tree/main/examples/shape_example)
 
 Example of grid display and direction showing agents in the form of arrow-head shape.
