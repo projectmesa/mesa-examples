@@ -1,4 +1,3 @@
-
 from mesa.experimental.cell_space import FixedAgent
 
 

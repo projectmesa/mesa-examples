@@ -65,7 +65,9 @@ class Person(CellAgent):
     def do_business(self):
         """check if person has any savings, any money in wallet, or if the
         bank can loan them any money"""
-        if (self.savings > 0 or self.wallet > 0 or self.bank.bank_to_loan > 0) and len(self.cell.agents) > 1:
+        if (self.savings > 0 or self.wallet > 0 or self.bank.bank_to_loan > 0) and len(
+            self.cell.agents
+        ) > 1:
             # create list of people at my location (includes self)
             # set customer to self for while loop condition
             customer = self
