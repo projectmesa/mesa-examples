@@ -1,3 +1,0 @@
-mesa~=2.0
-solara
-git+https://github.com/projectmesa/mesa-examples
