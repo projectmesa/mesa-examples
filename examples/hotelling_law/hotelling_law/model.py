@@ -140,7 +140,7 @@ class HotellingModel(Model):
         """Return a lambda function that gets the
         price of a store by its unique ID."""
         return lambda m: next(
-            (agent.price for agent in m.store_agents if agent.unique_id == unique_id), 0
+            (agent.price for agent in m.agents_by_type[StoreAgent] if agent.unique_id == unique_id), 0
         )
 
     @staticmethod
@@ -150,7 +150,7 @@ class HotellingModel(Model):
         return lambda m: next(
             (
                 agent.market_share
-                for agent in m.store_agents
+                for agent in m.agents_by_type[StoreAgent]
                 if agent.unique_id == unique_id
             ),
             0,
@@ -163,7 +163,7 @@ class HotellingModel(Model):
         return lambda m: next(
             (
                 agent.market_share * agent.price
-                for agent in m.store_agents
+                for agent in m.agents_by_type[StoreAgent]
                 if agent.unique_id == unique_id
             ),
             0,
@@ -211,10 +211,10 @@ class HotellingModel(Model):
 
     def recalculate_market_share(self):
         # Reset market share for all stores directly
-        for store in self.store_agents:
+        for store in  self.agents_by_type[StoreAgent]:
             store.market_share = 0
 
-        for consumer in self.consumer_agents:
+        for consumer in  self.agents_by_type[ConsumerAgent]:
             preferred_store = consumer.determine_preferred_store()
             if preferred_store:
                 preferred_store.market_share += 1
@@ -238,16 +238,16 @@ class HotellingModel(Model):
     def compute_average_price(self):
         if len(self.store_agents) == 0:
             return 0
-        return np.mean([agent.price for agent in self.store_agents])
+        return np.mean([agent.price for agent in  self.agents_by_type[StoreAgent]])
 
     # Function to compute the average market share for all store agents,
     def compute_average_market_share(self):
         if not self.store_agents:
             return 0
 
-        total_consumers = sum(agent.market_share for agent in self.store_agents)
-        average_market_share = total_consumers / len(self.store_agents)
+        total_consumers = sum(agent.market_share for agent in  self.agents_by_type[StoreAgent])
+        average_market_share = total_consumers / len( self.agents_by_type[StoreAgent])
         return average_market_share
 
     def compute_price_variance(self):
-        return np.var([agent.price for agent in self.store_agents])
+        return np.var([agent.price for agent in self.agents_by_type[StoreAgent]])

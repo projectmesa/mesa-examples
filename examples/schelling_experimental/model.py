@@ -1,6 +1,6 @@
 import mesa
-from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
 
+from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
 
 class SchellingAgent(CellAgent):
     """
@@ -12,7 +12,6 @@ class SchellingAgent(CellAgent):
         Create a new Schelling agent.
 
         Args:
-           x, y: Agent initial location.
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
         super().__init__(model)
@@ -20,7 +19,7 @@ class SchellingAgent(CellAgent):
 
     def step(self):
         similar = 0
-        for neighbor in self.cell.get_neighborhood(radius=self.model.radius).agents:
+        for neighbor in self.cell.neighborhood.agents:
             if neighbor.type == self.type:
                 similar += 1
 
@@ -36,41 +35,17 @@ class Schelling(mesa.Model):
     Model class for the Schelling segregation model.
     """
 
-    def __init__(
-        self,
-        height=20,
-        width=20,
-        homophily=3,
-        radius=1,
-        density=0.8,
-        minority_pc=0.2,
-        seed=None,
-    ):
-        """
-        Create a new Schelling model.
-
-        Args:
-            width, height: Size of the space.
-            density: Initial Chance for a cell to populated
-            minority_pc: Chances for an agent to be in minority class
-            homophily: Minimum number of agents of same class needed to be happy
-            radius: Search radius for checking similarity
-            seed: Seed for Reproducibility
-        """
-
-        super().__init__(seed=seed)
-        self.height = height
+    def __init__(self, width=20, height=20, density=0.8, minority_pc=0.2, homophily=3):
+        super().__init__()
         self.width = width
-        self.density = density
-        self.minority_pc = minority_pc
+        self.height = height
         self.homophily = homophily
-        self.radius = radius
 
         self.grid = OrthogonalMooreGrid((width, height), torus=True)
 
         self.happy = 0
         self.datacollector = mesa.DataCollector(
-            model_reporters={"happy": "happy"},  # Model-level count of happy agents
+            {"happy": "happy"},  # Model-level count of happy agents
         )
 
         # Set up agents
@@ -78,8 +53,8 @@ class Schelling(mesa.Model):
         # the coordinates of a cell as well as
         # its contents. (coord_iter)
         for cell in self.grid.all_cells:
-            if self.random.random() < self.density:
-                agent_type = 1 if self.random.random() < self.minority_pc else 0
+            if self.random.random() < density:
+                agent_type = 1 if self.random.random() < minority_pc else 0
                 agent = SchellingAgent(self, agent_type)
                 agent.cell = cell
 
@@ -87,11 +62,11 @@ class Schelling(mesa.Model):
 
     def step(self):
         """
-        Run one step of the model.
+        Run one step of the model. If All agents are happy, halt the model.
         """
         self.happy = 0  # Reset counter of happy agents
         self.agents.shuffle_do("step")
-
+        # collect data
         self.datacollector.collect(self)
 
         if self.happy == len(self.agents):
