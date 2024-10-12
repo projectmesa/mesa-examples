@@ -51,7 +51,7 @@ class WolfSheep(mesa.Model):
         grass=False,
         grass_regrowth_time=30,
         sheep_gain_from_food=4,
-        seed=None
+        seed=None,
     ):
         """
         Create a new Wolf-Sheep model with the given parameters.
@@ -93,14 +93,16 @@ class WolfSheep(mesa.Model):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.sheep_gain_from_food)
-            Sheep(self, energy, sheep_reproduce, sheep_gain_from_food, self.grid[(x,y)])
+            Sheep(
+                self, energy, sheep_reproduce, sheep_gain_from_food, self.grid[(x, y)]
+            )
 
         # Create wolves
         for _ in range(self.initial_wolves):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             energy = self.random.randrange(2 * self.wolf_gain_from_food)
-            Wolf(self, energy, wolf_reproduce, wolf_gain_from_food, self.grid[(x,y)])
+            Wolf(self, energy, wolf_reproduce, wolf_gain_from_food, self.grid[(x, y)])
 
         # Create grass patches
         if self.grass:
