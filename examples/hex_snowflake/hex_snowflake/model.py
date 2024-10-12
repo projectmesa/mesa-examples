@@ -20,7 +20,7 @@ class HexSnowflake(mesa.Model):
 
         # Place a dead cell at each location.
         for entry in self.grid.all_cells:
-            cell = Cell(entry, self)
+            Cell(entry, self)
 
         # activate the center(ish) cell.
         centerish_cell = self.grid[(width // 2, height // 2)]

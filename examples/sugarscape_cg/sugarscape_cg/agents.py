@@ -1,8 +1,6 @@
 import math
 
-import mesa
-
-from mesa.experimental.cell_space import FixedAgent, CellAgent
+from mesa.experimental.cell_space import CellAgent, FixedAgent
 
 
 def get_distance(cell_1, cell_2):

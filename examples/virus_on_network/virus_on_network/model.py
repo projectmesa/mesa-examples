@@ -2,9 +2,8 @@ import math
 from enum import Enum
 
 import mesa
-from mesa.experimental.cell_space import Network, FixedAgent
-
 import networkx as nx
+from mesa.experimental.cell_space import FixedAgent, Network
 
 
 class State(Enum):

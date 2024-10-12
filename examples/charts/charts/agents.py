@@ -67,7 +67,7 @@ class Person(CellAgent):
         bank can loan them any money"""
         if self.savings > 0 or self.wallet > 0 or self.bank.bank_to_loan > 0:
             # create list of people at my location (includes self)
-            my_cell = [a for a in self.cell.agents if not a == self]
+            my_cell = [a for a in self.cell.agents if a != self]
             # check if other people are at my location
             if len(my_cell) > 1:
                 # set customer to self for while loop condition

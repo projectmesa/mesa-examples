@@ -1,5 +1,4 @@
 import mesa
-
 from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
 
 

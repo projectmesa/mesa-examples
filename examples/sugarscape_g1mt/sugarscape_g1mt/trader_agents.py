@@ -1,9 +1,8 @@
 import math
 
-import mesa
+from mesa.experimental.cell_space import CellAgent
 
 from .resource_agents import Resource
-from mesa.experimental.cell_space import CellAgent
 
 
 # Helper function

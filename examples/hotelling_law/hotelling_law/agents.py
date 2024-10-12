@@ -2,7 +2,6 @@ import math
 import random
 
 import numpy as np
-
 from mesa.experimental.cell_space import CellAgent
 
 

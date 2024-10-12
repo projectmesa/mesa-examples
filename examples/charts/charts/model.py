@@ -12,9 +12,9 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agents import Bank, Person
-from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 """
 If you want to perform a parameter sweep, call batch_run.py instead of run.py.

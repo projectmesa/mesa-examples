@@ -1,5 +1,4 @@
 import mesa
-
 from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agent import TreeCell

@@ -2,7 +2,6 @@ import random
 
 import numpy as np
 from mesa import Model
-from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
 from mesa.experimental.cell_space import OrthogonalMooreGrid
 

@@ -10,10 +10,9 @@ Replication of the model found in NetLogo:
 """
 
 import mesa
-from  mesa.experimental.cell_space import OrthogonalMooreGrid
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agents import GrassPatch, Sheep, Wolf
-
 
 
 class WolfSheep(mesa.Model):

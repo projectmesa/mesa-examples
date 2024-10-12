@@ -1,9 +1,8 @@
 from pathlib import Path
 
 import mesa
-from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
-
 import numpy as np
+from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
 
 from .resource_agents import Resource
 from .trader_agents import Trader
@@ -115,7 +114,7 @@ class SugarscapeG1mt(mesa.Model):
 
             cell = self.grid[(x, y)]
             # create Trader object
-            trader = Trader(
+            Trader(
                 self,
                 cell,
                 sugar=sugar,

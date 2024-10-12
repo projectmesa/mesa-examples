@@ -1,4 +1,3 @@
-import mesa
 
 from mesa.experimental.cell_space import CellAgent, FixedAgent
 
@@ -33,7 +32,7 @@ class Animal(CellAgent):
             self.cell,
         )
 
-    def feed(self): ...  # noqa: D102
+    def feed(self): ...
 
     def step(self):
         """One step of the agent."""
