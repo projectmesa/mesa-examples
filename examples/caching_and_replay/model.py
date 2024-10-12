@@ -2,8 +2,9 @@
 
 import mesa
 
+from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
 
-class SchellingAgent(mesa.Agent):
+class SchellingAgent(CellAgent):
     """
     Schelling segregation agent
     """
@@ -21,15 +22,13 @@ class SchellingAgent(mesa.Agent):
 
     def step(self):
         similar = 0
-        for neighbor in self.model.grid.iter_neighbors(
-            self.pos, moore=True, radius=self.model.radius
-        ):
-            if neighbor.type == self.type:
+        for agent in self.cell.get_neighborhood(radius=self.model.radius).agents:
+            if agent.type == self.type:
                 similar += 1
 
         # If unhappy, move:
         if similar < self.model.homophily:
-            self.model.grid.move_to_empty(self)
+            self.cell = self.model.grid.select_random_empty_cell()
         else:
             self.model.happy += 1
 
@@ -69,7 +68,7 @@ class Schelling(mesa.Model):
         self.homophily = homophily
         self.radius = radius
 
-        self.grid = mesa.space.SingleGrid(width, height, torus=True)
+        self.grid = OrthogonalMooreGrid((width, height), torus=True)
 
         self.happy = 0
         self.datacollector = mesa.DataCollector(
@@ -80,11 +79,11 @@ class Schelling(mesa.Model):
         # We use a grid iterator that returns
         # the coordinates of a cell as well as
         # its contents. (coord_iter)
-        for _, pos in self.grid.coord_iter():
+        for cell in self.grid.all_cells:
             if self.random.random() < self.density:
                 agent_type = 1 if self.random.random() < self.minority_pc else 0
                 agent = SchellingAgent(self, agent_type)
-                self.grid.place_agent(agent, pos)
+                agent.cell = cell
 
         self.datacollector.collect(self)
 

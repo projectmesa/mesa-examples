@@ -28,7 +28,6 @@ class PdGrid(mesa.Model):
         """
         super().__init__(seed=seed)
         self.activation_order = activation_order
-        # self.grid = mesa.space.SingleGrid(width, height, torus=True)
         self.grid = OrthogonalMooreGrid((width, height), torus=True)
 
         if payoffs is not None:

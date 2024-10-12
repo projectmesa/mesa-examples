@@ -42,7 +42,6 @@ class SugarscapeCg(mesa.Model):
         self.height = height
         self.initial_population = initial_population
 
-        # self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
         self.grid = OrthogonalVonNeumannGrid((self.width, self.height), torus=True)
         self.datacollector = mesa.DataCollector(
             {"SsAgent": lambda m: len(m.agents_by_type[SsAgent])}
