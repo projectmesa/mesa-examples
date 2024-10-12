@@ -71,7 +71,7 @@ class SugarscapeG1mt(mesa.Model):
         self.running = True
 
         # initiate mesa grid class
-        self.grid =OrthogonalVonNeumannGrid((self.width, self.height), torus=False)
+        self.grid = OrthogonalVonNeumannGrid((self.width, self.height), torus=False)
         # initiate datacollector
         self.datacollector = mesa.DataCollector(
             model_reporters={
@@ -94,7 +94,6 @@ class SugarscapeG1mt(mesa.Model):
             max_sugar = sugar_distribution[cell.coordinate]
             max_spice = spice_distribution[cell.coordinate]
             Resource(self, max_sugar, max_spice, cell)
-
 
         for _ in range(self.initial_population):
             # get agent position

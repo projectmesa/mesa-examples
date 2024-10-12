@@ -2,6 +2,7 @@ import mesa
 
 from mesa.experimental.cell_space import FixedAgent
 
+
 class Resource(FixedAgent):
     """
     Resource:

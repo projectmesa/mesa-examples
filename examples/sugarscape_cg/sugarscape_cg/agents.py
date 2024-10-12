@@ -4,6 +4,7 @@ import mesa
 
 from mesa.experimental.cell_space import FixedAgent, CellAgent
 
+
 def get_distance(cell_1, cell_2):
     """Get the distance between two point
 

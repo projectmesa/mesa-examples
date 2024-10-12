@@ -63,7 +63,7 @@ class SugarscapeCg(mesa.Model):
             sugar = self.random.randrange(6, 25)
             metabolism = self.random.randrange(2, 4)
             vision = self.random.randrange(1, 6)
-            cell = self.grid[(x,y)]
+            cell = self.grid[(x, y)]
             SsAgent(self, cell, sugar, metabolism, vision)
 
         self.running = True
