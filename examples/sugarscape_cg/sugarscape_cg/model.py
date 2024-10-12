@@ -14,6 +14,7 @@ import mesa
 from .agents import SsAgent, Sugar
 import numpy as np
 
+
 class SugarscapeCg(mesa.Model):
     """
     Sugarscape 2 Constant Growback
@@ -49,7 +50,7 @@ class SugarscapeCg(mesa.Model):
         # Create sugar
         sugar_distribution = np.genfromtxt(Path(__file__).parent / "sugar-map.txt")
         sugar_id = 1
-        for (contents, x, y) in self.grid.coord_iter():
+        for contents, x, y in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
             sugar = Sugar(sugar_id, self, max_sugar)
             self.grid.place_agent(sugar, (x, y))
