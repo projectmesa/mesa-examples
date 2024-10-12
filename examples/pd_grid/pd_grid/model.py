@@ -3,6 +3,7 @@ from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agent import PDAgent
 
+
 class PdGrid(mesa.Model):
     """Model class for iterated, spatial prisoner's dilemma model."""
 

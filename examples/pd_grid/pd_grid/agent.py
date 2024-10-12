@@ -2,6 +2,7 @@ import mesa
 
 from mesa.experimental.cell_space import CellAgent
 
+
 class PDAgent(CellAgent):
     """Agent member of the iterated, spatial prisoner's dilemma model."""
 
@@ -31,7 +32,9 @@ class PDAgent(CellAgent):
         if better than own score."""
 
         # neighbors = self.model.grid.get_neighbors(self.pos, True, include_center=True)
-        neighbors = list(self.cell.neighborhood.agents) + [self,]
+        neighbors = list(self.cell.neighborhood.agents) + [
+            self,
+        ]
         best_neighbor = max(neighbors, key=lambda a: a.score)
         self.next_move = best_neighbor.move
 

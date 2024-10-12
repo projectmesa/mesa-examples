@@ -3,6 +3,7 @@ import mesa
 
 from mesa.experimental.cell_space import OrthogonalMooreGrid
 
+
 class Walker(mesa.Agent):
     def __init__(self, model, heading=(1, 0)):
         super().__init__(model)
