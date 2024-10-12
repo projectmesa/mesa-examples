@@ -10,11 +10,9 @@ Northwestern University, Evanston, IL.
 """
 
 from pathlib import Path
-
 import mesa
-
 from .agents import SsAgent, Sugar
-
+import numpy as np
 
 class SugarscapeCg(mesa.Model):
     """
@@ -38,40 +36,54 @@ class SugarscapeCg(mesa.Model):
         self.initial_population = initial_population
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=False)
+
+        # Initialize agents by type
+        self.agents_by_type = {SsAgent: [], Sugar: []}
+
+        # Set up data collector
         self.datacollector = mesa.DataCollector(
             {"SsAgent": lambda m: len(m.agents_by_type[SsAgent])}
         )
+        self.steps = 0
 
         # Create sugar
-        import numpy as np
-
         sugar_distribution = np.genfromtxt(Path(__file__).parent / "sugar-map.txt")
-        for _, (x, y) in self.grid.coord_iter():
+        sugar_id = 1
+        for (contents, x, y) in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
-            sugar = Sugar(self, max_sugar)
+            sugar = Sugar(sugar_id, self, max_sugar)
             self.grid.place_agent(sugar, (x, y))
+            self.agents_by_type[Sugar].append(sugar)  # Track sugar agents
+            sugar_id += 1
 
-        # Create agent:
+        # Create agents
+        agent_id = 1
         for i in range(self.initial_population):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             sugar = self.random.randrange(6, 25)
             metabolism = self.random.randrange(2, 4)
             vision = self.random.randrange(1, 6)
-            ssa = SsAgent(self, False, sugar, metabolism, vision)
+            ssa = SsAgent(agent_id, self, False, sugar, metabolism, vision)
             self.grid.place_agent(ssa, (x, y))
+            self.agents_by_type[SsAgent].append(ssa)  # Track SsAgent agents
+            agent_id += 1
 
         self.running = True
         self.datacollector.collect(self)
 
     def step(self):
-        # Step suger and agents
-        self.agents_by_type[Sugar].do("step")
-        self.agents_by_type[SsAgent].shuffle_do("step")
-        # collect data
+        # Step sugar and agents
+        for sugar in self.agents_by_type[Sugar]:
+            sugar.step()
+        for agent in self.agents_by_type[SsAgent]:
+            agent.step()
+
+        # Collect data
         self.datacollector.collect(self)
         if self.verbose:
             print(f"Step: {self.steps}, SsAgents: {len(self.agents_by_type[SsAgent])}")
+        self.steps += 1
 
     def run_model(self, step_count=200):
         if self.verbose:
