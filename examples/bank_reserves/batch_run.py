@@ -36,8 +36,9 @@ from bank_reserves.model import (
     get_total_money,
     get_total_savings,
     get_total_wallets,
-    BankReservesModel
+    BankReservesModel,
 )
+
 
 def main():
     # parameter lists for each parameter to be tested in batch run
