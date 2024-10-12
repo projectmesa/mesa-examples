@@ -114,9 +114,9 @@ This is based on Dorigo's Ant System "Swarm Intelligence" algorithm for generati
 
 ## Visualization Examples
 
-### [Boltzmann Wealth Model (Experimental)](https://github.com/projectmesa/mesa-examples/tree/main/examples/boltzmann_wealth_model_experimental)
+### [Boltzmann Wealth Model)](https://github.com/projectmesa/mesa-examples/tree/main/examples/boltzmann_wealth_model)
 
-Boltzmann Wealth model with the experimental Juptyer notebook visualization feature.
+Boltzmann Wealth model with an optional visualization using Streamlit.
 
 ### [Charts Example](https://github.com/projectmesa/mesa-examples/tree/main/examples/charts)
 
