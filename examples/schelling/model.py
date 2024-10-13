@@ -11,7 +11,6 @@ class SchellingAgent(mesa.Agent):
         Create a new Schelling agent.
 
         Args:
-           x, y: Agent initial location.
            agent_type: Indicator for the agent's type (minority=1, majority=0)
         """
         super().__init__(model)
