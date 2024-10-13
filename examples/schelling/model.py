@@ -88,5 +88,4 @@ class Schelling(mesa.Model):
 
         self.datacollector.collect(self)
 
-        if self.happy == len(self.agents):
-            self.running = False
+        self.running = self.happy != len(self.agents)
