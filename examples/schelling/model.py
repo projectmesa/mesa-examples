@@ -6,7 +6,7 @@ class SchellingAgent(mesa.Agent):
     Schelling segregation agent
     """
 
-    def __init__(self, model, agent_type):
+    def __init__(self, model: mesa.Model, agent_type: int) -> None:
         """
         Create a new Schelling agent.
 
@@ -16,7 +16,7 @@ class SchellingAgent(mesa.Agent):
         super().__init__(model)
         self.type = agent_type
 
-    def step(self):
+    def step(self) -> None:
         neighbors = self.model.grid.iter_neighbors(
             self.pos, moore=True, radius=self.model.radius
         )
