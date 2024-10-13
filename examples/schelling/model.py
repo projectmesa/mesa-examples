@@ -18,12 +18,10 @@ class SchellingAgent(mesa.Agent):
         self.type = agent_type
 
     def step(self):
-        similar = 0
-        for neighbor in self.model.grid.iter_neighbors(
+        neighbors = self.model.grid.iter_neighbors(
             self.pos, moore=True, radius=self.model.radius
-        ):
-            if neighbor.type == self.type:
-                similar += 1
+        )
+        similar = sum(1 for neighbor in neighbors if neighbor.type == self.type)
 
         # If unhappy, move:
         if similar < self.model.homophily:
@@ -60,10 +58,6 @@ class Schelling(mesa.Model):
         """
 
         super().__init__(seed=seed)
-        self.height = height
-        self.width = width
-        self.density = density
-        self.minority_pc = minority_pc
         self.homophily = homophily
         self.radius = radius
 
@@ -79,8 +73,8 @@ class Schelling(mesa.Model):
         # the coordinates of a cell as well as
         # its contents. (coord_iter)
         for _, pos in self.grid.coord_iter():
-            if self.random.random() < self.density:
-                agent_type = 1 if self.random.random() < self.minority_pc else 0
+            if self.random.random() < density:
+                agent_type = 1 if self.random.random() < minority_pc else 0
                 agent = SchellingAgent(self, agent_type)
                 self.grid.place_agent(agent, pos)
 
