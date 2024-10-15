@@ -2,9 +2,8 @@ import random
 
 import numpy as np
 from mesa import Model
-from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
-from mesa.space import MultiGrid
+from mesa.experimental.cell_space import OrthogonalMooreGrid
 
 from .agents import ConsumerAgent, StoreAgent
 
@@ -76,11 +75,12 @@ class HotellingModel(Model):
         consumer_preferences="default",
         environment_type="grid",
         mobility_rate=80,
+        seed=None,
     ):
         # Initialize the model with parameters for number of agents,
         # grid size, mode of operation,environment type,
         # and mobility rate.
-        super().__init__()
+        super().__init__(seed=seed)
         # Total number of store agents in the model.
         self.num_agents = N_stores
         # Total number of consumers
@@ -93,18 +93,15 @@ class HotellingModel(Model):
         self.consumer_preferences = consumer_preferences
         # Type of environment ('grid' or 'line').
         self.environment_type = environment_type
-        # Initialize AgentSets for store and consumer agents
-        self.store_agents = AgentSet([], self)
-        self.consumer_agents = AgentSet([], self)
 
         # Initialize the spatial grid based on the specified environment type.
         if environment_type == "grid":
-            self.grid = MultiGrid(
-                width, height, True
+            self.grid = OrthogonalMooreGrid(
+                (width, height), True
             )  # A grid where multiple agents can occupy the same cell.
         elif environment_type == "line":
-            self.grid = MultiGrid(
-                1, height, True
+            self.grid = OrthogonalMooreGrid(
+                (1, height), True
             )  # A grid representing a line (single occupancy per cell).
 
         self._initialize_agents()
@@ -142,7 +139,12 @@ class HotellingModel(Model):
         """Return a lambda function that gets the
         price of a store by its unique ID."""
         return lambda m: next(
-            (agent.price for agent in m.store_agents if agent.unique_id == unique_id), 0
+            (
+                agent.price
+                for agent in m.agents_by_type[StoreAgent]
+                if agent.unique_id == unique_id
+            ),
+            0,
         )
 
     @staticmethod
@@ -152,7 +154,7 @@ class HotellingModel(Model):
         return lambda m: next(
             (
                 agent.market_share
-                for agent in m.store_agents
+                for agent in m.agents_by_type[StoreAgent]
                 if agent.unique_id == unique_id
             ),
             0,
@@ -165,7 +167,7 @@ class HotellingModel(Model):
         return lambda m: next(
             (
                 agent.market_share * agent.price
-                for agent in m.store_agents
+                for agent in m.agents_by_type[StoreAgent]
                 if agent.unique_id == unique_id
             ),
             0,
@@ -186,29 +188,20 @@ class HotellingModel(Model):
 
             agent = StoreAgent(self, can_move=can_move, strategy=strategy)
 
-            self.store_agents.add(agent)
-
             # Randomly place agents on the grid for a grid environment.
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            self.grid.place_agent(agent, (x, y))
+            x = self.random.randrange(self.grid.dimensions[0])
+            y = self.random.randrange(self.grid.dimensions[1])
+            agent.cell = self.grid[(x, y)]
 
         # Place consumer agents
         for _ in range(self.num_consumers):
             # Ensure unique ID across all agents
             consumer = ConsumerAgent(self)
 
-            self.consumer_agents.add(consumer)
             # Place consumer randomly on the grid
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            self.grid.place_agent(consumer, (x, y))
-
-    def get_store_agents(self):
-        return self.store_agents
-
-    def get_consumer_agents(self):
-        return self.consumer_agents
+            x = self.random.randrange(self.grid.dimensions[0])
+            y = self.random.randrange(self.grid.dimensions[1])
+            consumer.cell = self.grid[(x, y)]
 
     # Method to advance the simulation by one step.
     def step(self):
@@ -222,10 +215,10 @@ class HotellingModel(Model):
 
     def recalculate_market_share(self):
         # Reset market share for all stores directly
-        for store in self.store_agents:
+        for store in self.agents_by_type[StoreAgent]:
             store.market_share = 0
 
-        for consumer in self.consumer_agents:
+        for consumer in self.agents_by_type[ConsumerAgent]:
             preferred_store = consumer.determine_preferred_store()
             if preferred_store:
                 preferred_store.market_share += 1
@@ -249,16 +242,18 @@ class HotellingModel(Model):
     def compute_average_price(self):
         if len(self.store_agents) == 0:
             return 0
-        return np.mean([agent.price for agent in self.store_agents])
+        return np.mean([agent.price for agent in self.agents_by_type[StoreAgent]])
 
     # Function to compute the average market share for all store agents,
     def compute_average_market_share(self):
         if not self.store_agents:
             return 0
 
-        total_consumers = sum(agent.market_share for agent in self.store_agents)
-        average_market_share = total_consumers / len(self.store_agents)
+        total_consumers = sum(
+            agent.market_share for agent in self.agents_by_type[StoreAgent]
+        )
+        average_market_share = total_consumers / len(self.agents_by_type[StoreAgent])
         return average_market_share
 
     def compute_price_variance(self):
-        return np.var([agent.price for agent in self.store_agents])
+        return np.var([agent.price for agent in self.agents_by_type[StoreAgent]])

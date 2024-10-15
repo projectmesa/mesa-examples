@@ -1,4 +1,5 @@
 import mesa
+from mesa.experimental.cell_space import HexGrid
 
 from .cell import Cell
 
@@ -15,19 +16,17 @@ class HexSnowflake(mesa.Model):
         """
         super().__init__()
         # Use a hexagonal grid, where edges wrap around.
-        self.grid = mesa.space.HexSingleGrid(width, height, torus=True)
+        self.grid = HexGrid((width, height), capacity=1, torus=True)
 
         # Place a dead cell at each location.
-        for contents, pos in self.grid.coord_iter():
-            cell = Cell(pos, self)
-            self.grid.place_agent(cell, pos)
+        for entry in self.grid.all_cells:
+            Cell(entry, self)
 
         # activate the center(ish) cell.
-        centerishCell = self.grid[width // 2][height // 2]
-
-        centerishCell.state = 1
-        for a in centerishCell.neighbors:
-            a.isConsidered = True
+        centerish_cell = self.grid[(width // 2, height // 2)]
+        centerish_cell.agents[0].state = 1
+        for a in centerish_cell.neighborhood.agents:
+            a.is_considered = True
 
         self.running = True
 
