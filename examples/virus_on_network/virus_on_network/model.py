@@ -3,7 +3,6 @@ from enum import Enum
 
 import mesa
 import networkx as nx
-from mesa.experimental.cell_space import FixedAgent, Network
 
 
 class State(Enum):
@@ -13,7 +12,7 @@ class State(Enum):
 
 
 def number_state(model, state):
-    return sum(1 for a in model.agents if a.state is state)
+    return sum(1 for a in model.grid.get_all_cell_contents() if a.state is state)
 
 
 def number_infected(model):
@@ -47,7 +46,7 @@ class VirusOnNetwork(mesa.Model):
         self.num_nodes = num_nodes
         prob = avg_node_degree / self.num_nodes
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=prob)
-        self.grid = Network(self.G)
+        self.grid = mesa.space.NetworkGrid(self.G)
 
         self.initial_outbreak_size = (
             initial_outbreak_size if initial_outbreak_size <= num_nodes else num_nodes
@@ -77,13 +76,12 @@ class VirusOnNetwork(mesa.Model):
             )
 
             # Add the agent to the node
-            a.cell = self.grid[node]
+            self.grid.place_agent(a, node)
 
         # Infect some nodes
         infected_nodes = self.random.sample(list(self.G), self.initial_outbreak_size)
-        for node in infected_nodes:
-            for agent in self.grid[node].agents:
-                agent.state = State.INFECTED
+        for a in self.grid.get_cell_list_contents(infected_nodes):
+            a.state = State.INFECTED
 
         self.running = True
         self.datacollector.collect(self)
@@ -106,7 +104,7 @@ class VirusOnNetwork(mesa.Model):
             self.step()
 
 
-class VirusAgent(FixedAgent):
+class VirusAgent(mesa.Agent):
     """
     Individual Agent definition and its properties/interaction methods
     """
@@ -130,10 +128,12 @@ class VirusAgent(FixedAgent):
         self.gain_resistance_chance = gain_resistance_chance
 
     def try_to_infect_neighbors(self):
-        neighbors_nodes = self.cell.neighborhood
+        neighbors_nodes = self.model.grid.get_neighborhood(
+            self.pos, include_center=False
+        )
         susceptible_neighbors = [
             agent
-            for agent in neighbors_nodes.agents
+            for agent in self.model.grid.get_cell_list_contents(neighbors_nodes)
             if agent.state is State.SUSCEPTIBLE
         ]
         for a in susceptible_neighbors:
