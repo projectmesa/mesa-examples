@@ -23,12 +23,8 @@ def make_plot_urbanized(model):
 
 model_params = {
     "max_coefficient": 100,
-    "dispersion_coefficient": Slider(
-        "dispersion_coefficient", 20, 0, 100, 1
-    ),
-    "spread_coefficient": Slider(
-        "spread_coefficient", 27, 0, 100, 1
-    ),
+    "dispersion_coefficient": Slider("dispersion_coefficient", 20, 0, 100, 1),
+    "spread_coefficient": Slider("spread_coefficient", 27, 0, 100, 1),
     "breed_coefficient": Slider("breed_coefficient", 5, 0, 100, 1),
     "rg_coefficient": Slider("rg_coefficient", 10, 0, 100, 1),
     "slope_coefficient": Slider("slope_coefficient", 50, 0, 100, 1),
@@ -41,8 +37,8 @@ page = SolaraViz(
     model,
     [
         make_geospace_leaflet(cell_portrayal, zoom=12.1),
-        make_plot_urbanized,
         make_plot_measure(["Percentage Urbanized"]),
+        make_plot_urbanized,
     ],
     name="Urban Growth Model",
     model_params=model_params,

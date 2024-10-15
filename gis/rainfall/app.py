@@ -27,15 +27,18 @@ def cell_portrayal(cell: LakeCell) -> Tuple[float, float, float, float]:
             1,
         )
 
+
 model = Rainfall()
 page = SolaraViz(
     model,
     [
         make_geospace_leaflet(cell_portrayal, zoom=11),
-        make_plot_measure(["Total Amount of Water", "Total Contained", "Total Outflow"]),
+        make_plot_measure(
+            ["Total Amount of Water", "Total Contained", "Total Outflow"]
+        ),
     ],
     name="Rainfall Model",
-    model_params=model_params
+    model_params=model_params,
 )
 
 page  # noqa
