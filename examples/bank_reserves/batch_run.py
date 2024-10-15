@@ -24,20 +24,9 @@ directory from which Python was run. The CSV file will contain the data from
 every step of every run.
 """
 
-import itertools
 import mesa
 import pandas as pd
-from bank_reserves.agents import Bank, Person
-from bank_reserves.model import (
-    get_num_mid_agents,
-    get_num_poor_agents,
-    get_num_rich_agents,
-    get_total_loans,
-    get_total_money,
-    get_total_savings,
-    get_total_wallets,
-    BankReservesModel,
-)
+from bank_reserves.model import BankReservesModel
 
 
 def main():
