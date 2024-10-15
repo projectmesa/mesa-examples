@@ -9,7 +9,7 @@ class StoreAgent(CellAgent):
     """An agent representing a store with a price and ability to move
     and adjust prices."""
 
-    def __init__(self, model, price=10, can_move=True, strategy="Budget"):
+    def __init__(self, model, cell, price=10, can_move=True, strategy="Budget"):
         # Initializes the store agent with a unique ID,
         # the model it belongs to,its initial price,
         # and whether it can move.
@@ -20,6 +20,7 @@ class StoreAgent(CellAgent):
         self.previous_market_share = 0  # Initialize previous market share
         self.strategy = strategy  # Store can be low cost (Budget)
         # / differential (Premium)
+        self.cell = cell
 
     def estimate_market_share(self, new_position=None):
         position = new_position if new_position else self.cell
@@ -157,12 +158,13 @@ class ConsumerAgent(CellAgent):
     """A consumer agent that chooses a store
     based on price and distance."""
 
-    def __init__(self, model):
+    def __init__(self, model, cell, consumer_preferences):
         super().__init__(model)
         self.preferred_store = None
+        self.cell = cell
+        self.preference = consumer_preferences
 
     def determine_preferred_store(self):
-        consumer_preference = self.model.agents_by_type[ConsumerAgent]
         stores = self.model.agents_by_type[StoreAgent]
 
         if len(stores) == 0:  # Check if the stores AgentSet is empty
@@ -173,11 +175,11 @@ class ConsumerAgent(CellAgent):
 
         for store in stores:
             # Calculate score based on consumer preference
-            if consumer_preference == "proximity":
+            if self.preference == "proximity":
                 score = self.euclidean_distance(
                     self.cell.coordinate, store.cell.coordinate
                 )
-            elif consumer_preference == "price":
+            elif self.preference == "price":
                 score = store.price
             else:  # Default case includes both proximity and price
                 score = store.price + self.euclidean_distance(

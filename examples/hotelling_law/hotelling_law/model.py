@@ -186,22 +186,12 @@ class HotellingModel(Model):
             if can_move:
                 mobile_agents_assigned += 1
 
-            agent = StoreAgent(self, can_move=can_move, strategy=strategy)
-
-            # Randomly place agents on the grid for a grid environment.
-            x = self.random.randrange(self.grid.dimensions[0])
-            y = self.random.randrange(self.grid.dimensions[1])
-            agent.cell = self.grid[(x, y)]
+            StoreAgent(self, self.grid.all_cells.select_random_cell(), can_move=can_move, strategy=strategy)
 
         # Place consumer agents
         for _ in range(self.num_consumers):
-            # Ensure unique ID across all agents
-            consumer = ConsumerAgent(self)
+            ConsumerAgent(self, self.grid.all_cells.select_random_cell(), self.consumer_preferences)
 
-            # Place consumer randomly on the grid
-            x = self.random.randrange(self.grid.dimensions[0])
-            y = self.random.randrange(self.grid.dimensions[1])
-            consumer.cell = self.grid[(x, y)]
 
     # Method to advance the simulation by one step.
     def step(self):
