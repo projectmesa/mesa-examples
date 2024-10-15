@@ -186,12 +186,20 @@ class HotellingModel(Model):
             if can_move:
                 mobile_agents_assigned += 1
 
-            StoreAgent(self, self.grid.all_cells.select_random_cell(), can_move=can_move, strategy=strategy)
+            StoreAgent(
+                self,
+                self.grid.all_cells.select_random_cell(),
+                can_move=can_move,
+                strategy=strategy,
+            )
 
         # Place consumer agents
         for _ in range(self.num_consumers):
-            ConsumerAgent(self, self.grid.all_cells.select_random_cell(), self.consumer_preferences)
-
+            ConsumerAgent(
+                self,
+                self.grid.all_cells.select_random_cell(),
+                self.consumer_preferences,
+            )
 
     # Method to advance the simulation by one step.
     def step(self):
