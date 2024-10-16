@@ -6,7 +6,7 @@ authors = [
     {name = "Project Mesa Team", email = "projectmesa@googlegroups.com"}
 ]
 license = {file = "LICENSE"}
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.8"
 
 [project.optional-dependencies]
