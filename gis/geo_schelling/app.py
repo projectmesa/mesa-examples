@@ -34,8 +34,8 @@ page = SolaraViz(
     model,
     [
         make_geospace_leaflet(schelling_draw, zoom=4),
-        make_plot_happiness,
         make_plot_measure(["happy"]),
+        make_plot_happiness,
     ],
     model_params=model_params,
     name="GeoSchelling",

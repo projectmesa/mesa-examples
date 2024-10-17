@@ -14,15 +14,15 @@ The GeoSpace contains a raster layer representing elevations. It is this elevati
 
 In this example, the raindrops are the GeoAgents. At each time step, raindrops are randomly created across the landscape to simulate rainfall. The raindrops flow from cells of higher elevation to lower elevation based on their eight surrounding cells (i.e., Moore neighbourhood). The raindrop also has its own height, which allows them to accumulate, gain height and flow if they are trapped at places such as potholes, pools, or depressions. When they reach the boundary of the GeoSpace, they are removed from the model as outflow.
 
-## How to run
+## How to Run
 
-To run the model interactively, run `mesa runserver` in this directory. e.g.
+To run the model interactively, run `solara run app.py` in this directory. e.g.
 
 ```bash
-mesa runserver
+solara run app.py
 ```
 
-Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press `Start`.
+Then open your browser to [http://127.0.0.1:8765/](http://127.0.0.1:8765/) and press the play button `▶`.
 
 ## License
 

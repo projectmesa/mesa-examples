@@ -1,17 +1,14 @@
-import mesa
 import mesa_geo as mg
+import solara
+from mesa.visualization import SolaraViz
+from mesa_geo.visualization import make_geospace_leaflet
+from population.model import Population
+from population.space import UgandaCell
 from shapely.geometry import Point, Polygon
 
-from .model import Population
-from .space import UgandaCell
 
-
-class NumAgentsElement(mesa.visualization.TextElement):
-    def __init__(self):
-        super().__init__()
-
-    def render(self, model):
-        return f"Number of Agents: {len(model.space.agents)}"
+def make_plot_num_agents(model):
+    return solara.Markdown(f"**Number of Agents: {len(model.space.agents)}**")
 
 
 def agent_portrayal(agent):
@@ -32,9 +29,14 @@ def agent_portrayal(agent):
         return (agent.population, agent.population, agent.population, 1)
 
 
-geospace_element = mg.visualization.MapModule(agent_portrayal)
-num_agents_element = NumAgentsElement()
-
-server = mesa.visualization.ModularServer(
-    Population, [geospace_element, num_agents_element], "Population Model"
+model = Population()
+page = SolaraViz(
+    model,
+    [
+        make_geospace_leaflet(agent_portrayal),
+        make_plot_num_agents,
+    ],
+    name="Population Model",
 )
+
+page  # noqa
