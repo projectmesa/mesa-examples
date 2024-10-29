@@ -12,6 +12,7 @@ class ColorCell(mesa.Agent):
     """
     Represents a cell's opinion (visualized by a color)
     """
+
     OPINIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     def __init__(self, pos, unique_id, model, initial_state):
@@ -91,15 +92,15 @@ class ColorPatches(mesa.Model):
         # for (contents, col, row) in self._grid.coord_iter():
         # replaced content with _ to appease linter
         for _, (row, col) in self._grid.coord_iter():
-
             cell = ColorCell(
-                (row, col), row+col*row, self, ColorCell.OPINIONS[self.random.randrange(0, 16)]
+                (row, col),
+                row + col * row,
+                self,
+                ColorCell.OPINIONS[self.random.randrange(0, 16)],
             )
             self._grid.place_agent(cell, (row, col))
 
         self.running = True
-
-
 
     def step(self):
         """
@@ -130,8 +131,15 @@ class ColorPatches(mesa.Model):
         - Randomly choose an opinion from `ColorCell.OPINIONS`.
         - Set each agent's `next_state` within this neighborhood to the selected opinion.
         """
-        x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
-        agents = list(self.grid.iter_neighbors((x, y), moore=True, include_center=True, radius=radius))
+        x, y = (
+            self.random.randrange(self.grid.width),
+            self.random.randrange(self.grid.height),
+        )
+        agents = list(
+            self.grid.iter_neighbors(
+                (x, y), moore=True, include_center=True, radius=radius
+            )
+        )
         opinion = ColorCell.OPINIONS[self.random.randrange(0, 16)]
 
         for agent in agents:
