@@ -2,8 +2,7 @@
 handles the definition of the canvas parameters and
 the drawing of the model representation on the canvas
 """
-
-# import webbrowser
+import webbrowser
 
 import mesa
 
@@ -30,7 +29,7 @@ _COLORS = [
 
 
 grid_rows = 50
-grid_cols = 25
+grid_cols = 50
 cell_size = 10
 canvas_width = grid_rows * cell_size
 canvas_height = grid_cols * cell_size
@@ -65,4 +64,4 @@ server = mesa.visualization.ModularServer(
     {"width": grid_rows, "height": grid_cols},
 )
 
-# webbrowser.open('http://127.0.0.1:8521')  # TODO: make this configurable
+webbrowser.open('http://127.0.0.1:8521')  # TODO: make this configurable
