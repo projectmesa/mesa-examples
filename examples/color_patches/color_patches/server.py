@@ -48,9 +48,9 @@ def color_patch_draw(cell):
     if cell is None:
         raise AssertionError
     portrayal = {"Shape": "rect", "w": 1, "h": 1, "Filled": "true", "Layer": 0}
-    portrayal["x"] = cell.get_row()
-    portrayal["y"] = cell.get_col()
-    portrayal["Color"] = _COLORS[cell.get_state()]
+    # Use cell.pos to get the (x, y) coordinates
+    portrayal["x"], portrayal["y"] = cell.pos
+    portrayal["Color"] = _COLORS[cell.state]  # Make sure to use cell.state for the color
     return portrayal
 
 
