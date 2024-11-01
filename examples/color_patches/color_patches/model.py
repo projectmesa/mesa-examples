@@ -24,12 +24,18 @@ class ColorCell(mesa.Agent):
         A choice is made at random in case of a tie.
         The next state is stored until all cells have been polled.
         """
-        neighbors = self.model.grid.get_neighbors(self.pos, moore=True, include_center=False)
+        neighbors = self.model.grid.get_neighbors(
+            self.pos, moore=True, include_center=False
+        )
         neighbors_opinion = Counter(neighbor.state for neighbor in neighbors)
         polled_opinions = neighbors_opinion.most_common()
 
         # Collect all tied opinions
-        tied_opinions = [opinion[0] for opinion in polled_opinions if opinion[1] == polled_opinions[0][1]]
+        tied_opinions = [
+            opinion[0]
+            for opinion in polled_opinions
+            if opinion[1] == polled_opinions[0][1]
+        ]
         self.next_state = self.random.choice(tied_opinions)
 
     def assume_opinion(self):
@@ -56,8 +62,10 @@ class ColorPatches(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
 
         # Create agents
-        for (content, x, y) in self.grid.coord_iter():
-            initial_state = ColorCell.OPINIONS[self.random.randrange(0, len(ColorCell.OPINIONS))]
+        for content, x, y in self.grid.coord_iter():
+            initial_state = ColorCell.OPINIONS[
+                self.random.randrange(0, len(ColorCell.OPINIONS))
+            ]
             agent = ColorCell(self.next_id(), self, initial_state)
             self.grid.place_agent(agent, (x, y))
             self.schedule.add(agent)
@@ -75,4 +83,3 @@ class ColorPatches(mesa.Model):
         for agent in self.schedule.agents:
             agent.assume_opinion()
         self.schedule.step()
-
