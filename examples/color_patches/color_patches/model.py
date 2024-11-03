@@ -8,7 +8,8 @@ class ColorCell(mesa.Agent):
     """
     Represents a cell's opinion (visualized by a color)
     """
-    #test
+
+    # test
     OPINIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     def __init__(self, unique_id, model, initial_state, mutation_prob=0.1):
@@ -36,12 +37,18 @@ class ColorCell(mesa.Agent):
             self.next_state = self.random.choice(ColorCell.OPINIONS)
         else:
             # Стандартний процес визначення "думки" на основі сусідів
-            neighbors = self.model.grid.get_neighbors(self.pos, moore=True, include_center=False)
+            neighbors = self.model.grid.get_neighbors(
+                self.pos, moore=True, include_center=False
+            )
             neighbors_opinion = Counter(neighbor.state for neighbor in neighbors)
             polled_opinions = neighbors_opinion.most_common()
 
             # Збираємо всі зв'язані думки (якщо є кілька з однаковою частотою)
-            tied_opinions = [opinion[0] for opinion in polled_opinions if opinion[1] == polled_opinions[0][1]]
+            tied_opinions = [
+                opinion[0]
+                for opinion in polled_opinions
+                if opinion[1] == polled_opinions[0][1]
+            ]
             self.next_state = self.random.choice(tied_opinions)
 
     def assume_opinion(self):
@@ -68,8 +75,10 @@ class ColorPatches(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
 
         # Create agents
-        for (content, x, y) in self.grid.coord_iter():
-            initial_state = ColorCell.OPINIONS[self.random.randrange(0, len(ColorCell.OPINIONS))]
+        for content, x, y in self.grid.coord_iter():
+            initial_state = ColorCell.OPINIONS[
+                self.random.randrange(0, len(ColorCell.OPINIONS))
+            ]
             agent = ColorCell(self.next_id(), self, initial_state, mutation_prob=0.01)
             self.grid.place_agent(agent, (x, y))
             self.schedule.add(agent)
