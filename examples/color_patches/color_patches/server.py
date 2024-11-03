@@ -29,8 +29,8 @@ _COLORS = [
 ]
 
 
-grid_rows = 50
-grid_cols = 25
+grid_rows = 100
+grid_cols = 100
 cell_size = 10
 canvas_width = grid_rows * cell_size
 canvas_height = grid_cols * cell_size
