@@ -1,6 +1,6 @@
 # Mesa Examples
 ## Core Mesa examples
-The core Mesa examples are available at the main Mesa repository: https://github.com/projectmesa/mesa/tree/main/examples
+The core Mesa examples are available at the main Mesa repository: https://github.com/projectmesa/mesa/tree/main/mesa/examples
 
 Those core examples are fully tested, updated and guaranteed to work with the Mesa release that they are included with. They are also included in the Mesa package, so you can access them directly from your Python environment.
 
