@@ -67,7 +67,7 @@ class ColorPatches(mesa.Model):
         """
         super().__init__()
         self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
-            (width, height), torus=False
+            (width, height), torus=False, random=self.random
         )
 
         # self._grid.coord_iter()

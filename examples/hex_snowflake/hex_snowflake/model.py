@@ -10,13 +10,13 @@ class HexSnowflake(mesa.Model):
     of cells with adjacency rules specific to hexagons.
     """
 
-    def __init__(self, width=50, height=50):
+    def __init__(self, width=50, height=50, seed=None):
         """
         Create a new playing area of (width, height) cells.
         """
-        super().__init__()
+        super().__init__(seed=seed)
         # Use a hexagonal grid, where edges wrap around.
-        self.grid = HexGrid((width, height), capacity=1, torus=True)
+        self.grid = HexGrid((width, height), capacity=1, torus=True, random=self.random)
 
         # Place a dead cell at each location.
         for entry in self.grid.all_cells:
