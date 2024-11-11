@@ -21,7 +21,7 @@ class ForestFire(mesa.Model):
 
         # Set up model objects
 
-        self.grid = OrthogonalMooreGrid((width, height), capacity=1)
+        self.grid = OrthogonalMooreGrid((width, height), capacity=1, random=self.random)
         self.datacollector = mesa.DataCollector(
             {
                 "Fine": lambda m: self.count_type(m, "Fine"),

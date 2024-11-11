@@ -14,7 +14,7 @@ class ShapeExample(mesa.Model):
         super().__init__()
         self.N = N  # num of agents
         self.headings = ((1, 0), (0, 1), (-1, 0), (0, -1))  # tuples are fast
-        self.grid = OrthogonalMooreGrid((width, height), torus=True)
+        self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
         self.make_walker_agents()
         self.running = True

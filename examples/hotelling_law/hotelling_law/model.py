@@ -97,11 +97,11 @@ class HotellingModel(Model):
         # Initialize the spatial grid based on the specified environment type.
         if environment_type == "grid":
             self.grid = OrthogonalMooreGrid(
-                (width, height), True
+                (width, height), torus=True, random=self.random
             )  # A grid where multiple agents can occupy the same cell.
         elif environment_type == "line":
             self.grid = OrthogonalMooreGrid(
-                (1, height), True
+                (1, height), torus=True, random=self.random
             )  # A grid representing a line (single occupancy per cell).
 
         self._initialize_agents()

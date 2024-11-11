@@ -68,7 +68,7 @@ class Schelling(mesa.Model):
         self.homophily = homophily
         self.radius = radius
 
-        self.grid = OrthogonalMooreGrid((width, height), torus=True)
+        self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
         self.happy = 0
         self.datacollector = mesa.DataCollector(
