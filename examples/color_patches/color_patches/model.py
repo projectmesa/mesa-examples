@@ -5,30 +5,38 @@ The model - a 2D lattice where agents live and have an opinion
 from collections import Counter
 
 import mesa
+import random
 
 
-class ColorCell(mesa.experimental.cell_space.CellAgent):
+class ColorCell(mesa.Agent):
     """
     Represents a cell's opinion (visualized by a color)
     """
 
     OPINIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-    def __init__(self, model, initial_state):
+    def __init__(self, pos, unique_id, model, initial_state):
         """
-        Create a cell, in the given state, at the given row, col position.
+        Create a cell, in the given state, at the given row, col position and stubbornness.
         """
-        super().__init__(model)
-        self.state = initial_state
-        self.next_state = None
+        super().__init__(unique_id, model)
+        self._row = pos[0]
+        self._col = pos[1]
+        self._state = initial_state
+        self.stubbornness = random.uniform(0, 0.99)
+        self._next_state = None
 
     def get_col(self):
         """Return the col location of this cell."""
-        return self.cell.coordinate[0]
+        return self._col
 
     def get_row(self):
         """Return the row location of this cell."""
-        return self.cell.coordinate[1]
+        return self._row
+
+    def get_state(self):
+        """Return the current state (OPINION) of this cell."""
+        return self._state
 
     def determine_opinion(self):
         """
@@ -36,9 +44,10 @@ class ColorCell(mesa.experimental.cell_space.CellAgent):
         The opinion is determined by the majority of the 8 neighbors' opinion
         A choice is made at random in case of a tie
         The next state is stored until all cells have been polled
+        The last opinion is determined by the stubbornness parameter of the agent
         """
-        neighbors = self.cell.neighborhood.agents
-        neighbors_opinion = Counter(n.state for n in neighbors)
+        _neighbor_iter = self.model.grid.iter_neighbors((self._row, self._col), True)
+        neighbors_opinion = Counter(n.get_state() for n in _neighbor_iter)
         # Following is a a tuple (attribute, occurrences)
         polled_opinions = neighbors_opinion.most_common()
         tied_opinions = []
@@ -46,13 +55,22 @@ class ColorCell(mesa.experimental.cell_space.CellAgent):
             if neighbor[1] == polled_opinions[0][1]:
                 tied_opinions.append(neighbor)
 
-        self.next_state = self.random.choice(tied_opinions)[0]
+        if self.random.random() > self.stubbornness:
+            self._next_state = self.random.choice(tied_opinions)[0]
+        else:
+            self._next_state = self._state
 
     def assume_opinion(self):
         """
         Set the state of the agent to the next state
         """
-        self.state = self.next_state
+        self._state = self._next_state
+
+    def set_next_state(self, opinion):
+        """
+        Set the next state for the agent.
+        """
+        self._next_state = opinion
 
 
 class ColorPatches(mesa.Model):
@@ -66,29 +84,66 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
         super().__init__()
-        self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
-            (width, height), torus=False
-        )
+        self._grid = mesa.space.SingleGrid(width, height, torus=False)
 
         # self._grid.coord_iter()
         #  --> should really not return content + col + row
         #  -->but only col & row
         # for (contents, col, row) in self._grid.coord_iter():
         # replaced content with _ to appease linter
-        for cell in self._grid.all_cells:
-            agent = ColorCell(self, ColorCell.OPINIONS[self.random.randrange(0, 16)])
-            agent.move_to(cell)
+        for _, (row, col) in self._grid.coord_iter():
+            cell = ColorCell(
+                (row, col),
+                row + col * row,
+                self,
+                ColorCell.OPINIONS[self.random.randrange(0, 16)],
+            )
+            self._grid.place_agent(cell, (row, col))
 
         self.running = True
 
     def step(self):
         """
-        Perform the model step in two stages:
+        Perform the model step in three stages:
         - First, all agents determine their next opinion based on their neighbors current opinions
+        - A random event is introduced to potentially influence agent opinions.
         - Then, all agents update their opinion to the next opinion
         """
         self.agents.do("determine_opinion")
+        self.random_event()
         self.agents.do("assume_opinion")
+
+    def random_event(self, event_chance=0.001):
+        """
+        Introduce a random event that may influence agent opinions.
+        If a randomly generated value is less than `event_chance`, a change in opinion will be triggered for agents by
+        calling `change_opinion`.
+        """
+        if self.random.random() < event_chance:
+            self.change_opinion()
+
+    def change_opinion(self, radius=2):
+        """
+        Apply an opinion change to agents within a specified radius around a random grid location.
+        - Select random coordinates (x, y) within the grid boundaries.
+        - Retrieve agents located within a Moore neighborhood of (x, y) using the specified radius (default is 2),
+            which includes all agents within this distance as well as the center cell.
+        - Randomly choose an opinion from `ColorCell.OPINIONS`.
+        - Set each agent's `next_state` within this neighborhood to the selected opinion.
+        """
+        x, y = (
+            self.random.randrange(self.grid.width),
+            self.random.randrange(self.grid.height),
+        )
+        agents = list(
+            self.grid.iter_neighbors(
+                (x, y), moore=True, include_center=True, radius=radius
+            )
+        )
+        opinion = ColorCell.OPINIONS[self.random.randrange(0, 16)]
+
+        for agent in agents:
+            agent.set_next_state(opinion)
 
     @property
     def grid(self):
