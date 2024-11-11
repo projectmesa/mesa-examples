@@ -101,7 +101,9 @@ class Charts(mesa.Model):
         self.width = width
         self.init_people = init_people
 
-        self.grid = OrthogonalMooreGrid((self.width, self.height), torus=True, random=self.random)
+        self.grid = OrthogonalMooreGrid(
+            (self.width, self.height), torus=True, random=self.random
+        )
         # rich_threshold is the amount of savings a person needs to be considered "rich"
         self.rich_threshold = rich_threshold
         self.reserve_percent = reserve_percent
