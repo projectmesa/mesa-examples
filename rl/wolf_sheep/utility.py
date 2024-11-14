@@ -7,7 +7,7 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
         unique_id_str = f"sheep_{self.next_id()}"
         sheep = SheepRL(unique_id_str, None, self, True, energy)
         self.grid.place_agent(sheep, (x, y))
-        self.schedule.add(sheep)
+        self.add(sheep)
 
     # Create wolves
     for i in range(self.initial_wolves):
@@ -17,7 +17,7 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
         unique_id_str = f"wolf_{self.next_id()}"
         wolf = WolfRL(unique_id_str, None, self, True, energy)
         self.grid.place_agent(wolf, (x, y))
-        self.schedule.add(wolf)
+        self.add(wolf)
 
     # Create grass patches
     if self.grass:
@@ -32,7 +32,7 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
             unique_id_str = f"grass_{self.next_id()}"
             patch = GrassPatch(unique_id_str, None, self, fully_grown, countdown)
             self.grid.place_agent(patch, (x, y))
-            self.schedule.add(patch)
+            self.add(patch)
 
 
 def move(self, action):

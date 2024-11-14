@@ -14,25 +14,28 @@ This repository demonstrates various applications of reinforcement learning (RL)
 1. **Install Mesa Models**
    Begin by installing the Mesa models:
 
+#TODO: Update this -- do release?
+
    ```bash
    pip install -U -e git+https://github.com/projectmesa/mesa-examples@mesa-2.x#egg=mesa-models
    ```
 
-2. **Install RLlib for Multi-Agent Training**
+3. **Install RLlib for Multi-Agent Training**
    Next, install RLlib along with TensorFlow and PyTorch to support multi-agent training algorithms:
 
    ```bash
    pip install "ray[rllib]" tensorflow torch
    ```
+#TODO Update requirements to mesa[rec] >3.0
 
-3. **Install Additional Dependencies**
+4. **Install Additional Dependencies**
    Finally, install any remaining dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Download Pre-Trained Weights**
+5. **Download Pre-Trained Weights**
    Download pre-trained weights from hugging face:
 
    ```bash

@@ -1,7 +1,7 @@
 import gymnasium as gym
 import mesa
 import numpy as np
-from mesa_models.epstein_civil_violence.model import EpsteinCivilViolence
+from mesa.examples.advanced.epstein_civil_violence.model import EpsteinCivilViolence
 from ray.rllib.env import MultiAgentEnv
 
 from .agent import CitizenRL, CopRL
