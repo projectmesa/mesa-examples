@@ -1,6 +1,5 @@
-from mesa_models.wolf_sheep.agents import GrassPatch, Sheep, Wolf
-
-from .utility import move
+from mesa.examples.advanced.wolf_sheep.agents import GrassPatch, Sheep, Wolf
+from utility import move
 
 
 class SheepRL(Sheep):
@@ -28,7 +27,7 @@ class SheepRL(Sheep):
             # Death
             if self.energy < 0:
                 self.model.grid.remove_agent(self)
-                self.model.schedule.remove(self)
+                self.model.remove(self)
                 living = False
 
         if living and self.random.random() < self.model.sheep_reproduce:
@@ -38,7 +37,7 @@ class SheepRL(Sheep):
             unique_id_str = f"sheep_{self.model.next_id()}"
             lamb = SheepRL(unique_id_str, self.pos, self.model, self.moore, self.energy)
             self.model.grid.place_agent(lamb, self.pos)
-            self.model.schedule.add(lamb)
+            self.model.add(lamb)
 
 
 class WolfRL(Wolf):
@@ -62,12 +61,12 @@ class WolfRL(Wolf):
 
             # Kill the sheep
             self.model.grid.remove_agent(sheep_to_eat)
-            self.model.schedule.remove(sheep_to_eat)
+            self.model.remove(sheep_to_eat)
 
         # Death or reproduction
         if self.energy < 0:
             self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
+            self.model.remove(self)
         else:
             if self.random.random() < self.model.wolf_reproduce:
                 # Create a new wolf cub
@@ -77,4 +76,4 @@ class WolfRL(Wolf):
                     unique_id_str, self.pos, self.model, self.moore, self.energy
                 )
                 self.model.grid.place_agent(cub, cub.pos)
-                self.model.schedule.add(cub)
+                self.model.add(cub)
