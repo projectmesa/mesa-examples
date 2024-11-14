@@ -30,9 +30,9 @@ def create_intial_agents(self, CitizenRL, CopRL):
     # Initializing cops then citizens
     # This ensures cops act out their step before citizens
     for cop in cops:
-        self.schedule.add(cop)
+        self.add(cop)
     for citizen in citizens:
-        self.schedule.add(citizen)
+        self.add(citizen)
 
 
 def grid_to_observation(self, CitizenRL):
