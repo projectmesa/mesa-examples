@@ -1,11 +1,10 @@
 import gymnasium as gym
 import mesa
 import numpy as np
+from agent import CitizenRL, CopRL
 from mesa.examples.advanced.epstein_civil_violence.model import EpsteinCivilViolence
 from ray.rllib.env import MultiAgentEnv
-
-from .agent import CitizenRL, CopRL
-from .utility import create_intial_agents, grid_to_observation
+from utility import create_intial_agents, grid_to_observation
 
 
 class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
@@ -88,7 +87,7 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
         self.action_dict = action_dict
 
         # Step the model
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
         # Calculate rewards
@@ -104,10 +103,10 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
             ]  # Get the values from the observation grid for the neighborhood cells
 
         # RL specific outputs for the environment
-        done = {a.unique_id: False for a in self.schedule.agents}
-        truncated = {a.unique_id: False for a in self.schedule.agents}
+        done = {a.unique_id: False for a in self.agents}
+        truncated = {a.unique_id: False for a in self.agents}
         truncated["__all__"] = np.all(list(truncated.values()))
-        if self.schedule.time > self.max_iters:
+        if self.time > self.max_iters:
             done["__all__"] = True
         else:
             done["__all__"] = False
@@ -116,7 +115,7 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
 
     def cal_reward(self):
         rewards = {}
-        for agent in self.schedule.agents:
+        for agent in self.agents:
             if isinstance(agent, CopRL):
                 if agent.arrest_made:
                     # Cop is rewarded for making an arrest
@@ -149,19 +148,17 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
         """
 
         super().reset()
-        # Using base scheduler to maintain the order of agents
-        self.schedule = mesa.time.BaseScheduler(self)
         self.grid = mesa.space.SingleGrid(self.width, self.height, torus=True)
         create_intial_agents(self, CitizenRL, CopRL)
         grid_to_observation(self, CitizenRL)
         # Intialize action dictionary with no action
-        self.action_dict = {a.unique_id: (0, 0) for a in self.schedule.agents}
+        self.action_dict = {a.unique_id: (0, 0) for a in self.agents}
         # Update neighbors for observation space
-        for agent in self.schedule.agents:
+        for agent in self.agents:
             agent.update_neighbors()
-        self.schedule.step()
+        self.agents.shuffle_do("step")
         observation = {}
-        for agent in self.schedule.agents:
+        for agent in self.agents:
             observation[agent.unique_id] = [
                 self.obs_grid[neighbor[0]][neighbor[1]]
                 for neighbor in agent.neighborhood
