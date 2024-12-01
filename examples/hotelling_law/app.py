@@ -5,7 +5,7 @@ import solara
 from hotelling_law.agents import ConsumerAgent, StoreAgent
 from hotelling_law.model import HotellingModel
 from matplotlib.figure import Figure
-from mesa.visualization import SolaraViz, make_plot_measure
+from mesa.visualization import SolaraViz, make_plot_component
 
 model_params = {
     "N_stores": {
@@ -349,7 +349,7 @@ page = SolaraViz(
         make_price_changes_line_chart,
         make_market_share_and_price_chart,
         make_market_share_line_chart,
-        make_plot_measure("Price Variance"),
+        make_plot_component("Price Variance"),
         make_revenue_line_chart,
     ],
     name="Hotelling's Law Model",
