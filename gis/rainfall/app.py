@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from mesa.visualization import Slider, SolaraViz, make_plot_measure
+from mesa.visualization import Slider, SolaraViz, make_plot_component
 from mesa_geo.visualization import make_geospace_leaflet
 from rainfall.model import Rainfall
 from rainfall.space import LakeCell
@@ -33,7 +33,7 @@ page = SolaraViz(
     model,
     [
         make_geospace_leaflet(cell_portrayal, zoom=11),
-        make_plot_measure(
+        make_plot_component(
             ["Total Amount of Water", "Total Contained", "Total Outflow"]
         ),
     ],

@@ -1,6 +1,6 @@
 from geo_sir.agents import PersonAgent
 from geo_sir.model import GeoSir
-from mesa.visualization import Slider, SolaraViz, make_plot_measure
+from mesa.visualization import Slider, SolaraViz, make_plot_component
 from mesa_geo.visualization import make_geospace_leaflet
 
 model_params = {
@@ -33,7 +33,7 @@ page = SolaraViz(
     model,
     [
         make_geospace_leaflet(infected_draw, zoom=12),
-        make_plot_measure(["infected", "susceptible", "recovered", "dead"]),
+        make_plot_component(["infected", "susceptible", "recovered", "dead"]),
     ],
     name="Basic agent-based SIR model",
     model_params=model_params,

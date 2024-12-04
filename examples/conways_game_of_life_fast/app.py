@@ -1,4 +1,4 @@
-from mesa.visualization import SolaraViz, make_plot_measure, make_space_matplotlib
+from mesa.visualization import SolaraViz, make_plot_component, make_space_component
 from model import GameOfLifeModel
 
 propertylayer_portrayal = {
@@ -38,8 +38,8 @@ model_params = {
 
 gol = GameOfLifeModel()
 
-layer_viz = make_space_matplotlib(propertylayer_portrayal=propertylayer_portrayal)
-TotalAlivePlot = make_plot_measure("Cells alive")
+layer_viz = make_space_component(propertylayer_portrayal=propertylayer_portrayal)
+TotalAlivePlot = make_plot_component("Cells alive")
 
 page = SolaraViz(
     gol,
