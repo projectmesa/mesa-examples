@@ -83,7 +83,14 @@ class AntTSP(CellAgent):
     An agent
     """
 
-    def __init__(self, model, alpha: float = 1.0, beta: float = 5.0, random_move_prob: float = 0.1, max_distance: float = None):
+    def __init__(
+        self,
+        model,
+        alpha: float = 1.0,
+        beta: float = 5.0,
+        random_move_prob: float = 0.1,
+        max_distance: float = None,
+    ):
         """
         Customize the agent
         """
@@ -126,13 +133,15 @@ class AntTSP(CellAgent):
         results = []
         for city in candidates:
             adjustment_factor = 1 - (
-                        self._traveled_distance / self.model.grid.G[self.cell.coordinate][city.coordinate]["distance"])
+                self._traveled_distance
+                / self.model.grid.G[self.cell.coordinate][city.coordinate]["distance"]
+            )
             val = (
-                    (self.graph[self.cell.coordinate][city.coordinate]["pheromone"])
-                    ** self.alpha
-                    * (self.graph[self.cell.coordinate][city.coordinate]["visibility"])
-                    ** self.beta
-                    * (1 + adjustment_factor)
+                (self.graph[self.cell.coordinate][city.coordinate]["pheromone"])
+                ** self.alpha
+                * (self.graph[self.cell.coordinate][city.coordinate]["visibility"])
+                ** self.beta
+                * (1 + adjustment_factor)
             )
             results.append(val)
 
@@ -231,9 +240,14 @@ class AcoTspModel(mesa.Model):
 
             # Збільшення часу випаровування феромону на шляхах, якими пройшло більше мурах
             num_ants_on_edge = sum(
-                1 for agent in self.agents if (i, j) in zip(agent.tsp_solution[:-1], agent.tsp_solution[1:]))
+                1
+                for agent in self.agents
+                if (i, j) in zip(agent.tsp_solution[:-1], agent.tsp_solution[1:])
+            )
             if num_ants_on_edge > 0:
-                tau_ij *= (1 + 0.1 * num_ants_on_edge)  # Додатковий коефіцієнт для популярних шляхів
+                tau_ij *= (
+                    1 + 0.1 * num_ants_on_edge
+                )  # Додатковий коефіцієнт для популярних шляхів
 
             self.grid.G[i][j]["pheromone"] = tau_ij
 
