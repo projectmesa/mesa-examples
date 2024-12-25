@@ -2,7 +2,7 @@ from typing import Tuple
 
 import solara
 from mesa.visualization import Slider, SolaraViz, make_plot_component
-from mesa_geo.visualization import make_geospace_leaflet
+from mesa_geo.visualization import make_geospace_component
 from urban_growth.model import UrbanGrowth
 from urban_growth.space import UrbanCell
 
@@ -36,7 +36,7 @@ model = UrbanGrowth()
 page = SolaraViz(
     model,
     [
-        make_geospace_leaflet(cell_portrayal, zoom=12.1),
+        make_geospace_component(cell_portrayal, zoom=12.1),
         make_plot_component(["Percentage Urbanized"]),
         make_plot_urbanized,
     ],

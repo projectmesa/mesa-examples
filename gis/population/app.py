@@ -1,7 +1,7 @@
 import mesa_geo as mg
 import solara
 from mesa.visualization import SolaraViz
-from mesa_geo.visualization import make_geospace_leaflet
+from mesa_geo.visualization import make_geospace_component
 from population.model import Population
 from population.space import UgandaCell
 from shapely.geometry import Point, Polygon
@@ -33,7 +33,7 @@ model = Population()
 page = SolaraViz(
     model,
     [
-        make_geospace_leaflet(agent_portrayal),
+        make_geospace_component(agent_portrayal),
         make_plot_num_agents,
     ],
     name="Population Model",

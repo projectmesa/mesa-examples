@@ -1,6 +1,6 @@
 import solara
 from mesa.visualization import Slider, SolaraViz, make_plot_component
-from mesa_geo.visualization import make_geospace_leaflet
+from mesa_geo.visualization import make_geospace_component
 from model import GeoSchelling
 
 
@@ -33,7 +33,7 @@ model = GeoSchelling()
 page = SolaraViz(
     model,
     [
-        make_geospace_leaflet(schelling_draw, zoom=4),
+        make_geospace_component(schelling_draw, zoom=4),
         make_plot_component(["happy"]),
         make_plot_happiness,
     ],

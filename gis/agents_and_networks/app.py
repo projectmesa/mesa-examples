@@ -1,7 +1,7 @@
 import sys
 
 from mesa.visualization import Slider, SolaraViz, make_plot_component
-from mesa_geo.visualization import make_geospace_leaflet
+from mesa_geo.visualization import make_geospace_component
 from src.model.model import AgentsAndNetworks
 from src.visualization.utils import agent_draw, make_plot_clock
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     page = SolaraViz(
         model,
         [
-            make_geospace_leaflet(agent_draw, zoom=campus_params[campus]["zoom"]),
+            make_geospace_component(agent_draw, zoom=campus_params[campus]["zoom"]),
             make_plot_clock,
             make_plot_component(["status_home", "status_work", "status_traveling"]),
             make_plot_component(["friendship_home", "friendship_work"]),

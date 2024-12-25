@@ -2,7 +2,7 @@ import solara
 from geo_schelling_points.agents import PersonAgent, RegionAgent
 from geo_schelling_points.model import GeoSchellingPoints
 from mesa.visualization import Slider, SolaraViz, make_plot_component
-from mesa_geo.visualization import make_geospace_leaflet
+from mesa_geo.visualization import make_geospace_component
 
 
 def make_plot_happiness(model):
@@ -35,7 +35,7 @@ model = GeoSchellingPoints()
 page = SolaraViz(
     model,
     [
-        make_geospace_leaflet(schelling_draw, zoom=4),
+        make_geospace_component(schelling_draw, zoom=4),
         make_plot_component(["happy", "unhappy"]),
         make_plot_happiness,
     ],
