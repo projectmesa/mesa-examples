@@ -1,23 +1,22 @@
 import math
-from mesa import Model
+
 from city_walking_behaviour.agents import (
-    Human,
+    DOG_OWNER_PROBABILITY,
+    FEMALE_PROBABILITY,
+    MAX_AGE,
+    MIN_AGE,
+    SINGLE_HOUSEHOLD_PROBABILITY,
     GroceryStore,
-    SocialPlace,
+    Human,
     NonFoodShop,
     Other,
+    SocialPlace,
 )
+from mesa import Model
+from mesa.datacollection import DataCollector
 from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
 from mesa.experimental.cell_space.property_layer import PropertyLayer
 from mesa.experimental.devs import ABMSimulator
-from mesa.datacollection import DataCollector
-from .agents import (
-    FEMALE_PROBABILITY,
-    DOG_OWNER_PROBABILITY,
-    SINGLE_HOUSEHOLD_PROBABILITY,
-    MIN_AGE,
-    MAX_AGE,
-)
 
 SCENARIOS = {
     "random_random": "Random Land Use, Random Safety",
@@ -592,14 +591,13 @@ class WalkingModel(Model):
         # Place couples
         for _ in range(self.no_of_couples):
             ses = self.generate_ses()
-            if cells_with_proximity[ses]:
-                if len(cells_with_proximity[ses]) >= 2:
-                    cell = self.random.choice(cells_with_proximity[ses])
-                    cells_with_proximity[ses].remove(cell)
-                    # Create the couple
-                    for _ in range(2):
-                        Human(self, self.unique_id, cell, SES=ses)
-                        self.unique_id += 1
+            if cells_with_proximity[ses] and len(cells_with_proximity[ses]) >= 2:
+                cell = self.random.choice(cells_with_proximity[ses])
+                cells_with_proximity[ses].remove(cell)
+                # Create the couple
+                for _ in range(2):
+                    Human(self, self.unique_id, cell, SES=ses)
+                    self.unique_id += 1
 
         # Place singles
         for _ in range(self.no_of_singles):

@@ -1,11 +1,11 @@
-from typing import Optional
-from mesa import Model
 import math
-from mesa.agent import AgentSet
-from mesa.experimental.cell_space import CellAgent, FixedAgent
-from mesa.experimental.cell_space import Cell
 from enum import Enum
+from typing import Optional
+
 import numpy as np
+from mesa import Model
+from mesa.agent import AgentSet
+from mesa.experimental.cell_space import Cell, CellAgent, FixedAgent
 
 # Constants for probability values
 FEMALE_PROBABILITY = 0.5
@@ -209,10 +209,12 @@ class WalkingBehaviorModel:
                 self.model.agents_by_type[SocialPlace]
             )
             distance = self.calculate_distance(human.cell, social_place.cell)
-            if distance <= self.get_max_walking_distance(human, ActivityType.SOCIAL):
-                if self.model.random.random() <= human.walking_attitude:
-                    self.add_distance(distance)
-                    walks.append((ActivityType.SOCIAL, social_place))
+            if (
+                distance <= self.get_max_walking_distance(human, ActivityType.SOCIAL)
+                and self.model.random.random() <= human.walking_attitude
+            ):
+                self.add_distance(distance)
+                walks.append((ActivityType.SOCIAL, social_place))
 
         # Leisure walk
         leisure_destination = self.decide_leisure_walk(human)
@@ -354,10 +356,7 @@ class Human(CellAgent):
         density_feedback = 0
         if self.previous_walking_density == 0:
             # If previous density was zero, treat any current density as a positive change
-            if self.current_walking_density > 0:
-                density_feedback = 1
-            else:
-                density_feedback = 0
+            density_feedback = 1 if self.current_walking_density > 0 else 0
         else:
             density_ratio = self.current_walking_density / self.previous_walking_density
             density_feedback = density_ratio - 1  # Centers the feedback around 0

@@ -1,16 +1,16 @@
 from city_walking_behaviour.agents import (
-    Human,
     GroceryStore,
-    SocialPlace,
+    Human,
     NonFoodShop,
     Other,
+    SocialPlace,
 )
 from city_walking_behaviour.model import WalkingModel
 from mesa.experimental.devs import ABMSimulator
 from mesa.visualization import (
     SolaraViz,
-    make_space_component,
     make_plot_component,
+    make_space_component,
 )
 
 # Define the scenarios
@@ -347,4 +347,4 @@ page = SolaraViz(
     name="Walking Model",
     simulator=simulator,
 )
-page
+page  # noqa
