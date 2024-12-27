@@ -1,4 +1,10 @@
-from city_walking_behaviour.agents import Human, GroceryStore, SocialPlace, NonFoodShop, Other
+from city_walking_behaviour.agents import (
+    Human,
+    GroceryStore,
+    SocialPlace,
+    NonFoodShop,
+    Other,
+)
 from city_walking_behaviour.model import WalkingModel
 from mesa.experimental.devs import ABMSimulator
 from mesa.visualization import (
@@ -208,19 +214,61 @@ def post_process_lines_leisure(ax):
 
 def post_process_buildings_legend(ax):
     import matplotlib.lines as mlines
+
     # Create legend entries for each building/agent
-    grocery_store = mlines.Line2D([], [], color="tab:green", marker="s", linestyle="None", markersize=10, label="Grocery Store")
-    social_place = mlines.Line2D([], [], color="tab:purple", marker="s", linestyle="None", markersize=10, label="Social Place")
-    non_food_shop = mlines.Line2D([], [], color="tab:olive", marker="s", linestyle="None", markersize=10, label="Non-Food Shop")
-    other_building = mlines.Line2D([], [], color="tab:brown", marker="s", linestyle="None", markersize=10, label="Other")
-    human = mlines.Line2D([], [], color="tab:red", marker="v", linestyle="None", markersize=10, label="Human")
+    grocery_store = mlines.Line2D(
+        [],
+        [],
+        color="tab:green",
+        marker="s",
+        linestyle="None",
+        markersize=10,
+        label="Grocery Store",
+    )
+    social_place = mlines.Line2D(
+        [],
+        [],
+        color="tab:purple",
+        marker="s",
+        linestyle="None",
+        markersize=10,
+        label="Social Place",
+    )
+    non_food_shop = mlines.Line2D(
+        [],
+        [],
+        color="tab:olive",
+        marker="s",
+        linestyle="None",
+        markersize=10,
+        label="Non-Food Shop",
+    )
+    other_building = mlines.Line2D(
+        [],
+        [],
+        color="tab:brown",
+        marker="s",
+        linestyle="None",
+        markersize=10,
+        label="Other",
+    )
+    human = mlines.Line2D(
+        [],
+        [],
+        color="tab:red",
+        marker="v",
+        linestyle="None",
+        markersize=10,
+        label="Human",
+    )
 
     ax.legend(
         handles=[grocery_store, social_place, non_food_shop, other_building, human],
         loc="center",
-        bbox_to_anchor=(0.5, 0.5)
+        bbox_to_anchor=(0.5, 0.5),
     )
     ax.axis("off")
+
 
 space_component = make_space_component(
     agent_portrayal, draw_grid=True, post_process=post_process_space
@@ -270,7 +318,9 @@ plot_component_d = make_plot_component(
     post_process=post_process_lines_leisure,
 )
 
-plot_component_legend = make_plot_component({}, post_process=post_process_buildings_legend)
+plot_component_legend = make_plot_component(
+    {}, post_process=post_process_buildings_legend
+)
 
 # Initialize and run the model
 simulator = ABMSimulator()

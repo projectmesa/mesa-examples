@@ -1,6 +1,12 @@
 import math
 from mesa import Model
-from city_walking_behaviour.agents import Human, GroceryStore, SocialPlace, NonFoodShop, Other
+from city_walking_behaviour.agents import (
+    Human,
+    GroceryStore,
+    SocialPlace,
+    NonFoodShop,
+    Other,
+)
 from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
 from mesa.experimental.cell_space.property_layer import PropertyLayer
 from mesa.experimental.devs import ABMSimulator
@@ -521,7 +527,7 @@ class WalkingModel(Model):
             base_safety = min_distance * 0.8  # Maximum safety of 0.8
 
             # Add some local variation
-            local_variation = self.random.random() * 0.2 
+            local_variation = self.random.random() * 0.2
 
             # Add some urban-like patterns
             if min_distance < 0.3:  # Near centers
