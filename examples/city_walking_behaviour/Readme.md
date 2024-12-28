@@ -1,123 +1,121 @@
 # Walking Behavior Agent-Based Model
 
-## Introduction
+This repository contains an agent-based model (ABM) that simulates walking behavior in a hypothetical city, examining how socioeconomic status (SES), built environment, and social factors influence walking patterns.
 
-This agent-based model (ABM) simulates walking behavior patterns in a hypothetical city. It examines how socioeconomic status (SES), built environment, and social factors influence walking patterns by modeling dynamic interactions between individual attributes and environmental factors. The model incorporates feedback mechanisms and individual-environment interactions to simulate realistic walking patterns across different socioeconomic groups.
+# Walking Behavior Simulation Model Documentation
 
-## Model Architecture
+## Overview
 
-### Core Components
+## Model Architecture (`model.py`)
 
-#### Initialization Parameters
+### Initialization Parameters
 
 - Grid dimensions (width and height)
-- Workplace distribution (Grocery Stores, Social Places, etc.)
-- Population demographics (couples and singles)
+- Number of workplaces (categorized into Grocery Stores, Social Places, etc.)
+- Population composition (number of couples and singles)
 
-#### Simulation Scenarios
+### Simulation Scenarios
 
-1. **RR (Random-Random)**
+The model implements four distinct scenarios:
 
-   - Random land use distribution
-   - Random safety values
+1. **RR (Random-Random)**: Random land use distribution with random safety values
+2. **RS (Random-Safety)**: Random land use distribution with lower safety values in core areas
+3. **CR (Centralized-Random)**: Centralized land use with random safety values
+4. **CS (Centralized-Safety)**: Centralized land use with lower safety values in core areas
 
-2. **RS (Random-Safety)**
-
-   - Random land use distribution
-   - Lower safety values in core areas
-
-3. **CR (Centralized-Random)**
-
-   - Centralized land use
-   - Random safety values
-
-4. **CS (Centralized-Safety)**
-   - Centralized land use
-   - Lower safety values in core areas
-
-### Environmental Systems
-
-#### Environmental Layers
+### Environmental Layers
 
 1. **Safety Layer** (`safety_cell_layer`)
 
-   - Dynamic values based on scenario
-   - Influences walking behavior and route selection
+   - Values vary based on selected scenario
+   - Impacts walking behavior and route choices
 
 2. **Aesthetic Layer** (`aesthetic_cell_layer`)
-   - Center-based value distribution
-   - Impacts route preferences
+   - Values decrease with distance from center
+   - Reflects personal preferences in route selection
 
-#### Agent Placement System
+### Agent Placement
 
-- Scenario-based workplace distribution
-- Household-based agent spawning
-- SES-correlated positioning (lower SES centrally located)
+- Workplaces are distributed according to scenario parameters
+- Households serve as spawn locations for human agents
+- Agent placement correlates with Socioeconomic Status (SES) - lower SES values correspond to more central locations
 
-### Data Collection System
+### Data Collection
 
-Tracks metrics across five SES levels (1-5):
+The model tracks the following metrics across five SES levels (1-5):
 
-- Average daily walking trips
-- Work-related trips
-- Basic needs trips (grocery and retail)
-- Leisure walks
+1. Average daily walking trips
+2. Work-related trips
+3. Basic needs trips (grocery and non-food shopping)
+4. Leisure trips (non-purposeful neighborhood walks)
 
-## Agent Implementation
+## Agent Implementation (`agents.py`)
 
-### Human Agent Characteristics
+### Human Class
 
-#### Demographics
+Extends the CellAgent class with the following attributes:
 
-- Gender (50/50 distribution)
-- Age (18-87 years, random distribution)
-- Family Size (1-2 members)
-- Pet Ownership (20% dog ownership rate)
+#### Demographic Characteristics
+
+- Gender: Equal probability of male/female
+- Age: Random distribution (18-87 years)
+- Family Size: 1 or 2 (based on `SINGLE_HOUSEHOLD_PROBABILITY`)
+- Pet Ownership: 20% probability of dog ownership (increases leisure walking frequency)
 
 #### Personal Attributes
 
-- Walking Ability
-- Walking Attitude
-- Employment Status
-- Social Networks
+- Walking Ability: Determined by `get_walking_ability` function
+- Walking Attitude: Calculated via `get_walking_attitude` function
+- Employment Status:
+  - Automatic retirement above `RETIREMENT_AGE`
+  - 95% employment probability for working-age population
+- Social Network: Maintains lists of friends and family members
 
-#### Behavioral Feedback Mechanisms
+#### Behavioral Feedback System
 
-Walking attitudes influenced by:
+Walking attitude is influenced by:
 
-- Social network dynamics
-- Environmental conditions
-- Pedestrian density
-- Walking history
+- Social network (family and friends' attitudes)
+- Environmental factors (safety and aesthetics)
+- Local pedestrian density
+- Cumulative walking distance
 
-### Walking Behavior Model
+### WalkingBehaviourModel Class
 
-- Activity probability modeling
-- Distance threshold management
-- Schedule optimization
-- Destination planning
+Manages walking behavior simulation with:
 
-### Workplace Hierarchy
+- Activity probability distributions
+- Maximum distance thresholds
+- Daily walk scheduling based on destination distances
+- Activity and destination planning algorithms
 
-1. Base Workplace (Abstract)
-2. GroceryStore
-3. NonFoodShop
-4. SocialPlace
-5. Other
+### Workplace Classes
 
-## Usage
+A hierarchy of workplace types:
 
-### Running the Simulation
+1. **Base Workplace**: Abstract class for workplace definition
+2. **GroceryStore**: Essential food retail
+3. **NonFoodShop**: General retail
+4. **SocialPlace**: Community gathering locations
+5. **Other**: Miscellaneous workplace types
+
+All workplace classes inherit from both `Workplace` and `FixedAgent` base classes.
+
+## How to Run
+
+To run a basic simulation:
 
 ```python
+
 solara run app.py
+
 ```
 
-## Project Structure
+# Files
 
-- `city_walking_behaviour/model.py`: Core simulation engine
-- `city_walking_behaviour/agents.py`: Agent class definitions
+- [city_walking_behaviour/model.py](city_walking_behaviour/model.py): Core model file.
+- [city_walking_behaviour/agents.py](city_walking_behaviour/agents.py): The agent class.
 
-## References
+## Further Reading
 
-1. [A Spatial Agent-Based Model for the Simulation of Adults' Daily Walking Within a City](https://pmc.ncbi.nlm.nih.gov/articles/PMC3306662/)
+1. A Spatial Agent-Based Model for the Simulation of Adults’ Daily Walking Within a City [article](https://pmc.ncbi.nlm.nih.gov/articles/PMC3306662/)
