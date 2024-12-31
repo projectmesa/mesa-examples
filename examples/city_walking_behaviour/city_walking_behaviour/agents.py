@@ -1,6 +1,8 @@
 import math
+from collections import defaultdict
 from enum import Enum
-from typing import Optional
+from functools import lru_cache
+from typing import List, Optional, Tuple
 
 import numpy as np
 from mesa import Model
@@ -63,17 +65,17 @@ class Other(Workplace, FixedAgent):
 
 
 class WalkingBehaviorModel:
-    """Encapsulates all walking decisions for a human agent, including distance checks."""
+    """Optimized walking behavior model with spatial caching and early termination."""
 
     DAILY_PROBABILITIES = {
-        ActivityType.GROCERY: 0.25,  # Every 4 days on average
+        ActivityType.GROCERY: 0.25,
         ActivityType.NON_FOOD_SHOPPING: 0.25,
         ActivityType.SOCIAL: 0.15,
         ActivityType.LEISURE: 0.20,
     }
 
     BASE_MAX_DISTANCES = {
-        ActivityType.WORK: 2000,  # meters
+        ActivityType.WORK: 2000,
         ActivityType.GROCERY: 1000,
         ActivityType.NON_FOOD_SHOPPING: 1500,
         ActivityType.SOCIAL: 2000,
@@ -83,143 +85,205 @@ class WalkingBehaviorModel:
     def __init__(self, model: Model):
         self.model = model
         self.total_distance_walked = 0
+        # Spatial index for quick location lookup
+        self._location_cache = {}
+        self._distance_cache = {}
+        # Maximum possible walking distance for any activity
+        self._max_possible_distance = max(self.BASE_MAX_DISTANCES.values())
 
-    def reset_daily_distance(self):
-        """Reset the total distance walked for a new day"""
+    def reset_daily_distance(self) -> None:
+        """Reset daily walking distance."""
         self.total_distance_walked = 0
 
-    def add_distance(self, distance: float):
-        """Add distance to total daily walking distance"""
+    def add_distance(self, distance: float) -> None:
+        """Add to total daily walking distance."""
         self.total_distance_walked += distance
 
-    def get_max_walking_distance(self, human, activity: ActivityType) -> float:
-        """Calculate person-specific maximum walking distance"""
-        return self.BASE_MAX_DISTANCES[activity] * human.walking_ability
+    @lru_cache(maxsize=1024)  # noqa
+    def get_max_walking_distance(self, ability: float, activity: ActivityType) -> float:
+        """Cached calculation of max walking distance based on ability."""
+        return self.BASE_MAX_DISTANCES[activity] * ability
 
-    def calculate_distance(self, cell1, cell2) -> float:
-        """Calculate distance between two cells"""
-        x1, y1 = cell1.coordinate
-        x2, y2 = cell2.coordinate
-        return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+    @staticmethod
+    @lru_cache(maxsize=4096)
+    def calculate_distance(x1: int, y1: int, x2: int, y2: int) -> float:
+        """Cached distance calculation between two points."""
+        dx = x2 - x1
+        dy = y2 - y1
+        return math.sqrt(dx * dx + dy * dy)
+
+    def get_distance(self, cell1, cell2) -> float:
+        """Get distance between cells using cache."""
+        key = (cell1, cell2)
+        if key not in self._distance_cache:
+            x1, y1 = cell1.coordinate
+            x2, y2 = cell2.coordinate
+            self._distance_cache[key] = self.calculate_distance(x1, y1, x2, y2)
+        return self._distance_cache[key]
 
     def decide_walk_to_work(self, human) -> bool:
-        """Decide if person walks to work"""
-        if not human.is_working or not human.workplace:
+        """Optimized work walk decision."""
+        if not (human.is_working and human.workplace):
             return False
 
-        distance = self.calculate_distance(human.cell, human.workplace.cell)
-        max_distance = self.get_max_walking_distance(human, ActivityType.WORK)
-
-        if distance <= max_distance:
-            return self.model.random.random() <= human.walking_attitude
-        return False
-
-    def find_nearest_location(
-        self, human, activity_type: ActivityType, search_workplace: bool = True
-    ) -> Optional[FixedAgent]:
-        """Find nearest location of given type within walking distance"""
-        if activity_type == ActivityType.GROCERY:
-            locations = self.model.agents_by_type[GroceryStore]
-        elif activity_type == ActivityType.NON_FOOD_SHOPPING:
-            locations = self.model.agents_by_type[NonFoodShop]
-        elif activity_type == ActivityType.SOCIAL:
-            locations = self.model.agents_by_type[SocialPlace]
-        else:
-            return None
-
-        max_distance = self.get_max_walking_distance(human, activity_type)
-
-        # Check locations near home
-        nearest = min(
-            locations,
-            key=lambda loc: self.calculate_distance(human.cell, loc.cell),
-            default=None,
+        distance = self.get_distance(human.household, human.workplace.cell)
+        max_distance = self.get_max_walking_distance(
+            human.walking_ability, ActivityType.WORK
         )
-        if (
-            nearest
-            and self.calculate_distance(human.cell, nearest.cell) <= max_distance
-        ):
-            return nearest
 
-        # Check locations near workplace if applicable
-        if search_workplace and human.workplace:
-            nearest = min(
-                locations,
-                key=lambda loc: self.calculate_distance(human.workplace.cell, loc.cell),
-                default=None,
-            )
-            if (
-                nearest
-                and self.calculate_distance(human.workplace.cell, nearest.cell)
-                <= max_distance
-            ):
-                return nearest
+        return (
+            distance <= max_distance
+            and self.model.random.random() <= human.walking_attitude
+        )
 
-        return None
+    def _build_location_cache(self, activity_type: ActivityType) -> None:
+        """Build spatial index for locations of given type."""
+        if activity_type not in self._location_cache:
+            locations = defaultdict(list)
+            if activity_type == ActivityType.GROCERY:
+                agents = self.model.agents_by_type[GroceryStore]
+            elif activity_type == ActivityType.NON_FOOD_SHOPPING:
+                agents = self.model.agents_by_type[NonFoodShop]
+            elif activity_type == ActivityType.SOCIAL:
+                agents = self.model.agents_by_type[SocialPlace]
+            else:
+                return
 
-    def decide_leisure_walk(self, human) -> Optional[tuple[float, float]]:
-        """Decide if person takes a leisure walk"""
+            # Group locations by grid sectors for faster lookup
+            sector_size = int(self._max_possible_distance)
+            for agent in agents:
+                x, y = agent.cell.coordinate
+                sector_x = x // sector_size
+                sector_y = y // sector_size
+                locations[(sector_x, sector_y)].append(agent)
+
+            self._location_cache[activity_type] = locations
+
+    def find_walkable_locations(self, human, activity_type: ActivityType) -> List:
+        """Find walkable locations using spatial indexing."""
+        self._build_location_cache(activity_type)
+        max_distance = self.get_max_walking_distance(
+            human.walking_ability, activity_type
+        )
+
+        walkable = []
+        locations = self._location_cache.get(activity_type, {})
+
+        # Helper function to check locations near a reference point
+        def check_near_point(ref_point):
+            x, y = ref_point.coordinate
+            sector_size = int(self._max_possible_distance)
+            sector_x = x // sector_size
+            sector_y = y // sector_size
+
+            # Check nearby sectors only
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    sector = (sector_x + dx, sector_y + dy)
+                    for location in locations.get(sector, []):
+                        if self.get_distance(ref_point, location.cell) <= max_distance:
+                            walkable.append(location)
+            return bool(walkable)
+
+        # Check household first
+        if check_near_point(human.household):
+            return walkable
+
+        # If no locations found and person is working, check workplace
+        if human.is_working and human.workplace:
+            check_near_point(human.workplace.cell)
+
+        return walkable
+
+    def get_leisure_cells(self, human) -> List:
+        """Get valid leisure walk destinations."""
+        max_distance = self.get_max_walking_distance(
+            human.walking_ability, ActivityType.LEISURE
+        )
+        min_distance = max_distance * 0.75
+
+        valid_cells = []
+        household_x, household_y = human.household.coordinate
+
+        # Set a minimum sector size to avoid division by zero
+        sector_size = max(int(max_distance), 1)  # Ensure minimum size of 1
+        sector_x = household_x // sector_size
+        sector_y = household_y // sector_size
+
+        # Check nearby sectors only
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                x_min = (sector_x + dx) * sector_size
+                y_min = (sector_y + dy) * sector_size
+                x_max = x_min + sector_size
+                y_max = y_min + sector_size
+
+                for cell in self.model.grid.all_cells.cells:
+                    x, y = cell.coordinate
+                    if x_min <= x <= x_max and y_min <= y <= y_max:
+                        dist = self.calculate_distance(household_x, household_y, x, y)
+                        if min_distance <= dist <= max_distance:
+                            valid_cells.append(cell)
+
+        return valid_cells
+
+    def decide_leisure_walk(self, human) -> Optional[Cell]:
+        """Optimized leisure walk decision."""
         if (
             self.model.random.random()
             > self.DAILY_PROBABILITIES[ActivityType.LEISURE] * human.walking_attitude
         ):
             return None
 
-        max_distance = self.get_max_walking_distance(human, ActivityType.LEISURE)
-        min_distance = max_distance * 0.75
+        valid_cells = self.get_leisure_cells(human)
+        return self.model.random.choice(valid_cells) if valid_cells else None
 
-        # Generate random point within 75-100% of max walking distance
-        random_cells = []
-        all_cells = self.model.grid.all_cells.cells
-        if len(all_cells) == 0:
-            return None
-        for cell in all_cells:
-            if (
-                self.calculate_distance(cell, human.cell) <= max_distance
-                and self.calculate_distance(cell, human.cell) >= min_distance
-            ):
-                random_cells.append(cell)
-
-        if len(random_cells) == 0:
-            return None
-        return self.model.random.choice(random_cells)
-
-    def simulate_daily_walks(self, human):
-        """Simulate a full day of possible walks for the agent."""
+    def simulate_daily_walks(self, human) -> List[Tuple]:
+        """Optimized daily walk simulation."""
         walks = []
+        random = self.model.random.random
 
         # Work walk
         if self.decide_walk_to_work(human):
-            distance = self.calculate_distance(human.cell, human.workplace.cell)
+            distance = self.get_distance(human.household, human.workplace.cell)
             self.add_distance(distance)
             walks.append((ActivityType.WORK, human.workplace))
 
         # Basic needs walks
-        for activity in [ActivityType.GROCERY, ActivityType.NON_FOOD_SHOPPING]:
-            if self.model.random.random() <= self.DAILY_PROBABILITIES[activity]:
-                destination = self.find_nearest_location(human, activity)
-                if destination and self.model.random.random() <= human.walking_attitude:
-                    distance = self.calculate_distance(human.cell, destination.cell)
+        for activity in (ActivityType.GROCERY, ActivityType.NON_FOOD_SHOPPING):
+            if random() <= self.DAILY_PROBABILITIES[activity]:
+                walkable = self.find_walkable_locations(human, activity)
+                if walkable and random() <= human.walking_attitude:
+                    destination = self.model.random.choice(walkable)
+                    distance = self.get_distance(human.household, destination.cell)
                     self.add_distance(distance)
                     walks.append((activity, destination))
 
         # Social visit
-        if self.model.random.random() <= self.DAILY_PROBABILITIES[ActivityType.SOCIAL]:
+        if random() <= self.DAILY_PROBABILITIES[ActivityType.SOCIAL]:
             social_place = self.model.random.choice(
                 self.model.agents_by_type[SocialPlace]
             )
-            distance = self.calculate_distance(human.cell, social_place.cell)
-            if (
-                distance <= self.get_max_walking_distance(human, ActivityType.SOCIAL)
-                and self.model.random.random() <= human.walking_attitude
-            ):
-                self.add_distance(distance)
+            max_distance = self.get_max_walking_distance(
+                human.walking_ability, ActivityType.SOCIAL
+            )
+
+            household_distance = self.get_distance(human.household, social_place.cell)
+            workplace_distance = float("inf")
+            if human.is_working and human.workplace:
+                workplace_distance = self.get_distance(
+                    human.workplace.cell, social_place.cell
+                )
+
+            min_distance = min(household_distance, workplace_distance)
+            if min_distance <= max_distance and random() <= human.walking_attitude:
+                self.add_distance(min_distance)
                 walks.append((ActivityType.SOCIAL, social_place))
 
         # Leisure walk
         leisure_destination = self.decide_leisure_walk(human)
         if leisure_destination:
-            distance = self.calculate_distance(human.cell, leisure_destination)
+            distance = self.get_distance(human.household, leisure_destination)
             self.add_distance(distance)
             walks.append((ActivityType.LEISURE, leisure_destination))
 
@@ -229,11 +293,19 @@ class WalkingBehaviorModel:
 class Human(CellAgent):
     """Represents a person with specific attributes and daily walking behavior."""
 
-    def __init__(self, model: Model, unique_id: int = 0, cell=None, SES: int = 0):
+    def __init__(
+        self,
+        model: Model,
+        unique_id: int = 0,
+        cell=None,
+        SES: int = 0,
+        household: Cell = None,
+    ):
         super().__init__(model)
         self.cell = cell
         self.unique_id = unique_id
         self.SES = SES
+        self.household = household
 
         # Human Attributes
         self.gender = self.model.generate_gender()
@@ -262,10 +334,10 @@ class Human(CellAgent):
     def _determine_working_status(self) -> bool:
         if self.age >= RETIREMENT_AGE:
             return False
-        return self.model.random.random() < WORKING_PROBABILITY
+        return self.random.random() < WORKING_PROBABILITY
 
     def get_friends(self) -> AgentSet:
-        friend_count = self.model.random.randint(MIN_FRIENDS, MAX_FRIENDS)
+        friend_count = self.random.randint(MIN_FRIENDS, MAX_FRIENDS)
         friend_set = AgentSet.select(
             self.model.agents_by_type[Human],
             lambda x: (x.SES > self.SES - 1 and x.SES < self.SES + 1)
@@ -286,7 +358,7 @@ class Human(CellAgent):
                 at_most=1,
             )
             if len(family_set) > 0:
-                family_set[0].family = AgentSet([self], random=self.model.random)
+                family_set[0].family = AgentSet([self], random=self.random)
             return family_set
         else:
             return None
@@ -294,12 +366,12 @@ class Human(CellAgent):
     def get_workplace(self) -> Optional[Workplace | FixedAgent]:
         if not self.is_working:
             return None
-        return self.model.random.choice(self.model.agents_by_type[GroceryStore])
+        return self.random.choice(self.model.agents_by_type[GroceryStore])
 
     def get_walking_ability(
         self,
     ) -> float:  # Method from https://pmc.ncbi.nlm.nih.gov/articles/PMC3306662/
-        random_component = self.model.random.random() ** 4
+        random_component = self.random.random() ** 4
         if self.age <= 37:
             # For ages up to 37, use the base calculation
             return random_component * (min(abs(137 - self.age), 100) / 100)
@@ -312,10 +384,11 @@ class Human(CellAgent):
     def get_walking_attitude(
         self,
     ) -> float:  # Method from https://pmc.ncbi.nlm.nih.gov/articles/PMC3306662/
-        return self.model.random.random() ** 3
+        return self.random.random() ** 3
 
     def get_feedback(self, activity: ActivityType):
-        a: float = 0.001  # attitude factor
+        a: float = 0.001 * 20  # attitude factor
+        # 20 because the model is scaled down 20 times.
 
         # 1. Walking attitudes of family members and friends
         if self.family:
@@ -337,13 +410,10 @@ class Human(CellAgent):
         # 2. Person's walking experience
         x, y = self.cell.coordinate
         SE_index = (
-            (
-                self.model.safety_cell_layer.data[x][y]
-                + self.model.random.uniform(-0.5, 0.5)
-            )
+            (self.model.safety_cell_layer.data[x][y] + self.random.uniform(-0.5, 0.5))
             * (
                 self.model.aesthetic_cell_layer.data[x][y]
-                + self.model.random.uniform(-0.5, 0.5)
+                + self.random.uniform(-0.5, 0.5)
             )
         ) / np.mean(
             self.model.safety_cell_layer.data * self.model.aesthetic_cell_layer.data
@@ -367,7 +437,9 @@ class Human(CellAgent):
         walking_feedback = 0
         if self.walking_behavior.total_distance_walked > 0:
             max_personal_distance = (
-                self.walking_behavior.get_max_walking_distance(self, activity)
+                self.walking_behavior.get_max_walking_distance(
+                    self.walking_ability, activity
+                )
                 * self.walking_ability
             )
             walking_feedback = min(
@@ -395,7 +467,12 @@ class Human(CellAgent):
             [
                 1
                 for activity, _ in daily_walks
-                if activity in [ActivityType.GROCERY, ActivityType.NON_FOOD_SHOPPING]
+                if activity
+                in [
+                    ActivityType.GROCERY,
+                    ActivityType.NON_FOOD_SHOPPING,
+                    ActivityType.SOCIAL,
+                ]
             ]
         )
         self.leisure_trips = sum(

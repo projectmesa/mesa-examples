@@ -1,6 +1,6 @@
 import math
 
-from city_walking_behaviour.agents import (
+from agents import (
     DOG_OWNER_PROBABILITY,
     FEMALE_PROBABILITY,
     MAX_AGE,
@@ -502,43 +502,51 @@ class WalkingModel(Model):
                 )
 
     def _setup_central_safety(self):
-        """Set up safety values with realistic urban-like distribution."""
+        """Set up safety values with a subtle urban-like distribution."""
         center_x, center_y = self.height // 2, self.width // 2
         max_distance = math.sqrt((self.height // 2) ** 2 + (self.width // 2) ** 2)
 
-        # Create multiple centers of low safety to simulate urban clusters
+        # Define centers with proper formatting
         centers = [
             (center_x, center_y),  # Main center
-            (
-                center_x + self.height // 4,
-                center_y + self.width // 4,
-            ),  # Secondary centers
-            (center_x - self.height // 4, center_y - self.width // 4),
-            (center_x + self.height // 4, center_y - self.width // 4),
-            (center_x - self.height // 4, center_y + self.width // 4),
+            # Secondary Centers: Removed for model simplicity.
+            #     (center_x + self.height // 4, center_y + self.width // 4),  # NE
+            #     (center_x - self.height // 4, center_y - self.width // 4),  # SW
+            #     (center_x + self.height // 4, center_y - self.width // 4),  # SE
+            #     (center_x - self.height // 4, center_y + self.width // 4),  # NW
         ]
 
         def calculate_safety(i, j):
-            distances = [math.sqrt((i - cx) ** 2 + (j - cy) ** 2) for cx, cy in centers]
+            # Calculate Manhattan distance
+            distances = [max(abs(i - cx), abs(j - cy)) for cx, cy in centers]
             min_distance = min(distances) / max_distance
 
-            # Base safety increases with distance from centers
-            base_safety = min_distance * 0.8  # Maximum safety of 0.8
+            # Subtle base safety calculation for center
+            base_safety = 0.4 + (min_distance * 0.4)
 
-            # Add some local variation
-            local_variation = self.random.random() * 0.2
+            # Square influence for center
+            square_factor = abs((i - center_x) / self.height) + abs(
+                (j - center_y) / self.width
+            )
+            central_damping = 1 - max(0, 0.7 - min_distance)  # Reduce effect in center
+            square_influence = (
+                square_factor * 0.15 * central_damping
+            )  # Reduced overall influence
 
-            # Add some urban-like patterns
-            if min_distance < 0.3:  # Near centers
-                # More variation in central areas
-                safety = base_safety + local_variation
-            else:  # Suburban and outer areas
-                # More consistent safety levels
-                safety = base_safety + (local_variation * 0.5)
+            # Smaller local variation
+            local_variation = self.random.random() * 0.03
 
-            # safety stays within [0, 1]
-            return max(0.1, min(1.0, safety))
+            # Subtle transition in center
+            if min_distance < 0.3:
+                safety = (
+                    base_safety + (square_influence * 0.5) + (local_variation * 0.5)
+                )
+            else:
+                safety = base_safety + square_influence + (local_variation * 0.4)
 
+            return max(0.3, min(0.85, safety))  # Narrower range for more subtlety
+
+        # Fill the safety layer
         for i in range(self.height):
             for j in range(self.width):
                 self.safety_cell_layer.data[i][j] = calculate_safety(i, j)
@@ -560,52 +568,85 @@ class WalkingModel(Model):
         self._setup_central_safety()
 
     def add_initial_humans(self):
-        """Add initial humans with distance-based cell organization."""
+        """Add initial humans with distance-based cell organization, allowing for occupied cells when necessary."""
         center_x, center_y = self.height // 2, self.width // 2
         max_distance = math.sqrt((self.height // 2) ** 2 + (self.width // 2) ** 2)
 
         # Initialize dictionary for each SES level
         cells_with_proximity = {1: [], 2: [], 3: [], 4: [], 5: []}
+        all_cells_by_ses = {
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+        }  # Including occupied cells
 
-        # Categorize all empty cells based on their distance from center
+        # Categorize all cells based on their distance from center
         for cell in self.grid.all_cells:
-            if not cell.empty:
-                continue
-
             x, y = cell.coordinate
             distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
             normalized_distance = distance / max_distance
 
             # Assign to SES levels based on normalized distance
             if normalized_distance < 0.2:
-                cells_with_proximity[1].append(cell)
+                ses_level = 1
             elif normalized_distance < 0.4:
-                cells_with_proximity[2].append(cell)
+                ses_level = 2
             elif normalized_distance < 0.6:
-                cells_with_proximity[3].append(cell)
+                ses_level = 3
             elif normalized_distance < 0.8:
-                cells_with_proximity[4].append(cell)
+                ses_level = 4
             else:
-                cells_with_proximity[5].append(cell)
+                ses_level = 5
+
+            # Add to both lists - one for empty cells, one for all cells
+            all_cells_by_ses[ses_level].append(cell)
+            if cell.empty:
+                cells_with_proximity[ses_level].append(cell)
 
         # Place couples
         for _ in range(self.no_of_couples):
             ses = self.generate_ses()
-            if cells_with_proximity[ses] and len(cells_with_proximity[ses]) >= 2:
-                cell = self.random.choice(cells_with_proximity[ses])
-                cells_with_proximity[ses].remove(cell)
+
+            # Try to place in empty cells first
+            if len(cells_with_proximity[ses]) >= 2:
+                cells = cells_with_proximity[ses]
+            # If not enough empty cells, use any cells in the correct SES area
+            elif len(all_cells_by_ses[ses]) >= 2:
+                cells = all_cells_by_ses[ses]
+            # If still no cells available, use any cells on the grid
+            else:
+                cells = self.grid.all_cells
+
+            if cells:
+                cell = self.random.choice(cells)
+                if cell in cells_with_proximity[ses]:
+                    cells_with_proximity[ses].remove(cell)
                 # Create the couple
                 for _ in range(2):
-                    Human(self, self.unique_id, cell, SES=ses)
+                    Human(self, self.unique_id, cell, SES=ses, household=cell)
                     self.unique_id += 1
 
         # Place singles
         for _ in range(self.no_of_singles):
             ses = self.generate_ses()
+
+            # Try to place in empty cells first
             if cells_with_proximity[ses]:
-                cell = self.random.choice(cells_with_proximity[ses])
-                cells_with_proximity[ses].remove(cell)
-                Human(self, self.unique_id, cell, SES=ses)
+                cells = cells_with_proximity[ses]
+            # If no empty cells, use any cells in the correct SES area
+            elif all_cells_by_ses[ses]:
+                cells = all_cells_by_ses[ses]
+            # If still no cells available, use any cells on the grid
+            else:
+                cells = self.grid.all_cells
+
+            if cells:
+                cell = self.random.choice(cells)
+                if cell in cells_with_proximity[ses]:
+                    cells_with_proximity[ses].remove(cell)
+                Human(self, self.unique_id, cell, SES=ses, household=cell)
                 self.unique_id += 1
 
     def step(self):
