@@ -1,0 +1,4 @@
+matplotlib
+mesa
+numpy
+solara
