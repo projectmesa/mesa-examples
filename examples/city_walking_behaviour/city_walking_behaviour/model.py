@@ -1,6 +1,6 @@
 import math
 
-from agents import (
+from city_walking_behaviour.agents import (
     DOG_OWNER_PROBABILITY,
     FEMALE_PROBABILITY,
     MAX_AGE,
