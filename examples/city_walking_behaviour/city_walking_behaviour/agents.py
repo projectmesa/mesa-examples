@@ -67,19 +67,20 @@ class Other(Workplace, FixedAgent):
 class WalkingBehaviorModel:
     """Optimized walking behavior model with spatial caching and early termination."""
 
+    MILES_TO_METERS = 1609.34
     DAILY_PROBABILITIES = {
-        ActivityType.GROCERY: 0.25,
-        ActivityType.NON_FOOD_SHOPPING: 0.25,
-        ActivityType.SOCIAL: 0.15,
-        ActivityType.LEISURE: 0.20,
+        ActivityType.GROCERY: 0.4,
+        ActivityType.NON_FOOD_SHOPPING: 0.25,  # once every 4 days
+        ActivityType.SOCIAL: 0.20,
+        ActivityType.LEISURE: 0.33,
     }
 
     BASE_MAX_DISTANCES = {
-        ActivityType.WORK: 2000,
-        ActivityType.GROCERY: 1000,
-        ActivityType.NON_FOOD_SHOPPING: 1500,
-        ActivityType.SOCIAL: 2000,
-        ActivityType.LEISURE: 3000,
+        ActivityType.WORK: 1.125 * MILES_TO_METERS,  # meters
+        ActivityType.GROCERY: 2.000 * MILES_TO_METERS,
+        ActivityType.NON_FOOD_SHOPPING: 1.500 * MILES_TO_METERS,
+        ActivityType.SOCIAL: 2.500 * MILES_TO_METERS,
+        ActivityType.LEISURE: 5.500 * MILES_TO_METERS,
     }
 
     def __init__(self, model: Model):
@@ -195,48 +196,67 @@ class WalkingBehaviorModel:
 
         return walkable
 
-    def get_leisure_cells(self, human) -> List:
-        """Get valid leisure walk destinations."""
+    def get_leisure_cells(self, human) -> List[Cell]:
+        """
+        Get valid leisure walk destinations.
+        """
+        if not human or not human.household:
+            return []
+
+        # Calculate distances based on walking ability
         max_distance = self.get_max_walking_distance(
             human.walking_ability, ActivityType.LEISURE
         )
+        # Set minimum distance to 75% of max distance
         min_distance = max_distance * 0.75
 
-        valid_cells = []
         household_x, household_y = human.household.coordinate
+        valid_cells = []
 
-        # Set a minimum sector size to avoid division by zero
-        sector_size = max(int(max_distance), 1)  # Ensure minimum size of 1
-        sector_x = household_x // sector_size
-        sector_y = household_y // sector_size
+        for cell in self.model.grid.all_cells.cells:
+            x, y = cell.coordinate
 
-        # Check nearby sectors only
-        for dx in (-1, 0, 1):
-            for dy in (-1, 0, 1):
-                x_min = (sector_x + dx) * sector_size
-                y_min = (sector_y + dy) * sector_size
-                x_max = x_min + sector_size
-                y_max = y_min + sector_size
+            # Quick boundary check
+            if (
+                abs(x - household_x) > max_distance
+                or abs(y - household_y) > max_distance
+            ):
+                continue
 
-                for cell in self.model.grid.all_cells.cells:
-                    x, y = cell.coordinate
-                    if x_min <= x <= x_max and y_min <= y <= y_max:
-                        dist = self.calculate_distance(household_x, household_y, x, y)
-                        if min_distance <= dist <= max_distance:
-                            valid_cells.append(cell)
+            # Calculate exact distance
+            dist = self.calculate_distance(household_x, household_y, x, y)
+            if min_distance <= dist <= max_distance:
+                valid_cells.append(cell)
+
+                if len(valid_cells) >= 200:
+                    return valid_cells
 
         return valid_cells
 
     def decide_leisure_walk(self, human) -> Optional[Cell]:
-        """Optimized leisure walk decision."""
-        if (
-            self.model.random.random()
-            > self.DAILY_PROBABILITIES[ActivityType.LEISURE] * human.walking_attitude
-        ):
+        """
+        Leisure walk decision making.
+        """
+        base_probability = self.DAILY_PROBABILITIES[ActivityType.LEISURE]
+
+        # Consider additional factors that might encourage walking
+        motivation_factors = 1.0
+        if human.has_dog:  # Dog owners are more likely to take leisure walks
+            motivation_factors += 0.3
+        if not human.is_working:  # Non-working individuals have more time
+            motivation_factors += 0.2
+
+        # Final probability calculation
+        probability = base_probability * human.walking_attitude * motivation_factors
+
+        if self.model.random.random() > probability:
             return None
 
         valid_cells = self.get_leisure_cells(human)
-        return self.model.random.choice(valid_cells) if valid_cells else None
+        if not valid_cells:
+            return None
+
+        return self.model.random.choice(valid_cells)
 
     def simulate_daily_walks(self, human) -> List[Tuple]:
         """Optimized daily walk simulation."""
@@ -289,6 +309,29 @@ class WalkingBehaviorModel:
 
         return walks
 
+    def __repr__(self) -> str:
+        """
+        Return a detailed string representation of the WalkingBehaviorModel.
+
+        Returns:
+            str: String showing model state including caches and distances
+        """
+        cache_stats = {
+            "location_cache_size": sum(
+                len(locations) for locations in self._location_cache.values()
+            ),
+            "distance_cache_size": len(self._distance_cache),
+            "leisure_cache_size": len(getattr(self, "_leisure_cells_cache", {})),
+        }
+
+        return (
+            f"WalkingBehaviorModel("
+            f"total_distance_walked={self.total_distance_walked:.2f}, "
+            f"max_possible_distance={self._max_possible_distance}, "
+            f"cache_sizes={cache_stats}, "
+            f"daily_probabilities={len(self.DAILY_PROBABILITIES)} activities)"
+        )
+
 
 class Human(CellAgent):
     """Represents a person with specific attributes and daily walking behavior."""
@@ -296,31 +339,33 @@ class Human(CellAgent):
     def __init__(
         self,
         model: Model,
+        gender: Optional[int] = None,
+        family_size: Optional[int] = None,
+        age: Optional[int] = None,
+        SES: Optional[int] = None,
         unique_id: int = 0,
         cell=None,
-        SES: int = 0,
         household: Cell = None,
     ):
         super().__init__(model)
         self.cell = cell
         self.unique_id = unique_id
-        self.SES = SES
         self.household = household
 
         # Human Attributes
-        self.gender = self.model.generate_gender()
-        self.age = self.model.generate_age()
-        self.family_size = self.model.generate_family_size()
+        self.gender = gender
+        self.age = age
+        self.SES = SES
+        self.family_size = family_size
         self.has_dog = self.model.generate_dog_ownership()
         self.walking_ability = self.get_walking_ability()
         self.walking_attitude = self.get_walking_attitude()
         self.is_working = self._determine_working_status()
         self.workplace = self.get_workplace()
         self.friends = self.get_friends()
-        self.family = self.get_family()
+        self.family: Human = None
 
         self.previous_walking_density: float = 0
-        self.current_walking_density: float
 
         # Datacollector attributes
         self.daily_walking_trips: int = 0
@@ -340,33 +385,28 @@ class Human(CellAgent):
         friend_count = self.random.randint(MIN_FRIENDS, MAX_FRIENDS)
         friend_set = AgentSet.select(
             self.model.agents_by_type[Human],
-            lambda x: (x.SES > self.SES - 1 and x.SES < self.SES + 1)
+            lambda x: (
+                x.SES > self.SES - 2 and x.SES < self.SES + 2
+            )  # get friends with similar SES i.e. difference no more than 3
             and x.unique_id != self.unique_id,
             at_most=friend_count,
         )
         if len(friend_set) > 0:
             for friend in friend_set:
-                friend.friends.add(self)
+                friend.friends.add(self)  # add self to the friends list as well
         return friend_set
-
-    def get_family(self) -> AgentSet:
-        if self.family_size > 1:
-            family_set = AgentSet.select(
-                self.model.agents_by_type[Human],
-                lambda x: x.gender != self.gender
-                and abs(x.age - self.age) <= 3,  # age difference no more than 3 years
-                at_most=1,
-            )
-            if len(family_set) > 0:
-                family_set[0].family = AgentSet([self], random=self.random)
-            return family_set
-        else:
-            return None
 
     def get_workplace(self) -> Optional[Workplace | FixedAgent]:
         if not self.is_working:
             return None
-        return self.random.choice(self.model.agents_by_type[GroceryStore])
+
+        # Get all workplaces like grocery stores, non-food shops, social places
+        all_workplaces = [
+            workplace
+            for workplace in self.model.agents
+            if not isinstance(workplace, Human)
+        ]
+        return self.random.choice(all_workplaces)
 
     def get_walking_ability(
         self,
@@ -386,72 +426,69 @@ class Human(CellAgent):
     ) -> float:  # Method from https://pmc.ncbi.nlm.nih.gov/articles/PMC3306662/
         return self.random.random() ** 3
 
-    def get_feedback(self, activity: ActivityType):
-        a: float = 0.001 * 20  # attitude factor
-        # 20 because the model is scaled down 20 times.
+    def get_feedback(self):
+        a: float = 0.001  # attitude factor
 
-        # 1. Walking attitudes of family members and friends
+        # 1. Social network feedback (family and friends)
+        # Store original attitude for use in calculations
+        At = self.walking_attitude
+
+        # Family feedback (Equations 1 & 2 in literature)
         if self.family:
-            self.walking_attitude = ((1 - a) * self.walking_attitude) + (
-                a * self.family[0].walking_attitude
-            )
+            self.walking_attitude = (1 - a) * At + a * self.family.walking_attitude
 
+        # Friends feedback (Equation 3 in literature)
         if self.friends:
-            cumulative_friends_attitude: float = 0  # Initialize to 0
-            for friend in self.friends:
-                cumulative_friends_attitude += friend.walking_attitude
-            # Average the friends' attitudes if there are any
+            friends_attitude = sum(friend.walking_attitude for friend in self.friends)
             if len(self.friends) > 0:
-                cumulative_friends_attitude /= len(self.friends)
-            self.walking_attitude = ((1 - a) * self.walking_attitude) + (
-                a * cumulative_friends_attitude
-            )
+                friends_attitude /= len(self.friends)
+                self.walking_attitude = (1 - a) * At + a * friends_attitude
 
-        # 2. Person's walking experience
+        # 2. Walking experience feedback (Equation 4 in literature)
         x, y = self.cell.coordinate
         SE_index = (
-            (self.model.safety_cell_layer.data[x][y] + self.random.uniform(-0.5, 0.5))
+            (
+                self.model.safety_cell_layer.data[x][y]
+                + self.model.random.uniform(-0.5, 0.5)
+            )
             * (
                 self.model.aesthetic_cell_layer.data[x][y]
-                + self.random.uniform(-0.5, 0.5)
+                + self.model.random.uniform(-0.5, 0.5)
             )
         ) / np.mean(
             self.model.safety_cell_layer.data * self.model.aesthetic_cell_layer.data
         )
 
-        # 3. Density of other walkers
-        neighbour_cells = self.cell.get_neighborhood(radius=2)
-        num_neighbours = [i for i in neighbour_cells if i.agents]
-        self.current_walking_density = len(num_neighbours) / len(neighbour_cells)
-        density_feedback = 0
-        if self.previous_walking_density == 0:
-            # If previous density was zero, treat any current density as a positive change
-            density_feedback = 1 if self.current_walking_density > 0 else 0
+        # 3. Density feedback
+        # Compare current walking density to previous day
+        neighbour_cells = self.cell.get_neighborhood(radius=1)
+        current_density = sum(len(cell.agents) for cell in neighbour_cells) / len(
+            neighbour_cells
+        )
+
+        Id = 0
+        if self.previous_walking_density > 0:
+            Id = current_density / self.previous_walking_density
         else:
-            density_ratio = self.current_walking_density / self.previous_walking_density
-            density_feedback = density_ratio - 1  # Centers the feedback around 0
+            Id = 1 if current_density > 0 else 0
 
-        self.previous_walking_density = self.current_walking_density
+        self.previous_walking_density = current_density
 
-        # 4. Total amount walked by the person during that day
-        walking_feedback = 0
+        # 4. Walking distance feedback (Equation 5 in literature)
+        It = 0
         if self.walking_behavior.total_distance_walked > 0:
-            max_personal_distance = (
-                self.walking_behavior.get_max_walking_distance(
-                    self.walking_ability, activity
-                )
-                * self.walking_ability
+            Ab_Da = sum(
+                [
+                    dis * self.walking_ability
+                    for dis in self.walking_behavior.BASE_MAX_DISTANCES.values()
+                ]
             )
-            walking_feedback = min(
-                1, max_personal_distance / self.walking_behavior.total_distance_walked
-            )
+            d = self.walking_behavior.total_distance_walked
+            It = min(1, Ab_Da / d)
 
-        # Update walking attitude
+        # Final attitude update (Equation 6 in literature)
         self.walking_attitude = (
-            self.walking_attitude
-            * (1 - a + (a * SE_index))
-            * (1 - a + (a * density_feedback))
-            * (1 - a + (a * walking_feedback))
+            At * (1 - a + a * SE_index) * (1 - a + a * Id) * (1 - a + a * It)
         )
 
     def step(self):
@@ -480,8 +517,8 @@ class Human(CellAgent):
         )
 
         if len(daily_walks) > 0:
+            self.get_feedback()
             for activity, destination in daily_walks:
-                self.get_feedback(activity)
                 # Move agent to new cell if applicable
                 if isinstance(destination, FixedAgent):
                     self.cell = destination.cell

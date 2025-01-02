@@ -510,10 +510,10 @@ class WalkingModel(Model):
         centers = [
             (center_x, center_y),  # Main center
             # Secondary Centers: Removed for model simplicity.
-            #     (center_x + self.height // 4, center_y + self.width // 4),  # NE
-            #     (center_x - self.height // 4, center_y - self.width // 4),  # SW
-            #     (center_x + self.height // 4, center_y - self.width // 4),  # SE
-            #     (center_x - self.height // 4, center_y + self.width // 4),  # NW
+            # (center_x + self.height // 4, center_y + self.width // 4),  # NE
+            # (center_x - self.height // 4, center_y - self.width // 4),  # SW
+            # (center_x + self.height // 4, center_y - self.width // 4),  # SE
+            # (center_x - self.height // 4, center_y + self.width // 4),  # NW
         ]
 
         def calculate_safety(i, j):
@@ -521,10 +521,12 @@ class WalkingModel(Model):
             distances = [max(abs(i - cx), abs(j - cy)) for cx, cy in centers]
             min_distance = min(distances) / max_distance
 
-            # Subtle base safety calculation for center
-            base_safety = 0.4 + (min_distance * 0.4)
+            # More subtle base safety calculation for center
+            base_safety = 0.4 + (
+                min_distance * 0.4
+            )  # Reduced range and increased minimum
 
-            # Square influence for center
+            # Reduced square influence for center
             square_factor = abs((i - center_x) / self.height) + abs(
                 (j - center_y) / self.width
             )
@@ -534,9 +536,9 @@ class WalkingModel(Model):
             )  # Reduced overall influence
 
             # Smaller local variation
-            local_variation = self.random.random() * 0.03
+            local_variation = self.random.random() * 0.03  # Reduced random variation
 
-            # Subtle transition in center
+            # More subtle transition in center
             if min_distance < 0.3:
                 safety = (
                     base_safety + (square_influence * 0.5) + (local_variation * 0.5)
@@ -568,27 +570,22 @@ class WalkingModel(Model):
         self._setup_central_safety()
 
     def add_initial_humans(self):
-        """Add initial humans with distance-based cell organization, allowing for occupied cells when necessary."""
+        """Add initial humans with distance-based cell organization. Each cell can contain up to 'n' households.
+        Couples share households."""
         center_x, center_y = self.height // 2, self.width // 2
         max_distance = math.sqrt((self.height // 2) ** 2 + (self.width // 2) ** 2)
+        MAX_HOUSEHOLDS_PER_CELL = 10
 
-        # Initialize dictionary for each SES level
-        cells_with_proximity = {1: [], 2: [], 3: [], 4: [], 5: []}
-        all_cells_by_ses = {
-            1: [],
-            2: [],
-            3: [],
-            4: [],
-            5: [],
-        }  # Including occupied cells
+        # Track available cells and their SES levels along with current occupancy
+        cells_by_ses = {}
+        cell_occupancy = {}  # Track number of households in each cell
 
-        # Categorize all cells based on their distance from center
         for cell in self.grid.all_cells:
             x, y = cell.coordinate
             distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
             normalized_distance = distance / max_distance
 
-            # Assign to SES levels based on normalized distance
+            # Assign SES based on normalized distance from center
             if normalized_distance < 0.2:
                 ses_level = 1
             elif normalized_distance < 0.4:
@@ -600,53 +597,107 @@ class WalkingModel(Model):
             else:
                 ses_level = 5
 
-            # Add to both lists - one for empty cells, one for all cells
-            all_cells_by_ses[ses_level].append(cell)
-            if cell.empty:
-                cells_with_proximity[ses_level].append(cell)
+            if ses_level not in cells_by_ses:
+                cells_by_ses[ses_level] = []
+            cells_by_ses[ses_level].append(cell)
+            cell_occupancy[cell] = 0  # Initialize occupancy counter
 
-        # Place couples
+        def find_available_cell(ses):
+            """Helper function to find a cell that hasn't reached maximum capacity"""
+            # Try in preferred SES zone first
+            available_cells = [
+                cell
+                for cell in cells_by_ses.get(ses, [])
+                if cell_occupancy[cell] < MAX_HOUSEHOLDS_PER_CELL
+            ]
+
+            if available_cells:
+                return self.random.choice(available_cells)
+
+            # Look in adjacent SES zones (alternate between higher and lower)
+            for offset in range(1, 5):
+                # Try higher SES
+                if ses + offset <= 5:
+                    available_cells = [
+                        cell
+                        for cell in cells_by_ses.get(ses + offset, [])
+                        if cell_occupancy[cell] < MAX_HOUSEHOLDS_PER_CELL
+                    ]
+                    if available_cells:
+                        return self.random.choice(available_cells)
+
+                # Try lower SES
+                if ses - offset >= 1:
+                    available_cells = [
+                        cell
+                        for cell in cells_by_ses.get(ses - offset, [])
+                        if cell_occupancy[cell] < MAX_HOUSEHOLDS_PER_CELL
+                    ]
+                    if available_cells:
+                        return self.random.choice(available_cells)
+
+            return None
+
+        # Place couples first (they share the same household)
         for _ in range(self.no_of_couples):
             ses = self.generate_ses()
+            cell = find_available_cell(ses)
 
-            # Try to place in empty cells first
-            if len(cells_with_proximity[ses]) >= 2:
-                cells = cells_with_proximity[ses]
-            # If not enough empty cells, use any cells in the correct SES area
-            elif len(all_cells_by_ses[ses]) >= 2:
-                cells = all_cells_by_ses[ses]
-            # If still no cells available, use any cells on the grid
-            else:
-                cells = self.grid.all_cells
+            if cell:
+                # Create both members of the couple in the same household
+                household = cell  # Using cell as household identifier
+                cell_occupancy[cell] += (
+                    1  # Increment occupancy (couples count as one household)
+                )
 
-            if cells:
-                cell = self.random.choice(cells)
-                if cell in cells_with_proximity[ses]:
-                    cells_with_proximity[ses].remove(cell)
-                # Create the couple
-                for _ in range(2):
-                    Human(self, self.unique_id, cell, SES=ses, household=cell)
-                    self.unique_id += 1
+                male = Human(
+                    self,
+                    gender="Male",
+                    family_size=2,
+                    age=self.generate_age(),
+                    SES=ses,
+                    unique_id=self.unique_id,
+                    cell=cell,
+                    household=cell,
+                )
+                self.unique_id += 1
+                female = Human(
+                    self,
+                    gender="Female",
+                    family_size=2,
+                    age=self.random.randint(
+                        male.age - 3, male.age + 3
+                    ),  # selecting age with difference no more than 3.
+                    SES=ses,
+                    unique_id=self.unique_id,
+                    cell=cell,
+                    household=cell,
+                )
+                self.unique_id += 1
 
-        # Place singles
+                # Link the couple together
+                male.family = female
+                female.family = male
+
+        # Place singles (each gets their own household)
         for _ in range(self.no_of_singles):
             ses = self.generate_ses()
+            cell = find_available_cell(ses)
 
-            # Try to place in empty cells first
-            if cells_with_proximity[ses]:
-                cells = cells_with_proximity[ses]
-            # If no empty cells, use any cells in the correct SES area
-            elif all_cells_by_ses[ses]:
-                cells = all_cells_by_ses[ses]
-            # If still no cells available, use any cells on the grid
-            else:
-                cells = self.grid.all_cells
+            if cell:
+                household = cell  # Using cell as household identifier
+                cell_occupancy[cell] += 1  # Increment occupancy
 
-            if cells:
-                cell = self.random.choice(cells)
-                if cell in cells_with_proximity[ses]:
-                    cells_with_proximity[ses].remove(cell)
-                Human(self, self.unique_id, cell, SES=ses, household=cell)
+                Human(
+                    self,
+                    gender=self.generate_gender(),
+                    family_size=1,
+                    age=self.generate_age(),
+                    SES=ses,
+                    unique_id=self.unique_id,
+                    cell=cell,
+                    household=household,
+                )
                 self.unique_id += 1
 
     def step(self):
@@ -655,10 +706,9 @@ class WalkingModel(Model):
 
         # Reset daily walking trips
         self.agents_by_type[Human].daily_walking_trips = 0
-        self.daily_walking_trips = 0
-        self.work_trips = 0
-        self.basic_needs_trips = 0
-        self.leisure_trips = 0
+        self.agents_by_type[Human].work_trips = 0
+        self.agents_by_type[Human].basic_needs_trips = 0
+        self.agents_by_type[Human].leisure_trips = 0
 
         self.datacollector.collect(self)
 
