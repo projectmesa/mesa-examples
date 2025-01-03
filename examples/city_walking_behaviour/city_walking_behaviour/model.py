@@ -1,6 +1,12 @@
 import math
 
-from city_walking_behaviour.agents import (
+from mesa import Model
+from mesa.datacollection import DataCollector
+from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
+from mesa.experimental.cell_space.property_layer import PropertyLayer
+from mesa.experimental.devs import ABMSimulator
+
+from .agents import (
     DOG_OWNER_PROBABILITY,
     FEMALE_PROBABILITY,
     MAX_AGE,
@@ -12,11 +18,6 @@ from city_walking_behaviour.agents import (
     Other,
     SocialPlace,
 )
-from mesa import Model
-from mesa.datacollection import DataCollector
-from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
-from mesa.experimental.cell_space.property_layer import PropertyLayer
-from mesa.experimental.devs import ABMSimulator
 
 SCENARIOS = {
     "random_random": "Random Land Use, Random Safety",
