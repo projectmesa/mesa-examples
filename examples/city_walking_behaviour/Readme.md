@@ -29,20 +29,16 @@ This simulation demonstrates how different city layouts and social factors affec
 ## Outcomes in different scenarios
 
 #### RR
-
-    -
+-
 
 #### RS
-
-    -
+![image](https://github.com/user-attachments/assets/67112dbb-056d-4bd5-b668-a1bb389c262d)
 
 #### CR
-
-    -
+![image](https://github.com/user-attachments/assets/aee37477-7693-46a8-848e-5a5986db0e95)
 
 #### CS
-
-    -
+![image](https://github.com/user-attachments/assets/f9e58239-19a2-4fa4-bbea-2b7ccbe36c8f)
 
 ## Quick Start
 
