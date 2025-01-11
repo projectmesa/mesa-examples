@@ -6,7 +6,6 @@ from city_walking_behaviour.agents import (
     SocialPlace,
 )
 from city_walking_behaviour.model import WalkingModel
-from mesa.experimental.devs import ABMSimulator
 from mesa.visualization import (
     SolaraViz,
     make_plot_component,
@@ -323,8 +322,7 @@ plot_component_legend = make_plot_component(
 )
 
 # Initialize and run the model
-simulator = ABMSimulator()
-model = WalkingModel(simulator=simulator)
+model = WalkingModel()
 
 # server = mesa.visualization(
 #     WalkingModel,
@@ -345,6 +343,5 @@ page = SolaraViz(
     ],
     model_params=model_params,
     name="Walking Model",
-    simulator=simulator,
 )
 page  # noqa

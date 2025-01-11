@@ -64,7 +64,7 @@ class Other(Workplace, FixedAgent):
         self.cell = cell
 
 
-class WalkingBehaviorModel:
+class DailyWalkingBehaviour:
     """Optimized walking behavior model with spatial caching and early termination."""
 
     MILES_TO_METERS = 1609.34
@@ -311,7 +311,7 @@ class WalkingBehaviorModel:
 
     def __repr__(self) -> str:
         """
-        Return a detailed string representation of the WalkingBehaviorModel.
+        Return a detailed string representation of the DailyWalkingBehaviour.
 
         Returns:
             str: String showing model state including caches and distances
@@ -325,7 +325,7 @@ class WalkingBehaviorModel:
         }
 
         return (
-            f"WalkingBehaviorModel("
+            f"DailyWalkingBehaviour("
             f"total_distance_walked={self.total_distance_walked:.2f}, "
             f"max_possible_distance={self._max_possible_distance}, "
             f"cache_sizes={cache_stats}, "
@@ -368,18 +368,24 @@ class Human(CellAgent):
         self.previous_walking_density: float = 0
 
         # Datacollector attributes
-        self.daily_walking_trips: int = 0
+        self.walk_daily_trips: int = 0
         self.work_trips: int = 0
         self.basic_needs_trips: int = 0
         self.leisure_trips: int = 0
 
         # Initialize walking behavior
-        self.walking_behavior = WalkingBehaviorModel(model)
+        self.walking_behavior = DailyWalkingBehaviour(model)
 
     def _determine_working_status(self) -> bool:
         if self.age >= RETIREMENT_AGE:
             return False
         return self.random.random() < WORKING_PROBABILITY
+
+    def reset_daily_trips(self):
+        self.walk_daily_trips = 0
+        self.basic_needs_trips = 0
+        self.leisure_trips = 0
+        self.work_trips = 0
 
     def get_friends(self) -> AgentSet:
         friend_count = self.random.randint(MIN_FRIENDS, MAX_FRIENDS)
@@ -496,7 +502,7 @@ class Human(CellAgent):
         daily_walks = self.walking_behavior.simulate_daily_walks(self)
 
         # Update datacollector attributes
-        self.daily_walking_trips = len(daily_walks)
+        self.walk_daily_trips = len(daily_walks)
         self.work_trips = sum(
             [1 for activity, _ in daily_walks if activity == ActivityType.WORK]
         )

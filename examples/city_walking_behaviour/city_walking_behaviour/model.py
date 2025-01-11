@@ -1,10 +1,10 @@
 import math
 
 from mesa import Model
+from mesa.agent import AgentSet
 from mesa.datacollection import DataCollector
 from mesa.experimental.cell_space import OrthogonalVonNeumannGrid
 from mesa.experimental.cell_space.property_layer import PropertyLayer
-from mesa.experimental.devs import ABMSimulator
 
 from .agents import (
     DOG_OWNER_PROBABILITY,
@@ -40,11 +40,8 @@ class WalkingModel(Model):
         no_of_others: int = 475,
         scenario: str = "random_random",
         seed=None,
-        simulator=ABMSimulator(),
     ):
         super().__init__(seed=seed)
-        self.simulator = simulator
-        self.simulator.setup(self)
 
         # Initialize basic properties
         self.initialize_properties(
@@ -64,211 +61,41 @@ class WalkingModel(Model):
         # Apply selected scenario
         self.apply_scenario(scenario)
 
-        # Model reporters: Fixed SES references for b_SES_4, c_SES_4, d_SES_4
-        model_reporters = {
-            "avg_walk_ses1": lambda x: (  # average daily walking trips for SES=1
-                sum(
-                    agent.daily_walking_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 1
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_walk_ses2": lambda x: (  # average daily walking trips for SES=2
-                sum(
-                    agent.daily_walking_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 2
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_walk_ses3": lambda x: (  # average daily walking trips for SES=3
-                sum(
-                    agent.daily_walking_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 3
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_walk_ses4": lambda x: (  # average daily walking trips for SES=4
-                sum(
-                    agent.daily_walking_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 4
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_walk_ses5": lambda x: (  # average daily walking trips for SES=5
-                sum(
-                    agent.daily_walking_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 5
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_work_ses1": lambda x: (  # average work trips for SES=1
-                sum(
-                    agent.work_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 1
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_work_ses2": lambda x: (  # average work trips for SES=2
-                sum(
-                    agent.work_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 2
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_work_ses3": lambda x: (  # average work trips for SES=3
-                sum(
-                    agent.work_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 3
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_work_ses4": lambda x: (  # average work trips for SES=4
-                sum(
-                    agent.work_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 4
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_work_ses5": lambda x: (  # average work trips for SES=5
-                sum(
-                    agent.work_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 5
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_basic_ses1": lambda x: (  # average basic-needs trips for SES=1
-                sum(
-                    agent.basic_needs_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 1
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_basic_ses2": lambda x: (  # average basic-needs trips for SES=2
-                sum(
-                    agent.basic_needs_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 2
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_basic_ses3": lambda x: (  # average basic-needs trips for SES=3
-                sum(
-                    agent.basic_needs_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 3
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_basic_ses4": lambda x: (  # average basic-needs trips for SES=4
-                sum(
-                    agent.basic_needs_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 4
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_basic_ses5": lambda x: (  # average basic-needs trips for SES=5
-                sum(
-                    agent.basic_needs_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 5
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_leisure_ses1": lambda x: (  # average leisure trips for SES=1
-                sum(
-                    agent.leisure_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 1
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_leisure_ses2": lambda x: (  # average leisure trips for SES=2
-                sum(
-                    agent.leisure_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 2
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_leisure_ses3": lambda x: (  # average leisure trips for SES=3
-                sum(
-                    agent.leisure_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 3
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_leisure_ses4": lambda x: (  # average leisure trips for SES=4
-                sum(
-                    agent.leisure_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 4
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-            "avg_leisure_ses5": lambda x: (  # average leisure trips for SES=5
-                sum(
-                    agent.leisure_trips
-                    for agent in x.agents_by_type[Human]
-                    if agent.SES == 5
-                )
-                / len(x.agents_by_type[Human])
-                if x.agents_by_type[Human]
-                else 0
-            ),
-        }
+        def create_model_reporters():
+            """Create a dictionary of model reporters with minimal boilerplate"""
+            reporters = {}
+            metrics = [
+                "walk_daily_trips",
+                "work_trips",
+                "basic_needs_trips",
+                "leisure_trips",
+            ]
+
+            for metric in metrics:
+                for ses in range(1, 6):
+                    name = (
+                        f"avg_{metric.split('_')[0]}_ses{ses}"  # e.g. "avg_walk_ses1"
+                    )
+
+                    # Create the reporter function
+                    reporters[name] = lambda x, m=metric, s=ses: (
+                        sum(
+                            getattr(agent, m)
+                            for agent in x.agents_by_type[Human]
+                            if s == agent.SES
+                        )
+                        / len(x.agents_by_type[Human])
+                        if x.agents_by_type[Human]
+                        else 0
+                    )
+
+            return reporters
+
+        # Generate the model_reporters dict
+        model_reporters = create_model_reporters()
 
         self.datacollector = DataCollector(model_reporters)
+        self.human_set: AgentSet = AgentSet([], random=self.random)
         # Add initial humans
         self.add_initial_humans()
 
@@ -680,6 +507,9 @@ class WalkingModel(Model):
                 male.family = female
                 female.family = male
 
+                self.human_set.add(male)
+                self.human_set.add(female)
+
         # Place singles (each gets their own household)
         for _ in range(self.no_of_singles):
             ses = self.generate_ses()
@@ -689,7 +519,7 @@ class WalkingModel(Model):
                 household = cell  # Using cell as household identifier
                 cell_occupancy[cell] += 1  # Increment occupancy
 
-                Human(
+                person = Human(
                     self,
                     gender=self.generate_gender(),
                     family_size=1,
@@ -701,17 +531,16 @@ class WalkingModel(Model):
                 )
                 self.unique_id += 1
 
+                self.human_set.add(person)
+
     def step(self):
         """Advance the model by one step."""
-        self.agents_by_type[Human].shuffle_do("step")
-
-        # Reset daily walking trips
-        self.agents_by_type[Human].daily_walking_trips = 0
-        self.agents_by_type[Human].work_trips = 0
-        self.agents_by_type[Human].basic_needs_trips = 0
-        self.agents_by_type[Human].leisure_trips = 0
+        self.human_set.shuffle_do("step")
 
         self.datacollector.collect(self)
+
+        # Reset daily walking trips
+        self.human_set.do("reset_daily_trips")
 
     def generate_gender(self) -> str:
         return "Female" if self.random.random() < FEMALE_PROBABILITY else "Male"
