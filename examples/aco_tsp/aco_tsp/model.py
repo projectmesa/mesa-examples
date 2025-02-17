@@ -83,18 +83,27 @@ class AntTSP(CellAgent):
     An agent
     """
 
-    def __init__(self, model, alpha: float = 1.0, beta: float = 5.0):
+    def __init__(
+        self,
+        model,
+        alpha: float = 1.0,
+        beta: float = 5.0,
+        random_move_prob: float = 0.1,
+        max_distance: float = None,
+    ):
         """
         Customize the agent
         """
         super().__init__(model)
         self.alpha = alpha
         self.beta = beta
+        self.random_move_prob = random_move_prob  # Ймовірність випадкового переміщення
         self._cities_visited = []
         self._traveled_distance = 0
         self.tsp_solution = []
         self.tsp_distance = 0
         self.graph = self.model.grid.G
+        self.max_distance = max_distance if max_distance is not None else float("inf")
 
     def calculate_pheromone_delta(self, q: float = 100):
         results = {}
@@ -112,23 +121,27 @@ class AntTSP(CellAgent):
             ]["distance"]
         super().move_to(cell)
 
+    # Зміна логіки вибору наступного міста мурахою
+    # У класі `AntTSP`, змінено метод `decide_next_city`, щоб додати нову логіку: враховувати довжину вже пройденого мурахою маршруту.
     def decide_next_city(self):
-        # Random
-        # new_city = self.random.choice(list(self.model.all_cities - set(self.cities_visited)))
-        # Choose closest city not yet visited
         neighbors = self.cell.neighborhood
         candidates = [n for n in neighbors if n not in self._cities_visited]
         if len(candidates) == 0:
             return self.cell
 
-        # p_ij(t) = 1/Z*[(tau_ij)**alpha * (1/distance)**beta]
+        # p_ij(t) = 1/Z*[(tau_ij)**alpha * (1/distance)**beta * (1 + adjustment_factor)]
         results = []
         for city in candidates:
+            adjustment_factor = 1 - (
+                self._traveled_distance
+                / self.model.grid.G[self.cell.coordinate][city.coordinate]["distance"]
+            )
             val = (
                 (self.graph[self.cell.coordinate][city.coordinate]["pheromone"])
                 ** self.alpha
                 * (self.graph[self.cell.coordinate][city.coordinate]["visibility"])
                 ** self.beta
+                * (1 + adjustment_factor)
             )
             results.append(val)
 
@@ -137,17 +150,17 @@ class AntTSP(CellAgent):
         results /= norm
 
         new_city = self.random.choices(candidates, weights=results)[0]
-
         return new_city
 
+    # У методі `step` мурахи завершують подорож при досягненні ліміту
     def step(self):
         """
         Modify this method to change what an individual agent will do during each step.
         Can include logic based on neighbors states.
         """
-
         for _ in range(self.model.num_cities - 1):
-            # Pick a random city that isn't in the list of cities visited
+            if self._traveled_distance >= self.max_distance:
+                break  # Завершується маршрут, якщо досягнуто ліміту
             new_city = self.decide_next_city()
             self.move_to(new_city)
 
@@ -173,6 +186,7 @@ class AcoTspModel(mesa.Model):
         max_steps: int = int(1e6),
         ant_alpha: float = 1.0,
         ant_beta: float = 5.0,
+        local_decay: float = 0.1,  # Новий параметр для локального випаровування
     ):
         super().__init__()
         self.num_agents = num_agents
@@ -181,6 +195,7 @@ class AcoTspModel(mesa.Model):
         self.all_cities = set(range(self.num_cities))
         self.max_steps = max_steps
         self.grid = Network(tsp_graph.g, random=self.random)
+        self.local_decay = local_decay  # Збереження параметра локального випаровування
 
         for _ in range(self.num_agents):
             agent = AntTSP(model=self, alpha=ant_alpha, beta=ant_beta)
@@ -213,19 +228,26 @@ class AcoTspModel(mesa.Model):
 
         self.running = True
 
-    def update_pheromone(self, q: float = 100, ro: float = 0.5):
-        # tau_ij(t+1) = (1-ro)*tau_ij(t) + delta_tau_ij(t)
-        # delta_tau_ij(t) = sum_k^M {Q/L^k} * I[i,j \in T^k]
+    def update_pheromone(self, q: float = 100):
+        ro = max(0.1, 0.5 - (self.num_steps / self.max_steps) * 0.4)  # Динамічне ro
         delta_tau_ij = {}
         for k, agent in enumerate(self.agents):
             delta_tau_ij[k] = agent.calculate_pheromone_delta(q)
-
         for i, j in self.grid.G.edges():
-            # Evaporate
             tau_ij = (1 - ro) * self.grid.G[i][j]["pheromone"]
-            # Add ant's contribution
             for k, delta_tau_ij_k in delta_tau_ij.items():
                 tau_ij += delta_tau_ij_k.get((i, j), 0.0)
+
+            # Збільшення часу випаровування феромону на шляхах, якими пройшло більше мурах
+            num_ants_on_edge = sum(
+                1
+                for agent in self.agents
+                if (i, j) in zip(agent.tsp_solution[:-1], agent.tsp_solution[1:])
+            )
+            if num_ants_on_edge > 0:
+                tau_ij *= (
+                    1 + 0.1 * num_ants_on_edge
+                )  # Додатковий коефіцієнт для популярних шляхів
 
             self.grid.G[i][j]["pheromone"] = tau_ij
 
