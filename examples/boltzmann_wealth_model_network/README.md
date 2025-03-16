@@ -10,7 +10,6 @@ In this network implementation, agents must be located on a node, with a limit o
 
 As the model runs, the distribution of wealth among agents goes from being perfectly uniform (all agents have the same starting wealth), to highly skewed -- a small number have high wealth, more have none at all.
 
-JavaScript library used in this example to render the network: [sigma.js](http://sigmajs.org/).
 
 ## Installation
 
@@ -22,19 +21,19 @@ To install the dependencies use pip and the requirements.txt in this directory. 
 
 ## How to Run
 
-To run the model interactively, run ``mesa runserver`` in this directory. e.g.
+To run the model interactively, run ``solara run app.py`` in this directory.
 
 ```
-    $ mesa runserver
+    $ solara run app.py
 ```
 
-Then open your browser to [http://127.0.0.1:8521/](http://127.0.0.1:8521/) and press Reset, then Run.
+Then open your browser to [http://127.0.0.1:8765/](http://127.0.0.1:8765/) and press Reset, then Run.
 
 ## Files
 
-* ``run.py``: Launches a model visualization server.
-* ``model.py``: Contains the agent class, and the overall model class.
-* ``server.py``: Defines classes for visualizing the model (network layout) in the browser via Mesa's modular server, and instantiates a visualization server.
+* ``agent.py``: Defines the agent class.
+* ``model.py``: Defines the model class.
+* ``app.py``  : Defines the visualization and spins up a solara server.
 
 ## Further Reading
 
