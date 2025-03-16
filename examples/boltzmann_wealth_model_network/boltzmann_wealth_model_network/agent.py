@@ -1,9 +1,10 @@
 from mesa.experimental.cell_space import CellAgent
 
-class MoneyAgent(CellAgent):
-    """ An agent with fixed initial wealth"""
 
-    def __init__(self,model): 
+class MoneyAgent(CellAgent):
+    """An agent with fixed initial wealth"""
+
+    def __init__(self, model):
         super().__init__(model)
         self.wealth = 1
 
@@ -17,5 +18,3 @@ class MoneyAgent(CellAgent):
     def step(self):
         if self.wealth > 0:
             self.give_money()
-
-

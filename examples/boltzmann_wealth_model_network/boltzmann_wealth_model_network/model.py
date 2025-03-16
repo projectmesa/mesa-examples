@@ -3,6 +3,7 @@ import networkx as nx
 from mesa.experimental.cell_space import Network
 from agent import MoneyAgent
 
+
 def compute_gini(model):
     agent_wealths = [agent.wealth for agent in model.agents]
     x = sorted(agent_wealths)
@@ -19,9 +20,7 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.num_agents = num_agents
         self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
-        self.grid = Network(
-            self.G, random=self.random, capacity=1
-        )
+        self.grid = Network(self.G, random=self.random, capacity=1)
 
         self.datacollector = mesa.DataCollector(
             model_reporters={"Gini": compute_gini},
@@ -42,4 +41,3 @@ class BoltzmannWealthModelNetwork(mesa.Model):
         self.agents.shuffle_do("step")
         # collect data
         self.datacollector.collect(self)
-
