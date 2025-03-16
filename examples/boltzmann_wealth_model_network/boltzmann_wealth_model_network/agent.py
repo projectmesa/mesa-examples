@@ -9,7 +9,7 @@ class MoneyAgent(CellAgent):
         self.wealth = 1
 
     def give_money(self):
-        neighbours = [agent for agent in self.cell.neighborhood.agents]
+        neighbours = list(self.cell.neighborhood.agents)
         if len(neighbours) > 0:
             other = self.random.choice(neighbours)
             other.wealth += 1

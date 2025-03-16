@@ -1,11 +1,9 @@
 from mesa.visualization import (
     Slider,
     SolaraViz,
-    make_space_component,
     make_plot_component,
+    make_space_component,
 )
-
-from mesa.space import NetworkGrid
 from model import BoltzmannWealthModelNetwork
 
 
@@ -50,4 +48,3 @@ page = SolaraViz(
     model_params=model_params,
     name="Boltzmann_wealth_model_network",
 )
-page

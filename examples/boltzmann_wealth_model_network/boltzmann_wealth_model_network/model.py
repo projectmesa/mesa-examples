@@ -1,7 +1,7 @@
 import mesa
 import networkx as nx
-from mesa.experimental.cell_space import Network
 from agent import MoneyAgent
+from mesa.experimental.cell_space import Network
 
 
 def compute_gini(model):
