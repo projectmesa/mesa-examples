@@ -1,5 +1,5 @@
-jupyter
-matplotlib
-mesa~=2.0
-numpy
+mesa==3.1.4
+solara
 networkx
+matplotlib
+altair
