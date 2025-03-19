@@ -1,6 +1,6 @@
 import mesa
 import networkx as nx
-from agent import MoneyAgent
+from .agent import MoneyAgent
 from mesa.experimental.cell_space import Network
 
 

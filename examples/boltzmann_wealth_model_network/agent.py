@@ -1,6 +1,5 @@
 from mesa.experimental.cell_space import CellAgent
 
-
 class MoneyAgent(CellAgent):
     """An agent with fixed initial wealth"""
 
