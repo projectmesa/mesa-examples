@@ -12,9 +12,8 @@ Author of NetLogo code:
 
 import mesa
 import numpy as np
+from agents import Bank, Person
 from mesa.experimental.cell_space import OrthogonalMooreGrid
-
-from .agents import Bank, Person
 
 """
 If you want to perform a parameter sweep, call batch_run.py instead of run.py.
@@ -97,19 +96,14 @@ class BankReservesModel(mesa.Model):
     amount.
     """
 
-    # grid height
-    grid_h = 20
-    # grid width
-    grid_w = 20
-
     """init parameters "init_people", "rich_threshold", and "reserve_percent"
        are all set via Slider"""
 
     def __init__(
         self,
-        height=grid_h,
-        width=grid_w,
-        init_people=2,
+        height=20,
+        width=20,
+        init_people=5,
         rich_threshold=10,
         reserve_percent=50,
     ):
@@ -158,7 +152,3 @@ class BankReservesModel(mesa.Model):
         self.agents.shuffle_do("step")
         # collect data
         self.datacollector.collect(self)
-
-    def run_model(self):
-        for i in range(self.run_time):
-            self.step()

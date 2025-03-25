@@ -24,23 +24,25 @@ directory from which Python was run. The CSV file will contain the data from
 every step of every run.
 """
 
-import mesa
 import pandas as pd
-from bank_reserves.model import BankReservesModel
+from mesa.batchrunner import batch_run
+from model import BankReservesModel
 
 
 def main():
     # parameter lists for each parameter to be tested in batch run
     br_params = {
+        "width": 20,
+        "height": 20,
         "init_people": [25, 100],
         "rich_threshold": [5, 10],
         "reserve_percent": 5,
     }
 
     # The existing batch run logic here
-    data = mesa.batch_run(
-        BankReservesModel,
-        br_params,
+    data = batch_run(
+        model_cls=BankReservesModel,
+        parameters=br_params
     )
     br_df = pd.DataFrame(data)
     br_df.to_csv("BankReservesModel_Data.csv")
