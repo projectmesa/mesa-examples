@@ -32,9 +32,9 @@ def test_decreasing_price_variance():
 
     df_model = model.datacollector.get_model_vars_dataframe()
 
-    assert check_slope(df_model["Price Variance"], increasing=False), (
-        "The price variance should decrease over time."
-    )
+    assert check_slope(
+        df_model["Price Variance"], increasing=False
+    ), "The price variance should decrease over time."
 
 
 def test_constant_price_variance():
@@ -53,6 +53,6 @@ def test_constant_price_variance():
 
     df_model = model.datacollector.get_model_vars_dataframe()
 
-    assert get_slope(df_model["Price Variance"]) == 0, (
-        "The price variance constant over time."
-    )
+    assert (
+        get_slope(df_model["Price Variance"]) == 0
+    ), "The price variance constant over time."

@@ -1,4 +1,3 @@
-
 from agents import Person
 from mesa.visualization import (
     Slider,
@@ -15,6 +14,7 @@ https://github.com/projectmesa/mesa/blob/main/examples/wolf_sheep/wolf_sheep/ser
 Accessed on: November 2, 2017
 Author of original code: Taylor Mutch
 """
+
 
 def person_portrayal(agent):
     if agent is None:
@@ -37,6 +37,7 @@ def person_portrayal(agent):
 
     return portrayal
 
+
 model_params = {
     "init_people": Slider(
         label="People",
@@ -50,21 +51,21 @@ model_params = {
         min=1,
         max=20,
     ),
-    "reserve_percent":Slider(
+    "reserve_percent": Slider(
         label="Reserves",
         value=50,
         min=1,
         max=100,
-    )
+    ),
 }
 
 SpacePlot = make_space_component(person_portrayal)
-CategoryPlot = make_plot_component(["Rich","Poor","Middle Class"])
+CategoryPlot = make_plot_component(["Rich", "Poor", "Middle Class"])
 model = BankReservesModel()
 
 page = SolaraViz(
     BankReservesModel(),
-    components=[SpacePlot,CategoryPlot],
+    components=[SpacePlot, CategoryPlot],
     model_params=model_params,
     name="Bank Reserves",
 )

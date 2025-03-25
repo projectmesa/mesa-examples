@@ -40,10 +40,7 @@ def main():
     }
 
     # The existing batch run logic here
-    data = batch_run(
-        model_cls=BankReservesModel,
-        parameters=br_params
-    )
+    data = batch_run(model_cls=BankReservesModel, parameters=br_params)
     br_df = pd.DataFrame(data)
     br_df.to_csv("BankReservesModel_Data.csv")
 
