@@ -43,10 +43,15 @@ model_params = {
 
 model = TermiteModel(num_termites=400,width=100,height=100,wood_chip_density=0.1)
 
+def post_process(ax):
+    ax.set_aspect("equal")
+    ax.set_xticks([])
+    ax.set_yticks([])
+
 woodchips_space = make_mpl_space_component(
     agent_portrayal = agent_portrayal,
     propertylayer_portrayal = wood_chip_portrayal,
-    post_process = None,
+    post_process = post_process,
     draw_grid=False,
     )
 
