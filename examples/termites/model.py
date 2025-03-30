@@ -9,7 +9,9 @@ class TermiteModel(Model):
     A simulation that depicts behavior of termite agents gathering wood chips into piles.
     """
 
-    def __init__(self, num_termites=50, width=60, height=60, wood_chip_density=0.4, seed=None):
+    def __init__(
+        self, num_termites=50, width=60, height=60, wood_chip_density=0.4, seed=None
+    ):
         """Initialize the model.
 
         Args:
@@ -26,8 +28,14 @@ class TermiteModel(Model):
         self.grid = OrthogonalMooreGrid((width, height), torus=True)
 
         # Initializing up a PropertyLayer(woodcell) for wood_chips
-        self.wood_chips_layer = PropertyLayer("woodcell",(width, height), default_value=False, dtype=bool)
-        self.wood_chips_layer.data = np.random.choice([True,False],size=(width,height),p=[self.wood_chip_density, 1-self.wood_chip_density])
+        self.wood_chips_layer = PropertyLayer(
+            "woodcell", (width, height), default_value=False, dtype=bool
+        )
+        self.wood_chips_layer.data = np.random.choice(
+            [True, False],
+            size=(width, height),
+            p=[self.wood_chip_density, 1 - self.wood_chip_density],
+        )
 
         # Adding PropertyLayer to the grid"""
         self.grid.add_property_layer(self.wood_chips_layer)
@@ -39,8 +47,5 @@ class TermiteModel(Model):
             self.random.sample(self.grid.all_cells.cells, k=self.num_termites),
         )
 
-
     def step(self):
         self.agents.shuffle_do("step")
-
-
