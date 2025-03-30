@@ -9,7 +9,7 @@ class Termite(CellAgent):
         hasWoodChip(bool): True if the agent is carrying a wood chip.
     """
 
-    def __init__(self,model,cell):
+    def __init__(self, model, cell):
         """
         Args:
             model: The model instance.
@@ -40,7 +40,9 @@ class Termite(CellAgent):
                 Termite agent is already carrying a woodchip and has bumped into another wood chip
                 then search for a empty space (no agent and no woodcell) in it's neighbourhood and drop the wood chip
                 """
-                empty_cell_neighbors = [x for x in self.cell.neighborhood if x.is_empty and not x.woodcell]
+                empty_cell_neighbors = [
+                    x for x in self.cell.neighborhood if x.is_empty and not x.woodcell
+                ]
 
                 if empty_cell_neighbors:
                     # Moving to random empty cell
