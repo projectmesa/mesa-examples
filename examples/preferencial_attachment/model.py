@@ -1,27 +1,44 @@
 import networkx as nx
 import numpy as np
-from mesa import Model
+from mesa import Model, DataCollector
 from mesa.discrete_space import Network
 
 from agents import NodeAgent
 
+def calculate_total_degree(model):
+    _ , degree = zip(*model.graph.degree())
+    return sum(degree)
+
 class AgentNetwork(Model):
     
-    def __init__(self,seed=None):
+    def __init__(self,num=100,seed=None):
         super().__init__(seed=seed)
+        self.num = num
         self.graph = nx.Graph()
-        self.graph.add_node(0)
-        self.graph.add_node(1)
-        self.graph.add_edge(0,1)
         self.new_node=1
+        for i in range(self.num):
+            self.graph.add_node(i)
+
+        self.graph.add_edge(0,1)
+
+        self.datacollector = DataCollector(
+            {
+            "Degree": calculate_total_degree,
+            }
+        )
+    
         self.grid = Network(self.graph,capacity=1,random=self.random) 
-        NodeAgent.create_agents(model=self,n=2,cell=list(self.grid.all_cells))
+        NodeAgent.create_agents(model=self,n=self.num,cell=list(self.grid.all_cells))
     
 
     def step(self):
         print("taking steppp...........")
         self.new_node += 1
-        self.graph.add_node(self.new_node)
+
+        # if self.new_node >= self.num:
+        #     break
+            
+        # self.graph.add_node(self.new_node)
 
         # extract node IDs along with their degrees
         nodes, degree = zip(*self.graph.degree())
@@ -38,3 +55,5 @@ class AgentNetwork(Model):
 
         # for x in self.agents:
         #     print(x.unique_id)
+
+        self.datacollector.collect(self)
