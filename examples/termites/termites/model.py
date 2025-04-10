@@ -1,7 +1,8 @@
 import numpy as np
-from agents import Termite
 from mesa import Model
 from mesa.discrete_space import OrthogonalMooreGrid, PropertyLayer
+
+from .agents import Termite
 
 
 class TermiteModel(Model):

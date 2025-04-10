@@ -1,6 +1,6 @@
 from mesa.visualization import SolaraViz
 from mesa.visualization.components.matplotlib_components import make_mpl_space_component
-from model import TermiteModel
+from termites.model import TermiteModel
 
 wood_chip_portrayal = {
     "woodcell": {
