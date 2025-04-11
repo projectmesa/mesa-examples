@@ -62,7 +62,9 @@ class Termite(CellAgent):
                         if not neighbor.woodcell and neighbor.is_empty:
                             # Count wood chips in this neighbor's neighborhood
                             count = sum(1 for n in neighbor.neighborhood if n.woodcell)
-                            if count > 0:  # Only consider cells with at least one wood chip nearby
+                            if (
+                                count > 0
+                            ):  # Only consider cells with at least one wood chip nearby
                                 neighbor_scores[neighbor] = count
 
                     if neighbor_scores:
