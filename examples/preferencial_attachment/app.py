@@ -1,5 +1,5 @@
 import solara 
-from model import AgentNetwork
+from preferencial_attachment.model import AgentNetwork
 from mesa.visualization import (
     Slider,
     SolaraViz,
@@ -13,19 +13,34 @@ def node_portrayal(agent):
         "size": 30
     }
 
-def post_process_lineplot(ax):
-    ax.set_ylim(ymin=0)
-    ax.set_ylabel("# total degree")
-    ax.set_xlim(xmin=0)
-    ax.legend(bbox_to_anchor=(1.05, 1.0), loc="upper left")
+# def post_process_lineplot(ax):
+#     ax.set_ylim(ymin=0)
+#     ax.set_ylabel("# total degree")
+#     ax.set_xlim(xmin=0)
+#     ax.legend(bbox_to_anchor=(1.05, 1.0), loc="upper left")
 
+model_params = {
+    "num": {
+        "type": "SliderInt",
+        "value": 50,
+        "label": "No. of agents",
+        "min": 10,
+        "max":150,
+        "step": 1,
+    },
+    "seed": {
+        "type": "InputText",
+        "value": 42,
+        "label": "Random Seed",
+    }, 
+}
 SpacePlot = make_space_component(node_portrayal)
-StatePlot = make_plot_component(measure = "Degree",post_process=post_process_lineplot)
+# StatePlot = make_plot_component(measure = "Degree",post_process=post_process_lineplot)
 model = AgentNetwork()
 
 page = SolaraViz(
     model,
-    components=[SpacePlot,StatePlot],
-    # model_params=model_params,
+    components=[SpacePlot],
+    model_params=model_params,
     name= "Agent Network"
 )
