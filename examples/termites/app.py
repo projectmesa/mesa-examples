@@ -38,7 +38,7 @@ model_params = {
     "height": 60,
 }
 
-model = TermiteModel(num_termites=400, width=100, height=100, wood_chip_density=0.1)
+model = TermiteModel()
 
 
 def post_process(ax):
