@@ -20,10 +20,10 @@ def agent_portrayal(agent):
 model_params = {
     "num_termites": {
         "type": "SliderInt",
-        "value": 50,
+        "value": 100,
         "label": "No. of Termites",
         "min": 10,
-        "max": 100,
+        "max": 500,
         "step": 1,
     },
     "wood_chip_density": {
@@ -60,5 +60,5 @@ page = SolaraViz(
     model_params=model_params,
     name="Termites Model",
     play_interval=1,
-    render_interval=15,
+    render_interval=10,
 )
