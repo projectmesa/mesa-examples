@@ -62,7 +62,6 @@ class Termite(CellAgent):
             return False
 
     def get_away(self):
-
         for _ in range(10):
             new_cell = self.cell.neighborhood.select_random_cell()
             if new_cell.is_empty:
