@@ -18,12 +18,17 @@ def agent_portrayal(agent):
 
 
 model_params = {
+    "seed":{
+        "type":"InputText",
+        "value":42,
+        "label":"Seed",
+    },
     "num_termites": {
         "type": "SliderInt",
         "value": 100,
         "label": "No. of Termites",
         "min": 10,
-        "max": 500,
+        "max": 1000,
         "step": 1,
     },
     "wood_chip_density": {
@@ -34,8 +39,22 @@ model_params = {
         "max": 1,
         "step": 0.1,
     },
-    "width": 60,
-    "height": 60,
+    "width": {
+        "type": "SliderInt",
+        "value": 100,
+        "label": "Width",
+        "min": 10,
+        "max": 500,
+        "step": 1,
+    },
+    "height": {
+        "type": "SliderInt",
+        "value": 100,
+        "label": "Height",
+        "min": 10,
+        "max": 500,
+        "step": 1,
+    },
 }
 
 model = TermiteModel()
@@ -59,6 +78,4 @@ page = SolaraViz(
     components=[woodchips_space],
     model_params=model_params,
     name="Termites Model",
-    play_interval=1,
-    render_interval=10,
 )
