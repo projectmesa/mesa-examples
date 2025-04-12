@@ -18,10 +18,10 @@ def agent_portrayal(agent):
 
 
 model_params = {
-    "seed":{
-        "type":"InputText",
-        "value":42,
-        "label":"Seed",
+    "seed": {
+        "type": "InputText",
+        "value": 42,
+        "label": "Seed",
     },
     "num_termites": {
         "type": "SliderInt",
