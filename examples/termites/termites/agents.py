@@ -82,9 +82,10 @@ class Termite(CellAgent):
             return False
 
     def get_away(self):
-
         # Move 20 steps forward randomly untill on a cell with no wood chip.
-        empty_neighbors = [c for c in self.cell.get_neighborhood(radius=3) if c.is_empty]
+        empty_neighbors = [
+            c for c in self.cell.get_neighborhood(radius=3) if c.is_empty
+        ]
         if empty_neighbors:
             self.cell = self.model.random.choice(empty_neighbors)
 
