@@ -11,7 +11,7 @@ class TermiteModel(Model):
     """
 
     def __init__(
-        self, num_termites=100, width=60, height=60, wood_chip_density=0.1, seed=None
+        self, num_termites=100, width=100, height=100, wood_chip_density=0.1, seed=42
     ):
         """Initialize the model.
 
