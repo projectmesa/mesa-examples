@@ -1,10 +1,10 @@
+from boltzmann_wealth_model_network.model import BoltzmannWealthModelNetwork
 from mesa.visualization import (
     Slider,
     SolaraViz,
     make_plot_component,
     make_space_component,
 )
-from model import BoltzmannWealthModelNetwork
 
 
 def agent_portrayal(agent):
@@ -44,7 +44,10 @@ model = BoltzmannWealthModelNetwork()
 
 page = SolaraViz(
     model,
-    components=[GiniPlot, SpacePlot],
+    components=[
+        SpacePlot,
+        GiniPlot,
+    ],
     model_params=model_params,
     name="Boltzmann_wealth_model_network",
 )
