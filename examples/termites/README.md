@@ -15,7 +15,7 @@ Over time, these simple interactions lead to the formation of wood chip piles, i
 
 ## Installation
 
-Make sure that you have installed the `latest` version of mesa i.e `3.2` onwards.
+Make sure that you have installed the `latest` version of mesa.
 
 ## Usage
 
