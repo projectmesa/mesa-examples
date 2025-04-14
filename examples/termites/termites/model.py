@@ -1,6 +1,6 @@
 import numpy as np
 from mesa import Model
-from mesa.discrete_space import OrthogonalMooreGrid, PropertyLayer
+from mesa.experimental.cell_space import OrthogonalMooreGrid, PropertyLayer
 
 from .agents import Termite
 
