@@ -7,10 +7,8 @@ from preferencial_attachment.model import AgentNetwork
 
 
 def node_portrayal(agent):
-    return{
-        "color": "blue",
-        "size": 30
-    }
+    return {"color": "blue", "size": 30}
+
 
 model_params = {
     "seed": {
@@ -23,10 +21,11 @@ model_params = {
         "value": 30,
         "label": "No. of agents",
         "min": 10,
-        "max":100,
+        "max": 100,
         "step": 1,
     },
 }
+
 
 def post_process_lineplot(ax):
     ax.set_ylim(ymin=0)
@@ -36,12 +35,12 @@ def post_process_lineplot(ax):
 
 
 SpacePlot = make_space_component(node_portrayal)
-StatePlot = make_plot_component(measure = "Degree",post_process=post_process_lineplot)
+StatePlot = make_plot_component(measure="Degree", post_process=post_process_lineplot)
 model = AgentNetwork()
 
 page = SolaraViz(
     model,
-    components=[SpacePlot,StatePlot],
+    components=[SpacePlot, StatePlot],
     model_params=model_params,
-    name= "Agent Network"
+    name="Agent Network",
 )
