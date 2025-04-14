@@ -6,7 +6,7 @@ class Termite(CellAgent):
     A Termite agent that has ability to carry woodchip.
 
     Attributes:
-        hasWoodChip(bool): True if the agent is carrying a wood chip.
+        has_woodchip(bool): True if the agent is carrying a wood chip.
     """
 
     def __init__(self, model, cell):
@@ -17,7 +17,7 @@ class Termite(CellAgent):
         """
         super().__init__(model)
         self.cell = cell
-        self.hasWoodChip = False
+        self.has_woodchip = False
 
     def wiggle(self):
         self.cell = self.model.random.choice(self.model.grid.all_cells.cells)
@@ -25,7 +25,7 @@ class Termite(CellAgent):
     def search_for_chip(self):
         if self.cell.woodcell:
             self.cell.woodcell = False
-            self.hasWoodChip = True
+            self.has_woodchip = True
 
             for _ in range(10):
                 new_cell = self.cell.neighborhood.select_random_cell()
@@ -46,12 +46,12 @@ class Termite(CellAgent):
         return True
 
     def put_down_chip(self):
-        if not self.hasWoodChip:
+        if not self.has_woodchip:
             return True
 
         if not self.cell.woodcell:
             self.cell.woodcell = True
-            self.hasWoodChip = False
+            self.has_woodchip = False
 
             self.get_away()
             return True
@@ -77,7 +77,7 @@ class Termite(CellAgent):
           2. Find a new pile (a cell with a wood chip) if carrying a chip.
           3. Put down the chip if a suitable location is found.
         """
-        if not self.hasWoodChip:
+        if not self.has_woodchip:
             while not self.search_for_chip():
                 pass
 

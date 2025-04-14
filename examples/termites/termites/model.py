@@ -7,7 +7,7 @@ from .agents import Termite
 
 class TermiteModel(Model):
     """
-    A simulation that depicts behavior of termite agents gathering wood chips into piles.
+    A simulation that shows behavior of termite agents gathering wood chips into piles.
     """
 
     def __init__(
@@ -31,6 +31,8 @@ class TermiteModel(Model):
         self.wood_chips_layer = PropertyLayer(
             "woodcell", (width, height), default_value=False, dtype=bool
         )
+
+        # Randomly distribute wood chips, by directly modifying the layer's underlying ndarray
         self.wood_chips_layer.data = np.random.choice(
             [True, False],
             size=(width, height),
@@ -39,10 +41,11 @@ class TermiteModel(Model):
 
         self.grid.add_property_layer(self.wood_chips_layer)
 
+        # Create agents and randomly distribute them over the grid
         Termite.create_agents(
-            self,
-            self.num_termites,
-            self.random.sample(self.grid.all_cells.cells, k=self.num_termites),
+            model = self,
+            n = self.num_termites,
+            cell = self.random.sample(self.grid.all_cells.cells, k=self.num_termites),
         )
 
     def step(self):

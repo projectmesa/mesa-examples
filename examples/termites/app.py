@@ -14,7 +14,7 @@ wood_chip_portrayal = {
 
 
 def agent_portrayal(agent):
-    return {"marker": ">", "color": "red" if agent.hasWoodChip else "black", "size": 10}
+    return {"marker": ">", "color": "red" if agent.has_woodchip else "black", "size": 10}
 
 
 model_params = {
