@@ -43,9 +43,9 @@ class TermiteModel(Model):
 
         # Create agents and randomly distribute them over the grid
         Termite.create_agents(
-            model = self,
-            n = self.num_termites,
-            cell = self.random.sample(self.grid.all_cells.cells, k=self.num_termites),
+            model=self,
+            n=self.num_termites,
+            cell=self.random.sample(self.grid.all_cells.cells, k=self.num_termites),
         )
 
     def step(self):
