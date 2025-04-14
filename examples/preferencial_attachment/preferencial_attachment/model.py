@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 from mesa import DataCollector, Model
-from mesa.discrete_space import Network
+from mesa.experimental.cell_space import Network
 
 from .agents import NodeAgent
 
