@@ -1,6 +1,6 @@
 # Virus-Antibody Model
 
-This model is a simulation of immune reaction declined as a confrontation between antibody agents and virus agents. The global idea is to model how the imune system can struggle against new virus but is able to adapt over time and beat a same virus if it comes back. The results are quite interesting as the simulation can go both ways (virus win or antibodies win) with a little tweak in the base parameters.
+This model is a simulation of immune reaction declined as a confrontation between antibody agents and virus agents. The global idea is to model how the immune system can struggle against new virus but is able to adapt over time and beat a same virus if it comes back. The results are quite interesting as the simulation can go both ways (virus win or antibodies win) with a little tweak in the base parameters.
 
 
 **It showcases :**
