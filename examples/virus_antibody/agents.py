@@ -53,9 +53,6 @@ class AntibodyAgent(ContinuousSpaceAgent):
         self.ko_steps_left = 0
 
     def step(self):
-        if self is None:
-            return
-
         # Acquire a virus target if we don't already have one
         if self.target is None:
             closest = self.find_closest_virus()
