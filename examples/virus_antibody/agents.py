@@ -16,6 +16,7 @@ class AntibodyAgent(ContinuousSpaceAgent):
     """An Antibody agent. They move randomly until they see a virus, go fight it.
     If they lose, stay KO for a bit, lose health and back to random moving.
     """
+
     speed = 1.5
     sight_range = 10
     ko_timeout = 15
@@ -46,9 +47,15 @@ class AntibodyAgent(ContinuousSpaceAgent):
         self.ko_steps_left = 0
 
     def step(self):
-        nearby_agents,_ = self.space.get_agents_in_radius(self.position, self.sight_range)
+        nearby_agents, _ = self.space.get_agents_in_radius(
+            self.position, self.sight_range
+        )
         nearby_viruses = [a for a in nearby_agents if isinstance(a, VirusAgent)]
-        nearby_antibodies = [a for a in nearby_agents if isinstance(a, AntibodyAgent) and a.unique_id != self.unique_id]
+        nearby_antibodies = [
+            a
+            for a in nearby_agents
+            if isinstance(a, AntibodyAgent) and a.unique_id != self.unique_id
+        ]
 
         # Acquire a virus target if we don't already have one
         if self.target is None and nearby_viruses:
@@ -89,7 +96,6 @@ class AntibodyAgent(ContinuousSpaceAgent):
         clone.ko_steps_left = 0
 
     def move(self):
-
         # Dereference weakref if needed
         target = (
             self.target()
@@ -136,7 +142,6 @@ class AntibodyAgent(ContinuousSpaceAgent):
             self.position = new_pos
 
     def engage_virus(self, virus) -> str:
-
         dna = copy.deepcopy(virus.dna)
         if dna in self.st_memory or dna in self.lt_memory:
             virus.remove()
@@ -158,6 +163,7 @@ class AntibodyAgent(ContinuousSpaceAgent):
 
 class VirusAgent(ContinuousSpaceAgent):
     """A virus agent: random movement, mutation, duplication, passive to antibodies."""
+
     speed = 1
 
     def __init__(

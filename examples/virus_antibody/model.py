@@ -31,10 +31,8 @@ class VirusAntibodyModel(Model):
         initial_viruses=20,
         width=100,
         height=100,
-
         # Antibody parameters
         antibody_duplication_rate=0.01,
-
         # Virus parameters
         virus_duplication_rate=0.01,
         virus_mutation_rate=0.01,
