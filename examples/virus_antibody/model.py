@@ -7,7 +7,7 @@ A mesa implementation of the Virus/Antibody model, where antibodies and viruses 
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../../mesa"))
+sys.path.insert(0, os.path.abspath("../../../mesa"))
 
 import numpy as np
 from agents import AntibodyAgent, VirusAgent
@@ -31,11 +31,10 @@ class VirusAntibodyModel(Model):
         initial_viruses=20,
         width=100,
         height=100,
+
         # Antibody parameters
         antibody_duplication_rate=0.01,
-        antibody_sight_range=10,
-        antibody_ko_timeout=15,
-        antibody_memory_capacity=3,
+
         # Virus parameters
         virus_duplication_rate=0.01,
         virus_mutation_rate=0.01,
@@ -54,7 +53,6 @@ class VirusAntibodyModel(Model):
 
         Indirect Args (not chosen in the graphic interface for clarity reasons):
             antibody_memory_capacity: Number of virus DNA an antibody can remember
-            antibody_sight_range: Radius within which antibodies can detect viruses
             antibody_ko_timeout : Number of step after which an antibody can move after a KO
 
         """
@@ -69,9 +67,6 @@ class VirusAntibodyModel(Model):
 
         # antibody parameters
         self.antibody_duplication_rate = antibody_duplication_rate
-        self.antibody_sight_range = antibody_sight_range
-        self.antibody_ko_timeout = antibody_ko_timeout
-        self.antibody_memory_capacity = antibody_memory_capacity
 
         # virus parameters
         self.virus_duplication_rate = virus_duplication_rate
@@ -103,16 +98,13 @@ class VirusAntibodyModel(Model):
             size=(self.initial_antibody, 2)
         ) * np.array(self.space.size)
         directions = self.rng.uniform(-1, 1, size=(self.initial_antibody, 2))
-        self.antibodies_set = AntibodyAgent.create_agents(
+        AntibodyAgent.create_agents(
             self,
             self.initial_antibody,
             self.space,
             initial_position=antibodies_positions,
             direction=directions,
-            sight_range=self.antibody_sight_range,
             duplication_rate=self.antibody_duplication_rate,
-            ko_timeout=self.antibody_ko_timeout,
-            memory_capacity=self.antibody_memory_capacity,
         )
 
         # Create and place the Virus agents
@@ -122,7 +114,7 @@ class VirusAntibodyModel(Model):
         )
         directions = self.rng.uniform(-1, 1, size=(self.initial_viruses, 2))
 
-        self.viruses_set = VirusAgent.create_agents(
+        VirusAgent.create_agents(
             self,
             self.initial_viruses,
             self.space,

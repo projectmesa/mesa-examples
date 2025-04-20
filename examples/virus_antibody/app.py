@@ -6,7 +6,7 @@ from agents import AntibodyAgent, VirusAgent
 from matplotlib.markers import MarkerStyle
 from model import VirusAntibodyModel
 
-sys.path.insert(0, os.path.abspath("../../mesa"))
+sys.path.insert(0, os.path.abspath("../../../mesa"))
 
 from mesa.experimental.devs import ABMSimulator
 from mesa.visualization import (
