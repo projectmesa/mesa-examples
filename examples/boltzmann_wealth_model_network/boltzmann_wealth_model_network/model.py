@@ -1,6 +1,6 @@
 import mesa
 import networkx as nx
-from mesa.experimental.cell_space import Network
+from mesa.discrete_space import Network
 
 from .agent import MoneyAgent
 
@@ -19,7 +19,16 @@ class BoltzmannWealthModelNetwork(mesa.Model):
     def __init__(self, num_agents=10, num_nodes=10):
         super().__init__()
         self.num_agents = num_agents
-        self.num_nodes = num_nodes if num_nodes >= self.num_agents else self.num_agents
+        if self.num_agents > num_nodes:
+            self.num_nodes = self.num_agents
+            print("""
+            ╔═══════════════════════════════════ Warning ════════════════════════════════════════╗
+            ║ Number of agents  >  Number of nodes.                                              ║
+            ║ Since each node can hold only one agent, so num_nodes has been set to num_agents.  ║
+            ╚════════════════════════════════════════════════════════════════════════════════════╝
+            """)
+        else:
+            self.num_nodes = num_nodes
         self.G = nx.erdos_renyi_graph(n=self.num_nodes, p=0.5)
         self.grid = Network(self.G, random=self.random, capacity=1)
 
