@@ -3,7 +3,8 @@ import pandas as pd
 import solara
 from mesa.visualization import SolaraViz
 from mesa.visualization.utils import update_counter
-from model import WarehouseModel
+
+from examples.warehouse.model import WarehouseModel
 
 # Constants
 LOADING_DOCKS = [(0, 0, 0), (0, 2, 0), (0, 4, 0), (0, 6, 0), (0, 8, 0)]
