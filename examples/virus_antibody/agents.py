@@ -9,10 +9,27 @@ import weakref
 from collections import deque
 
 import numpy as np
+
+sys.path.insert(0, os.path.abspath("../../../mesa"))
 from mesa.experimental.continuous_space import ContinuousSpaceAgent
 
+class CellularAgent(ContinuousSpaceAgent) :
+    def _random_move(self, speed=1):
+        """Random walk in a 2D space."""
+        perturb = np.array(
+            [
+                self.random.uniform(-0.5, 0.5),
+                self.random.uniform(-0.5, 0.5),
+            ]
+        )
+        self.direction = self.direction + perturb
+        norm = np.linalg.norm(self.direction)
+        if norm > 0:
+            self.direction /= norm
+        self.position += self.direction * speed
 
-class AntibodyAgent(ContinuousSpaceAgent):
+
+class AntibodyAgent(CellularAgent):
     """An Antibody agent. They move randomly until they see a virus, go fight it.
     If they lose, stay KO for a bit, lose health and back to random moving.
     """
@@ -113,17 +130,7 @@ class AntibodyAgent(ContinuousSpaceAgent):
 
         # Random walk if no target
         elif target is None:
-            perturb = np.array(
-                [
-                    self.random.uniform(-0.5, 0.5),
-                    self.random.uniform(-0.5, 0.5),
-                ]
-            )
-            self.direction = self.direction + perturb
-            norm = np.linalg.norm(self.direction)
-            if norm > 0:
-                self.direction /= norm
-            new_pos = self.position + self.direction * self.speed
+            self._random_move()
 
         # Chase a valid virus target
         else:
@@ -161,7 +168,7 @@ class AntibodyAgent(ContinuousSpaceAgent):
             return "ko"
 
 
-class VirusAgent(ContinuousSpaceAgent):
+class VirusAgent(CellularAgent):
     """A virus agent: random movement, mutation, duplication, passive to antibodies."""
 
     speed = 1
@@ -186,7 +193,7 @@ class VirusAgent(ContinuousSpaceAgent):
     def step(self):
         if self.random.random() < self.duplication_rate:
             self.duplicate()
-        self.move()
+        self._random_move()
 
     def duplicate(self):
         VirusAgent(
@@ -209,17 +216,4 @@ class VirusAgent(ContinuousSpaceAgent):
             dna[idx] = (dna[idx] - 1) % 10
         return dna
 
-    def move(self):
-        # Random walk
-        perturb = np.array(
-            [
-                self.random.uniform(-0.5, 0.5),
-                self.random.uniform(-0.5, 0.5),
-            ]
-        )
-        self.direction = self.direction + perturb
-        norm = np.linalg.norm(self.direction)
-        if norm > 0:
-            self.direction /= norm
 
-        self.position += self.direction * self.speed
