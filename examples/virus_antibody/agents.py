@@ -13,7 +13,8 @@ import numpy as np
 sys.path.insert(0, os.path.abspath("../../../mesa"))
 from mesa.experimental.continuous_space import ContinuousSpaceAgent
 
-class CellularAgent(ContinuousSpaceAgent) :
+
+class CellularAgent(ContinuousSpaceAgent):
     def _random_move(self, speed=1):
         """Random walk in a 2D space."""
         perturb = np.array(
@@ -215,5 +216,3 @@ class VirusAgent(CellularAgent):
         elif chance < self.mutation_rate:
             dna[idx] = (dna[idx] - 1) % 10
         return dna
-
-
