@@ -16,6 +16,8 @@ This model demonstrates deliberate meta-agent creation. It shows the basics of m
 
 In its current configuration, agents being part of multiple meta-agents is not supported
 
+An additional item of note is that to reference the RobotAgent created in model you will see `type(self.RobotAgent)` or `type(model.RobotAgent)` in various places. If you have any ideas for how to make this more user friendly please let us know or do a pull request.
+
 ## Installation
 
 This model requires Mesa's recommended install
