@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import solara
+from agents import InventoryAgent
 from mesa.visualization import SolaraViz
 from mesa.visualization.utils import update_counter
-
-from examples.warehouse.model import WarehouseModel
+from model import WarehouseModel
 
 # Constants
 LOADING_DOCKS = [(0, 0, 0), (0, 2, 0), (0, 4, 0), (0, 6, 0), (0, 8, 0)]
@@ -53,8 +53,8 @@ def plot_warehouse(model):
     update_counter.get()
 
     # Prepare data for inventory and robot agents
-    inventory_data = prepare_agent_data(model, "InventoryAgent", "Inventory")
-    robot_data = prepare_agent_data(model, "RobotAgent", "Robot")
+    inventory_data = prepare_agent_data(model, InventoryAgent, "Inventory")
+    robot_data = prepare_agent_data(model, type(model.RobotAgent), "Robot")
 
     # Combine data into a single DataFrame
     data = pd.DataFrame(inventory_data + robot_data)

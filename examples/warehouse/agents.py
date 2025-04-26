@@ -10,7 +10,7 @@ class InventoryAgent(FixedAgent):
     """
 
     def __init__(self, model, cell, item: str):
-        super().__init__(model, key_by_name=True)
+        super().__init__(model)
         self.cell = cell
         self.item = item
         self.quantity = 1000  # Default quantity
@@ -24,7 +24,7 @@ class RouteAgent(mesa.Agent):
     """
 
     def __init__(self, model):
-        super().__init__(model, key_by_name=True)
+        super().__init__(model)
 
     def find_path(self, start, goal) -> list[tuple[int, int, int]] | None:
         """
@@ -82,7 +82,7 @@ class SensorAgent(mesa.Agent):
     """
 
     def __init__(self, model):
-        super().__init__(model, key_by_name=True)
+        super().__init__(model)
 
     def move(
         self, coord: tuple[int, int, int], path: list[tuple[int, int, int]]
@@ -109,9 +109,9 @@ class SensorAgent(mesa.Agent):
             self.meta_agent.cell = self.random.choice(empty_neighbors)
 
         # Recalculate path
-        new_path = self.meta_agent.get_subagent_instance(RouteAgent).find_path(
-            self.meta_agent.cell, self.meta_agent.item.cell
-        )
+        new_path = self.meta_agent.get_constituting_agent_instance(
+            RouteAgent
+        ).find_path(self.meta_agent.cell, self.meta_agent.item.cell)
         self.meta_agent.path = new_path
         return "recalculating"
 
@@ -122,7 +122,7 @@ class WorkerAgent(mesa.Agent):
     """
 
     def __init__(self, model, ld, cs):
-        super().__init__(model, key_by_name=True)
+        super().__init__(model)
         self.loading_dock = ld
         self.charging_station = cs
         self.path: list[tuple[int, int, int]] | None = None
@@ -140,7 +140,7 @@ class WorkerAgent(mesa.Agent):
         """
         Continues the task if the robot is able to perform it.
         """
-        status = self.meta_agent.get_subagent_instance(SensorAgent).move(
+        status = self.meta_agent.get_constituting_agent_instance(SensorAgent).move(
             self.cell.coordinate, self.path
         )
 
