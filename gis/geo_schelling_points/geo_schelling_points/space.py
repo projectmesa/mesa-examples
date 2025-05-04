@@ -7,7 +7,7 @@ from .agents import RegionAgent
 
 
 class Nuts2Eu(mg.GeoSpace):
-    _id_region_map: Dict[str, RegionAgent]
+    _id_region_map: dict[str, RegionAgent]
     num_people: int
 
     def __init__(self):

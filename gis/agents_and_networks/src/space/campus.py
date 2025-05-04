@@ -11,13 +11,13 @@ from ..agent.commuter import Commuter
 
 
 class Campus(mg.GeoSpace):
-    homes: Tuple[Building]
-    works: Tuple[Building]
-    other_buildings: Tuple[Building]
+    homes: tuple[Building]
+    works: tuple[Building]
+    other_buildings: tuple[Building]
     home_counter: DefaultDict[mesa.space.FloatCoordinate, int]
-    _buildings: Dict[int, Building]
-    _commuters_pos_map: DefaultDict[mesa.space.FloatCoordinate, Set[Commuter]]
-    _commuter_id_map: Dict[int, Commuter]
+    _buildings: dict[int, Building]
+    _commuters_pos_map: DefaultDict[mesa.space.FloatCoordinate, set[Commuter]]
+    _commuter_id_map: dict[int, Commuter]
 
     def __init__(self, crs: str) -> None:
         super().__init__(crs=crs)
@@ -56,7 +56,7 @@ class Campus(mg.GeoSpace):
 
     def get_commuters_by_pos(
         self, float_pos: mesa.space.FloatCoordinate
-    ) -> Set[Commuter]:
+    ) -> set[Commuter]:
         return self._commuters_pos_map[float_pos]
 
     def get_commuter_by_id(self, commuter_id: int) -> Commuter:
@@ -69,7 +69,7 @@ class Campus(mg.GeoSpace):
 
     def update_home_counter(
         self,
-        old_home_pos: Optional[mesa.space.FloatCoordinate],
+        old_home_pos: mesa.space.FloatCoordinate | None,
         new_home_pos: mesa.space.FloatCoordinate,
     ) -> None:
         if old_home_pos is not None:
