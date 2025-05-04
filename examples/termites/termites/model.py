@@ -1,4 +1,3 @@
-import numpy as np
 from mesa import Model
 from mesa.experimental.cell_space import OrthogonalMooreGrid, PropertyLayer
 
@@ -33,7 +32,7 @@ class TermiteModel(Model):
         )
 
         # Randomly distribute wood chips, by directly modifying the layer's underlying ndarray
-        self.wood_chips_layer.data = np.random.choice(
+        self.wood_chips_layer.data = self.random.choice(
             [True, False],
             size=(width, height),
             p=[self.wood_chip_density, 1 - self.wood_chip_density],
