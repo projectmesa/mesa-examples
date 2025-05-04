@@ -1,4 +1,3 @@
-
 from mesa import Model
 from mesa.experimental.cell_space import OrthogonalMooreGrid, PropertyLayer
 
