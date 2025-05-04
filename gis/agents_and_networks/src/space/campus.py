@@ -1,6 +1,6 @@
 import random
 from collections import defaultdict
-from typing import DefaultDict, Dict, Optional, Set, Tuple
+from typing import DefaultDict
 
 import mesa
 import mesa_geo as mg
