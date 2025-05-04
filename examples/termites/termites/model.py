@@ -25,14 +25,14 @@ class TermiteModel(Model):
         self.num_termites = num_termites
         self.wood_chip_density = wood_chip_density
 
-        self.grid = OrthogonalMooreGrid((width, height), torus=True)
+        self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
         self.wood_chips_layer = PropertyLayer(
             "woodcell", (width, height), default_value=False, dtype=bool
         )
 
         # Randomly distribute wood chips, by directly modifying the layer's underlying ndarray
-        self.wood_chips_layer.data = self.random.choice(
+        self.wood_chips_layer.data = self.rng.choice(
             [True, False],
             size=(width, height),
             p=[self.wood_chip_density, 1 - self.wood_chip_density],
