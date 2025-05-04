@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import geopandas as gpd
 import mesa
 import numpy as np

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import solara
 from mesa.visualization import Slider, SolaraViz, make_plot_component
 from mesa_geo.visualization import make_geospace_component
