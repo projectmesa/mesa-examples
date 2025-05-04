@@ -1,5 +1,4 @@
 import mesa
-from make_warehouse import make_warehouse
 from mesa.discrete_space import OrthogonalMooreGrid
 from mesa.discrete_space.cell_agent import CellAgent
 from mesa.experimental.meta_agents.meta_agent import create_meta_agent
@@ -10,6 +9,7 @@ from .agents import (
     SensorAgent,
     WorkerAgent,
 )
+from .make_warehouse import make_warehouse
 
 # Constants for configuration
 LOADING_DOCKS = [(0, 0, 0), (0, 2, 0), (0, 4, 0), (0, 6, 0), (0, 8, 0)]
