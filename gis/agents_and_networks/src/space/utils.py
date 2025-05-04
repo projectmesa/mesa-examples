@@ -23,7 +23,7 @@ def get_coord_matrix(
 
 def get_affine_transform(
     from_coord: np.ndarray, to_coord: np.ndarray
-) -> Tuple[float, float, float, float, float, float]:
+) -> tuple[float, float, float, float, float, float]:
     A, res, rank, s = np.linalg.lstsq(from_coord, to_coord, rcond=None)
 
     np.testing.assert_array_almost_equal(res, np.zeros_like(res), decimal=15)
@@ -44,7 +44,7 @@ def get_rounded_coordinate(
 
 
 def segmented(lines: gpd.GeoSeries) -> gpd.GeoSeries:
-    def _segmented(linestring: LineString) -> List[LineString]:
+    def _segmented(linestring: LineString) -> list[LineString]:
         return [
             LineString((start_node, end_node))
             for start_node, end_node in zip(

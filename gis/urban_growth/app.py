@@ -7,7 +7,7 @@ from urban_growth.model import UrbanGrowth
 from urban_growth.space import UrbanCell
 
 
-def cell_portrayal(cell: UrbanCell) -> Tuple[float, float, float, float]:
+def cell_portrayal(cell: UrbanCell) -> tuple[float, float, float, float]:
     if cell.urban:
         if cell.old_urbanized:
             return 0, 0, 255, 1
