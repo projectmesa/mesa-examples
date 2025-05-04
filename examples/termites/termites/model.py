@@ -25,9 +25,7 @@ class TermiteModel(Model):
         self.num_termites = num_termites
         self.wood_chip_density = wood_chip_density
 
-        self.grid = OrthogonalMooreGrid((width, height), 
-                                        torus=True,
-                                        random= self.random)
+        self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
         self.wood_chips_layer = PropertyLayer(
             "woodcell", (width, height), default_value=False, dtype=bool
