@@ -57,4 +57,9 @@ jobs:
         pip install -U git+https://github.com/projectmesa/mesa-geo@main#egg=mesa-geo
         pip install .[test_gis]
     - name: Test with pytest
-      run: pytest -rA -Werror test_gis_examples.py
+      run: pytest -rA -Werror test_gis_examples.py --cov-report=xml
+    - name: Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
