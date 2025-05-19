@@ -41,7 +41,7 @@ def person_portrayal(agent):
         if agent.loans > 10:
             color = POOR_COLOR
 
-        portrayal["Color"] = color
+        portrayal["color"] = color
 
     return portrayal
 
