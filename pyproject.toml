@@ -13,10 +13,12 @@ requires-python = ">=3.8"
 test = [
     "pytest",
     "scipy",
+    "pytest-cov",
 ]
 test_gis = [
     "pytest",
     "momepy",
+    "pytest-cov",
 ]
 rl_example = [
     "stable-baselines3",
