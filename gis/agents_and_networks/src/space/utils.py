@@ -22,7 +22,7 @@ def get_coord_matrix(
 def get_affine_transform(
     from_coord: np.ndarray, to_coord: np.ndarray
 ) -> tuple[float, float, float, float, float, float]:
-    A, res, rank, s = np.linalg.lstsq(from_coord, to_coord, rcond=None)
+    A, res, rank, s = np.linalg.lstsq(from_coord, to_coord, rcond=None)  # noqa: N806
 
     np.testing.assert_array_almost_equal(res, np.zeros_like(res), decimal=15)
     np.testing.assert_array_almost_equal(A[:, 2], np.array([0.0, 0.0, 1.0]), decimal=15)
@@ -57,7 +57,7 @@ def segmented(lines: gpd.GeoSeries) -> gpd.GeoSeries:
 # reference: https://gis.stackexchange.com/questions/367228/using-shapely-interpolate-to-evenly-re-sample-points-on-a-linestring-geodatafram
 def redistribute_vertices(geom, distance):
     if isinstance(geom, LineString):
-        if (num_vert := int(round(geom.length / distance))) == 0:
+        if (num_vert := round(geom.length / distance)) == 0:
             num_vert = 1
         return LineString(
             [
@@ -78,9 +78,13 @@ class UnitTransformer:
     _degree2meter: pyproj.Transformer
     _meter2degree: pyproj.Transformer
 
-    def __init__(
-        self, degree_crs=pyproj.CRS("EPSG:4326"), meter_crs=pyproj.CRS("EPSG:3857")
-    ):
+    def __init__(self, degree_crs: pyproj.CRS | None, meter_crs: pyproj.CRS | None):
+        if degree_crs is None:
+            degree_crs = pyproj.CRS("EPSG:4326")
+
+        if meter_crs is None:
+            meter_crs = pyproj.CRS("EPSG:3857")
+
         self._degree2meter = pyproj.Transformer.from_crs(
             degree_crs, meter_crs, always_xy=True
         )

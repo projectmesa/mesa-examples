@@ -19,7 +19,7 @@ class RoadNetwork:
 
     def __init__(self, lines: gpd.GeoSeries):
         segmented_lines = gpd.GeoDataFrame(geometry=segmented(lines))
-        G = momepy.gdf_to_nx(segmented_lines, approach="primal", length="length")
+        G = momepy.gdf_to_nx(segmented_lines, approach="primal", length="length")  # noqa: N806
         self.nx_graph = G.subgraph(max(nx.connected_components(G), key=len))
         self.crs = lines.crs
 
@@ -70,7 +70,7 @@ class CampusWalkway(RoadNetwork):
         self._path_cache_result = f"{output_dir}/{campus}_path_cache_result.pkl"
         try:
             with open(self._path_cache_result, "rb") as cached_result:
-                self._path_select_cache = pickle.load(cached_result)
+                self._path_select_cache = pickle.load(cached_result)  # noqa: S301
         except FileNotFoundError:
             self._path_select_cache = {}
 

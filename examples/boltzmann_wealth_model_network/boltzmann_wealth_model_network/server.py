@@ -3,7 +3,7 @@ import mesa
 from .model import BoltzmannWealthModelNetwork
 
 
-def network_portrayal(G):
+def network_portrayal(G):  # noqa: N803
     # The model ensures there is 0 or 1 agent per node
 
     portrayal = {}
