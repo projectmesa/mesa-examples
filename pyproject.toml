@@ -1,13 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "mesa-models"
-version = "0.1.0"
 description = "Importable Mesa models."
-authors = [
-    {name = "Project Mesa Team", email = "projectmesa@googlegroups.com"}
-]
 license = {file = "LICENSE"}
-readme = "README.md"
 requires-python = ">=3.8"
+authors = [
+    {name = "Project Mesa Team", email = "maintainers@projectmesa.dev"}
+]
+version = "0.1.0"
+readme = "README.md"
 
 [project.optional-dependencies]
 test = [
@@ -25,16 +29,14 @@ rl_example = [
     "tensorboard"
 ]
 
-[build-system]
-requires = [
-    "setuptools",
-    "wheel",
-]
-build-backend = "setuptools.build_meta"
-
 [tool.ruff]
+# Hardcode to Python 3.8.
+target-version = "py38"
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
 # See https://github.com/charliermarsh/ruff#rules for error code definitions.
-lint.select = [
+select = [
     # "ANN", # annotations TODO
     "B", # bugbear
     "C4", # comprehensions
@@ -58,36 +60,29 @@ lint.select = [
     "UP", # upgrade
     "W", # style warnings
     "YTT", # sys.version
+#    "D",  # docstring TODO
 ]
 # Ignore list taken from https://github.com/psf/black/blob/master/.flake8
 # E203	Whitespace before ':'
 # E266	Too many leading '#' for block comment
-# E501	Line too long (82 > 79 characters)
 # W503	Line break occurred before a binary operator
-# But we don't specify them because ruff's Black already
+# But we don't specify them because ruff's formatter
 # checks for it.
 # See https://github.com/charliermarsh/ruff/issues/1842#issuecomment-1381210185
-lint.extend-ignore = [
-    "E501",
-    "S101", # Use of `assert` detected
-    "B017", # `assertRaises(Exception)` should be considered evil TODO
-    "PGH004", # Use specific rule codes when using `noqa` TODO
-    "B905", # `zip()` without an explicit `strict=` parameter
-    "N802", # Function name should be lowercase
-    "N999",  # Invalid module name. We should revisit this in the future, TODO
-    "B007",  # Loop control variable `i` not used within loop body
-    "N806",  # Variable `N` in function should be lowercase
-    "N803",  # Argument name `N` should be lowercase
-    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar` TODO
-    "S311",  # Standard pseudo-random generators are not suitable for cryptographic purposes TODO
-    "B008",  # Do not perform function call `pyproj.CRS` in argument defaults TODO
-    "S301",  # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue TODO
-    "ISC001",  # conflict with ruff format
+extend-ignore = [
+  "E501",
+  "S101",   # Use of `assert` detected
+  "B017",   # `assertRaises(Exception)` should be considered evil TODO
+  "PGH004", # Use specific rule codes when using `noqa` TODO
+  "B905",   # `zip()` without an explicit `strict=` parameter
+  "N802",   # Function name should be lowercase
+  "N999",   # Invalid module name. We should revisit this in the future, TODO
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar` TODO
+  "S310",   # Audit URL open for permitted schemes. Allowing use of `file:` or custom schemes is often unexpected.
+  "S603",   # `subprocess` call: check for execution of untrusted input
+  "ISC001", # ruff format asks to disable this feature
+  "S311",   # Standard pseudo-random generators are not suitable for cryptographic purposes
 ]
-# Hardcode to Python 3.8.
-target-version = "py38"
-extend-include = ["*.ipynb"]
 
-[tool.isort]
-profile = "black"
-sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'LOCALFOLDER']
+[tool.ruff.lint.pydocstyle]
+convention = "google"
