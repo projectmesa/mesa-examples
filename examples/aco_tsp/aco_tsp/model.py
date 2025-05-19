@@ -79,14 +79,10 @@ class TSPGraph:
 
 
 class AntTSP(CellAgent):
-    """
-    An agent
-    """
+    """An agent"""
 
     def __init__(self, model, alpha: float = 1.0, beta: float = 5.0):
-        """
-        Customize the agent
-        """
+        """Customize the agent"""
         super().__init__(model)
         self.alpha = alpha
         self.beta = beta
@@ -141,11 +137,9 @@ class AntTSP(CellAgent):
         return new_city
 
     def step(self):
-        """
-        Modify this method to change what an individual agent will do during each step.
+        """Modify this method to change what an individual agent will do during each step.
         Can include logic based on neighbors states.
         """
-
         for _ in range(self.model.num_cities - 1):
             # Pick a random city that isn't in the list of cities visited
             new_city = self.decide_next_city()
@@ -158,8 +152,7 @@ class AntTSP(CellAgent):
 
 
 class AcoTspModel(mesa.Model):
-    """
-    The model class holds the model-level attributes, manages the agents, and generally handles
+    """The model class holds the model-level attributes, manages the agents, and generally handles
     the global level of our model.
 
     There is only one model-level parameter: how many agents the model contains. When a new model
@@ -168,12 +161,16 @@ class AcoTspModel(mesa.Model):
 
     def __init__(
         self,
+        tsp_graph: TSPGraph | None,
         num_agents: int = 20,
-        tsp_graph: TSPGraph = TSPGraph.from_random(20),
         max_steps: int = int(1e6),
         ant_alpha: float = 1.0,
         ant_beta: float = 5.0,
     ):
+        # Don't create the TSPGraph.from_random as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
+        if tsp_graph is None:
+            tsp_graph = TSPGraph.from_random(20)
+
         super().__init__()
         self.num_agents = num_agents
         self.tsp_graph = tsp_graph
@@ -224,15 +221,13 @@ class AcoTspModel(mesa.Model):
             # Evaporate
             tau_ij = (1 - ro) * self.grid.G[i][j]["pheromone"]
             # Add ant's contribution
-            for k, delta_tau_ij_k in delta_tau_ij.items():
+            for _, delta_tau_ij_k in delta_tau_ij.items():
                 tau_ij += delta_tau_ij_k.get((i, j), 0.0)
 
             self.grid.G[i][j]["pheromone"] = tau_ij
 
     def step(self):
-        """
-        A model step. Used for activating the agents and collecting data.
-        """
+        """A model step. Used for activating the agents and collecting data."""
         self.agents.shuffle_do("step")
         self.update_pheromone()
 

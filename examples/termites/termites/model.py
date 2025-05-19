@@ -5,9 +5,7 @@ from .agents import Termite
 
 
 class TermiteModel(Model):
-    """
-    A simulation that shows behavior of termite agents gathering wood chips into piles.
-    """
+    """A simulation that shows behavior of termite agents gathering wood chips into piles."""
 
     def __init__(
         self, num_termites=100, width=100, height=100, wood_chip_density=0.1, seed=42

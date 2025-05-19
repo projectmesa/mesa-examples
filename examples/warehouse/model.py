@@ -24,15 +24,13 @@ INVENTORY_START_ROW_OFFSET = 3
 
 
 class WarehouseModel(mesa.Model):
-    """
-    Model for simulating warehouse management with autonomous systems where
+    """Model for simulating warehouse management with autonomous systems where
     each autonomous system (e.g., robot) is made of numerous smaller agents
     (e.g., routing, sensors, etc.).
     """
 
     def __init__(self, seed=42):
-        """
-        Initialize the model.
+        """Initialize the model.
 
         Args:
             seed (int): Random seed.
@@ -87,8 +85,7 @@ class WarehouseModel(mesa.Model):
             )
 
     def central_move(self, robot):
-        """
-        Consolidates meta-agent behavior in the model class.
+        """Consolidates meta-agent behavior in the model class.
 
         Args:
             robot: The robot meta-agent to move.
@@ -96,9 +93,7 @@ class WarehouseModel(mesa.Model):
         robot.move(robot.cell.coordinate, robot.path)
 
     def step(self):
-        """
-        Advance the model by one step.
-        """
+        """Advance the model by one step."""
         for robot in self.agents_by_type[type(self.RobotAgent)]:
             if robot.status == "open":  # Assign a task to the robot
                 item = self.random.choice(self.agents_by_type[InventoryAgent])

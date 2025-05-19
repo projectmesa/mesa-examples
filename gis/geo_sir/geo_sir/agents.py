@@ -16,8 +16,7 @@ class PersonAgent(mg.GeoAgent):
         death_risk=0.1,
         init_infected=0.1,
     ):
-        """
-        Create a new person agent.
+        """Create a new person agent.
         :param model:       Model in which the agent runs
         :param geometry:    Shape object for the agent
         :param agent_type:  Indicator if agent is infected
@@ -38,8 +37,7 @@ class PersonAgent(mg.GeoAgent):
             self.model.counts["susceptible"] -= 1
 
     def move_point(self, dx, dy):
-        """
-        Move a point by creating a new one
+        """Move a point by creating a new one
         :param dx:  Distance to move in x-axis
         :param dy:  Distance to move in y-axis
         """
@@ -83,8 +81,7 @@ class NeighbourhoodAgent(mg.GeoAgent):
     """Neighbourhood agent. Changes color according to number of infected inside it."""
 
     def __init__(self, model, geometry, crs, agent_type="safe", hotspot_threshold=1):
-        """
-        Create a new Neighbourhood agent.
+        """Create a new Neighbourhood agent.
         :param unique_id:   Unique identifier for the agent
         :param model:       Model in which the agent runs
         :param geometry:    Shape object for the agent

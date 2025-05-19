@@ -8,9 +8,7 @@ class Cell(FixedAgent):
     ALIVE = 1
 
     def __init__(self, cell, model, init_state=DEAD):
-        """
-        Create a cell, in the given state, at the given x, y position.
-        """
+        """Create a cell, in the given state, at the given x, y position."""
         super().__init__(model)
         self.cell = cell
         self.state = init_state
@@ -26,8 +24,7 @@ class Cell(FixedAgent):
         return self.is_considered is True
 
     def determine_state(self):
-        """
-        Compute if the cell will be dead or alive at the next tick. A dead
+        """Compute if the cell will be dead or alive at the next tick. A dead
         cell will become alive if it has only one neighbor. The state is not
         changed here, but is just computed and stored in self._next_state,
         because our current state may still be necessary for our neighbors
@@ -52,7 +49,5 @@ class Cell(FixedAgent):
                     a.is_considered = True
 
     def assume_state(self):
-        """
-        Set the state to the new computed state
-        """
+        """Set the state to the new computed state"""
         self.state = self._next_state

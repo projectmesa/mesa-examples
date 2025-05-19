@@ -10,15 +10,14 @@ from .agents import ConsumerAgent, StoreAgent
 
 # The main model class that sets up and runs the simulation.
 class HotellingModel(Model):
-    """
-    A model simulating competition and pricing strategies among stores
+    """A model simulating competition and pricing strategies among stores
     within a defined environment. This simulation
     explores the dynamics of market competition, specifically focusing
     on how pricing and location strategies affect
     market outcomes in accordance with Hotelling's Law.
 
     Parameters:
-        N_stores (int): The number of store agents participating
+        n_stores (int): The number of store agents participating
         in the simulation.Each agent acts as an individual store competing
         in the market.
         width (int), height (int): The dimensions of the simulation grid.
@@ -67,8 +66,8 @@ class HotellingModel(Model):
 
     def __init__(
         self,
-        N_stores=20,
-        N_consumers=100,
+        n_stores=20,
+        n_consumers=100,
         width=50,
         height=50,
         mode="default",
@@ -82,9 +81,9 @@ class HotellingModel(Model):
         # and mobility rate.
         super().__init__(seed=seed)
         # Total number of store agents in the model.
-        self.num_agents = N_stores
+        self.num_agents = n_stores
         # Total number of consumers
-        self.num_consumers = N_consumers
+        self.num_consumers = n_consumers
         # Percentage of agents that can move.
         self.mobility_rate = mobility_rate
         # Operational mode of the simulation affects agents' behavior
@@ -111,18 +110,18 @@ class HotellingModel(Model):
 
         # Dynamically generate store-specific price collectors
         store_price_collectors = {
-            f"Store_{i}_Price": self.get_store_price_lambda(i) for i in range(N_stores)
+            f"Store_{i}_Price": self.get_store_price_lambda(i) for i in range(n_stores)
         }
 
         # Dynamically generate store-specific market_share collectors
         store_market_share_collectors = {
             f"Store_{i}_Market Share": self.get_market_share_lambda(i)
-            for i in range(N_stores)
+            for i in range(n_stores)
         }
 
         # Dynamically generate store-specific revenue collectors
         store_revenue_collectors = {
-            f"Store_{i}_Revenue": self.get_revenue_lambda(i) for i in range(N_stores)
+            f"Store_{i}_Revenue": self.get_revenue_lambda(i) for i in range(n_stores)
         }
 
         # Combine the dictionaries and pass them to DataCollector
@@ -137,7 +136,8 @@ class HotellingModel(Model):
     @staticmethod
     def get_store_price_lambda(unique_id):
         """Return a lambda function that gets the
-        price of a store by its unique ID."""
+        price of a store by its unique ID.
+        """
         return lambda m: next(
             (
                 agent.price
@@ -150,7 +150,8 @@ class HotellingModel(Model):
     @staticmethod
     def get_market_share_lambda(unique_id):
         """Return a lambda function that gets the
-        market_share of a store by its unique ID."""
+        market_share of a store by its unique ID.
+        """
         return lambda m: next(
             (
                 agent.market_share
@@ -163,7 +164,8 @@ class HotellingModel(Model):
     @staticmethod
     def get_revenue_lambda(unique_id):
         """Return a lambda function that calculates the
-        revenue of a store by its unique ID."""
+        revenue of a store by its unique ID.
+        """
         return lambda m: next(
             (
                 agent.market_share * agent.price
@@ -224,7 +226,7 @@ class HotellingModel(Model):
     # Utility method to run the model for a specified number of steps.
     def run_model(self, step_count=200):
         """Run the model for a certain number of steps."""
-        for i in range(step_count):
+        for _ in range(step_count):
             self.step()
 
     # Method to export collected data to CSV files for further analysis.

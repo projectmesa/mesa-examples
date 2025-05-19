@@ -5,7 +5,8 @@ from .hotelling_law.model import HotellingModel
 
 def check_slope(data, increasing=True):
     """Checks the slope of a dataset to determine
-    if it's increasing or decreasing."""
+    if it's increasing or decreasing.
+    """
     slope = get_slope(data)
     return (slope > 0) if increasing else (slope < 0)
 
@@ -18,7 +19,8 @@ def get_slope(data):
 
 def test_decreasing_price_variance():
     """Test to ensure the price variance decreases over time,
-    in line with Hotelling's law."""
+    in line with Hotelling's law.
+    """
     model = HotellingModel(
         N_stores=5,
         width=20,
@@ -39,7 +41,8 @@ def test_decreasing_price_variance():
 
 def test_constant_price_variance():
     """Test to ensure the price variance constant over time,
-    with Rules location_only without changing price"""
+    with Rules location_only without changing price
+    """
     model = HotellingModel(
         N_stores=5,
         width=20,

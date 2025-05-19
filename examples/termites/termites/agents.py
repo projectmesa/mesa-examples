@@ -2,18 +2,16 @@ from mesa.experimental.cell_space import CellAgent
 
 
 class Termite(CellAgent):
-    """
-    A Termite agent that has ability to carry woodchip.
+    """A Termite agent that has ability to carry woodchip.
 
     Attributes:
         has_woodchip(bool): True if the agent is carrying a wood chip.
     """
 
     def __init__(self, model, cell):
-        """
-        Args:
-            model: The model instance.
-            cell: The starting cell (position) of the agent.
+        """Args:
+        model: The model instance.
+        cell: The starting cell (position) of the agent.
         """
         super().__init__(model)
         self.cell = cell
@@ -71,11 +69,10 @@ class Termite(CellAgent):
                 break
 
     def step(self):
-        """
-        Protocol which termite agent follows:
-          1. Search for a wood chip if not carrying one.
-          2. Find a new pile (a cell with a wood chip) if carrying a chip.
-          3. Put down the chip if a suitable location is found.
+        """Protocol which termite agent follows:
+        1. Search for a wood chip if not carrying one.
+        2. Find a new pile (a cell with a wood chip) if carrying a chip.
+        3. Put down the chip if a suitable location is found.
         """
         if not self.has_woodchip:
             while not self.search_for_chip():

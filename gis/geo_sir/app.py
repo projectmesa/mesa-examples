@@ -11,9 +11,7 @@ model_params = {
 
 
 def infected_draw(agent):
-    """
-    Portrayal Method for canvas
-    """
+    """Portrayal Method for canvas"""
     portrayal = {}
     if isinstance(agent, PersonAgent):
         portrayal["radius"] = "2"

@@ -1,6 +1,4 @@
-"""
-Configure visualization elements and instantiate a server
-"""
+"""Configure visualization elements and instantiate a server"""
 
 import networkx as nx
 import solara

@@ -1,5 +1,4 @@
-"""
-The following code was adapted from the Bank Reserves model included in Netlogo
+"""The following code was adapted from the Bank Reserves model included in Netlogo
 Model information can be found at:
 http://ccl.northwestern.edu/netlogo/models/BankReserves
 Accessed on: November 2, 2017
@@ -18,7 +17,8 @@ class Bank:
     class. This is because there is only one bank in this model, and it does not
     use any Mesa-specific features like the scheduler or the grid, and doesn't
     have a step method. It is just used to keep track of the bank's reserves and
-    the amount it can loan out, for Person agents to interact with."""
+    the amount it can loan out, for Person agents to interact with.
+    """
 
     def __init__(self, model, reserve_percent=50):
         self.model = model
@@ -63,8 +63,9 @@ class Person(CellAgent):
         self.bank = bank
 
     def do_business(self):
-        """check if person has any savings, any money in wallet, or if the
-        bank can loan them any money"""
+        """Check if person has any savings, any money in wallet, or if the
+        bank can loan them any money
+        """
         if (self.savings > 0 or self.wallet > 0 or self.bank.bank_to_loan > 0) and len(
             self.cell.agents
         ) > 1:
@@ -164,8 +165,9 @@ class Person(CellAgent):
 
     # part of balance_books()
     def take_out_loan(self, amount):
-        """borrow from the bank to put money in my wallet, and increase my
-        outstanding loans"""
+        """Borrow from the bank to put money in my wallet, and increase my
+        outstanding loans
+        """
         self.loans += amount
         self.wallet += amount
         # decresae the amount the bank can loan right now

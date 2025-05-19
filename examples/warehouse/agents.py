@@ -5,9 +5,7 @@ from mesa.discrete_space import FixedAgent
 
 
 class InventoryAgent(FixedAgent):
-    """
-    Represents an inventory item in the warehouse.
-    """
+    """Represents an inventory item in the warehouse."""
 
     def __init__(self, model, cell, item: str):
         super().__init__(model)
@@ -17,8 +15,7 @@ class InventoryAgent(FixedAgent):
 
 
 class RouteAgent(mesa.Agent):
-    """
-    Handles path finding for agents in the warehouse.
+    """Handles path finding for agents in the warehouse.
 
     Intended to be a pseudo onboard GPS system for robots.
     """
@@ -27,9 +24,7 @@ class RouteAgent(mesa.Agent):
         super().__init__(model)
 
     def find_path(self, start, goal) -> list[tuple[int, int, int]] | None:
-        """
-        Determines the path for a robot to take using the A* algorithm.
-        """
+        """Determines the path for a robot to take using the A* algorithm."""
 
         def heuristic(a, b) -> int:
             dx = abs(a[0] - b[0])
@@ -75,8 +70,7 @@ class RouteAgent(mesa.Agent):
 
 
 class SensorAgent(mesa.Agent):
-    """
-    Detects entities in the area and handles movement along a path.
+    """Detects entities in the area and handles movement along a path.
 
     Intended to be a pseudo onboard sensor system for robot.
     """
@@ -87,9 +81,7 @@ class SensorAgent(mesa.Agent):
     def move(
         self, coord: tuple[int, int, int], path: list[tuple[int, int, int]]
     ) -> str:
-        """
-        Moves the agent along the given path.
-        """
+        """Moves the agent along the given path."""
         if coord not in path:
             raise ValueError("Current coordinate not in path.")
 
@@ -117,9 +109,7 @@ class SensorAgent(mesa.Agent):
 
 
 class WorkerAgent(mesa.Agent):
-    """
-    Represents a robot worker responsible for collecting and loading items.
-    """
+    """Represents a robot worker responsible for collecting and loading items."""
 
     def __init__(self, model, ld, cs):
         super().__init__(model)
@@ -130,16 +120,12 @@ class WorkerAgent(mesa.Agent):
         self.item: InventoryAgent | None = None
 
     def initiate_task(self, item: InventoryAgent):
-        """
-        Initiates a task for the robot to perform.
-        """
+        """Initiates a task for the robot to perform."""
         self.item = item
         self.path = self.find_path(self.cell, item.cell)
 
     def continue_task(self):
-        """
-        Continues the task if the robot is able to perform it.
-        """
+        """Continues the task if the robot is able to perform it."""
         status = self.meta_agent.get_constituting_agent_instance(SensorAgent).move(
             self.cell.coordinate, self.path
         )

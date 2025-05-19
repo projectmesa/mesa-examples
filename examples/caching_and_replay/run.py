@@ -10,9 +10,7 @@ model_params["cache_file_path"] = "./my_cache_file_path.cache"
 
 
 def get_cache_file_status(_):
-    """
-    Display an informational text about caching and the status of the cache file (existing versus not existing)
-    """
+    """Display an informational text about caching and the status of the cache file (existing versus not existing)"""
     cache_file = Path(model_params["cache_file_path"])
     return (
         f"Only activate the 'Replay cached run?' switch when a cache file already exists, otherwise it will fail. "

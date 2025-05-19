@@ -5,15 +5,12 @@ from .cell import Cell
 
 
 class HexSnowflake(mesa.Model):
-    """
-    Represents the hex grid of cells. The grid is represented by a 2-dimensional array
+    """Represents the hex grid of cells. The grid is represented by a 2-dimensional array
     of cells with adjacency rules specific to hexagons.
     """
 
     def __init__(self, width=50, height=50, seed=None):
-        """
-        Create a new playing area of (width, height) cells.
-        """
+        """Create a new playing area of (width, height) cells."""
         super().__init__(seed=seed)
         # Use a hexagonal grid, where edges wrap around.
         self.grid = HexGrid((width, height), capacity=1, torus=True, random=self.random)
@@ -31,8 +28,7 @@ class HexSnowflake(mesa.Model):
         self.running = True
 
     def step(self):
-        """
-        Perform the model step in two stages:
+        """Perform the model step in two stages:
         - First, all cells assume their next state (whether they will be dead or alive)
         - Then, all cells change state to their next state
         """
