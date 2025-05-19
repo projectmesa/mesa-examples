@@ -4,10 +4,11 @@ the drawing of the model representation on the canvas
 """
 
 # import webbrowser
-
-import mesa
-
-from .model import ColorPatches
+from color_patches.model import ColorPatches
+from mesa.visualization import (
+    SolaraViz,
+    make_space_component,
+)
 
 _COLORS = [
     "Aqua",
@@ -54,15 +55,15 @@ def color_patch_draw(cell):
     return portrayal
 
 
-canvas_element = mesa.visualization.CanvasGrid(
-    color_patch_draw, grid_rows, grid_cols, canvas_width, canvas_height
+space_component = make_space_component(
+    color_patch_draw,
+    draw_grid=False,
 )
-
-server = mesa.visualization.ModularServer(
-    ColorPatches,
-    [canvas_element],
-    "Color Patches",
-    {"width": grid_rows, "height": grid_cols},
+model = ColorPatches()
+page = SolaraViz(
+    model,
+    components=[space_component],
+    model_params={"width": grid_rows, "height": grid_cols},
+    name="Color Patches",
 )
-
 # webbrowser.open('http://127.0.0.1:8521')  # TODO: make this configurable

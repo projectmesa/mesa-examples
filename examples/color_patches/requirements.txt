@@ -1,1 +1,2 @@
-mesa~=2.0
+mesa[viz]>=3.0
+networkx
