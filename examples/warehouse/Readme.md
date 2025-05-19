@@ -23,7 +23,7 @@ An additional item of note is that to reference the RobotAgent created in model 
 This model requires Mesa's recommended install
 
 ```
-    $ pip install mesa[rec]
+    $ pip install 'mesa[rec]>=3'
 ```
 
 ## How to Run
