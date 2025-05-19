@@ -51,7 +51,7 @@ def color_patch_draw(cell):
     portrayal = {"Shape": "rect", "w": 1, "h": 1, "Filled": "true", "Layer": 0}
     portrayal["x"] = cell.get_row()
     portrayal["y"] = cell.get_col()
-    portrayal["Color"] = _COLORS[cell.get_state()]
+    portrayal["Color"] = _COLORS[cell.state]
     return portrayal
 
 
