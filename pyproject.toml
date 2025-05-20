@@ -33,8 +33,6 @@ rl_example = [
 ]
 
 [tool.ruff]
-# Hardcode to Python 3.8.
-target-version = "py38"
 extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
