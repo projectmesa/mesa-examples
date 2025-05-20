@@ -5,9 +5,15 @@ The model - a 2D lattice where agents live and have an opinion
 from collections import Counter
 
 import mesa
+from mesa.discrete_space.cell_agent import (
+    CellAgent,
+)
+from mesa.discrete_space.grid import (
+    OrthogonalMooreGrid,
+)
 
 
-class ColorCell(mesa.discrete_space.cell_agent.CellAgent):
+class ColorCell(CellAgent):
     """
     Represents a cell's opinion (visualized by a color)
     """
@@ -66,7 +72,7 @@ class ColorPatches(mesa.Model):
         The agents next state is first determined before updating the grid
         """
         super().__init__()
-        self._grid = mesa.experimental.cell_space.OrthogonalMooreGrid(
+        self._grid = OrthogonalMooreGrid(
             (width, height), torus=False, random=self.random
         )
 
