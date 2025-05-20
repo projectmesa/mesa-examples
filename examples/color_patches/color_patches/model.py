@@ -7,7 +7,7 @@ from collections import Counter
 import mesa
 
 
-class ColorCell(mesa.experimental.cell_space.CellAgent):
+class ColorCell(mesa.discrete_space.cell_agent.CellAgent):
     """
     Represents a cell's opinion (visualized by a color)
     """
