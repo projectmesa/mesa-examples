@@ -12,7 +12,6 @@ from mesa.discrete_space.grid import (
     OrthogonalMooreGrid,
 )
 
-
 class ColorCell(CellAgent):
     """
     Represents a cell's opinion (visualized by a color)
