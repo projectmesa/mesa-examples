@@ -57,7 +57,7 @@ def segmented(lines: gpd.GeoSeries) -> gpd.GeoSeries:
 # reference: https://gis.stackexchange.com/questions/367228/using-shapely-interpolate-to-evenly-re-sample-points-on-a-linestring-geodatafram
 def redistribute_vertices(geom, distance):
     if isinstance(geom, LineString):
-        if (num_vert := int(round(geom.length / distance))) == 0:
+        if (num_vert := round(geom.length / distance)) == 0:
             num_vert = 1
         return LineString(
             [
