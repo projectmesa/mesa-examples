@@ -20,10 +20,12 @@ readme = "README.md"
 test = [
     "pytest",
     "scipy",
+    "pytest-cov",
 ]
 test_gis = [
     "pytest",
     "momepy",
+    "pytest-cov",
 ]
 rl_example = [
     "stable-baselines3",
