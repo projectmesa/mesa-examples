@@ -21,8 +21,7 @@ def generate_item_code() -> str:
 def make_warehouse(
     rows: int = DEFAULT_ROWS, cols: int = DEFAULT_COLS, height: int = DEFAULT_HEIGHT
 ) -> np.ndarray:
-    """
-    Generate a warehouse layout with designated LD, CS, and storage rows as a NumPy array.
+    """Generate a warehouse layout with designated LD, CS, and storage rows as a NumPy array.
 
     Args:
         rows (int): Number of rows in the warehouse.

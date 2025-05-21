@@ -20,8 +20,7 @@ model_params = {
 
 
 def prepare_agent_data(model, agent_type, agent_label):
-    """
-    Prepare data for agents of a specific type.
+    """Prepare data for agents of a specific type.
 
     Args:
         model: The WarehouseModel instance.
@@ -44,8 +43,7 @@ def prepare_agent_data(model, agent_type, agent_label):
 
 @solara.component
 def plot_warehouse(model):
-    """
-    Visualize the warehouse model in a 3D scatter plot.
+    """Visualize the warehouse model in a 3D scatter plot.
 
     Args:
         model: The WarehouseModel instance.

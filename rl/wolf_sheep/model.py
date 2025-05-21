@@ -10,12 +10,9 @@ from utility import create_intial_agents, grid_to_observation
 
 
 class WolfSheepRL(WolfSheep, MultiAgentEnv):
-    """
-    WolfRL-Sheep Predation Model
-    """
-
     def __init__(
         self,
+        simulator: ABMSimulator | None,
         width=20,
         height=20,
         initial_sheep=100,
@@ -27,12 +24,13 @@ class WolfSheepRL(WolfSheep, MultiAgentEnv):
         grass_regrowth_time=30,
         sheep_gain_from_food=4,
         seed=42,
-        simulator=ABMSimulator(),
         vision=4,
     ):
-        """
-        Create a new WolfRL-Sheep model with the given parameters.
-        """
+        """Create a new WolfRL-Sheep model with the given parameters."""
+        # Don't create the ABMSimulator as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
+        if simulator is None:
+            simulator = ABMSimulator()
+
         super().__init__(
             width,
             height,
@@ -73,6 +71,8 @@ class WolfSheepRL(WolfSheep, MultiAgentEnv):
                 ),
             }
         )
+
+    """WolfRL-Sheep Predation Model"""
 
     def step(self, action_dict):
         self.action_dict = action_dict

@@ -7,7 +7,8 @@ from mesa.experimental.cell_space import CellAgent
 
 class StoreAgent(CellAgent):
     """An agent representing a store with a price and ability to move
-    and adjust prices."""
+    and adjust prices.
+    """
 
     def __init__(self, model, cell, price=10, can_move=True, strategy="Budget"):
         # Initializes the store agent with a unique ID,
@@ -128,7 +129,8 @@ class StoreAgent(CellAgent):
 
     def estimate_market_overlap(self, other_store):
         """Estimate market overlap between this store and another store.
-        This could be based on shared consumer base or other factors."""
+        This could be based on shared consumer base or other factors.
+        """
         overlap = 0
 
         for consumer in self.model.agents_by_type[ConsumerAgent]:
@@ -156,7 +158,8 @@ class StoreAgent(CellAgent):
 
 class ConsumerAgent(CellAgent):
     """A consumer agent that chooses a store
-    based on price and distance."""
+    based on price and distance.
+    """
 
     def __init__(self, model, cell, consumer_preferences):
         super().__init__(model)

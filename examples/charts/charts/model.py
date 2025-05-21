@@ -1,5 +1,4 @@
-"""
-The following code was adapted from the Bank Reserves model included in Netlogo
+"""The following code was adapted from the Bank Reserves model included in Netlogo
 Model information can be found at:
 http://ccl.northwestern.edu/netlogo/models/BankReserves
 Accessed on: November 2, 2017
@@ -25,22 +24,19 @@ For details see batch_run.py in the same directory as run.py.
 
 
 def get_num_rich_agents(model):
-    """return number of rich agents"""
-
+    """Return number of rich agents"""
     rich_agents = [a for a in model.agents if a.savings > model.rich_threshold]
     return len(rich_agents)
 
 
 def get_num_poor_agents(model):
-    """return number of poor agents"""
-
+    """Return number of poor agents"""
     poor_agents = [a for a in model.agents if a.loans > 10]
     return len(poor_agents)
 
 
 def get_num_mid_agents(model):
-    """return number of middle class agents"""
-
+    """Return number of middle class agents"""
     mid_agents = [
         a for a in model.agents if a.loans < 10 and a.savings < model.rich_threshold
     ]
@@ -48,16 +44,14 @@ def get_num_mid_agents(model):
 
 
 def get_total_savings(model):
-    """sum of all agents' savings"""
-
+    """Sum of all agents' savings"""
     agent_savings = [a.savings for a in model.agents]
     # return the sum of agents' savings
     return np.sum(agent_savings)
 
 
 def get_total_wallets(model):
-    """sum of amounts of all agents' wallets"""
-
+    """Sum of amounts of all agents' wallets"""
     agent_wallets = [a.wallet for a in model.agents]
     # return the sum of all agents' wallets
     return np.sum(agent_wallets)
@@ -143,5 +137,5 @@ class Charts(mesa.Model):
         self.datacollector.collect(self)
 
     def run_model(self):
-        for i in range(self.run_time):
+        for _ in range(self.run_time):
             self.step()

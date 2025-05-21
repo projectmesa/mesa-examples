@@ -1,5 +1,4 @@
-"""
-The following code was adapted from the Bank Reserves model included in Netlogo
+"""The following code was adapted from the Bank Reserves model included in Netlogo
 Model information can be found at:
 http://ccl.northwestern.edu/netlogo/models/BankReserves
 Accessed on: November 2, 2017

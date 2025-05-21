@@ -5,13 +5,10 @@ from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
 
 
 class SchellingAgent(CellAgent):
-    """
-    Schelling segregation agent
-    """
+    """Schelling segregation agent"""
 
     def __init__(self, model, agent_type):
-        """
-        Create a new Schelling agent.
+        """Create a new Schelling agent.
 
         Args:
            x, y: Agent initial location.
@@ -34,9 +31,7 @@ class SchellingAgent(CellAgent):
 
 
 class Schelling(mesa.Model):
-    """
-    Model class for the Schelling segregation model.
-    """
+    """Model class for the Schelling segregation model."""
 
     def __init__(
         self,
@@ -48,8 +43,7 @@ class Schelling(mesa.Model):
         minority_pc=0.3,
         seed=None,
     ):
-        """
-        Create a new Schelling model.
+        """Create a new Schelling model.
 
         Args:
             width, height: Size of the space.
@@ -59,7 +53,6 @@ class Schelling(mesa.Model):
             radius: Search radius for checking similarity
             seed: Seed for Reproducibility
         """
-
         super().__init__(seed=seed)
         self.height = height
         self.width = width
@@ -88,9 +81,7 @@ class Schelling(mesa.Model):
         self.datacollector.collect(self)
 
     def step(self):
-        """
-        Run one step of the model.
-        """
+        """Run one step of the model."""
         self.happy = 0  # Reset counter of happy agents
         self.agents.shuffle_do("step")
 

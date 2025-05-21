@@ -19,8 +19,7 @@ class GeoSir(mesa.Model):
     def __init__(
         self, pop_size=30, init_infected=0.2, exposure_distance=500, infection_risk=0.2
     ):
-        """
-        Create a new InfectedModel
+        """Create a new InfectedModel
         :param pop_size:        Size of population
         :param init_infected:   Probability of a person agent to start as infected
         :param exposure_distance:   Proximity distance between agents
@@ -63,7 +62,7 @@ class GeoSir(mesa.Model):
             agent_kwargs={"init_infected": init_infected},
         )
         # Generate random location and add agent to grid
-        for i in range(pop_size):
+        for _ in range(pop_size):
             this_neighbourhood = self.random.randint(
                 0, len(neighbourhood_agents) - 1
             )  # Region where agent starts

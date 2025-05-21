@@ -1,5 +1,4 @@
-"""
-This code implements a multi-agent model called MoneyModel using the Mesa library.
+"""This code implements a multi-agent model called MoneyModel using the Mesa library.
 The model simulates the distribution of wealth among agents in a grid environment.
 Each agent has a randomly assigned wealth and can move to neighboring cells.
 Agents can also give money to other agents in the same cell if they have greater wealth.
@@ -141,7 +140,7 @@ class BoltzmannWealthModelRL(BoltzmannWealth, gymnasium.Env):
         super().reset()
         self.grid = mesa.space.MultiGrid(self.grid.width, self.grid.height, True)
         self.remove_all_agents()
-        for i in range(self.num_agents):
+        for _ in range(self.num_agents):
             # Create MoneyAgentRL instances and add them to the schedule
             a = MoneyAgentRL(self)
             x = self.random.randrange(self.grid.width)

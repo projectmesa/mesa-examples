@@ -15,11 +15,11 @@ script_directory = Path(__file__).resolve().parent
 def get_largest_connected_components(gdf):
     """Get the largest connected component of a GeoDataFrame."""
     # create spatial weights matrix
-    W = libpysal.weights.Queen.from_dataframe(
+    w = libpysal.weights.Queen.from_dataframe(
         gdf, use_index=True, silence_warnings=True
     )
     # get component labels
-    gdf["component"] = W.component_labels
+    gdf["component"] = w.component_labels
     # get the largest component
     largest_component = gdf["component"].value_counts().idxmax()
     # subset the GeoDataFrame

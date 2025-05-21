@@ -7,7 +7,7 @@ from mesa import Model
 
 def get_models(directory):
     models = []
-    for root, dirs, files in os.walk(directory):
+    for root, _, files in os.walk(directory):
         for file in files:
             if file == "model.py":
                 module_name = os.path.relpath(os.path.join(root, file[:-3])).replace(

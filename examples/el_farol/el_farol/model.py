@@ -10,11 +10,11 @@ class ElFarolBar(mesa.Model):
         crowd_threshold=60,
         num_strategies=10,
         memory_size=10,
-        N=100,
+        num_agents=100,
     ):
         super().__init__()
         self.running = True
-        self.num_agents = N
+        self.num_agents = num_agents
 
         # Initialize the previous attendance randomly so the agents have a history
         # to work with from the start.

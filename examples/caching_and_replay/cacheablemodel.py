@@ -3,8 +3,7 @@ from model import Schelling
 
 
 class CacheableSchelling(CacheableModel):
-    """
-    A wrapper around the original Schelling model to make the simulation cacheable
+    """A wrapper around the original Schelling model to make the simulation cacheable
     and replay-able.  Uses CacheableModel from the Mesa-Replay library,
     which is a wrapper that can be put around any regular mesa model to make it
     "cacheable".

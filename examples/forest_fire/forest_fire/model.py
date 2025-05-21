@@ -5,13 +5,10 @@ from .agent import TreeCell
 
 
 class ForestFire(mesa.Model):
-    """
-    Simple Forest Fire model.
-    """
+    """Simple Forest Fire model."""
 
     def __init__(self, width=100, height=100, density=0.65, seed=None):
-        """
-        Create a new forest fire model.
+        """Create a new forest fire model.
 
         Args:
             width, height: The size of the grid to model
@@ -43,9 +40,7 @@ class ForestFire(mesa.Model):
         self.datacollector.collect(self)
 
     def step(self):
-        """
-        Advance the model by one step.
-        """
+        """Advance the model by one step."""
         self.agents.shuffle_do("step")
         # collect data
         self.datacollector.collect(self)
@@ -56,7 +51,5 @@ class ForestFire(mesa.Model):
 
     @staticmethod
     def count_type(model, tree_condition):
-        """
-        Helper method to count trees in a given condition in a given model.
-        """
+        """Helper method to count trees in a given condition in a given model."""
         return len(model.agents.select(lambda x: x.condition == tree_condition))

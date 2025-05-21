@@ -10,9 +10,9 @@ class Walker(mesa.Agent):
 
 
 class ShapeExample(mesa.Model):
-    def __init__(self, N=2, width=20, height=10):
+    def __init__(self, num_agents=2, width=20, height=10):
         super().__init__()
-        self.N = N  # num of agents
+        self.num_agents = num_agents  # num of agents
         self.headings = ((1, 0), (0, 1), (-1, 0), (0, -1))  # tuples are fast
         self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
@@ -20,7 +20,7 @@ class ShapeExample(mesa.Model):
         self.running = True
 
     def make_walker_agents(self):
-        for _ in range(self.N):
+        for _ in range(self.num_agents):
             x = self.random.randrange(self.grid.dimensions[0])
             y = self.random.randrange(self.grid.dimensions[1])
             cell = self.grid[(x, y)]

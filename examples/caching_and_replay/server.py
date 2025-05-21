@@ -5,16 +5,12 @@ from model import Schelling
 
 
 def get_happy_agents(model):
-    """
-    Display a text count of how many happy agents there are.
-    """
+    """Display a text count of how many happy agents there are."""
     return f"Happy agents: {model.happy}"
 
 
 def schelling_draw(agent):
-    """
-    Portrayal Method for canvas
-    """
+    """Portrayal Method for canvas"""
     if agent is None:
         return
     portrayal = {"Shape": "circle", "r": 0.5, "Filled": "true", "Layer": 0}

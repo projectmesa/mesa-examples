@@ -40,6 +40,6 @@ class BoltzmannWealthModelNetwork(Model):
     def compute_gini(self):
         agent_wealths = [agent.wealth for agent in self.agents]
         x = sorted(agent_wealths)
-        N = self.num_agents
-        B = sum(xi * (N - i) for i, xi in enumerate(x)) / (N * sum(x))
-        return 1 + (1 / N) - 2 * B
+        num_agents = self.num_agents
+        B = sum(xi * (num_agents - i) for i, xi in enumerate(x)) / (num_agents * sum(x))  # noqa: N806
+        return 1 + (1 / num_agents) - 2 * B

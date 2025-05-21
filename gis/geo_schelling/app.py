@@ -16,9 +16,7 @@ model_params = {
 
 
 def schelling_draw(agent):
-    """
-    Portrayal Method for canvas
-    """
+    """Portrayal Method for canvas"""
     portrayal = {}
     if agent.atype is None:
         portrayal["color"] = "Grey"
