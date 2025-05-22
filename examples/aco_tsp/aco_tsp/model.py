@@ -151,6 +151,10 @@ class AntTSP(CellAgent):
         self._traveled_distance = 0
 
 
+# Don't create the TSPGraph.from_random as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
+TSP_GRAPH = TSPGraph.from_random(20)
+
+
 class AcoTspModel(mesa.Model):
     """The model class holds the model-level attributes, manages the agents, and generally handles
     the global level of our model.
@@ -161,16 +165,12 @@ class AcoTspModel(mesa.Model):
 
     def __init__(
         self,
-        tsp_graph: TSPGraph | None,
         num_agents: int = 20,
         max_steps: int = int(1e6),
         ant_alpha: float = 1.0,
         ant_beta: float = 5.0,
+        tsp_graph: TSPGraph = TSP_GRAPH,
     ):
-        # Don't create the TSPGraph.from_random as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
-        if tsp_graph is None:
-            tsp_graph = TSPGraph.from_random(20)
-
         super().__init__()
         self.num_agents = num_agents
         self.tsp_graph = tsp_graph
