@@ -8,11 +8,13 @@ from mesa.experimental.devs import ABMSimulator
 from ray.rllib.env import MultiAgentEnv
 from utility import create_intial_agents, grid_to_observation
 
+# Don't create the ABMSimulator as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
+ABM_SIMULATOR = ABMSimulator()
+
 
 class WolfSheepRL(WolfSheep, MultiAgentEnv):
     def __init__(
         self,
-        simulator: ABMSimulator | None,
         width=20,
         height=20,
         initial_sheep=100,
@@ -25,12 +27,8 @@ class WolfSheepRL(WolfSheep, MultiAgentEnv):
         sheep_gain_from_food=4,
         seed=42,
         vision=4,
+        simulator: ABMSimulator = ABM_SIMULATOR,
     ):
-        """Create a new WolfRL-Sheep model with the given parameters."""
-        # Don't create the ABMSimulator as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
-        if simulator is None:
-            simulator = ABMSimulator()
-
         super().__init__(
             width,
             height,
