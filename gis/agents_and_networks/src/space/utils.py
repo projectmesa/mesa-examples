@@ -78,7 +78,9 @@ class UnitTransformer:
     _degree2meter: pyproj.Transformer
     _meter2degree: pyproj.Transformer
 
-    def __init__(self, degree_crs: pyproj.CRS | None, meter_crs: pyproj.CRS | None):
+    def __init__(
+        self, degree_crs: pyproj.CRS | None = None, meter_crs: pyproj.CRS | None = None
+    ):
         if degree_crs is None:
             degree_crs = pyproj.CRS("EPSG:4326")
 
