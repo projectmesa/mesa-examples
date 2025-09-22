@@ -1,5 +1,6 @@
 from mesa.examples.advanced.epstein_civil_violence.agents import Citizen, Cop
-from utility import move
+
+from .utility import move
 
 
 class CitizenRL(Citizen):
@@ -11,7 +12,7 @@ class CitizenRL(Citizen):
             self.jail_sentence -= 1
         else:
             # RL Logic
-            # Update condition and postion based on action
+            # Update condition and position based on action
             self.condition = "Active" if action_tuple[0] == 1 else "Quiescent"
             # Update neighbors for updated empty neighbors
             self.update_neighbors()

@@ -9,8 +9,8 @@ from stable_baselines3 import PPO
 
 # Modify the MoneyModel class to take actions from the RL model
 class MoneyModelRL(BoltzmannWealthModelRL):
-    def __init__(self, N, width, height):
-        super().__init__(N, width, height)
+    def __init__(self, n, width, height):
+        super().__init__(n, width, height)
         model_path = os.path.join(
             os.path.dirname(__file__), "..", "model", "boltzmann_money.zip"
         )

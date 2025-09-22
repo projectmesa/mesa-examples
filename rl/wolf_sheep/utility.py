@@ -1,6 +1,9 @@
-def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
+from .agents import GrassPatch, SheepRL, WolfRL
+
+
+def create_initial_agents(self):
     # Create sheep:
-    for i in range(self.initial_sheep):
+    for _ in range(self.initial_sheep):
         x = self.random.randrange(self.width)
         y = self.random.randrange(self.height)
         energy = self.random.randrange(2 * self.sheep_gain_from_food)
@@ -10,7 +13,7 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
         self.add(sheep)
 
     # Create wolves
-    for i in range(self.initial_wolves):
+    for _ in range(self.initial_wolves):
         x = self.random.randrange(self.width)
         y = self.random.randrange(self.height)
         energy = self.random.randrange(2 * self.wolf_gain_from_food)
@@ -21,7 +24,7 @@ def create_intial_agents(self, SheepRL, WolfRL, GrassPatch):
 
     # Create grass patches
     if self.grass:
-        for agent, (x, y) in self.grid.coord_iter():
+        for _, (x, y) in self.grid.coord_iter():
             fully_grown = self.random.choice([True, False])
 
             if fully_grown:
@@ -62,7 +65,7 @@ def move(self, action):
         self.model.grid.move_agent(self, new_position)
 
 
-def grid_to_observation(self, SheepRL, WolfRL, GrassPatch):
+def grid_to_observation(self):
     # Convert grid to matrix for better representation
     self.obs_grid = []
     for i in self.grid._grid:

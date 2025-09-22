@@ -54,7 +54,7 @@ vertices-own [
   entrance?  ;;if it is an entrance to a building
   test  ;;used to delete in test
 
-  ;;the follwoing variables are used and renewed in each path-selection
+  ;;the following variables are used and renewed in each path-selection
   dist  ;;distance from original point to here
   done ;;1 if has calculated the shortest path through this point, 0 otherwise
   lastnode ;;last node to this point in shortest path
@@ -108,7 +108,7 @@ to setup
 
   ;;ask patches with [ centroid? = true][sprout 1 [set size 2 set color red]] ;;use this line to verify
 
-  ;;create turtles representing the nodes. create links to conect them.
+  ;;create turtles representing the nodes. create links to connect them.
   foreach gis:feature-list-of gmu-walkway [ road-feature ->
     foreach gis:vertex-lists-of road-feature [ v ->  ; for the road feature, get the list of vertices
       let previous-node-pt nobody
@@ -813,7 +813,7 @@ PLOT
 456
 739
 672
-Firends at Home
+Friends at Home
 No. of friends at home
 Count of people
 0.0
@@ -852,7 +852,7 @@ You may want to turn off some layers for a clear display.
 
 ## THINGS TO TRY
 
-Change the switches for different dispalys. Try different number of coimmuters. Try the verification.
+Change the switches for different displays. Try different number of coimmuters. Try the verification.
 
 ## EXTENDING THE MODEL
 
@@ -860,7 +860,7 @@ What if the commuters move with a speed (some distance per tick) instead of one 
 
 ## NETLOGO FEATURES
 
-For faster compuation, this model simplifies the original data by reducing the number of nodes. To do that, the walkway data is loaded to the 20 x 20 grid in Netlogo, which is small, and therefore, many nodes fall on the same patch. In each patch, we only want to keep one node, and duplicate nodes are removed, while their neighbors are connected to the one node left.
+For faster computation, this model simplifies the original data by reducing the number of nodes. To do that, the walkway data is loaded to the 20 x 20 grid in Netlogo, which is small, and therefore, many nodes fall on the same patch. In each patch, we only want to keep one node, and duplicate nodes are removed, while their neighbors are connected to the one node left.
 
 Also, links are created in this model to represent raods. This is so far the best way I can find to deal with road related problems in Netlogo. However, because the way I create links is to link nodes one by one (see code for more details), so some roads are likely to be left behind. But again there is no better way I can find. Therefore, I also used a loop in setup to delete nodes that are not connected to the whole network.
 
