@@ -1,11 +1,14 @@
-def create_intial_agents(self, CitizenRL, CopRL):
+from .agent import CitizenRL, CopRL
+
+
+def create_initial_agents(self):
     # Create agents
     unique_id = 0
     if self.cop_density + self.citizen_density > 1:
         raise ValueError("CopRL density + citizen density must be less than 1")
     cops = []
     citizens = []
-    for contents, (x, y) in self.grid.coord_iter():
+    for _, (x, y) in self.grid.coord_iter():
         if self.random.random() < self.cop_density:
             unique_id_str = f"cop_{unique_id}"
             cop = CopRL(unique_id_str, self, (x, y), vision=self.cop_vision)
@@ -35,7 +38,7 @@ def create_intial_agents(self, CitizenRL, CopRL):
         self.add(citizen)
 
 
-def grid_to_observation(self, CitizenRL):
+def grid_to_observation(self):
     # Convert neighborhood to observation grid
     self.obs_grid = []
     for i in self.grid._grid:

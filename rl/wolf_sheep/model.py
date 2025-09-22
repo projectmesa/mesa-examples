@@ -6,7 +6,8 @@ from mesa.examples.advanced.wolf_sheep.agents import GrassPatch
 from mesa.examples.advanced.wolf_sheep.model import WolfSheep
 from mesa.experimental.devs import ABMSimulator
 from ray.rllib.env import MultiAgentEnv
-from utility import create_intial_agents, grid_to_observation
+
+from .utility import create_initial_agents, grid_to_observation
 
 # Don't create the ABMSimulator as argument default: https://docs.astral.sh/ruff/rules/function-call-in-default-argument/
 ABM_SIMULATOR = ABMSimulator()
@@ -154,8 +155,8 @@ class WolfSheepRL(WolfSheep, MultiAgentEnv):
         super().reset()
         self.grid = mesa.space.MultiGrid(self.width, self.height, torus=True)
         self.current_id = 0
-        create_intial_agents(self, SheepRL, WolfRL, GrassPatch)
-        grid_to_observation(self, SheepRL, WolfRL, GrassPatch)
+        create_initial_agents(self)
+        grid_to_observation(self)
         obs = {}
         for agent in self.agents:
             if isinstance(agent, (SheepRL, WolfRL)):

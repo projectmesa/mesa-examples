@@ -7,7 +7,7 @@ This project demonstrates the use of the RLlib library to implement Multi-Agent 
 **RLlib and Multi-Agent Learning**:
 - **Library Utilized**: The project leverages the RLlib library to concurrently train two independent PPO (Proximal Policy Optimization) agents.
 - **Agents**:
-  - **Wolf**: Predatory agent survives by eating sheeps
+  - **Wolf**: Predatory agent survives by eating sheep
   - **Sheep**: Prey agent survives by eating grass
   - **Grass**: Grass is eaten by sheep and regrows with time
 

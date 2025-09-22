@@ -1,5 +1,6 @@
 from mesa.examples.advanced.wolf_sheep.agents import GrassPatch, Sheep, Wolf
-from utility import move
+
+from .utility import move
 
 
 class SheepRL(Sheep):

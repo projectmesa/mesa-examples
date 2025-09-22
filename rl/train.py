@@ -36,7 +36,7 @@ def train_model(
     algo_config = get_config(config)
     algo = algo_config.build()
 
-    for i in range(num_iterations):
+    for _ in range(num_iterations):
         result = algo.train()
         print(pretty_print(result))
 

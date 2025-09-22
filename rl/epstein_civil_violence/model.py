@@ -4,7 +4,8 @@ import numpy as np
 from agent import CitizenRL, CopRL
 from mesa.examples.advanced.epstein_civil_violence.model import EpsteinCivilViolence
 from ray.rllib.env import MultiAgentEnv
-from utility import create_intial_agents, grid_to_observation
+
+from .utility import create_initial_agents, grid_to_observation
 
 
 class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
@@ -143,8 +144,8 @@ class EpsteinCivilViolenceRL(EpsteinCivilViolence, MultiAgentEnv):
         """
         super().reset()
         self.grid = mesa.space.SingleGrid(self.width, self.height, torus=True)
-        create_intial_agents(self, CitizenRL, CopRL)
-        grid_to_observation(self, CitizenRL)
+        create_initial_agents(self)
+        grid_to_observation(self)
         # Initialize action dictionary with no action
         self.action_dict = {a.unique_id: (0, 0) for a in self.agents}
         # Update neighbors for observation space

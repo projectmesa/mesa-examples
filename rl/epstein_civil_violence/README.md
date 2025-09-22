@@ -8,7 +8,7 @@ This project demonstrates the use of the RLlib library to implement Multi-Agent 
 - **Library Utilized**: The project leverages the RLlib library to concurrently train two independent PPO (Proximal Policy Optimization) agents.
 - **Agents**:
   - **Police**: Aims to control violence (Reduce active agent)
-  - **Citizen**: Aims to show resistence (be active) without getting arrested
+  - **Citizen**: Aims to show resistance (be active) without getting arrested
 
 **Input and Observation Space**:
 - **Observation Grid**: Each agent's policy receives a 4 radius grid centered on itself as input.

@@ -50,7 +50,7 @@ To test the code, simply execute `example.py`:
 python example.py
 ```
 
-*Note: Pre-trained models might not work in some cases because of differnce in versions of libraries used to train and test.*
+*Note: Pre-trained models might not work in some cases because of difference in versions of libraries used to train and test.*
 
 To learn about individual implementations, please refer to the README files of specific environments.
 
