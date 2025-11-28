@@ -3,14 +3,11 @@ Mesa implementation of Virus/Antibody model: Agents module.
 """
 
 import copy
-import os
-import sys
 import weakref
 from collections import deque
 
 import numpy as np
 
-sys.path.insert(0, os.path.abspath("../../../mesa"))
 from mesa.experimental.continuous_space import ContinuousSpaceAgent
 
 

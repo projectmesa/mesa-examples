@@ -4,13 +4,8 @@ Virus/Antibody Model
 A mesa implementation of the Virus/Antibody model, where antibodies and viruses interact in a continuous space.
 """
 
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath("../../../mesa"))
-
 import numpy as np
-from agents import AntibodyAgent, VirusAgent
+from .agents import AntibodyAgent, VirusAgent
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.experimental.continuous_space import ContinuousSpace
