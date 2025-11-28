@@ -5,10 +5,11 @@ A mesa implementation of the Virus/Antibody model, where antibodies and viruses 
 """
 
 import numpy as np
-from .agents import AntibodyAgent, VirusAgent
 from mesa import Model
 from mesa.datacollection import DataCollector
 from mesa.experimental.continuous_space import ContinuousSpace
+
+from .agents import AntibodyAgent, VirusAgent
 
 
 class VirusAntibodyModel(Model):

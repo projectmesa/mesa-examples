@@ -7,7 +7,6 @@ import weakref
 from collections import deque
 
 import numpy as np
-
 from mesa.experimental.continuous_space import ContinuousSpaceAgent
 
 
