@@ -1,5 +1,5 @@
 from mesa import Model
-from mesa.experimental.cell_space import OrthogonalMooreGrid, PropertyLayer
+from mesa.discrete_space import OrthogonalMooreGrid, PropertyLayer
 
 from .agents import Termite
 

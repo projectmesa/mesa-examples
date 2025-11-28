@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import mesa
 import networkx as nx
 import numpy as np
-from mesa.experimental.cell_space import CellAgent, Network
+from mesa.discrete_space import CellAgent, Network
 
 
 @dataclass

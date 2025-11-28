@@ -1,5 +1,5 @@
 import mesa
-from mesa.experimental.cell_space import OrthogonalMooreGrid
+from mesa.discrete_space import OrthogonalMooreGrid
 
 
 class Walker(mesa.Agent):

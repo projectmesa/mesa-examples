@@ -2,7 +2,7 @@ import math
 import random
 
 import numpy as np
-from mesa.experimental.cell_space import CellAgent
+from mesa.discrete_space import CellAgent
 
 
 class StoreAgent(CellAgent):

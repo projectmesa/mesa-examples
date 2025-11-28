@@ -3,7 +3,7 @@ import random
 import numpy as np
 from mesa import Model
 from mesa.datacollection import DataCollector
-from mesa.experimental.cell_space import OrthogonalMooreGrid
+from mesa.discrete_space import OrthogonalMooreGrid
 
 from .agents import ConsumerAgent, StoreAgent
 
