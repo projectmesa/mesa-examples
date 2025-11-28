@@ -1,4 +1,4 @@
-from mesa.experimental.cell_space import FixedAgent
+from mesa.discrete_space import FixedAgent
 
 
 class Cell(FixedAgent):

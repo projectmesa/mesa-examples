@@ -9,7 +9,7 @@ Author of NetLogo code:
     Northwestern University, Evanston, IL.
 """
 
-from mesa.experimental.cell_space import CellAgent
+from mesa.discrete_space import CellAgent
 
 
 class Bank:

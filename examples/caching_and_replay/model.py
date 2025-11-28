@@ -1,7 +1,7 @@
 """This file was copied over from the original Schelling mesa example."""
 
 import mesa
-from mesa.experimental.cell_space import CellAgent, OrthogonalMooreGrid
+from mesa.discrete_space import CellAgent, OrthogonalMooreGrid
 
 
 class SchellingAgent(CellAgent):

@@ -1,5 +1,5 @@
 import mesa
-from mesa.experimental.cell_space import HexGrid
+from mesa.discrete_space import HexGrid
 
 from .cell import Cell
 
