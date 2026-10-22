@@ -23,14 +23,20 @@ class TermiteModel(Model):
         self.num_termites = num_termites
         self.wood_chip_density = wood_chip_density
 
+        # Create a grid with the specified width and height.
+        # Uses Orthogonal Moore neighborhood and toroidal wrapping.
         self.grid = OrthogonalMooreGrid((width, height), torus=True, random=self.random)
 
+        # Create a numpy array of the same shape as the grid.
+        # Each cell is randomly assigned True (has wood chip) or False (no wood chip).
+        # Probability of True is determined by wood_chip_density.
         wood_chips = self.rng.choice(
             [True, False],
             size=(width, height),
             p=[self.wood_chip_density, 1 - self.wood_chip_density],
         )
 
+        # Attach the numpy array to the grid as a named property layer.
         self.grid.add_property_layer("woodcell", wood_chips)
 
         # Create agents and randomly distribute them over the grid

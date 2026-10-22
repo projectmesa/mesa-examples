@@ -31,12 +31,6 @@ class UrbanCell(mg.Cell):
         **kwargs: dict,
     ):
         super().__init__(model, **kwargs)
-        self.urban = None
-        self.slope = None
-        self.road_1 = None
-        self.excluded = None
-        self.land_use = None
-
         self.suitable = None
         self.road = None
         self.run_value = None

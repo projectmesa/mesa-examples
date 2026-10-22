@@ -51,7 +51,7 @@ class WolfRL(Wolf):
         self.energy -= 1
 
         # If there are sheep present, eat one
-        x, y = self.pos
+        _x, _y = self.pos
         this_cell = self.model.grid.get_cell_list_contents([self.pos])
         sheep = [obj for obj in this_cell if isinstance(obj, Sheep)]
         if len(sheep) > 0:

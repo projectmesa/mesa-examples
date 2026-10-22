@@ -18,7 +18,6 @@ class UgandaCell(Cell):
         **kwargs: dict,
     ):
         super().__init__(model, **kwargs)
-        self.population = None
 
     def step(self):
         pass

@@ -1,1 +1,1 @@
-mesa[rec]>=3
+mesa[rec]>=4.0.0a0

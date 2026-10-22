@@ -1,7 +1,11 @@
 import mesa
+import numpy as np
 from mesa.discrete_space import HexGrid
 
-from .agent import Ant
+try:
+    from .agent import Ant
+except ImportError:
+    from agent import Ant
 
 
 class AntForaging(mesa.Model):
@@ -57,9 +61,9 @@ class AntForaging(mesa.Model):
         # Create the Nest in the center
         center = (self.grid.width // 2, self.grid.height // 2)
         # Spike the 'home' pheromone at the nest so ants can find it initially
-        self.grid.pheromone_home[center] = 1.0
+        self.grid.pheromone_home.data[center] = 1.0
         # Mark the home location
-        self.grid.home[center] = 1
+        self.grid.home.data[center] = 1
 
         # Scatter some Food Sources
         # Create 3 big clusters of food
@@ -101,7 +105,7 @@ class AntForaging(mesa.Model):
         """
         Apply evaporation to a pheromone layer.
         """
-        np_layer = self.grid.property_layers[layer_name]
+        np_layer = np.asarray(getattr(self.grid, layer_name).data)
         np_layer *= 1.0 - self.evaporation_rate
 
         # Clamp to 0 to prevent negative values

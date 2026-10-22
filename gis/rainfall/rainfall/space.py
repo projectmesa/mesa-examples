@@ -18,9 +18,6 @@ class LakeCell(mg.Cell):
         **kwargs: dict,
     ):
         super().__init__(model, **kwargs)
-        self.elevation = None
-        self.water_level = None
-        self.water_level_normalized = None
 
     def step(self):
         pass

@@ -1,3 +1,7 @@
+"""Agents used by warehouse meta-agent example."""
+
+from __future__ import annotations
+
 from queue import PriorityQueue
 
 import mesa
@@ -11,20 +15,17 @@ class InventoryAgent(FixedAgent):
         super().__init__(model)
         self.cell = cell
         self.item = item
-        self.quantity = 1000  # Default quantity
+        self.quantity = 1000
 
 
 class RouteAgent(mesa.Agent):
-    """Handles path finding for agents in the warehouse.
-
-    Intended to be a pseudo onboard GPS system for robots.
-    """
+    """Handle path finding for the warehouse robots."""
 
     def __init__(self, model):
         super().__init__(model)
 
     def find_path(self, start, goal) -> list[tuple[int, int, int]] | None:
-        """Determines the path for a robot to take using the A* algorithm."""
+        """Find a path from ``start`` to ``goal`` using A* search."""
 
         def heuristic(a, b) -> int:
             dx = abs(a[0] - b[0])
@@ -46,19 +47,19 @@ class RouteAgent(mesa.Agent):
                     current = came_from[current]
                 path.reverse()
                 path.insert(0, start.coordinate)
-                path.pop()  # Remove the last location (inventory)
+                path.pop()
                 return path
 
             for n_cell in self.model.warehouse[current].neighborhood:
                 coord = n_cell.coordinate
 
-                # Only consider orthogonal neighbors
+                # Only consider orthogonal neighbors in x/y plane.
                 if abs(coord[0] - current[0]) + abs(coord[1] - current[1]) != 1:
                     continue
 
                 tentative_g_score = g_score[current] + 1
                 if not n_cell.is_empty:
-                    tentative_g_score += 50  # Penalty for non-empty cells
+                    tentative_g_score += 50
 
                 if coord not in g_score or tentative_g_score < g_score[coord]:
                     g_score[coord] = tentative_g_score
@@ -70,10 +71,7 @@ class RouteAgent(mesa.Agent):
 
 
 class SensorAgent(mesa.Agent):
-    """Detects entities in the area and handles movement along a path.
-
-    Intended to be a pseudo onboard sensor system for robot.
-    """
+    """Detect obstacles and move the robot along a computed path."""
 
     def __init__(self, model):
         super().__init__(model)
@@ -81,7 +79,10 @@ class SensorAgent(mesa.Agent):
     def move(
         self, coord: tuple[int, int, int], path: list[tuple[int, int, int]]
     ) -> str:
-        """Moves the agent along the given path."""
+        """Move one step along the current path."""
+        # Backend-authoritative lookup: sensor -> robot via groups_of
+        robot = next(iter(self.model.meta_agents.groups_of(self)), self)
+
         if coord not in path:
             raise ValueError("Current coordinate not in path.")
 
@@ -91,25 +92,27 @@ class SensorAgent(mesa.Agent):
 
         next_cell = self.model.warehouse[path[idx + 1]]
         if next_cell.is_empty:
-            self.meta_agent.cell = next_cell
+            robot.cell = next_cell  # type: ignore[attr-defined]
             return "moving"
 
-        # Handle obstacle
-        neighbors = self.model.warehouse[self.meta_agent.cell.coordinate].neighborhood
+        neighbors = self.model.warehouse[robot.cell.coordinate].neighborhood  # type: ignore[attr-defined]
         empty_neighbors = [n for n in neighbors if n.is_empty]
         if empty_neighbors:
-            self.meta_agent.cell = self.random.choice(empty_neighbors)
+            robot.cell = self.random.choice(empty_neighbors)  # type: ignore[attr-defined]
 
-        # Recalculate path
-        new_path = self.meta_agent.get_constituting_agent_instance(
-            RouteAgent
-        ).find_path(self.meta_agent.cell, self.meta_agent.item.cell)
-        self.meta_agent.path = new_path
+        # Recalculate via typed router member
+        router = next(
+            iter(self.model.meta_agents.members_of(robot, relation="router")), None
+        )
+        if router is None or getattr(robot, "item", None) is None:
+            return "recalculating"
+        new_path = router.find_path(robot.cell, robot.item.cell)  # type: ignore[attr-defined]
+        robot.path = new_path  # type: ignore[attr-defined]
         return "recalculating"
 
 
 class WorkerAgent(mesa.Agent):
-    """Represents a robot worker responsible for collecting and loading items."""
+    """Handle inventory pickup and delivery to the loading dock."""
 
     def __init__(self, model, ld, cs):
         super().__init__(model)
@@ -120,33 +123,65 @@ class WorkerAgent(mesa.Agent):
         self.item: InventoryAgent | None = None
 
     def initiate_task(self, item: InventoryAgent):
-        """Initiates a task for the robot to perform."""
-        self.item = item
-        self.path = self.find_path(self.cell, item.cell)
+        """Start a new inventory task."""
+        robot = next(iter(self.model.meta_agents.groups_of(self)), self)
+        # Typed lookup for router to build path
+        router = next(
+            iter(self.model.meta_agents.members_of(robot, relation="router")), None
+        )
+        robot.item = item  # type: ignore[attr-defined]
+        if router is not None:
+            robot.path = router.find_path(robot.cell, item.cell)  # type: ignore[attr-defined]
+        else:
+            # fallback: router capability assumed on robot via meta_methods
+            robot.path = robot.find_path(robot.cell, item.cell)  # type: ignore[attr-defined]
 
     def continue_task(self):
-        """Continues the task if the robot is able to perform it."""
-        status = self.meta_agent.get_constituting_agent_instance(SensorAgent).move(
-            self.cell.coordinate, self.path
-        )
+        """Continue the current task if the robot has one."""
+        robot = next(iter(self.model.meta_agents.groups_of(self)), self)
+        if getattr(robot, "path", None) is None or getattr(robot, "item", None) is None:
+            return
 
-        if status == "movement complete" and self.meta_agent.status == "inventory":
-            # Pick up item and bring to loading dock
-            source_coordinate = self.meta_agent.cell.coordinate
-            target_level = self.item.cell.coordinate[2]
-            self.meta_agent.cell = self.model.warehouse[
+        sensor = next(
+            iter(self.model.meta_agents.members_of(robot, relation="sensor")), None
+        )
+        if sensor is not None:
+            status = sensor.move(robot.cell.coordinate, robot.path)  # type: ignore[arg-type]
+        else:
+            # fallback to robot's own move (wired via meta_methods)
+            status = robot.move(robot.cell.coordinate, robot.path)  # type: ignore[attr-defined]
+
+        if (
+            status == "movement complete"
+            and getattr(robot, "status", None) == "inventory"
+        ):
+            source_coordinate = robot.cell.coordinate  # type: ignore[attr-defined]
+            target_level = robot.item.cell.coordinate[2]  # type: ignore[attr-defined]
+            robot.cell = self.model.warehouse[  # type: ignore[attr-defined]
                 (source_coordinate[0], source_coordinate[1], target_level)
             ]
-            self.meta_agent.status = "loading"
-            self.carrying = self.item.item
-            self.item.quantity -= 1
-            loading_coordinate = self.meta_agent.cell.coordinate
-            self.meta_agent.cell = self.model.warehouse[
+            robot.status = "loading"  # type: ignore[attr-defined]
+            robot.carrying = robot.item.item  # type: ignore[attr-defined]
+            robot.item.quantity -= 1  # type: ignore[attr-defined]
+
+            loading_coordinate = robot.cell.coordinate  # type: ignore[attr-defined]
+            robot.cell = self.model.warehouse[  # type: ignore[attr-defined]
                 (loading_coordinate[0], loading_coordinate[1], 0)
             ]
-            self.path = self.find_path(self.cell, self.loading_dock)
+            # Recompute path to loading dock via router or robot
+            router = next(
+                iter(self.model.meta_agents.members_of(robot, relation="router")), None
+            )
+            if router is not None:
+                robot.path = router.find_path(robot.cell, robot.loading_dock)  # type: ignore[attr-defined]
+            else:
+                robot.path = robot.find_path(robot.cell, robot.loading_dock)  # type: ignore[attr-defined]
 
-        if status == "movement complete" and self.meta_agent.status == "loading":
-            # Load item onto truck and return to charging station
-            self.carrying = None
-            self.meta_agent.status = "open"
+        if (
+            status == "movement complete"
+            and getattr(robot, "status", None) == "loading"
+        ):
+            robot.carrying = None  # type: ignore[attr-defined]
+            robot.status = "open"  # type: ignore[attr-defined]
+            robot.path = None  # type: ignore[attr-defined]
+            robot.item = None  # type: ignore[attr-defined]
