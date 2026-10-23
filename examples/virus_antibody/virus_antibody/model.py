@@ -115,7 +115,7 @@ class VirusAntibodyModel(Model):
             position=viruses_positions,
             duplication_rate=self.virus_duplication_rate,
             mutation_rate=self.virus_mutation_rate,
-            dna=dna,
+            dna=[dna.copy() for _ in range(self.initial_viruses)],
         )
 
         self.datacollector.collect(self)
